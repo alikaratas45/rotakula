@@ -90,16 +90,7 @@ function PoiMarker({
 
   return (
     <AdvancedMarker onClick={onClick} position={position} title={poi.name}>
-        <div className="relative flex flex-col items-center group">
-          <div 
-            className={cn(
-              "bg-background/80 backdrop-blur-sm text-blue-600 font-bold px-2 py-1 rounded-md shadow-lg text-xs mb-1 whitespace-nowrap",
-            )}
-          >
-            {poi.name}
-          </div>
-          <div className="w-6 h-6 bg-blue-500 rounded-full border-2 border-white shadow-md"></div>
-        </div>
+        <div className="w-6 h-6 bg-blue-500 rounded-full border-2 border-white shadow-md"></div>
     </AdvancedMarker>
   );
 }
