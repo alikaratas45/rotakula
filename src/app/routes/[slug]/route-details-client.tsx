@@ -6,11 +6,12 @@ import { useSavedRoutes } from '@/hooks/use-saved-routes';
 import { getImageById } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Heart, Map, MapPin } from 'lucide-react';
+import { Heart, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import { FoodIcon, HistoricHouseIcon, VolcanoIcon } from '@/components/icons';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
+import EmbeddedMap from '@/components/map';
 
 function getCategoryIcon(category: PointOfInterest['category']) {
     switch (category) {
@@ -29,32 +30,10 @@ function getCategoryIcon(category: PointOfInterest['category']) {
 export default function RouteDetailsClient({ route, pois }: { route: ThematicRoute; pois: PointOfInterest[] }) {
     const { isLoaded, isRouteSaved, toggleSaveRoute } = useSavedRoutes();
 
-    const getPoiQuery = (poi: PointOfInterest) => {
-        if (poi.id === 'poi-13') { // Gökçeören
-            return `${poi.latitude},${poi.longitude}`;
-        }
-        if (poi.mapQuery) return encodeURIComponent(poi.mapQuery);
-        return encodeURIComponent(`${poi.name}, Kula, Manisa`);
-    };
-
-    const handleShowRouteOnMap = () => {
-        if (pois.length === 0) return;
-
-        const origin = getPoiQuery(pois[0]);
-        const destination = pois.length > 1 ? getPoiQuery(pois[pois.length - 1]) : origin;
-        
-        const waypoints = pois.slice(1, -1).map(getPoiQuery).join('|');
-        
-        let url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}`;
-        if (waypoints) {
-            url += `&waypoints=${waypoints}`;
-        }
-
-        window.open(url, '_blank');
-    };
-
     const handleShowPoiOnMap = (poi: PointOfInterest) => {
-        const query = getPoiQuery(poi);
+        const query = poi.id === 'poi-13'
+            ? `${poi.latitude},${poi.longitude}`
+            : encodeURIComponent(`${poi.name}, Kula, Manisa`);
         const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
         window.open(url, '_blank');
     };
@@ -65,7 +44,14 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
         <div className="container py-8 md:py-12">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
                 <div className="lg:col-span-2">
-                    <p className="text-lg text-foreground/80 mb-6">{route.longDescription}</p>
+                    <p className="text-lg text-foreground/80 mb-8">{route.longDescription}</p>
+
+                    {pois.length > 0 && (
+                        <div className="mb-8">
+                             <h2 className="text-2xl font-headline font-bold mb-4">Rota Haritası</h2>
+                            <EmbeddedMap pois={pois} />
+                        </div>
+                    )}
                     
                     <h2 className="text-2xl font-headline font-bold mb-6">Bu Rotada Neler Var?</h2>
                     <div className="space-y-6">
@@ -99,7 +85,7 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
                                                 <p className="text-foreground/80 mb-4">{poi.description}</p>
                                                 <Button variant="outline" size="sm" onClick={() => handleShowPoiOnMap(poi)}>
                                                     <MapPin className="mr-2 h-4 w-4" />
-                                                    Haritada Göster
+                                                    Google Haritalar'da Aç
                                                 </Button>
                                             </CardContent>
                                         </div>
@@ -125,10 +111,6 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
                                 >
                                     <Heart className={cn("mr-2 h-4 w-4", isSaved && "fill-current text-red-500")} />
                                     {isSaved ? 'Kaydedildi' : 'Rotayı Kaydet'}
-                                </Button>
-                                <Button onClick={handleShowRouteOnMap} variant="outline" className="w-full">
-                                    <Map className="mr-2 h-4 w-4" />
-                                    Tüm Rotayı Haritada Aç
                                 </Button>
                                 <Separator />
                                 <div className="space-y-2">

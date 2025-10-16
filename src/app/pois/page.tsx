@@ -8,8 +8,9 @@ import type { PointOfInterest } from '@/lib/types';
 import { getImageById } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, Map, MapPin } from 'lucide-react';
+import { Loader2, MapPin } from 'lucide-react';
 import { VolcanoIcon, HistoricHouseIcon, FoodIcon } from '@/components/icons';
+import EmbeddedMap from '@/components/map';
 
 function getCategoryIcon(category: PointOfInterest['category']) {
     switch (category) {
@@ -45,35 +46,10 @@ export default function PoisPage() {
         fetchPois();
     }, []);
 
-    const getPoiQuery = (poi: PointOfInterest) => {
-        if (poi.id === 'poi-13') { // Gökçeören
-            return `${poi.latitude},${poi.longitude}`;
-        }
-        if (poi.mapQuery) return encodeURIComponent(poi.mapQuery);
-        return encodeURIComponent(`${poi.name}, Kula, Manisa`);
-    };
-    
-    const handleShowAllOnMap = () => {
-        if (pois.length === 0) return;
-
-        // Google Maps URL waypoint limit is around 10. Let's slice it.
-        const waypointsToShow = pois.slice(0, 10);
-
-        const origin = getPoiQuery(waypointsToShow[0]);
-        const destination = waypointsToShow.length > 1 ? getPoiQuery(waypointsToShow[waypointsToShow.length - 1]) : origin;
-        
-        const waypoints = waypointsToShow.slice(1, -1).map(getPoiQuery).join('|');
-        
-        let url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}`;
-        if (waypoints) {
-            url += `&waypoints=${waypoints}`;
-        }
-
-        window.open(url, '_blank');
-    };
-
     const handleShowPoiOnMap = (poi: PointOfInterest) => {
-        const query = getPoiQuery(poi);
+        const query = poi.id === 'poi-13' 
+            ? `${poi.latitude},${poi.longitude}` 
+            : encodeURIComponent(`${poi.name}, Kula, Manisa`);
         const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
         window.open(url, '_blank');
     };
@@ -90,13 +66,14 @@ export default function PoisPage() {
         <div className="container py-8 md:py-12">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
                 <h1 className="text-3xl md:text-4xl font-headline font-bold">Gezilecek Yerler</h1>
-                {pois.length > 0 && (
-                     <Button onClick={handleShowAllOnMap}>
-                        <Map className="mr-2 h-4 w-4" />
-                        Tümünü Haritada Göster
-                    </Button>
-                )}
             </div>
+
+            {pois.length > 0 && (
+                <div className="mb-12">
+                    <h2 className="text-2xl font-headline font-bold mb-4">Harita</h2>
+                    <EmbeddedMap pois={pois} />
+                </div>
+            )}
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {pois.map(poi => {
@@ -129,7 +106,7 @@ export default function PoisPage() {
                             <div className="p-4 pt-0 mt-auto">
                                 <Button variant="outline" size="sm" onClick={() => handleShowPoiOnMap(poi)}>
                                     <MapPin className="mr-2 h-4 w-4" />
-                                    Haritada Göster
+                                    Google Haritalar'da Aç
                                 </Button>
                             </div>
                         </Card>

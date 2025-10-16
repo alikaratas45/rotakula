@@ -8,8 +8,9 @@ import type { PointOfInterest } from '@/lib/types';
 import { getImageById } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, Map, MapPin } from 'lucide-react';
+import { Loader2, MapPin } from 'lucide-react';
 import { BedIcon } from '@/components/icons';
+import EmbeddedMap from '@/components/map';
 
 export default function AccommodationPage() {
     const [pois, setPois] = useState<PointOfInterest[]>([]);
@@ -30,13 +31,8 @@ export default function AccommodationPage() {
         fetchPois();
     }, []);
 
-    const getPoiQuery = (poi: PointOfInterest) => {
-        if (poi.mapQuery) return encodeURIComponent(poi.mapQuery);
-        return encodeURIComponent(`${poi.name}, Kula, Manisa`);
-    };
-
     const handleShowPoiOnMap = (poi: PointOfInterest) => {
-        const query = getPoiQuery(poi);
+        const query = encodeURIComponent(`${poi.name}, Kula, Manisa`);
         const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
         window.open(url, '_blank');
     };
@@ -54,6 +50,13 @@ export default function AccommodationPage() {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
                 <h1 className="text-3xl md:text-4xl font-headline font-bold">Konaklama</h1>
             </div>
+
+            {pois.length > 0 && (
+                <div className="mb-12">
+                    <h2 className="text-2xl font-headline font-bold mb-4">Harita</h2>
+                    <EmbeddedMap pois={pois} />
+                </div>
+            )}
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {pois.map(poi => {
@@ -86,7 +89,7 @@ export default function AccommodationPage() {
                             <div className="p-4 pt-0 mt-auto">
                                 <Button variant="outline" size="sm" onClick={() => handleShowPoiOnMap(poi)}>
                                     <MapPin className="mr-2 h-4 w-4" />
-                                    Haritada Göster
+                                    Google Haritalar'da Aç
                                 </Button>
                             </div>
                         </Card>
