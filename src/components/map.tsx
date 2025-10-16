@@ -15,12 +15,12 @@ function PoiMarker({ poi }: { poi: PointOfInterest }) {
 }
 
 export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
-  const apiKey = "AIzaSyDiNYyy_sXwD_nCQX015vHxImsOrWIK3ig";
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
   if (!apiKey) {
     return (
       <div className="flex items-center justify-center h-96 bg-muted rounded-lg">
-        <p className="text-muted-foreground">Google Haritalar API anahtarı eksik veya geçersiz. Lütfen `.env.local` dosyasını kontrol edin.</p>
+        <p className="text-muted-foreground text-center p-4">Google Haritalar API anahtarı eksik veya geçersiz. <br/>Lütfen `.env.local` dosyasını kontrol edin veya geliştirici konsolunda anahtarınızın doğru şekilde yapılandırıldığından emin olun.</p>
       </div>
     );
   }
