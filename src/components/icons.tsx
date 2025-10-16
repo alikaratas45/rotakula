@@ -1,4 +1,4 @@
-import type { SVGProps } from "react";
+import { Bed, type SVGProps } from "lucide-react";
 
 export function RotaKulaLogo(props: SVGProps<SVGSVGElement>) {
     return (
@@ -90,4 +90,8 @@ export function FoodIcon(props: SVGProps<SVGSVGElement>) {
       <path d="M15 15h.01" />
     </svg>
   );
+}
+
+export function BedIcon(props: SVGProps<SVGSVGElement>) {
+  return <Bed {...props} />;
 }

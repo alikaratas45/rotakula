@@ -20,6 +20,8 @@ import { RotaKulaLogo } from "./icons";
 const navLinks = [
     { href: "/", label: "Ana Sayfa" },
     { href: "/pois", label: "Gezilecek Yerler" },
+    { href: "/food", label: "Lezzet Durakları" },
+    { href: "/accommodation", label: "Konaklama" },
     { href: "/my-routes", label: "Rotalarım" },
 ];
 
