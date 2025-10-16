@@ -10,8 +10,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Loader2, MapPin } from 'lucide-react';
 import { FoodIcon } from '@/components/icons';
-import EmbeddedMap from '@/components/map';
 import { APIProvider } from '@vis.gl/react-google-maps';
+import { NearbySearch } from '@/components/map';
 
 
 export default function FoodPage() {
@@ -55,13 +55,12 @@ export default function FoodPage() {
                     <h1 className="text-3xl md:text-4xl font-headline font-bold">Lezzet Durakları</h1>
                 </div>
 
-                {pois.length > 0 && (
-                    <div className="mb-12">
-                        <h2 className="text-2xl font-headline font-bold mb-4">Harita</h2>
-                        <EmbeddedMap pois={pois} />
-                    </div>
-                )}
+                <div className="mb-12">
+                    <h2 className="text-2xl font-headline font-bold mb-4">Yakındaki Lezzet Durakları</h2>
+                    <NearbySearch />
+                </div>
                 
+                <h2 className="text-2xl font-headline font-bold mb-4 mt-12">Öne Çıkanlar</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {pois.map(poi => {
                         const image = getImageById(poi.imageId);
@@ -84,7 +83,7 @@ export default function FoodPage() {
                                     </div>
                                     <div>
                                         <CardTitle className="font-headline text-xl">{poi.name}</CardTitle>
-                                        <CardDescription className="capitalize">{poi.category}</CardDescription>
+                                        <CardDescription>Öne Çıkan Lezzet</CardDescription>
                                     </div>
                                 </CardHeader>
                                 <CardContent className="flex-grow">
