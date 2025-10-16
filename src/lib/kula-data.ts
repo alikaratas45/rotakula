@@ -6,26 +6,35 @@ import poisData from './data/kula-pois.json';
 const routes: ThematicRoute[] = routesData.routes;
 const pois: PointOfInterest[] = poisData.pois;
 
+// Adding a delay to simulate network latency
+const DELAY = 50;
+
 export async function getRoutes(): Promise<ThematicRoute[]> {
+  await new Promise(resolve => setTimeout(resolve, DELAY));
   return routes;
 }
 
 export async function getPois(): Promise<PointOfInterest[]> {
+  await new Promise(resolve => setTimeout(resolve, DELAY));
   return pois;
 }
 
 export async function getRouteBySlug(slug: string): Promise<ThematicRoute | undefined> {
+  await new Promise(resolve => setTimeout(resolve, DELAY));
   return routes.find(route => route.slug === slug);
 }
 
 export async function getPoiById(id: string): Promise<PointOfInterest | undefined> {
+  await new Promise(resolve => setTimeout(resolve, DELAY));
   return pois.find(poi => poi.id === id);
 }
 
 export async function getPoisByIds(ids: string[]): Promise<PointOfInterest[]> {
+    await new Promise(resolve => setTimeout(resolve, DELAY));
     return pois.filter(poi => ids.includes(poi.id));
 }
 
 export async function getFeaturedRoute(): Promise<ThematicRoute | undefined> {
+    await new Promise(resolve => setTimeout(resolve, DELAY));
     return routes.find(route => route.isFeatured);
 }

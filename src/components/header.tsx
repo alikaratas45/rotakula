@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, Mountain } from "lucide-react";
+import { Menu, Mountain, ChevronDown } from "lucide-react";
+import * as React from "react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -14,7 +15,15 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { RotaKulaLogo } from "./icons";
+import { getPois } from "@/lib/kula-data";
+import type { PointOfInterest } from "@/lib/types";
 
 const navLinks = [
     { href: "/", label: "Ana Sayfa" },
@@ -23,6 +32,20 @@ const navLinks = [
 
 export function Header() {
     const pathname = usePathname();
+    const [pois, setPois] = React.useState<PointOfInterest[]>([]);
+
+    React.useEffect(() => {
+        async function fetchPois() {
+            const allPois = await getPois();
+            setPois(allPois);
+        }
+        fetchPois();
+    }, []);
+
+    const handleShowPoiOnMap = (poi: PointOfInterest) => {
+        const url = `https://www.google.com/maps/search/?api=1&query=${poi.latitude},${poi.longitude}`;
+        window.open(url, '_blank');
+    };
 
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -47,6 +70,21 @@ export function Header() {
                                 {link.label}
                             </Link>
                         ))}
+                         <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" className="text-sm font-medium transition-colors hover:text-foreground/80 text-foreground/60 p-0 h-auto">
+                                    Gezilecek Yerler
+                                    <ChevronDown className="relative top-[1px] ml-1 h-3 w-3 transition duration-200 group-data-[state=open]:rotate-180" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                {pois.map(poi => (
+                                    <DropdownMenuItem key={poi.id} onClick={() => handleShowPoiOnMap(poi)}>
+                                        {poi.name}
+                                    </DropdownMenuItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </nav>
                 </div>
                 
@@ -63,7 +101,7 @@ export function Header() {
                             </Button>
                         </SheetTrigger>
                         <SheetContent side="left">
-                            <SheetHeader>
+                             <SheetHeader className="text-left">
                                 <SheetTitle>Menü</SheetTitle>
                                 <SheetDescription>
                                     Uygulama içinde gezinmek için aşağıdaki bağlantıları kullanabilirsiniz.
@@ -82,6 +120,16 @@ export function Header() {
                                         {link.label}
                                     </Link>
                                 ))}
+                                <div className="px-2.5">
+                                    <h3 className="text-muted-foreground">Gezilecek Yerler</h3>
+                                    <div className="mt-2 flex flex-col gap-2">
+                                        {pois.map(poi => (
+                                            <button key={poi.id} onClick={() => handleShowPoiOnMap(poi)} className="text-muted-foreground hover:text-foreground text-left">
+                                                {poi.name}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
                             </nav>
                         </SheetContent>
                     </Sheet>
