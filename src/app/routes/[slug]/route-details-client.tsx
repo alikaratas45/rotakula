@@ -9,6 +9,7 @@ import { Heart, Map, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import { FoodIcon, HistoricHouseIcon, VolcanoIcon } from '@/components/icons';
 import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
 
 function getCategoryIcon(category: PointOfInterest['category']) {
     switch (category) {
