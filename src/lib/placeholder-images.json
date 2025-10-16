@@ -113,6 +113,18 @@
       "description": "Körez köyünden tarihi bir sokak.",
       "imageUrl": "/korez.jpg",
       "imageHint": "historic village street"
+    },
+    {
+      "id": "poi-emre-village",
+      "description": "Emre Köyü ve Yunus Emre Türbesi",
+      "imageUrl": "/emre-village.jpg",
+      "imageHint": "village tomb"
+    },
+    {
+      "id": "poi-evciler-village",
+      "description": "Evciler köyünden bir sokak.",
+      "imageUrl": "/evciler-village.jpg",
+      "imageHint": "village street"
     }
   ]
 }

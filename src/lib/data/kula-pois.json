@@ -126,6 +126,24 @@
       "imageId": "poi-korez-village",
       "latitude": 38.52,
       "longitude": 28.7
+    },
+    {
+      "id": "poi-16",
+      "name": "Emre Köyü",
+      "description": "Yunus Emre ve hocası Tabduk Emre'nin türbelerinin bulunduğuna inanılan, manevi atmosferi yüksek bir köy.",
+      "category": "history",
+      "imageId": "poi-emre-village",
+      "latitude": 38.545,
+      "longitude": 28.645
+    },
+    {
+      "id": "poi-17",
+      "name": "Evciler Köyü",
+      "description": "Geleneksel Kula mimarisini yansıtan taş evleri ve sakin yaşamıyla bilinen bir diğer tarihi köy.",
+      "category": "history",
+      "imageId": "poi-evciler-village",
+      "latitude": 38.65,
+      "longitude": 28.52
     }
   ]
 }
