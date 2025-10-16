@@ -57,10 +57,10 @@ function PoiMarker({
   return (
     <AdvancedMarker onClick={onClick} position={position} title={poi.name}>
       <div className="relative flex flex-col items-center">
-        <div className="bg-white text-red-600 font-bold px-2 py-1 rounded-md shadow-lg text-xs mb-1 whitespace-nowrap">
+        <div className="bg-white text-blue-600 font-bold px-2 py-1 rounded-md shadow-lg text-xs mb-1 whitespace-nowrap">
           {poi.name}
         </div>
-        <div className="w-6 h-6 bg-red-500 rounded-full border-2 border-white shadow-md"></div>
+        <div className="w-6 h-6 bg-blue-500 rounded-full border-2 border-white shadow-md"></div>
       </div>
     </AdvancedMarker>
   );
@@ -73,6 +73,8 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
 
   const selectedPoi = selectedPoiId ? pois.find(p => p.id === selectedPoiId) : null;
   const selectedImage = selectedPoi ? getImageById(selectedPoi.imageId) : null;
+  
+  // A ref to the marker DOM element is needed for the InfoWindow
   const markerRef = selectedPoi ? document.querySelector(`[aria-label="${selectedPoi.name}"]`) as HTMLElement : null;
 
    useEffect(() => {
