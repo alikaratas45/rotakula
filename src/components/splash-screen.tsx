@@ -7,8 +7,8 @@ export function SplashScreen() {
         <Image
           src="/belediye.png"
           alt="Kula Belediyesi Logosu"
-          width={150}
-          height={150}
+          width={250}
+          height={250}
           priority
         />
       </div>
