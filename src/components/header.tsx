@@ -28,6 +28,11 @@ const navLinks = [
 
 export function Header() {
     const pathname = usePathname();
+    const [isSheetOpen, setIsSheetOpen] = React.useState(false);
+
+    const handleLinkClick = () => {
+        setIsSheetOpen(false);
+    };
     
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -60,7 +65,7 @@ export function Header() {
                         <Image src="/logo.png" alt="RotaKula Logo" width={28} height={28} />
                         <span className="font-bold font-headline text-lg">RotaKula</span>
                     </Link>
-                    <Sheet>
+                    <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                         <SheetTrigger asChild>
                             <Button variant="ghost" size="icon" className="md:hidden">
                                 <Menu className="h-6 w-6" />
@@ -79,6 +84,7 @@ export function Header() {
                                     <Link
                                         key={link.href}
                                         href={link.href}
+                                        onClick={handleLinkClick}
                                         className={cn(
                                             "flex items-center gap-4 px-2.5",
                                             pathname.startsWith(link.href) && link.href !== "/" || pathname === link.href ? "text-foreground" : "text-muted-foreground hover:text-foreground"
