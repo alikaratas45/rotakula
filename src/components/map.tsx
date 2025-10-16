@@ -1,12 +1,21 @@
 
 "use client";
 
-import { Map, AdvancedMarker, useMap } from "@vis.gl/react-google-maps";
+import { Map, AdvancedMarker, useMap, InfoWindow } from "@vis.gl/react-google-maps";
 import { PointOfInterest } from "@/lib/types";
 import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, X } from "lucide-react";
+import Image from "next/image";
+import { getImageById } from "@/lib/placeholder-images";
+import { Button } from "./ui/button";
 
-function PoiMarker({ poi }: { poi: PointOfInterest }) {
+function PoiMarker({ 
+    poi, 
+    onClick 
+}: { 
+    poi: PointOfInterest, 
+    onClick: () => void 
+}) {
   const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
   const map = useMap();
 
@@ -46,7 +55,7 @@ function PoiMarker({ poi }: { poi: PointOfInterest }) {
   if (!position) return null;
 
   return (
-    <AdvancedMarker position={position} title={poi.name}>
+    <AdvancedMarker onClick={onClick} position={position} title={poi.name}>
       <div className="relative flex flex-col items-center">
         <div className="bg-white text-red-600 font-bold px-2 py-1 rounded-md shadow-lg text-xs mb-1 whitespace-nowrap">
           {poi.name}
@@ -60,6 +69,11 @@ function PoiMarker({ poi }: { poi: PointOfInterest }) {
 export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
   const map = useMap();
   const [markersLoaded, setMarkersLoaded] = useState(false);
+  const [selectedPoiId, setSelectedPoiId] = useState<string | null>(null);
+
+  const selectedPoi = selectedPoiId ? pois.find(p => p.id === selectedPoiId) : null;
+  const selectedImage = selectedPoi ? getImageById(selectedPoi.imageId) : null;
+  const markerRef = selectedPoi ? document.querySelector(`[aria-label="${selectedPoi.name}"]`) as HTMLElement : null;
 
    useEffect(() => {
     if (map && pois.length > 0) {
@@ -111,6 +125,11 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
     }
   }, [map, pois]);
 
+  useEffect(() => {
+    // Reset selection when POIs change
+    setSelectedPoiId(null);
+  }, [pois]);
+
   const center = pois.length > 0
     ? { lat: pois[0].latitude, lng: pois[0].longitude }
     : { lat: 38.547, lng: 28.52 };
@@ -131,10 +150,34 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
         gestureHandling={"greedy"}
         disableDefaultUI={true}
         mapId="rotakula-map"
+        onClick={() => setSelectedPoiId(null)}
       >
         {pois.map((poi) => (
-          <PoiMarker key={poi.id} poi={poi} />
+          <PoiMarker key={poi.id} poi={poi} onClick={() => setSelectedPoiId(poi.id)} />
         ))}
+        
+        {selectedPoi && markerRef && (
+            <InfoWindow
+                anchor={markerRef}
+                onCloseClick={() => setSelectedPoiId(null)}
+            >
+              <div className="w-64 p-1">
+                 {selectedImage && (
+                   <div className="relative h-32 w-full mb-2 rounded-md overflow-hidden">
+                     <Image
+                       src={selectedImage.imageUrl}
+                       alt={selectedImage.description}
+                       fill
+                       className="object-cover"
+                       data-ai-hint={selectedImage.imageHint}
+                     />
+                   </div>
+                 )}
+                 <h3 className="font-bold font-headline text-md mb-1">{selectedPoi.name}</h3>
+                 <p className="text-sm text-foreground/80">{selectedPoi.description}</p>
+              </div>
+            </InfoWindow>
+        )}
       </Map>
     </div>
   );
