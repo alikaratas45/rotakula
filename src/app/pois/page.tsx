@@ -49,21 +49,17 @@ export default function PoisPage() {
         if (poi.id === 'poi-13') { // Gökçeören
             return `${poi.latitude},${poi.longitude}`;
         }
-        return encodeURIComponent(`${poi.name}, Kula, Manisa`);
+        return encodeURIComponent(poi.name);
     };
     
     const handleShowAllOnMap = () => {
         if (pois.length < 1) return;
         
-        const origin = getPoiQuery(pois[0]);
-        const destination = pois.length > 1 ? getPoiQuery(pois[pois.length - 1]) : origin;
-        
-        const waypoints = pois.slice(1, -1).map(getPoiQuery).join('|');
-        
-        let url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}`;
-        if (waypoints) {
-            url += `&waypoints=${waypoints}`;
-        }
+        // This creates a search query that includes all POIs, which is better for a large number of points
+        // as the Directions API has a waypoint limit.
+        const searchTerms = pois.map(poi => `"${poi.name}"`).join(' veya ');
+        const query = encodeURIComponent(`Kula Manisa içinde ${searchTerms}`);
+        const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
 
         window.open(url, '_blank');
     };
