@@ -49,16 +49,20 @@ export default function PoisPage() {
         if (poi.id === 'poi-13') { // Gökçeören
             return `${poi.latitude},${poi.longitude}`;
         }
-        return encodeURIComponent(poi.name);
+        if (poi.mapQuery) return encodeURIComponent(poi.mapQuery);
+        return encodeURIComponent(`${poi.name}, Kula, Manisa`);
     };
     
     const handleShowAllOnMap = () => {
         if (pois.length === 0) return;
 
-        const origin = getPoiQuery(pois[0]);
-        const destination = pois.length > 1 ? getPoiQuery(pois[pois.length - 1]) : origin;
+        // Google Maps URL waypoint limit is around 10. Let's slice it.
+        const waypointsToShow = pois.slice(0, 10);
+
+        const origin = getPoiQuery(waypointsToShow[0]);
+        const destination = waypointsToShow.length > 1 ? getPoiQuery(waypointsToShow[waypointsToShow.length - 1]) : origin;
         
-        const waypoints = pois.slice(1, -1).map(getPoiQuery).join('|');
+        const waypoints = waypointsToShow.slice(1, -1).map(getPoiQuery).join('|');
         
         let url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}`;
         if (waypoints) {

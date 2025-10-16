@@ -33,6 +33,7 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
         if (poi.id === 'poi-13') { // Gökçeören
             return `${poi.latitude},${poi.longitude}`;
         }
+        if (poi.mapQuery) return encodeURIComponent(poi.mapQuery);
         return encodeURIComponent(`${poi.name}, Kula, Manisa`);
     };
 
