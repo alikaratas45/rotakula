@@ -7,7 +7,6 @@ import { getPois } from '@/lib/kula-data';
 import type { PointOfInterest } from '@/lib/types';
 import { getImageById } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Loader2, MapPin } from 'lucide-react';
 import { FoodIcon } from '@/components/icons';
 import { APIProvider } from '@vis.gl/react-google-maps';
@@ -34,12 +33,6 @@ export default function FoodPage() {
         fetchPois();
     }, []);
 
-    const handleShowPoiOnMap = (poi: PointOfInterest) => {
-        const query = encodeURIComponent("Kula'daki yiyecek içecek işletmeleri");
-        const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
-        window.open(url, '_blank');
-    };
-
     if (isLoading) {
         return (
             <div className="flex justify-center items-center h-64">
@@ -56,11 +49,12 @@ export default function FoodPage() {
                 </div>
 
                 <div className="mb-12">
-                    <h2 className="text-2xl font-headline font-bold mb-4">Yakındaki Lezzet Durakları</h2>
+                    <h2 className="text-2xl font-headline font-bold mb-4">Yakınınızdaki Restoranlar</h2>
+                    <p className="text-muted-foreground mb-4">Harita, konumunuza göre yakındaki yeme içme mekanlarını göstermektedir. Yeni yerler keşfetmek için haritayı gezebilirsiniz.</p>
                     <NearbySearch />
                 </div>
                 
-                <h2 className="text-2xl font-headline font-bold mb-4 mt-12">Öne Çıkanlar</h2>
+                <h2 className="text-2xl font-headline font-bold mb-4 mt-12">Editörün Seçimi: Öne Çıkan Lezzetler</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {pois.map(poi => {
                         const image = getImageById(poi.imageId);
@@ -87,14 +81,8 @@ export default function FoodPage() {
                                     </div>
                                 </CardHeader>
                                 <CardContent className="flex-grow">
-                                    <p className="text-foreground/80 mb-4">{poi.description}</p>
+                                    <p className="text-foreground/80">{poi.description}</p>
                                 </CardContent>
-                                <div className="p-4 pt-0 mt-auto">
-                                    <Button variant="outline" size="sm" onClick={() => handleShowPoiOnMap(poi)}>
-                                        <MapPin className="mr-2 h-4 w-4" />
-                                        Google Haritalar'da Göster
-                                    </Button>
-                                </div>
                             </Card>
                         );
                     })}
