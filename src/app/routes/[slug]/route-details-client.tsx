@@ -31,10 +31,12 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
     const handleShowRouteOnMap = () => {
         if (pois.length === 0) return;
 
-        const origin = `${pois[0].latitude},${pois[0].longitude}`;
-        const destination = pois.length > 1 ? `${pois[pois.length - 1].latitude},${pois[pois.length - 1].longitude}` : origin;
+        const getPoiQuery = (poi: PointOfInterest) => encodeURIComponent(poi.mapQuery || `${poi.name}, Kula, Manisa`);
+
+        const origin = getPoiQuery(pois[0]);
+        const destination = pois.length > 1 ? getPoiQuery(pois[pois.length - 1]) : origin;
         
-        const waypoints = pois.slice(1, -1).map(p => `${p.latitude},${p.longitude}`).join('|');
+        const waypoints = pois.slice(1, -1).map(getPoiQuery).join('|');
         
         let url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}`;
         if (waypoints) {
