@@ -28,10 +28,22 @@ function getCategoryIcon(category: PointOfInterest['category']) {
 export default function RouteDetailsClient({ route, pois }: { route: ThematicRoute; pois: PointOfInterest[] }) {
     const { isLoaded, isRouteSaved, toggleSaveRoute } = useSavedRoutes();
 
+    const getPoiQuery = (poi: PointOfInterest) => {
+        // If a specific mapQuery is provided (like "Kula'daki lokantalar"), use it.
+        // Otherwise, use coordinates for precision, especially for natural/unnamed spots.
+        // For Gökçeören, we must use coordinates.
+        if (poi.mapQuery) {
+            return encodeURIComponent(poi.mapQuery);
+        }
+        if (poi.id === 'poi-13') { // Gökçeören
+            return `${poi.latitude},${poi.longitude}`;
+        }
+        // For other POIs, name search is generally better for user experience.
+        return encodeURIComponent(`${poi.name}, Kula, Manisa`);
+    };
+
     const handleShowRouteOnMap = () => {
         if (pois.length === 0) return;
-
-        const getPoiQuery = (poi: PointOfInterest) => encodeURIComponent(poi.mapQuery || `${poi.name}, Kula, Manisa`);
 
         const origin = getPoiQuery(pois[0]);
         const destination = pois.length > 1 ? getPoiQuery(pois[pois.length - 1]) : origin;
@@ -47,7 +59,7 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
     };
 
     const handleShowPoiOnMap = (poi: PointOfInterest) => {
-        const query = encodeURIComponent(poi.mapQuery || `${poi.name}, Kula, Manisa`);
+        const query = getPoiQuery(poi);
         const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
         window.open(url, '_blank');
     };

@@ -45,7 +45,7 @@ export default function PoisPage() {
     }, []);
 
     const handleShowPoiOnMap = (poi: PointOfInterest) => {
-        const query = encodeURIComponent(poi.mapQuery || `${poi.name}, Kula, Manisa`);
+        const query = poi.mapQuery ? encodeURIComponent(poi.mapQuery) : `${poi.latitude},${poi.longitude}`;
         const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
         window.open(url, '_blank');
     };
