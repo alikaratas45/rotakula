@@ -1,0 +1,34 @@
+{
+  "stories": [
+    {
+      "id": "story-1",
+      "slug": "kuladokya-efsanesi",
+      "title": "Kuladokya Efsanesi: Peri Bacalarının Ardındaki Sır",
+      "excerpt": "Kapadokya'ya benzetilen ama kendi özgün hikayesine sahip olan bu coğrafi harikanın ardındaki halk efsanelerini ve jeolojik gerçekleri keşfedin.",
+      "content": "Kula'nın en büyüleyici yerlerinden biri olan ve sıkça 'Kuladokya' olarak anılan peri bacaları, sadece bir doğa harikası değil, aynı zamanda nesillerdir anlatılan efsanelerin de beşiğidir. Kapadokya'daki benzerlerinden farklı olarak, buradaki oluşumlar gölsel çökellerin rüzgar ve su erozyonuyla şekillenmesiyle meydana gelmiştir. Bu da onları daha kırılgan ve sürekli değişim halinde yapar; hızlı oluşur ve hızlı yok olurlar.\n\nHalk arasında anlatılan bir efsaneye göre, bu topraklarda yaşayan periler, insanlarla aralarındaki sınırı korumak için bu bacaları bir gecede inşa etmişlerdir. Bir başka rivayete göre ise devler, bu kayaları oyun oynarken üst üste yığmış ve zamanla bu şekilleri almışlardır. Bilimsel açıklaması ne kadar net olsa da, bu mistik atmosfer içinde efsanelere inanmak insana ayrı bir keyif verir. Gün batımında kızıla bürünen peri bacalarının arasında yürürken, kendinizi bir masalın içinde hissetmeniz işten bile değildir.",
+      "author": "Ahmet Yılmaz",
+      "date": "2024-05-10",
+      "imageId": "story-kuladokya"
+    },
+    {
+      "id": "story-2",
+      "slug": "bir-zamanlar-kula-evleri",
+      "title": "Zamanda Yolculuk: Bir Kula Evinin Anıları",
+      "excerpt": "Cumbalı pencereleri ve ahşap oymalarıyla Kula evleri, sadece bir mimari yapı değil, aynı zamanda yaşanmışlıkların da birer tanığıdır.",
+      "content": "Kula'nın daracık arnavut kaldırımlı sokaklarında yürürken, her biri birer sanat eseri olan tarihi evler sizi selamlar. Bu evler, Osmanlı sivil mimarisinin en zarif örneklerini sunar. Genellikle iki katlı olan bu yapıların alt katları taştan, günlük yaşamın geçtiği üst katları ise ahşaptandır. Dışa taşkın cumbalı pencereler, sokaktaki sosyal yaşamı evin içine taşımanın bir yoludur.\n\nBir zamanlar bu evlerde yaşayan ailelerin hikayeleri, ahşap tavan işlemelerine, kapı tokmaklarına sinmiştir. Her evin 'hayat' adı verilen bir iç avlusu bulunur. Bu avlular, ailenin bir araya geldiği, düğünlerin, bayramların kutlandığı, acıların ve sevinçlerin paylaşıldığı kutsal mekanlardır. Restore edilerek butik otel veya kafe olarak yeniden hayat bulan bu konaklarda bir kahve molası verdiğinizde, duvarların size fısıldadığı hikayeleri dinlemeyi unutmayın.",
+      "author": "Ayşe Kaya",
+      "date": "2024-04-22",
+      "imageId": "story-kula-house"
+    },
+    {
+      "id": "story-3",
+      "slug": "semerci-dedenin-atolyesi",
+      "title": "Kaybolan Bir Sanat: Semerci Dede'nin Atölyesi",
+      "excerpt": "Teknolojinin unutturduğu bir meslek olan semercilik, Kula'nın tarihi çarşısında son ustalarından birinin elinde yaşamaya devam ediyor.",
+      "content": "Kula'nın tarihi zanaatkarlar çarşısına adım attığınızda, çekiç sesleri ve deri kokusu sizi karşılar. Bakırcıların, demircilerin arasında, belki de en çok dikkatinizi çekecek olan, ömrünü semer yapımına adamış son ustalardan birinin küçük atölyesidir. Semer, yük hayvanlarının sırtına konulan ve yükün dengeli taşınmasını sağlayan ahşap iskeletli bir eyerdir.\n\nSemerci dede, her biri el emeği göz nuru olan semerlerini yaparken, sadece bir zanaat icra etmez, aynı zamanda bir kültürü de yaşatır. Saz ve kamışları büyük bir ustalıkla işleyip, deriyle kapladığı semerlerin her birinin bir hikayesi vardır. Onunla yapacağınız kısa bir sohbet, sizi teknolojinin henüz hayatımıza bu kadar dahil olmadığı, insan emeğinin ve zanaatın en değerli olduğu zamanlara götürecektir. Kula'dan ayrılmadan önce bu kaybolmaya yüz tutmuş sanata tanıklık etmek, unutulmaz bir deneyim olacaktır.",
+      "author": "Mehmet Öztürk",
+      "date": "2024-03-15",
+      "imageId": "story-artisan"
+    }
+  ]
+}

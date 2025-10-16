@@ -19,6 +19,7 @@ import {
 
 const navLinks = [
     { href: "/", label: "Ana Sayfa" },
+    { href: "/stories", label: "Hikayeler" },
     { href: "/pois", label: "Gezilecek Yerler" },
     { href: "/food", label: "Lezzet Durakları" },
     { href: "/accommodation", label: "Konaklama" },
@@ -45,7 +46,7 @@ export function Header() {
                                 href={link.href}
                                 className={cn(
                                     "transition-colors hover:text-foreground/80",
-                                    pathname === link.href ? "text-foreground" : "text-foreground/60"
+                                    pathname.startsWith(link.href) && link.href !== "/" || pathname === link.href ? "text-foreground" : "text-foreground/60"
                                 )}
                             >
                                 {link.label}
@@ -80,7 +81,7 @@ export function Header() {
                                         href={link.href}
                                         className={cn(
                                             "flex items-center gap-4 px-2.5",
-                                            pathname === link.href ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                                            pathname.startsWith(link.href) && link.href !== "/" || pathname === link.href ? "text-foreground" : "text-muted-foreground hover:text-foreground"
                                         )}
                                     >
                                         {link.label}

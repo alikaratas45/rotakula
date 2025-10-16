@@ -125,6 +125,24 @@
       "description": "Evciler köyünden bir sokak.",
       "imageUrl": "/evciler-village.jpg",
       "imageHint": "village street"
+    },
+    {
+      "id": "story-kuladokya",
+      "description": "Kuladokya peri bacalarının gün batımında görünüşü",
+      "imageUrl": "/peri-bacalari.jpg",
+      "imageHint": "canyon sunset"
+    },
+    {
+      "id": "story-kula-house",
+      "description": "Tarihi bir Kula konağının cumbalı penceresi",
+      "imageUrl": "/essanlar.jpg",
+      "imageHint": "historic house window"
+    },
+    {
+      "id": "story-artisan",
+      "description": "Bir zanaatkarın el aletleriyle çalıştığı an",
+      "imageUrl": "/elsanat.jpg",
+      "imageHint": "artisan hands"
     }
   ]
 }

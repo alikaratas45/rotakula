@@ -19,3 +19,14 @@ export type ThematicRoute = {
   poiIds: string[];
   isFeatured?: boolean;
 };
+
+export type Story = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  author: string;
+  date: string;
+  imageId: string;
+};
