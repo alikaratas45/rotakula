@@ -3,19 +3,19 @@
     {
       "id": "hero-home",
       "description": "Kula peri bacaları gün batımı",
-      "imageUrl": "/hero-home.jpg",
+      "imageUrl": "/kula.jpg",
       "imageHint": "canyon sunset"
     },
     {
       "id": "route-geopark",
       "description": "Kula volkanik arazisi",
-      "imageUrl": "/route-geopark.jpg",
+      "imageUrl": "/geopark.jpg",
       "imageHint": "volcanic landscape"
     },
     {
       "id": "route-history",
       "description": "Tarihi Kula evlerinin olduğu dar bir sokak",
-      "imageUrl": "/route-history.jpg",
+      "imageUrl": "/essanlar.jpg",
       "imageHint": "old town street"
     },
     {
@@ -27,19 +27,19 @@
     {
       "id": "poi-divlit-volcano",
       "description": "Kula Divlit Yanardağı krateri",
-      "imageUrl": "/poi-divlit-volcano.jpg",
+      "imageUrl": "/kuladivlit.jpg",
       "imageHint": "volcano crater"
     },
     {
       "id": "poi-fairy-chimneys",
       "description": "Kula Peri Bacaları jeolojik oluşumları",
-      "imageUrl": "/poi-fairy-chimneys.jpg",
+      "imageUrl": "/peri-bacalari.jpg",
       "imageHint": "rock formations"
     },
     {
       "id": "poi-basalt-columns",
       "description": "Çakırca Bazalt Sütunları",
-      "imageUrl": "/poi-basalt-columns.jpg",
+      "imageUrl": "/cakirca.jpg",
       "imageHint": "basalt columns"
     },
     {
