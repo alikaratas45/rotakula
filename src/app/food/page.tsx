@@ -35,7 +35,7 @@ export default function FoodPage() {
     }, []);
 
     const handleShowPoiOnMap = (poi: PointOfInterest) => {
-        const query = encodeURIComponent(`${poi.name}, Kula, Manisa`);
+        const query = encodeURIComponent("Kula'daki yiyecek içecek işletmeleri");
         const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
         window.open(url, '_blank');
     };
@@ -93,7 +93,7 @@ export default function FoodPage() {
                                 <div className="p-4 pt-0 mt-auto">
                                     <Button variant="outline" size="sm" onClick={() => handleShowPoiOnMap(poi)}>
                                         <MapPin className="mr-2 h-4 w-4" />
-                                        Google Haritalar'da Aç
+                                        Google Haritalar'da Göster
                                     </Button>
                                 </div>
                             </Card>
