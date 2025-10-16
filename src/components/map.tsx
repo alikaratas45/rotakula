@@ -17,9 +17,20 @@ function PoiMarker({ poi }: { poi: PointOfInterest }) {
     };
 
     const geocoder = new google.maps.Geocoder();
-    const query = poi.id === 'poi-13' 
-        ? { location: { lat: poi.latitude, lng: poi.longitude } }
-        : { address: `${poi.name}, Kula, Manisa, Türkiye` };
+    
+    let addressQuery: string;
+    if (poi.id === 'poi-2') { // Kula Peri Bacaları
+        addressQuery = 'Kuladokya Peri Bacaları';
+    } else if (poi.id === 'poi-13') { // Gökçeören Köyü - special handling
+        addressQuery = `${poi.latitude},${poi.longitude}`;
+    } else {
+        addressQuery = `${poi.name}, Kula, Manisa, Türkiye`;
+    }
+
+    const query = poi.id === 'poi-13'
+      ? { location: { lat: poi.latitude, lng: poi.longitude } }
+      : { address: addressQuery };
+
 
     geocoder.geocode(query, (results, status) => {
         if (status === 'OK' && results && results[0]) {
@@ -55,9 +66,18 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
       let hasSuccessfulGeocode = false;
 
       pois.forEach((poi) => {
+        let addressQuery: string;
+        if (poi.id === 'poi-2') { // Kula Peri Bacaları
+            addressQuery = 'Kuladokya Peri Bacaları';
+        } else if (poi.id === 'poi-13') { // Gökçeören Köyü
+            addressQuery = `${poi.latitude},${poi.longitude}`;
+        } else {
+            addressQuery = `${poi.name}, Kula, Manisa, Türkiye`;
+        }
+
         const query = poi.id === 'poi-13'
             ? { location: { lat: poi.latitude, lng: poi.longitude } }
-            : { address: `${poi.name}, Kula, Manisa, Türkiye` };
+            : { address: addressQuery };
         
         geocoder.geocode(query, (results, status) => {
             geocodedCount++;
