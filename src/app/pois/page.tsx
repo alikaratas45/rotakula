@@ -34,7 +34,8 @@ export default function PoisPage() {
         async function fetchPois() {
             try {
                 const allPois = await getPois();
-                setPois(allPois);
+                const filteredPois = allPois.filter(poi => poi.category !== 'food' && poi.category !== 'accommodation');
+                setPois(filteredPois);
             } catch (error) {
                 console.error("Failed to fetch POIs", error);
             } finally {
