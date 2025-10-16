@@ -4,11 +4,45 @@
 import { Map, AdvancedMarker, useMap, InfoWindow } from "@vis.gl/react-google-maps";
 import { PointOfInterest } from "@/lib/types";
 import { useEffect, useState } from "react";
-import { Loader2, X } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { getImageById } from "@/lib/placeholder-images";
-import { Button } from "./ui/button";
+import { cn } from "@/lib/utils";
 
+// --- User Location Marker ---
+function UserLocationMarker() {
+  const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (geoPosition) => {
+        setPosition({
+          lat: geoPosition.coords.latitude,
+          lng: geoPosition.coords.longitude,
+        });
+      },
+      (error) => {
+        console.warn(`Error getting user location: ${error.message}`);
+        // Silently fail if user denies permission
+      },
+      { enableHighAccuracy: true }
+    );
+  }, []);
+
+  if (!position) return null;
+
+  return (
+    <AdvancedMarker position={position} title="Sizin Konumunuz">
+      <div className="relative w-6 h-6 flex justify-center items-center">
+        <div className="absolute w-full h-full rounded-full bg-blue-500/20 animate-ping"></div>
+        <div className="w-4 h-4 rounded-full bg-blue-500 border-2 border-white shadow-md"></div>
+      </div>
+    </AdvancedMarker>
+  );
+}
+
+
+// --- POI Marker ---
 function PoiMarker({ 
     poi, 
     onClick 
@@ -56,26 +90,48 @@ function PoiMarker({
 
   return (
     <AdvancedMarker onClick={onClick} position={position} title={poi.name}>
-      <div className="relative flex flex-col items-center">
-        <div className="bg-white text-blue-600 font-bold px-2 py-1 rounded-md shadow-lg text-xs mb-1 whitespace-nowrap">
-          {poi.name}
+        <div className="relative flex flex-col items-center group">
+          <div 
+            className={cn(
+              "bg-background/80 backdrop-blur-sm text-blue-600 font-bold px-2 py-1 rounded-md shadow-lg text-xs mb-1 whitespace-nowrap",
+            )}
+          >
+            {poi.name}
+          </div>
+          <div className="w-6 h-6 bg-blue-500 rounded-full border-2 border-white shadow-md"></div>
         </div>
-        <div className="w-6 h-6 bg-blue-500 rounded-full border-2 border-white shadow-md"></div>
-      </div>
     </AdvancedMarker>
   );
 }
 
+// --- Main Map Component ---
 export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
   const map = useMap();
   const [markersLoaded, setMarkersLoaded] = useState(false);
   const [selectedPoiId, setSelectedPoiId] = useState<string | null>(null);
+  const [userPosition, setUserPosition] = useState<{ lat: number; lng: number } | null>(null);
 
   const selectedPoi = selectedPoiId ? pois.find(p => p.id === selectedPoiId) : null;
   const selectedImage = selectedPoi ? getImageById(selectedPoi.imageId) : null;
   
-  // A ref to the marker DOM element is needed for the InfoWindow
   const markerRef = selectedPoi ? document.querySelector(`[aria-label="${selectedPoi.name}"]`) as HTMLElement : null;
+
+  useEffect(() => {
+    // Get user's location
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setUserPosition({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+      },
+      () => {
+        // Fail silently if user denies
+        setUserPosition(null); 
+      }
+    );
+  }, []);
+
 
    useEffect(() => {
     if (map && pois.length > 0) {
@@ -83,6 +139,11 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
       const geocoder = new google.maps.Geocoder();
       let geocodedCount = 0;
       let hasSuccessfulGeocode = false;
+
+      // Add user's position to bounds if available
+      if (userPosition) {
+        bounds.extend(new google.maps.LatLng(userPosition.lat, userPosition.lng));
+      }
 
       pois.forEach((poi) => {
         let addressQuery: string;
@@ -110,11 +171,11 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
 
             // When all pois are geocoded, fit bounds
             if (geocodedCount === pois.length) {
-                if (hasSuccessfulGeocode) {
+                if (hasSuccessfulGeocode || userPosition) {
                     map.fitBounds(bounds, 100); // 100px padding
                 } else if (!bounds.isEmpty()) {
                     map.fitBounds(bounds);
-                    if (pois.length === 1) {
+                    if (pois.length === 1 && !userPosition) {
                         map.setZoom(13);
                     }
                 }
@@ -122,10 +183,15 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
             }
         });
       });
+    } else if (map && userPosition) {
+        // If there are no POIs but we have user location, center on them
+        map.setCenter(userPosition);
+        map.setZoom(13);
+        setMarkersLoaded(true);
     } else if (pois.length === 0) {
         setMarkersLoaded(true);
     }
-  }, [map, pois]);
+  }, [map, pois, userPosition]);
 
   useEffect(() => {
     // Reset selection when POIs change
@@ -154,6 +220,7 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
         mapId="rotakula-map"
         onClick={() => setSelectedPoiId(null)}
       >
+        {userPosition && <UserLocationMarker />}
         {pois.map((poi) => (
           <PoiMarker key={poi.id} poi={poi} onClick={() => setSelectedPoiId(poi.id)} />
         ))}
