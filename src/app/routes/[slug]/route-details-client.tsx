@@ -6,9 +6,9 @@ import { useSavedRoutes } from '@/hooks/use-saved-routes';
 import { getImageById } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Heart, MapPin } from 'lucide-react';
+import { Heart, MapPin, Mountain } from 'lucide-react';
 import Image from 'next/image';
-import { FoodIcon, HistoricHouseIcon, VolcanoIcon } from '@/components/icons';
+import { FoodIcon, HistoricHouseIcon } from '@/components/icons';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import EmbeddedMap from '@/components/map';
@@ -18,7 +18,7 @@ function getCategoryIcon(category: PointOfInterest['category']) {
     switch (category) {
         case 'geopark':
         case 'nature':
-            return <VolcanoIcon className="h-6 w-6 text-accent-foreground" />;
+            return <Mountain className="h-6 w-6 text-accent-foreground" />;
         case 'history':
             return <HistoricHouseIcon className="h-6 w-6 text-accent-foreground" />;
         case 'food':

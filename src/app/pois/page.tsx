@@ -8,8 +8,8 @@ import type { PointOfInterest } from '@/lib/types';
 import { getImageById } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, MapPin } from 'lucide-react';
-import { VolcanoIcon, HistoricHouseIcon, FoodIcon } from '@/components/icons';
+import { Loader2, MapPin, Mountain } from 'lucide-react';
+import { HistoricHouseIcon, FoodIcon } from '@/components/icons';
 import EmbeddedMap from '@/components/map';
 import { APIProvider } from '@vis.gl/react-google-maps';
 
@@ -17,7 +17,7 @@ function getCategoryIcon(category: PointOfInterest['category']) {
     switch (category) {
         case 'geopark':
         case 'nature':
-            return <VolcanoIcon className="h-6 w-6 text-accent-foreground" />;
+            return <Mountain className="h-6 w-6 text-accent-foreground" />;
         case 'history':
             return <HistoricHouseIcon className="h-6 w-6 text-accent-foreground" />;
         case 'food':
