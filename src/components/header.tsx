@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import * as React from "react";
+import Image from "next/image";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -15,7 +16,6 @@ import {
   SheetDescription,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { RotaKulaLogo } from "./icons";
 
 const navLinks = [
     { href: "/", label: "Ana Sayfa" },
@@ -33,7 +33,7 @@ export function Header() {
             <div className="container flex h-16 items-center">
                 <div className="mr-4 hidden md:flex">
                     <Link href="/" className="mr-6 flex items-center space-x-2">
-                        <RotaKulaLogo className="h-6 w-6 text-primary" />
+                        <Image src="/logo.png" alt="RotaKula Logo" width={28} height={28} />
                         <span className="hidden font-bold sm:inline-block font-headline text-lg">
                             RotaKula
                         </span>
@@ -56,7 +56,7 @@ export function Header() {
                 
                 <div className="flex flex-1 items-center justify-between md:justify-end">
                     <Link href="/" className="flex items-center space-x-2 md:hidden">
-                        <RotaKulaLogo className="h-6 w-6 text-primary" />
+                        <Image src="/logo.png" alt="RotaKula Logo" width={28} height={28} />
                         <span className="font-bold font-headline text-lg">RotaKula</span>
                     </Link>
                     <Sheet>
