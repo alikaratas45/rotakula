@@ -45,26 +45,20 @@
     {
       "id": "poi-historic-houses",
       "description": "Restore edilmiş bir Tarihi Kula Evi",
-      "imageUrl": "/poi-historic-houses.jpg",
+      "imageUrl": "/essanlar.jpg",
       "imageHint": "historic mansion"
     },
     {
       "id": "poi-carullah-mosque",
       "description": "Carullah Bin Süleyman Camii'nin avlusu",
-      "imageUrl": "/poi-carullah-mosque.jpg",
+      "imageUrl": "/carullah.jpg",
       "imageHint": "mosque courtyard"
     },
     {
       "id": "poi-local-artisans",
       "description": "Kula'da yerel bir zanaatkar atölyesi",
-      "imageUrl": "/poi-local-artisans.jpg",
+      "imageUrl": "/elsanat.jpg",
       "imageHint": "artisan workshop"
-    },
-    {
-      "id": "poi-kula-stew",
-      "description": "Toprak güveçte Kula güveci",
-      "imageUrl": "/poi-kula-stew.jpg",
-      "imageHint": "stew dish"
     },
     {
       "id": "poi-sweet-pide",

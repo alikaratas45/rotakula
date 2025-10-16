@@ -55,15 +55,6 @@
       "longitude": 28.5215
     },
     {
-      "id": "poi-7",
-      "name": "Kula Lezzet Sarayı",
-      "description": "Kula'nın meşhur odun köftesi ve güvecini tadabileceğiniz, yöresel lezzetleriyle ünlü bir restoran.",
-      "category": "food",
-      "imageId": "poi-kula-stew",
-      "latitude": 38.5458,
-      "longitude": 28.5221
-    },
-    {
       "id": "poi-8",
       "name": "Tarihi Kula Pidecisi",
       "description": "Kula'ya özgü, tahinli ve şekerli pidenin en lezzetli halini bulabileceğiniz tarihi bir fırın.",
