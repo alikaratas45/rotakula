@@ -6,7 +6,14 @@ import { Menu, Mountain } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { RotaKulaLogo } from "./icons";
 
 const navLinks = [
@@ -56,6 +63,12 @@ export function Header() {
                             </Button>
                         </SheetTrigger>
                         <SheetContent side="left">
+                            <SheetHeader>
+                                <SheetTitle>Menü</SheetTitle>
+                                <SheetDescription>
+                                    Uygulama içinde gezinmek için aşağıdaki bağlantıları kullanabilirsiniz.
+                                </SheetDescription>
+                            </SheetHeader>
                             <nav className="grid gap-6 text-lg font-medium mt-8">
                                 {navLinks.map((link) => (
                                     <Link
