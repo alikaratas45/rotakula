@@ -95,6 +95,24 @@
       "description": "Sandal Divlit Yanardağı ve çevresi.",
       "imageUrl": "/sandal.jpg",
       "imageHint": "volcano cone"
+    },
+    {
+      "id": "poi-gokceoren-village",
+      "description": "Gökçeören köyünün genel görünümü.",
+      "imageUrl": "/gokceoren.jpg",
+      "imageHint": "village landscape"
+    },
+    {
+      "id": "poi-incesu-village",
+      "description": "İncesu köyü ve çevresindeki doğal güzellikler.",
+      "imageUrl": "/incesu.jpg",
+      "imageHint": "village stream"
+    },
+    {
+      "id": "poi-korez-village",
+      "description": "Körez köyünden tarihi bir sokak.",
+      "imageUrl": "/korez.jpg",
+      "imageHint": "historic village street"
     }
   ]
 }

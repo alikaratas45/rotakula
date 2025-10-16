@@ -99,6 +99,33 @@
       "imageId": "poi-divlit-volcano",
       "latitude": 38.5833,
       "longitude": 28.5167
+    },
+    {
+      "id": "poi-13",
+      "name": "Gökçeören Köyü",
+      "description": "Geleneksel mimarisi ve doğal güzellikleriyle bilinen, Kula'nın bir diğer önemli tarihi köyü.",
+      "category": "history",
+      "imageId": "poi-gokceoren-village",
+      "latitude": 38.65,
+      "longitude": 28.65
+    },
+    {
+      "id": "poi-14",
+      "name": "İncesu Köyü",
+      "description": "Adını içinden geçen dereden alan, yeşillikler içinde huzurlu bir atmosfere sahip şirin bir köy.",
+      "category": "history",
+      "imageId": "poi-incesu-village",
+      "latitude": 38.68,
+      "longitude": 28.55
+    },
+    {
+      "id": "poi-15",
+      "name": "Körez Köyü",
+      "description": "Tarihi yapıları ve kültürel dokusuyla dikkat çeken, Kula'nın keşfedilmeyi bekleyen köylerinden.",
+      "category": "history",
+      "imageId": "poi-korez-village",
+      "latitude": 38.52,
+      "longitude": 28.7
     }
   ]
 }

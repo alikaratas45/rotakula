@@ -35,7 +35,7 @@
       "description": "Kula'nın otantik köy yaşamını ve saklı kalmış tarihi güzelliklerini keşfedin.",
       "longDescription": "Kula merkezinin dışına çıkarak, asırlık taş evleri, sakin sokakları ve yemyeşil doğasıyla sizi karşılayacak tarihi köylerde huzurlu bir gün geçirin. Bu rota, Kula'nın kırsal yaşamını ve kültürel zenginliğini deneyimlemek için idealdir.",
       "imageId": "route-villages",
-      "poiIds": ["poi-10", "poi-11"]
+      "poiIds": ["poi-10", "poi-11", "poi-13", "poi-14", "poi-15"]
     }
   ]
 }
