@@ -1,3 +1,4 @@
+
 "use client"
 
 import type { ThematicRoute, PointOfInterest } from '@/lib/types';
@@ -29,16 +30,9 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
     const { isLoaded, isRouteSaved, toggleSaveRoute } = useSavedRoutes();
 
     const getPoiQuery = (poi: PointOfInterest) => {
-        // If a specific mapQuery is provided (like "Kula'daki lokantalar"), use it.
-        // Otherwise, use coordinates for precision, especially for natural/unnamed spots.
-        // For Gökçeören, we must use coordinates.
-        if (poi.mapQuery) {
-            return encodeURIComponent(poi.mapQuery);
-        }
         if (poi.id === 'poi-13') { // Gökçeören
             return `${poi.latitude},${poi.longitude}`;
         }
-        // For other POIs, name search is generally better for user experience.
         return encodeURIComponent(`${poi.name}, Kula, Manisa`);
     };
 

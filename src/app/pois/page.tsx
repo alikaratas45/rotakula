@@ -45,9 +45,6 @@ export default function PoisPage() {
     }, []);
 
     const getPoiQuery = (poi: PointOfInterest) => {
-        if (poi.mapQuery) {
-            return encodeURIComponent(poi.mapQuery);
-        }
         if (poi.id === 'poi-13') { // Gökçeören
             return `${poi.latitude},${poi.longitude}`;
         }
