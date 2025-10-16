@@ -20,9 +20,9 @@
     },
     {
       "id": "route-food",
-      "description": "Kula'nın meşhur odun köftesi",
-      "imageUrl": "/route-food.jpg",
-      "imageHint": "grilled meatballs"
+      "description": "Toprak güveçte Kula güveci",
+      "imageUrl": "/govec.jpg",
+      "imageHint": "stew dish"
     },
     {
       "id": "poi-divlit-volcano",
