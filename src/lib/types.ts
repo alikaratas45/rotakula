@@ -6,6 +6,7 @@ export type PointOfInterest = {
   imageId: string;
   latitude: number;
   longitude: number;
+  mapQuery?: string;
 };
 
 export type ThematicRoute = {

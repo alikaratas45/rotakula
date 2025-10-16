@@ -56,12 +56,13 @@
     },
     {
       "id": "poi-8",
-      "name": "Tarihi Kula Pidecisi",
-      "description": "Kula'ya özgü, tahinli ve şekerli pidenin en lezzetli halini bulabileceğiniz tarihi bir fırın.",
+      "name": "Kula Lezzet Durakları",
+      "description": "Kula'ya özgü, tahinli pideden odun köftesine çeşitli tatları bulabileceğiniz mekanlar.",
       "category": "food",
       "imageId": "poi-sweet-pide",
       "latitude": 38.5462,
-      "longitude": 28.5208
+      "longitude": 28.5208,
+      "mapQuery": "Kula'daki lokantalar"
     },
     {
       "id": "poi-9",
