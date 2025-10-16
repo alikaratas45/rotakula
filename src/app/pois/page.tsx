@@ -8,7 +8,7 @@ import type { PointOfInterest } from '@/lib/types';
 import { getImageById } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, MapPin } from 'lucide-react';
+import { Loader2, Map, MapPin } from 'lucide-react';
 import { VolcanoIcon, HistoricHouseIcon, FoodIcon } from '@/components/icons';
 
 function getCategoryIcon(category: PointOfInterest['category']) {
@@ -44,8 +44,29 @@ export default function PoisPage() {
         fetchPois();
     }, []);
 
+    const getPoiQuery = (poi: PointOfInterest) => {
+        if (poi.mapQuery) {
+            return encodeURIComponent(poi.mapQuery);
+        }
+        if (poi.id === 'poi-13') { // Gökçeören
+            return `${poi.latitude},${poi.longitude}`;
+        }
+        return encodeURIComponent(`${poi.name}, Kula, Manisa`);
+    };
+    
+    const handleShowAllOnMap = () => {
+        if (pois.length < 1) return;
+        
+        const waypoints = pois
+            .map(poi => getPoiQuery(poi))
+            .join('|');
+            
+        const url = `https://www.google.com/maps/dir/?api=1&waypoints=${waypoints}`;
+        window.open(url, '_blank');
+    };
+
     const handleShowPoiOnMap = (poi: PointOfInterest) => {
-        const query = poi.mapQuery ? encodeURIComponent(poi.mapQuery) : `${poi.latitude},${poi.longitude}`;
+        const query = getPoiQuery(poi);
         const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
         window.open(url, '_blank');
     };
@@ -60,7 +81,15 @@ export default function PoisPage() {
 
     return (
         <div className="container py-8 md:py-12">
-            <h1 className="text-3xl md:text-4xl font-headline font-bold mb-8">Gezilecek Yerler</h1>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+                <h1 className="text-3xl md:text-4xl font-headline font-bold">Gezilecek Yerler</h1>
+                {pois.length > 0 && (
+                     <Button onClick={handleShowAllOnMap}>
+                        <Map className="mr-2 h-4 w-4" />
+                        Tümünü Haritada Göster
+                    </Button>
+                )}
+            </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {pois.map(poi => {
