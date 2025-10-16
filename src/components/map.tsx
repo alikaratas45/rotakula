@@ -1,7 +1,7 @@
 
 "use client";
 
-import { APIProvider, Map, AdvancedMarker } from "@vis.gl/react-google-maps";
+import { Map, AdvancedMarker } from "@vis.gl/react-google-maps";
 import { PointOfInterest } from "@/lib/types";
 
 function PoiMarker({ poi }: { poi: PointOfInterest }) {
@@ -15,35 +15,23 @@ function PoiMarker({ poi }: { poi: PointOfInterest }) {
 }
 
 export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
-  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-
-  if (!apiKey) {
-    return (
-      <div className="flex items-center justify-center h-96 bg-muted rounded-lg">
-        <p className="text-muted-foreground text-center p-4">Google Haritalar API anahtarı eksik veya geçersiz. <br/>Lütfen `.env.local` dosyasını kontrol edin veya geliştirici konsolunda anahtarınızın doğru şekilde yapılandırıldığından emin olun.</p>
-      </div>
-    );
-  }
-
   const center = pois.length > 0
     ? { lat: pois[0].latitude, lng: pois[0].longitude }
     : { lat: 38.547, lng: 28.52 }; // Fallback to Kula center
 
   return (
-    <APIProvider apiKey={apiKey}>
-      <div className="h-96 w-full rounded-lg overflow-hidden">
-        <Map
-          defaultCenter={center}
-          defaultZoom={11}
-          gestureHandling={"greedy"}
-          disableDefaultUI={true}
-          mapId="rotakula-map"
-        >
-          {pois.map((poi) => (
-            <PoiMarker key={poi.id} poi={poi} />
-          ))}
-        </Map>
-      </div>
-    </APIProvider>
+    <div className="h-96 w-full rounded-lg overflow-hidden">
+      <Map
+        defaultCenter={center}
+        defaultZoom={11}
+        gestureHandling={"greedy"}
+        disableDefaultUI={true}
+        mapId="rotakula-map"
+      >
+        {pois.map((poi) => (
+          <PoiMarker key={poi.id} poi={poi} />
+        ))}
+      </Map>
+    </div>
   );
 }
