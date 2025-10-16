@@ -57,11 +57,14 @@ export default function PoisPage() {
     const handleShowAllOnMap = () => {
         if (pois.length < 1) return;
         
-        const waypoints = pois
-            .map(poi => getPoiQuery(poi))
-            .join('|');
+        // Use the search API to show multiple pins.
+        // It's less ideal than a route but shows standard red pins.
+        // We can't set pin colors from a URL.
+        const searchQuery = pois
+            .map(poi => poi.name)
+            .join(', Kula | ');
             
-        const url = `https://www.google.com/maps/dir/?api=1&waypoints=${waypoints}`;
+        const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(searchQuery)}`;
         window.open(url, '_blank');
     };
 
