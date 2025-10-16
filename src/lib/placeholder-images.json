@@ -3,79 +3,79 @@
     {
       "id": "hero-home",
       "description": "Kula peri bacaları gün batımı",
-      "imageUrl": "https://picsum.photos/seed/kula1/1920/1080",
+      "imageUrl": "/hero-home.jpg",
       "imageHint": "canyon sunset"
     },
     {
       "id": "route-geopark",
       "description": "Kula volkanik arazisi",
-      "imageUrl": "https://picsum.photos/seed/kula2/600/400",
+      "imageUrl": "/route-geopark.jpg",
       "imageHint": "volcanic landscape"
     },
     {
       "id": "route-history",
       "description": "Tarihi Kula evlerinin olduğu dar bir sokak",
-      "imageUrl": "https://picsum.photos/seed/kula3/600/400",
+      "imageUrl": "/route-history.jpg",
       "imageHint": "old town street"
     },
     {
       "id": "route-food",
       "description": "Kula'nın meşhur odun köftesi",
-      "imageUrl": "https://picsum.photos/seed/kula4/600/400",
+      "imageUrl": "/route-food.jpg",
       "imageHint": "grilled meatballs"
     },
     {
       "id": "poi-divlit-volcano",
       "description": "Kula Divlit Yanardağı krateri",
-      "imageUrl": "https://picsum.photos/seed/kula5/600/400",
+      "imageUrl": "/poi-divlit-volcano.jpg",
       "imageHint": "volcano crater"
     },
     {
       "id": "poi-fairy-chimneys",
       "description": "Kula Peri Bacaları jeolojik oluşumları",
-      "imageUrl": "https://picsum.photos/seed/kula6/600/400",
+      "imageUrl": "/poi-fairy-chimneys.jpg",
       "imageHint": "rock formations"
     },
     {
       "id": "poi-basalt-columns",
       "description": "Çakırca Bazalt Sütunları",
-      "imageUrl": "https://picsum.photos/seed/kula7/600/400",
+      "imageUrl": "/poi-basalt-columns.jpg",
       "imageHint": "basalt columns"
     },
     {
       "id": "poi-historic-houses",
       "description": "Restore edilmiş bir Tarihi Kula Evi",
-      "imageUrl": "https://picsum.photos/seed/kula8/600/400",
+      "imageUrl": "/poi-historic-houses.jpg",
       "imageHint": "historic mansion"
     },
     {
       "id": "poi-carullah-mosque",
       "description": "Carullah Bin Süleyman Camii'nin avlusu",
-      "imageUrl": "https://picsum.photos/seed/kula9/600/400",
+      "imageUrl": "/poi-carullah-mosque.jpg",
       "imageHint": "mosque courtyard"
     },
     {
       "id": "poi-local-artisans",
       "description": "Kula'da yerel bir zanaatkar atölyesi",
-      "imageUrl": "https://picsum.photos/seed/kula10/600/400",
+      "imageUrl": "/poi-local-artisans.jpg",
       "imageHint": "artisan workshop"
     },
     {
       "id": "poi-kula-stew",
       "description": "Toprak güveçte Kula güveci",
-      "imageUrl": "https://picsum.photos/seed/kula11/600/400",
+      "imageUrl": "/poi-kula-stew.jpg",
       "imageHint": "stew dish"
     },
     {
       "id": "poi-sweet-pide",
       "description": "Fırından yeni çıkmış Kula şekerli pidesi",
-      "imageUrl": "https://picsum.photos/seed/kula12/600/400",
+      "imageUrl": "/poi-sweet-pide.jpg",
       "imageHint": "sweet pastry"
     },
     {
       "id": "poi-essanlar-konagi",
       "description": "Essanlar Konağı otelinin dış görünüşü",
-      "imageUrl": "https://picsum.photos/seed/kula13/600/400",
+      "imageUrl": "/poi-essanlar-konagi.jpg",
       "imageHint": "historic hotel"
     }
   ]
