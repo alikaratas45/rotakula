@@ -30,8 +30,8 @@ function getCategoryIcon(category: PointOfInterest['category']) {
 
 export default function PoisPage() {
     const [pois, setPois] = useState<PointOfInterest[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
+    const [isLoading, setIsLoading]_useState(true);
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
     useEffect(() => {
         async function fetchPois() {

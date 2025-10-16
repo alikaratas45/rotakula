@@ -17,7 +17,7 @@ import { APIProvider } from '@vis.gl/react-google-maps';
 export default function FoodPage() {
     const [pois, setPois] = useState<PointOfInterest[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
     useEffect(() => {
         async function fetchPois() {
