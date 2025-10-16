@@ -3,9 +3,9 @@
     {
       "id": "poi-1",
       "name": "Sandal Divlit Volkan Konisi",
-      "description": "Türkiye'nin en genç volkan konisi olan Kula Divlit, etkileyici krateri ve manzarasıyla jeoparkın en önemli noktalarından biridir.",
+      "description": "Türkiye'nin en genç volkan konilerinden biri olan Sandal Divlit, etkileyici krateri ve manzarasıyla jeoparkın önemli noktalarından biridir.",
       "category": "geopark",
-      "imageId": "poi-divlit-volcano",
+      "imageId": "poi-sandal-volcano",
       "latitude": 38.5833,
       "longitude": 28.5167
     },
@@ -90,6 +90,15 @@
       "imageId": "poi-sandal-village",
       "latitude": 38.5,
       "longitude": 28.4
+    },
+    {
+      "id": "poi-12",
+      "name": "Kula Divlit Volkan Konisi",
+      "description": "Jeoparkın en bilinen simgelerinden biri olan Kula Divlit, ziyaretçilere ay yüzeyini andıran bir yürüyüş deneyimi sunar.",
+      "category": "geopark",
+      "imageId": "poi-divlit-volcano",
+      "latitude": 38.5833,
+      "longitude": 28.5167
     }
   ]
 }

@@ -89,6 +89,12 @@
       "description": "Sandal köyünün genel görünümü.",
       "imageUrl": "/sandal-village.jpg",
       "imageHint": "village view"
+    },
+    {
+      "id": "poi-sandal-volcano",
+      "description": "Sandal Divlit Yanardağı ve çevresi.",
+      "imageUrl": "/sandal-village.jpg",
+      "imageHint": "volcano cone"
     }
   ]
 }
