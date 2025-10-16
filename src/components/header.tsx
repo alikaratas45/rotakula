@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, Mountain, ChevronDown } from "lucide-react";
+import { Menu, ChevronDown } from "lucide-react";
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
@@ -10,10 +10,10 @@ import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  SheetDescription,
 } from "@/components/ui/sheet";
 import {
   DropdownMenu,
@@ -43,7 +43,8 @@ export function Header() {
     }, []);
 
     const handleShowPoiOnMap = (poi: PointOfInterest) => {
-        const url = `https://www.google.com/maps/search/?api=1&query=${poi.latitude},${poi.longitude}`;
+        const query = encodeURIComponent(`${poi.name}, Kula, Manisa`);
+        const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
         window.open(url, '_blank');
     };
 

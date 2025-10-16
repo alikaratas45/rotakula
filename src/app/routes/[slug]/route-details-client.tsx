@@ -45,7 +45,8 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
     };
 
     const handleShowPoiOnMap = (poi: PointOfInterest) => {
-        const url = `https://www.google.com/maps/search/?api=1&query=${poi.latitude},${poi.longitude}`;
+        const query = encodeURIComponent(`${poi.name}, Kula, Manisa`);
+        const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
         window.open(url, '_blank');
     };
 
