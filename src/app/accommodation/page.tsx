@@ -16,7 +16,7 @@ import { APIProvider } from '@vis.gl/react-google-maps';
 export default function AccommodationPage() {
     const [pois, setPois] = useState<PointOfInterest[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
 
     useEffect(() => {
         async function fetchPois() {
@@ -51,7 +51,7 @@ export default function AccommodationPage() {
       return (
           <div className="container py-8 md:py-12">
                <div className="flex items-center justify-center h-96 bg-muted rounded-lg">
-                  <p className="text-muted-foreground text-center p-4">Google Haritalar API anahtarı eksik veya geçersiz. <br/>Lütfen `.env.local` dosyasını kontrol edin veya geliştirici konsolunda anahtarınızın doğru şekilde yapılandırıldığından emin olun.</p>
+                  <p className="text-muted-foreground text-center p-4">Google Haritalar API anahtarı eksik veya geçersiz. <br/>Lütfen `.env.local` dosyanızı oluşturup `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=YOUR_API_KEY` şeklinde anahtarınızı ekleyin ve geliştirici sunucusunu yeniden başlatın.</p>
               </div>
           </div>
       );

@@ -30,7 +30,7 @@ function getCategoryIcon(category: PointOfInterest['category']) {
 
 export default function RouteDetailsClient({ route, pois }: { route: ThematicRoute; pois: PointOfInterest[] }) {
     const { isLoaded, isRouteSaved, toggleSaveRoute } = useSavedRoutes();
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
 
     const handleShowPoiOnMap = (poi: PointOfInterest) => {
         const query = poi.id === 'poi-13'
@@ -46,7 +46,7 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
       return (
           <div className="container py-8 md:py-12">
                <div className="flex items-center justify-center h-96 bg-muted rounded-lg">
-                  <p className="text-muted-foreground text-center p-4">Google Haritalar API anahtarı eksik veya geçersiz. <br/>Lütfen `.env.local` dosyasını kontrol edin veya geliştirici konsolunda anahtarınızın doğru şekilde yapılandırıldığından emin olun.</p>
+                  <p className="text-muted-foreground text-center p-4">Google Haritalar API anahtarı eksik veya geçersiz. <br/>Lütfen `.env.local` dosyanızı oluşturup `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=YOUR_API_KEY` şeklinde anahtarınızı ekleyin ve geliştirici sunucusunu yeniden başlatın.</p>
               </div>
           </div>
       );
