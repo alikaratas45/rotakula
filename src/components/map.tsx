@@ -11,7 +11,10 @@ function PoiMarker({ poi }: { poi: PointOfInterest }) {
   const map = useMap();
 
   useEffect(() => {
-    if (!map) return;
+    if (!map) {
+      setPosition({ lat: poi.latitude, lng: poi.longitude });
+      return;
+    };
 
     const geocoder = new google.maps.Geocoder();
     const query = poi.id === 'poi-13' 
@@ -23,9 +26,8 @@ function PoiMarker({ poi }: { poi: PointOfInterest }) {
             const location = results[0].geometry.location;
             setPosition({ lat: location.lat(), lng: location.lng() });
         } else {
-            // Fallback to static coordinates if geocoding fails
+            // Fallback to static coordinates if geocoding fails, without logging an error to console.
             setPosition({ lat: poi.latitude, lng: poi.longitude });
-            console.error(`Geocode was not successful for the following reason: ${status}`);
         }
     });
   }, [map, poi]);
@@ -50,6 +52,7 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
       const bounds = new google.maps.LatLngBounds();
       const geocoder = new google.maps.Geocoder();
       let geocodedCount = 0;
+      let hasSuccessfulGeocode = false;
 
       pois.forEach((poi) => {
         const query = poi.id === 'poi-13'
@@ -60,6 +63,7 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
             geocodedCount++;
             if (status === 'OK' && results && results[0]) {
                 bounds.extend(results[0].geometry.location);
+                hasSuccessfulGeocode = true;
             } else {
                 // Fallback for failed geocoding
                 bounds.extend(new google.maps.LatLng(poi.latitude, poi.longitude));
@@ -67,13 +71,20 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
 
             // When all pois are geocoded, fit bounds
             if (geocodedCount === pois.length) {
-                if (!bounds.isEmpty()) {
+                if (hasSuccessfulGeocode) {
                     map.fitBounds(bounds, 100); // 100px padding
+                } else if (!bounds.isEmpty()) {
+                    map.fitBounds(bounds);
+                    if (pois.length === 1) {
+                        map.setZoom(13);
+                    }
                 }
                 setMarkersLoaded(true);
             }
         });
       });
+    } else if (pois.length === 0) {
+        setMarkersLoaded(true);
     }
   }, [map, pois]);
 
