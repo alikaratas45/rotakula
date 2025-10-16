@@ -15,10 +15,12 @@ function PoiMarker({ poi }: { poi: PointOfInterest }) {
 }
 
 export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
-  if (!process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY) {
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+
+  if (!apiKey) {
     return (
       <div className="flex items-center justify-center h-96 bg-muted rounded-lg">
-        <p className="text-muted-foreground">Google Haritalar API anahtarı eksik.</p>
+        <p className="text-muted-foreground">Google Haritalar API anahtarı eksik veya geçersiz. Lütfen `.env.local` dosyasını kontrol edin.</p>
       </div>
     );
   }
@@ -28,7 +30,7 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
     : { lat: 38.547, lng: 28.52 }; // Fallback to Kula center
 
   return (
-    <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}>
+    <APIProvider apiKey={apiKey}>
       <div className="h-96 w-full rounded-lg overflow-hidden">
         <Map
           defaultCenter={center}
