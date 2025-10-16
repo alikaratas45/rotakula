@@ -1,0 +1,32 @@
+{
+  "routes": [
+    {
+      "id": "route-1",
+      "slug": "jeopark-kesif-rotasi",
+      "title": "Jeopark Keşif Rotası",
+      "description": "Kula'nın volkanik geçmişine tanıklık edin ve jeolojik harikaları keşfedin.",
+      "longDescription": "Bu rota, sizi Türkiye'nin ilk ve tek UNESCO Global Jeoparkı'nın kalbine götürüyor. Milyonlarca yıllık jeolojik oluşumları, sönmüş yanardağları ve lav akıntılarını yakından görün. Doğa ve bilim meraklıları için unutulmaz bir deneyim.",
+      "imageId": "route-geopark",
+      "poiIds": ["poi-1", "poi-2", "poi-3"],
+      "isFeatured": true
+    },
+    {
+      "id": "route-2",
+      "slug": "tarihi-dokuyu-hisset",
+      "title": "Tarihi Dokuyu Hisset",
+      "description": "Osmanlı mimarisinin en güzel örnekleri arasında zamanda bir yolculuğa çıkın.",
+      "longDescription": "Kula'nın dar sokaklarında kaybolun, asırlık konakların hikayelerini dinleyin ve geleneksel el sanatlarını yaşatan zanaatkarlarla tanışın. Bu yürüyüş rotası, Kula'nın zengin kültürel mirasını size hissettirecek.",
+      "imageId": "route-history",
+      "poiIds": ["poi-4", "poi-5", "poi-6"]
+    },
+    {
+      "id": "route-3",
+      "slug": "kula-lezzet-turu",
+      "title": "Kula Lezzet Turu",
+      "description": "Kula'nın eşsiz ve otantik tatlarını deneyimleyeceğiniz bir gastronomi macerası.",
+      "longDescription": "Odun köftesinden meşhur güvecine, şekerli pideden yöresel otlara kadar Kula mutfağının en özel lezzetlerini tadın. Bu rota, damak zevkine düşkün gezginler için Kula'nın en iyi lezzet duraklarını bir araya getiriyor.",
+      "imageId": "route-food",
+      "poiIds": ["poi-7", "poi-8"]
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "pois": [
+    {
+      "id": "poi-1",
+      "name": "Kula Divlit Yanardağı",
+      "description": "Türkiye'nin en genç volkan konisi olan Kula Divlit, etkileyici krateri ve manzarasıyla jeoparkın en önemli noktalarından biridir.",
+      "category": "geopark",
+      "imageId": "poi-divlit-volcano",
+      "latitude": 38.5833,
+      "longitude": 28.5167
+    },
+    {
+      "id": "poi-2",
+      "name": "Kula Peri Bacaları (Kuladokya)",
+      "description": "Volkanik tüfler ve yağmur sularının milyonlarca yılda oluşturduğu bu peri bacaları, Kapadokya'yı andıran manzaralar sunar.",
+      "category": "geopark",
+      "imageId": "poi-fairy-chimneys",
+      "latitude": 38.6361,
+      "longitude": 28.3844
+    },
+    {
+      "id": "poi-3",
+      "name": "Çakırca Bazalt Sütunları",
+      "description": "Lavların soğumasıyla oluşan altıgen şekilli bazalt sütunlar, doğanın geometrik bir harikasıdır.",
+      "category": "geopark",
+      "imageId": "poi-basalt-columns",
+      "latitude": 38.5421,
+      "longitude": 28.4552
+    },
+    {
+      "id": "poi-4",
+      "name": "Tarihi Kula Evleri",
+      "description": "Osmanlı sivil mimarisinin en güzel örneklerini barındıran, cumbalı, ahşap ve taş işçiliğinin zarif birleşimi olan evler.",
+      "category": "history",
+      "imageId": "poi-historic-houses",
+      "latitude": 38.5473,
+      "longitude": 28.5204
+    },
+    {
+      "id": "poi-5",
+      "name": "Carullah Bin Süleyman Camii",
+      "description": "Kula'nın en eski camilerinden biri olan bu yapı, Mimar Sinan'ın kalfalarından biri tarafından yapılmıştır ve iç süslemeleriyle dikkat çeker.",
+      "category": "history",
+      "imageId": "poi-carullah-mosque",
+      "latitude": 38.547,
+      "longitude": 28.5209
+    },
+    {
+      "id": "poi-6",
+      "name": "Yerel Zanaatkarlar Çarşısı",
+      "description": "Kula'nın geleneksel el sanatlarını (bakırcılık, semercilik, demircilik) yaşatan ustaları ziyaret edebileceğiniz otantik bir çarşı.",
+      "category": "history",
+      "imageId": "poi-local-artisans",
+      "latitude": 38.5465,
+      "longitude": 28.5215
+    },
+    {
+      "id": "poi-7",
+      "name": "Kula Lezzet Sarayı",
+      "description": "Kula'nın meşhur odun köftesi ve güvecini tadabileceğiniz, yöresel lezzetleriyle ünlü bir restoran.",
+      "category": "food",
+      "imageId": "poi-kula-stew",
+      "latitude": 38.5458,
+      "longitude": 28.5221
+    },
+    {
+      "id": "poi-8",
+      "name": "Tarihi Kula Pidecisi",
+      "description": "Kula'ya özgü, tahinli ve şekerli pidenin en lezzetli halini bulabileceğiniz tarihi bir fırın.",
+      "category": "food",
+      "imageId": "poi-sweet-pide",
+      "latitude": 38.5462,
+      "longitude": 28.5208
+    },
+    {
+      "id": "poi-9",
+      "name": "Essanlar Konağı",
+      "description": "Tarihi bir Kula evinin restore edilmesiyle hizmet veren, otantik bir konaklama deneyimi sunan butik bir otel.",
+      "category": "accommodation",
+      "imageId": "poi-essanlar-konagi",
+      "latitude": 38.5478,
+      "longitude": 28.5218
+    }
+  ]
+}
