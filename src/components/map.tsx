@@ -15,7 +15,7 @@ function PoiMarker({ poi }: { poi: PointOfInterest }) {
 }
 
 export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
-  const apiKey = "AIzaSyCaUj3SgI5Pl12RrW9DOxrxc-srGK1mHxw";
+  const apiKey = "AIzaSyDiNYyy_sXwD_nCQX015vHxImsOrWIK3ig";
 
   if (!apiKey) {
     return (
