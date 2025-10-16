@@ -30,7 +30,7 @@ function getCategoryIcon(category: PointOfInterest['category']) {
 
 export default function RouteDetailsClient({ route, pois }: { route: ThematicRoute; pois: PointOfInterest[] }) {
     const { isLoaded, isRouteSaved, toggleSaveRoute } = useSavedRoutes();
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+    const apiKey = "AIzaSyDiNYyy_sXwD_nCQX015vHxImsOrWIK3ig";
 
     const handleShowPoiOnMap = (poi: PointOfInterest) => {
         const query = poi.id === 'poi-13'
