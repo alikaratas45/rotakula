@@ -27,6 +27,15 @@
       "longDescription": "Odun köftesinden meşhur güvecine, şekerli pideden yöresel otlara kadar Kula mutfağının en özel lezzetlerini tadın. Bu rota, damak zevkine düşkün gezginler için Kula'nın en iyi lezzet duraklarını bir araya getiriyor.",
       "imageId": "route-food",
       "poiIds": ["poi-8"]
+    },
+    {
+      "id": "route-4",
+      "slug": "tarihi-koyler",
+      "title": "Tarihi Köylerimiz",
+      "description": "Kula'nın otantik köy yaşamını ve saklı kalmış tarihi güzelliklerini keşfedin.",
+      "longDescription": "Kula merkezinin dışına çıkarak, asırlık taş evleri, sakin sokakları ve yemyeşil doğasıyla sizi karşılayacak tarihi köylerde huzurlu bir gün geçirin. Bu rota, Kula'nın kırsal yaşamını ve kültürel zenginliğini deneyimlemek için idealdir.",
+      "imageId": "route-villages",
+      "poiIds": ["poi-10", "poi-11"]
     }
   ]
 }

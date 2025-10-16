@@ -25,6 +25,12 @@
       "imageHint": "stew dish"
     },
     {
+      "id": "route-villages",
+      "description": "Kula'da tarihi bir köyden taş evler",
+      "imageUrl": "/village-houses.jpg",
+      "imageHint": "village houses"
+    },
+    {
       "id": "poi-divlit-volcano",
       "description": "Kula Divlit Yanardağı krateri",
       "imageUrl": "/kuladivlit.jpg",
@@ -71,6 +77,18 @@
       "description": "Essanlar Konağı otelinin dış görünüşü",
       "imageUrl": "/poi-essanlar-konagi.jpg",
       "imageHint": "historic hotel"
+    },
+    {
+      "id": "poi-village-houses",
+      "description": "Encekler köyünden tarihi taş evler.",
+      "imageUrl": "/village-houses.jpg",
+      "imageHint": "stone houses"
+    },
+    {
+      "id": "poi-sandal-village",
+      "description": "Sandal köyünün genel görünümü.",
+      "imageUrl": "/sandal-village.jpg",
+      "imageHint": "village view"
     }
   ]
 }

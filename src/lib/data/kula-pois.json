@@ -72,6 +72,24 @@
       "imageId": "poi-essanlar-konagi",
       "latitude": 38.5478,
       "longitude": 28.5218
+    },
+    {
+      "id": "poi-10",
+      "name": "Encekler Köyü",
+      "description": "Tarihi taş evleri ve sakin atmosferiyle bilinen, Kula'nın saklı kalmış köylerinden biri.",
+      "category": "history",
+      "imageId": "poi-village-houses",
+      "latitude": 38.6,
+      "longitude": 28.6
+    },
+    {
+      "id": "poi-11",
+      "name": "Sandal Köyü",
+      "description": "Roma dönemine ait kalıntıları ve doğal güzellikleriyle öne çıkan, zengin bir tarihe sahip köy.",
+      "category": "history",
+      "imageId": "poi-sandal-village",
+      "latitude": 38.5,
+      "longitude": 28.4
     }
   ]
 }
