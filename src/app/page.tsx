@@ -42,9 +42,8 @@ const RouteCard = ({ route, isFeatured = false }: { route: ThematicRoute, isFeat
 };
 
 export default async function Home() {
-  const routes = await getRoutes();
-  const featuredRoute = await getFeaturedRoute();
-  const otherRoutes = routes.filter(route => !route.isFeatured);
+  const allRoutes = await getRoutes();
+  const featuredRoute = allRoutes.find(route => route.isFeatured);
   const heroImage = getImageById('hero-home');
 
   return (
@@ -93,8 +92,8 @@ export default async function Home() {
 
           <h2 className="text-3xl font-headline font-bold text-center mb-8">Tematik Rotalar</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {otherRoutes.map(route => (
-              <RouteCard key={route.id} route={route} />
+            {allRoutes.map(route => (
+              <RouteCard key={route.id} route={route} isFeatured={route.isFeatured} />
             ))}
           </div>
         </div>
