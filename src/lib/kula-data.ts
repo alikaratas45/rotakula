@@ -2,6 +2,7 @@ import type { ThematicRoute, PointOfInterest, Story } from './types';
 import routesData from './data/kula-routes.json';
 import poisData from './data/kula-pois.json';
 import storiesData from './data/kula-stories.json';
+import { getWeek } from 'date-fns';
 
 // A simple in-memory cache to simulate a database and avoid re-reading files.
 const routes: ThematicRoute[] = routesData.routes;
@@ -48,5 +49,11 @@ export async function getPoisByIds(ids: string[]): Promise<PointOfInterest[]> {
 
 export async function getFeaturedRoute(): Promise<ThematicRoute | undefined> {
     await new Promise(resolve => setTimeout(resolve, DELAY));
-    return routes.find(route => route.isFeatured);
+    if (routes.length === 0) {
+        return undefined;
+    }
+    // Monday is the first day of the week
+    const weekOfYear = getWeek(new Date(), { weekStartsOn: 1 });
+    const featuredIndex = (weekOfYear -1) % routes.length;
+    return routes[featuredIndex];
 }

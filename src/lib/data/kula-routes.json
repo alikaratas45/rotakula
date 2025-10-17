@@ -7,8 +7,7 @@
       "description": "Kula'nın volkanik geçmişine tanıklık edin ve jeolojik harikaları keşfedin.",
       "longDescription": "Bu rota, sizi Türkiye'nin ilk ve tek UNESCO Global Jeoparkı'nın kalbine götürüyor. Milyonlarca yıllık jeolojik oluşumları, sönmüş yanardağları ve lav akıntılarını yakından görün. Doğa ve bilim meraklıları için unutulmaz bir deneyim.",
       "imageId": "route-geopark",
-      "poiIds": ["poi-18", "poi-12", "poi-2", "poi-3", "poi-1"],
-      "isFeatured": true
+      "poiIds": ["poi-18", "poi-12", "poi-2", "poi-3", "poi-1"]
     },
     {
       "id": "route-2",
