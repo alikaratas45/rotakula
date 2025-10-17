@@ -39,7 +39,8 @@ export function Header() {
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container flex h-16 items-center">
-                <div className="hidden md:flex md:mr-6">
+                {/* Desktop Header */}
+                <div className="hidden md:flex mr-6">
                     <Link href="/" className="flex items-center space-x-2">
                         <Image src="/logo.png" alt="RotaKula Logo" width={28} height={28} />
                         <span className="hidden font-bold sm:inline-block font-headline text-lg">
@@ -62,16 +63,12 @@ export function Header() {
                     </nav>
                 </div>
                 
-                <div className="flex flex-1 items-center justify-between md:justify-end gap-2">
-                    <Link href="/" className="flex items-center space-x-2 md:hidden">
-                        <Image src="/logo.png" alt="RotaKula Logo" width={28} height={28} />
-                        <span className="font-bold font-headline text-lg">RotaKula</span>
-                    </Link>
-                    <div className="flex items-center gap-2">
-                        <AudioGuideControl />
-                        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+                {/* Mobile Header */}
+                <div className="flex flex-1 items-center justify-between md:hidden">
+                    <div className="w-1/3 flex justify-start">
+                         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                             <SheetTrigger asChild>
-                                <Button variant="ghost" className="md:hidden">
+                                <Button variant="ghost" className="p-0">
                                     <Menu className="h-10 w-10" />
                                     <span className="sr-only">Menüyü Aç</span>
                                 </Button>
@@ -101,6 +98,22 @@ export function Header() {
                             </SheetContent>
                         </Sheet>
                     </div>
+
+                    <div className="w-1/3 flex justify-center">
+                        <Link href="/" className="flex items-center space-x-2">
+                            <Image src="/logo.png" alt="RotaKula Logo" width={28} height={28} />
+                            <span className="font-bold font-headline text-lg">RotaKula</span>
+                        </Link>
+                    </div>
+
+                    <div className="w-1/3 flex justify-end">
+                        <AudioGuideControl />
+                    </div>
+                </div>
+
+                {/* Desktop right side */}
+                <div className="hidden md:flex flex-1 items-center justify-end gap-2">
+                    <AudioGuideControl />
                 </div>
             </div>
         </header>
