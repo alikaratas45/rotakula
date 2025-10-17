@@ -37,7 +37,10 @@ export type Story = {
   imageId: string;
 };
 
+// Type for the input of the textToSpeech Genkit flow
 export type TtsInput = string;
+
+// Type for the output of the textToSpeech Genkit flow
 export type TtsOutput = {
-  media: string;
+  media: string; // A data URI string: "data:audio/wav;base64,..."
 };
