@@ -69,7 +69,16 @@ export function AudioGuideControl() {
     };
 
     const handlePlayAudio = async (poi: PointOfInterest) => {
+        if (audioRef.current?.src && status === 'narrating') {
+            return; // Already narrating, don't interrupt
+        }
+
         setStatus('generating');
+        toast({
+            title: "Anlatım Başlıyor",
+            description: `${poi.name} için sesli anlatım hazırlanıyor...`,
+        });
+
         try {
             const { media } = await textToSpeech(poi.description);
             if (media) {
@@ -120,7 +129,7 @@ export function AudioGuideControl() {
                 break; 
             }
         }
-    }, [userLocation, pois, status, triggeredPois]);
+    }, [userLocation, pois, status, triggeredPois, handlePlayAudio]);
 
 
     const toggleGuide = () => {

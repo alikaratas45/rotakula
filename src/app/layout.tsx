@@ -5,9 +5,8 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { SplashScreen } from '@/components/splash-screen';
-
 
 export default function RootLayout({
   children,
