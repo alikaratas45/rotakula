@@ -70,8 +70,8 @@ export function Header() {
                     <AudioGuideControl />
                     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                         <SheetTrigger asChild>
-                            <Button variant="ghost" size="icon" className="md:hidden">
-                                <Menu className="h-8 w-8" />
+                            <Button variant="ghost" className="md:hidden">
+                                <Menu className="h-10 w-10" />
                                 <span className="sr-only">Menüyü Aç</span>
                             </Button>
                         </SheetTrigger>
