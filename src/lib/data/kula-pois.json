@@ -147,7 +147,7 @@
     {
       "id": "poi-18",
       "name": "Jeopark Ziyaretçi Merkezi",
-      "description": "Jeopark hakkında bilgi alabileceğiniz, turlarınızı planlayabileceğiniz ve bölgenin jeolojik mirasını interaktif sergilerle keşfedebileceğiniz başlangıç noktası.",
+      "description": "Jeopark ziyaretçi merkezi hem jeoparkı anlatan tanıtım merkezinin bulunduğu, hem de jeoparkın idari ofisinin bulunduğu yerdir. Ayrıca burada lavabo ihtiyacınızı karşılayabileceğiniz ve oturup, çay, kahve içebileceğiniz bir alandır. Buraya gelmişken 4000 yıllık ayak izlerini görmeden gitmeyin!",
       "category": "geopark",
       "imageId": "poi-visitor-center",
       "latitude": 38.5833,
