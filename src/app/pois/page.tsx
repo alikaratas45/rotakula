@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import { getPois } from '@/lib/kula-data';
 import type { PointOfInterest } from '@/lib/types';
@@ -9,9 +9,10 @@ import { getImageById } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Loader2, MapPin, Mountain } from 'lucide-react';
-import { HistoricHouseIcon, FoodIcon } from '@/components/icons';
+import { HistoricHouseIcon, FoodIcon, PlayIcon, PauseIcon } from '@/components/icons';
 import EmbeddedMap from '@/components/map';
 import { APIProvider } from '@vis.gl/react-google-maps';
+import { textToSpeech } from '@/ai/flows/tts-flow';
 
 function getCategoryIcon(category: PointOfInterest['category']) {
     switch (category) {
@@ -31,6 +32,9 @@ function getCategoryIcon(category: PointOfInterest['category']) {
 export default function PoisPage() {
     const [pois, setPois] = useState<PointOfInterest[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [nowPlaying, setNowPlaying] = useState<string | null>(null);
+    const [isGenerating, setIsGenerating] = useState<string | null>(null);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
 
     useEffect(() => {
@@ -47,6 +51,42 @@ export default function PoisPage() {
         }
         fetchPois();
     }, []);
+
+    const handlePlayPause = async (poi: PointOfInterest) => {
+        if (audioRef.current && nowPlaying === poi.id) {
+            audioRef.current.pause();
+            setNowPlaying(null);
+            return;
+        }
+
+        if (audioRef.current && nowPlaying) {
+             audioRef.current.pause();
+        }
+
+        setIsGenerating(poi.id);
+        setNowPlaying(null);
+
+        try {
+            const { media } = await textToSpeech(poi.description);
+            if (media) {
+                if (audioRef.current) {
+                    audioRef.current.src = media;
+                } else {
+                    audioRef.current = new Audio(media);
+                }
+                 audioRef.current.play();
+                 setNowPlaying(poi.id);
+                 audioRef.current.onended = () => {
+                     setNowPlaying(null);
+                 };
+            }
+        } catch (error) {
+            console.error("Failed to generate audio", error);
+        } finally {
+            setIsGenerating(null);
+        }
+    };
+
 
     const handleShowPoiOnMap = (poi: PointOfInterest) => {
         const query = poi.id === 'poi-13' 
@@ -81,6 +121,9 @@ export default function PoisPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {pois.map(poi => {
                         const image = getImageById(poi.imageId);
+                        const isPlaying = nowPlaying === poi.id;
+                        const isGeneratingAudio = isGenerating === poi.id;
+
                         return (
                             <Card key={poi.id} className="flex flex-col overflow-hidden">
                                 <div className="relative h-48 w-full">
@@ -106,11 +149,26 @@ export default function PoisPage() {
                                 <CardContent className="flex-grow">
                                     <p className="text-foreground/80 mb-4">{poi.description}</p>
                                 </CardContent>
-                                <div className="p-4 pt-0 mt-auto">
+                                <div className="p-4 pt-0 mt-auto flex items-center gap-2">
                                     <Button variant="outline" size="sm" onClick={() => handleShowPoiOnMap(poi)}>
                                         <MapPin className="mr-2 h-4 w-4" />
                                         Google Haritalar'da Aç
                                     </Button>
+                                    <Button
+                                            variant="outline"
+                                            size="icon"
+                                            onClick={() => handlePlayPause(poi)}
+                                            disabled={isGeneratingAudio}
+                                            aria-label={isPlaying ? "Anlatımı durdur" : "Anlatımı dinle"}
+                                        >
+                                            {isGeneratingAudio ? (
+                                                <Loader2 className="h-4 w-4 animate-spin" />
+                                            ) : isPlaying ? (
+                                                <PauseIcon className="h-4 w-4" />
+                                            ) : (
+                                                <PlayIcon className="h-4 w-4" />
+                                            )}
+                                        </Button>
                                 </div>
                             </Card>
                         );
