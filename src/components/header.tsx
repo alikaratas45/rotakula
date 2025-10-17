@@ -62,43 +62,45 @@ export function Header() {
                     </nav>
                 </div>
                 
-                <div className="flex flex-1 items-center justify-end gap-2">
-                    <Link href="/" className="flex items-center space-x-2 md:hidden mr-auto">
+                <div className="flex flex-1 items-center justify-between md:justify-end gap-2">
+                    <Link href="/" className="flex items-center space-x-2 md:hidden">
                         <Image src="/logo.png" alt="RotaKula Logo" width={28} height={28} />
                         <span className="font-bold font-headline text-lg">RotaKula</span>
                     </Link>
-                    <AudioGuideControl />
-                    <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-                        <SheetTrigger asChild>
-                            <Button variant="ghost" className="md:hidden">
-                                <Menu className="h-10 w-10" />
-                                <span className="sr-only">Menüyü Aç</span>
-                            </Button>
-                        </SheetTrigger>
-                        <SheetContent side="left">
-                             <SheetHeader className="text-left">
-                                <SheetTitle>Menü</SheetTitle>
-                                <SheetDescription>
-                                    Uygulama içinde gezinmek için aşağıdaki bağlantıları kullanabilirsiniz.
-                                </SheetDescription>
-                            </SheetHeader>
-                            <nav className="grid gap-6 text-lg font-medium mt-8">
-                                {navLinks.map((link) => (
-                                    <Link
-                                        key={link.href}
-                                        href={link.href}
-                                        onClick={handleLinkClick}
-                                        className={cn(
-                                            "flex items-center gap-4 px-2.5",
-                                            pathname.startsWith(link.href) && link.href !== "/" || pathname === link.href ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-                                        )}
-                                    >
-                                        {link.label}
-                                    </Link>
-                                ))}
-                            </nav>
-                        </SheetContent>
-                    </Sheet>
+                    <div className="flex items-center gap-2">
+                        <AudioGuideControl />
+                        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+                            <SheetTrigger asChild>
+                                <Button variant="ghost" className="md:hidden">
+                                    <Menu className="h-10 w-10" />
+                                    <span className="sr-only">Menüyü Aç</span>
+                                </Button>
+                            </SheetTrigger>
+                            <SheetContent side="left">
+                                 <SheetHeader className="text-left">
+                                    <SheetTitle>Menü</SheetTitle>
+                                    <SheetDescription>
+                                        Uygulama içinde gezinmek için aşağıdaki bağlantıları kullanabilirsiniz.
+                                    </SheetDescription>
+                                </SheetHeader>
+                                <nav className="grid gap-6 text-lg font-medium mt-8">
+                                    {navLinks.map((link) => (
+                                        <Link
+                                            key={link.href}
+                                            href={link.href}
+                                            onClick={handleLinkClick}
+                                            className={cn(
+                                                "flex items-center gap-4 px-2.5",
+                                                pathname.startsWith(link.href) && link.href !== "/" || pathname === link.href ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                                            )}
+                                        >
+                                            {link.label}
+                                        </Link>
+                                    ))}
+                                </nav>
+                            </SheetContent>
+                        </Sheet>
+                    </div>
                 </div>
             </div>
         </header>
