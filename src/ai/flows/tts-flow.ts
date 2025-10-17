@@ -4,22 +4,13 @@
  *
  * This file defines a Genkit flow that converts a given text string into speech audio.
  * - textToSpeech - The main function to call the TTS flow.
- * - TtsInputSchema - The Zod schema for the input text.
- * - TtsOutputSchema - The Zod schema for the output audio data URI.
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'genkit';
 import { googleAI } from '@genkit-ai/google-genai';
 import wav from 'wav';
+import { TtsInputSchema, TtsOutputSchema, type TtsInput, type TtsOutput } from '@/lib/types';
 
-export const TtsInputSchema = z.string();
-export const TtsOutputSchema = z.object({
-  media: z.string().describe("The output audio as a data URI."),
-});
-
-export type TtsInput = z.infer<typeof TtsInputSchema>;
-export type TtsOutput = z.infer<typeof TtsOutputSchema>;
 
 export async function textToSpeech(text: TtsInput): Promise<TtsOutput> {
   return ttsFlow(text);

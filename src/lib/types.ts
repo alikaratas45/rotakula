@@ -1,3 +1,5 @@
+import { z } from 'genkit';
+
 export type PointOfInterest = {
   id: string;
   name: string;
@@ -30,3 +32,11 @@ export type Story = {
   date: string;
   imageId: string;
 };
+
+export const TtsInputSchema = z.string();
+export const TtsOutputSchema = z.object({
+  media: z.string().describe("The output audio as a data URI."),
+});
+
+export type TtsInput = z.infer<typeof TtsInputSchema>;
+export type TtsOutput = z.infer<typeof TtsOutputSchema>;
