@@ -17,8 +17,26 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
     const heroImage = getImageById(poi.imageId);
 
     const [isPlaying, setIsPlaying] = useState(false);
+    const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
     const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
     const { toast } = useToast();
+
+    useEffect(() => {
+        if ('speechSynthesis' in window) {
+            const handleVoicesChanged = () => {
+                setVoices(window.speechSynthesis.getVoices());
+            };
+            window.speechSynthesis.onvoiceschanged = handleVoicesChanged;
+            handleVoicesChanged(); // Initial load
+            
+            return () => {
+                window.speechSynthesis.onvoiceschanged = null;
+                 if (window.speechSynthesis.speaking) {
+                    window.speechSynthesis.cancel();
+                }
+            };
+        }
+    }, []);
 
     const cleanup = useCallback(() => {
         if (window.speechSynthesis) {
@@ -59,6 +77,16 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
 
         const utterance = new SpeechSynthesisUtterance(poi.longDescription);
         utterance.lang = "tr-TR";
+        
+        // Find a male Turkish voice
+        const maleVoice = voices.find(voice => voice.lang === 'tr-TR' && voice.name.toLowerCase().includes('male'));
+        if (maleVoice) {
+            utterance.voice = maleVoice;
+        } else {
+            const turkishVoice = voices.find(voice => voice.lang === 'tr-TR');
+            if (turkishVoice) utterance.voice = turkishVoice;
+        }
+        
         utteranceRef.current = utterance;
 
         utterance.onstart = () => {
@@ -88,7 +116,7 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
 
         window.speechSynthesis.speak(utterance);
 
-    }, [poi.longDescription, cleanup, toast]);
+    }, [poi.longDescription, cleanup, toast, voices]);
 
     return (
         <APIProvider apiKey={apiKey}>

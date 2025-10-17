@@ -28,6 +28,24 @@ export function AudioGuideControl() {
     const { toast, dismiss } = useToast();
     const [narratingPoi, setNarratingPoi] = useState<PointOfInterest | null>(null);
     const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+    const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+
+    useEffect(() => {
+        if ('speechSynthesis' in window) {
+            const handleVoicesChanged = () => {
+                setVoices(window.speechSynthesis.getVoices());
+            };
+            window.speechSynthesis.onvoiceschanged = handleVoicesChanged;
+            handleVoicesChanged(); // Initial load
+            
+            return () => {
+                window.speechSynthesis.onvoiceschanged = null;
+                if (window.speechSynthesis.speaking) {
+                    window.speechSynthesis.cancel();
+                }
+            };
+        }
+    }, []);
 
      const cancelNarration = useCallback(() => {
         if (window.speechSynthesis) {
@@ -108,6 +126,16 @@ export function AudioGuideControl() {
         
         const utterance = new SpeechSynthesisUtterance(poi.description);
         utterance.lang = "tr-TR";
+
+        // Find a male Turkish voice
+        const maleVoice = voices.find(voice => voice.lang === 'tr-TR' && voice.name.toLowerCase().includes('male'));
+        if (maleVoice) {
+            utterance.voice = maleVoice;
+        } else {
+            const turkishVoice = voices.find(voice => voice.lang === 'tr-TR');
+            if (turkishVoice) utterance.voice = turkishVoice;
+        }
+
         utteranceRef.current = utterance;
 
         utterance.onend = () => {
@@ -126,7 +154,7 @@ export function AudioGuideControl() {
         };
 
         window.speechSynthesis.speak(utterance);
-    }, [status, toast, cancelNarration]);
+    }, [status, toast, cancelNarration, voices]);
 
 
     useEffect(() => {
