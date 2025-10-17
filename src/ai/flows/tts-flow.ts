@@ -8,15 +8,14 @@
 
 import { ai } from '@/ai/genkit';
 import { googleAI } from '@genkit-ai/google-genai';
-import { Stream } from 'genkit/streaming';
+import { type Stream } from 'genkit';
 
 
 // This flow now streams the raw PCM audio data directly to the client.
 // The client will be responsible for playing this audio using the Web Audio API.
 export async function textToSpeech(
-  input: string,
-  stream: Stream<string>
-) {
+  input: string
+): Promise<Stream<string>> {
   const { stream: ttsStream } = await ai.generate({
     model: googleAI.model('gemini-2.5-flash-preview-tts'),
     config: {
@@ -31,13 +30,18 @@ export async function textToSpeech(
     stream: true,
   });
 
-  // Forward the audio chunks to the client as base64 strings
-  for await (const chunk of ttsStream) {
-    if (chunk.media?.url) {
-      const pcmData_base64 = chunk.media.url.substring(
-        chunk.media.url.indexOf(',') + 1
-      );
-      stream.write(pcmData_base64);
+  async function* processStream(): AsyncGenerator<string> {
+    for await (const chunk of ttsStream) {
+      if (chunk.media?.url) {
+        const pcmData_base64 = chunk.media.url.substring(
+          chunk.media.url.indexOf(',') + 1
+        );
+        yield pcmData_base64;
+      }
     }
   }
+
+  return {
+    [Symbol.asyncIterator]: processStream,
+  };
 }
