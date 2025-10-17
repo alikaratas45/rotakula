@@ -6,7 +6,7 @@ import type { PointOfInterest } from '@/lib/types';
 import { haversineDistance } from '@/lib/utils';
 import { textToSpeech } from '@/ai/flows/tts-flow';
 import { Button } from './ui/button';
-import { Loader2, Radio, RadioTower } from 'lucide-react';
+import { Loader2, PauseIcon, PlayIcon, Radio, RadioTower } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import {
   Tooltip,
@@ -27,9 +27,9 @@ export function AudioGuideControl() {
     const [triggeredPois, setTriggeredPois] = useState<Set<string>>(new Set());
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const watchIdRef = useRef<number | null>(null);
-    const { toast } = useToast();
+    const { toast, dismiss } = useToast();
+    const [narratingPoi, setNarratingPoi] = useState<PointOfInterest | null>(null);
 
-    // Fetch all POIs on initial load
     useEffect(() => {
         async function fetchPois() {
             const allPois = await getPois();
@@ -56,13 +56,12 @@ export function AudioGuideControl() {
                     variant: "destructive"
                 });
                 stopLocationTracking();
-                setStatus('idle');
             },
             { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
         );
     };
 
-    const stopLocationTracking = () => {
+    const stopLocationTracking = useCallback(() => {
         if (watchIdRef.current !== null) {
             navigator.geolocation.clearWatch(watchIdRef.current);
             watchIdRef.current = null;
@@ -72,19 +71,24 @@ export function AudioGuideControl() {
             audioRef.current.pause();
             audioRef.current = null;
         }
-        setTriggeredPois(new Set()); // Reset triggered pois when stopping
-    };
+        setTriggeredPois(new Set());
+        setNarratingPoi(null);
+        setStatus('idle');
+        dismiss(); // Dismiss any active toasts
+    }, [dismiss]);
 
     const handlePlayAudio = useCallback(async (poi: PointOfInterest) => {
-        if (audioRef.current?.src && status === 'narrating') {
-            return; // Already narrating, don't interrupt
+        if (status === 'generating' || status === 'narrating') {
+             if (audioRef.current) {
+                audioRef.current.pause();
+                setNarratingPoi(null);
+                setStatus('listening');
+             }
+             return;
         }
 
         setStatus('generating');
-        toast({
-            title: "Anlatım Başlıyor",
-            description: `${poi.name} için sesli anlatım hazırlanıyor...`,
-        });
+        setNarratingPoi(poi);
 
         try {
             const { media } = await textToSpeech(poi.description);
@@ -98,9 +102,11 @@ export function AudioGuideControl() {
                 audioRef.current.play();
                 audioRef.current.onended = () => {
                     setStatus('listening');
+                    setNarratingPoi(null);
                 };
             } else {
                  setStatus('listening');
+                 setNarratingPoi(null);
             }
         } catch (error) {
             console.error("Failed to generate or play audio", error);
@@ -110,11 +116,11 @@ export function AudioGuideControl() {
                 variant: "destructive"
             });
             setStatus('listening');
+            setNarratingPoi(null);
         }
     }, [status, toast]);
 
 
-    // Check for nearby POIs when user location changes and guide is active
     useEffect(() => {
         if (status !== 'listening' || !userLocation || pois.length === 0) {
             return;
@@ -122,7 +128,7 @@ export function AudioGuideControl() {
 
         for (const poi of pois) {
             if (triggeredPois.has(poi.id)) {
-                continue; // Skip if already triggered for this session
+                continue; 
             }
 
             const distance = haversineDistance(
@@ -132,11 +138,20 @@ export function AudioGuideControl() {
 
             if (distance < PROXIMITY_THRESHOLD) {
                 setTriggeredPois(prev => new Set(prev).add(poi.id));
-                handlePlayAudio(poi);
+                toast({
+                    title: `📍 Yakınlardasınız: ${poi.name}`,
+                    description: "Anlatımı dinlemek için butona tıklayın.",
+                    duration: Infinity, // Keep toast until dismissed
+                    action: (
+                        <Button onClick={() => handlePlayAudio(poi)}>
+                           <PlayIcon className="mr-2 h-4 w-4" /> Dinle
+                        </Button>
+                    )
+                });
                 break; 
             }
         }
-    }, [userLocation, pois, status, triggeredPois, handlePlayAudio]);
+    }, [userLocation, pois, status, triggeredPois, handlePlayAudio, toast]);
 
 
     const toggleGuide = () => {
@@ -145,10 +160,9 @@ export function AudioGuideControl() {
             startLocationTracking();
              toast({
                 title: "Sesli Rehber Başlatıldı",
-                description: "Yakınınızdaki yerler için anlatım otomatik olarak başlayacaktır.",
+                description: "Yakınınızdaki yerler için bildirim alacaksınız.",
             });
         } else {
-            setStatus('idle');
             stopLocationTracking();
             toast({
                 title: "Sesli Rehber Kapatıldı",
@@ -157,18 +171,10 @@ export function AudioGuideControl() {
     };
 
     const getButtonContent = () => {
-        switch (status) {
-            case 'idle':
-                return <Radio className="h-5 w-5" />;
-            case 'listening':
-                return <RadioTower className="h-5 w-5 animate-pulse text-green-500" />;
-            case 'generating':
-                return <Loader2 className="h-5 w-5 animate-spin" />;
-            case 'narrating':
-                return <RadioTower className="h-5 w-5 text-blue-500" />;
-            default:
-                return <Radio className="h-5 w-5" />;
-        }
+        if (status === 'generating') return <Loader2 className="h-5 w-5 animate-spin" />;
+        if (status === 'narrating') return <PauseIcon className="h-5 w-5 text-blue-500" />;
+        if (status === 'listening') return <RadioTower className="h-5 w-5 animate-pulse text-green-500" />;
+        return <Radio className="h-5 w-5" />;
     };
      
     const getTooltipContent = () => {
@@ -180,7 +186,7 @@ export function AudioGuideControl() {
             case 'generating':
                 return "Anlatım hazırlanıyor...";
             case 'narrating':
-                return "Anlatım yapılıyor... Kapatmak için tıklayın.";
+                return `Anlatım yapılıyor: ${narratingPoi?.name}. Duraklatmak için tıklayın.`;
             default:
                 return "Sesli Rehber";
         }
@@ -195,7 +201,6 @@ export function AudioGuideControl() {
                         size="icon" 
                         onClick={toggleGuide}
                         aria-label={getTooltipContent()}
-                        disabled={status === 'generating'}
                     >
                         {getButtonContent()}
                     </Button>
