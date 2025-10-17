@@ -92,6 +92,19 @@
       transform: rotateY(360deg);
     }
   }
+  @keyframes unfold-in {
+    0% {
+      transform: rotateY(-90deg);
+      opacity: 0;
+    }
+    100% {
+      transform: rotateY(0deg);
+      opacity: 1;
+    }
+  }
+  .animate-unfold-in {
+    animation: unfold-in 0.8s ease-out forwards;
+  }
   .animate-spin-slow {
     animation: spin-slow 3s linear infinite;
   }

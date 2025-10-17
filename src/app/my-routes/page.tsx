@@ -42,8 +42,8 @@ export default function MyRoutesPage() {
                     {userSavedRoutes.map(route => {
                         const image = getImageById(route.imageId);
                         return (
-                             <Card key={route.id} className="flex flex-col">
-                                <Link href={`/routes/${route.slug}`} className="group block">
+                             <Card key={route.id} className="flex flex-col perspective-1000">
+                                <Link href={`/routes/${route.slug}`} className="group block preserve-3d animate-unfold-in">
                                     <CardHeader className="p-0">
                                         <div className="relative h-48 w-full">
                                             {image && (

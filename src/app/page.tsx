@@ -11,8 +11,8 @@ import { Separator } from '@/components/ui/separator';
 const RouteCard = ({ route, isFeatured = false }: { route: ThematicRoute, isFeatured?: boolean }) => {
   const image = getImageById(route.imageId);
   return (
-    <Link href={`/routes/${route.slug}`} className="group block">
-      <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1">
+    <Link href={`/routes/${route.slug}`} className="group block perspective-1000">
+      <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1 preserve-3d animate-unfold-in">
         <CardHeader className="p-0">
           <div className="relative h-48 w-full">
             {image && (
