@@ -198,11 +198,12 @@ export function AudioGuideControl() {
                 <TooltipTrigger asChild>
                     <Button 
                         variant="ghost"
-                        size="icon" 
+                        size="sm" 
                         onClick={toggleGuide}
                         aria-label={getTooltipContent()}
                     >
                         {getButtonContent()}
+                        <span className="hidden sm:inline ml-2">Sesli Rehber</span>
                     </Button>
                 </TooltipTrigger>
                 <TooltipContent>
