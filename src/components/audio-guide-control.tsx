@@ -5,7 +5,7 @@ import { getPois } from '@/lib/kula-data';
 import type { PointOfInterest } from '@/lib/types';
 import { haversineDistance } from '@/lib/utils';
 import { Button } from './ui/button';
-import { Loader2, PauseIcon, PlayIcon, Radio, RadioTower } from 'lucide-react';
+import { PauseIcon, PlayIcon, Radio, RadioTower } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import {
   Tooltip,
@@ -143,10 +143,10 @@ export function AudioGuideControl() {
             setStatus('listening');
         };
 
-        utterance.onerror = () => {
+        utterance.onerror = (event) => {
             toast({
                 title: "Ses Hatası",
-                description: "Sesli anlatım oluşturulurken bir hata oluştu.",
+                description: `Sesli anlatım sırasında bir hata oluştu: ${event.error}`,
                 variant: "destructive"
             });
             setNarratingPoi(null);
@@ -161,6 +161,9 @@ export function AudioGuideControl() {
         if (status !== 'listening' || !userLocation || pois.length === 0) {
             return;
         }
+
+        // Do not trigger narration if another one is already playing
+        if (narratingPoi) return;
 
         for (const poi of pois) {
             if (triggeredPois.has(poi.id)) {
@@ -187,7 +190,7 @@ export function AudioGuideControl() {
                 break; 
             }
         }
-    }, [userLocation, pois, status, triggeredPois, handlePlayAudio, toast]);
+    }, [userLocation, pois, status, triggeredPois, handlePlayAudio, toast, narratingPoi]);
 
 
     const toggleGuide = () => {
@@ -232,7 +235,7 @@ export function AudioGuideControl() {
                     <Button 
                         variant="ghost"
                         size="sm" 
-                        onClick={toggleGuide}
+                        onClick={status === 'narrating' ? cancelNarration : toggleGuide}
                         aria-label={getTooltipContent()}
                     >
                         {getButtonContent()}
