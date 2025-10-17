@@ -68,9 +68,8 @@ export function Header() {
                     <div className="w-1/3 flex justify-start">
                          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                             <SheetTrigger asChild>
-                                <Button variant="ghost" className="p-0">
-                                    <CustomMenuIcon className="h-10 w-10" />
-                                    <span className="sr-only">Menüyü Aç</span>
+                                <Button variant="ghost">
+                                    Menü
                                 </Button>
                             </SheetTrigger>
                             <SheetContent side="left">
