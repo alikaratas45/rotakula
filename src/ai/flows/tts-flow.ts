@@ -9,7 +9,13 @@
 import { ai } from '@/ai/genkit';
 import { googleAI } from '@genkit-ai/google-genai';
 import wav from 'wav';
-import { TtsInputSchema, TtsOutputSchema, type TtsInput, type TtsOutput } from '@/lib/types';
+import { z } from 'genkit';
+import type { TtsInput, TtsOutput } from '@/lib/types';
+
+const TtsInputSchema = z.string();
+const TtsOutputSchema = z.object({
+  media: z.string().describe("The output audio as a data URI."),
+});
 
 
 export async function textToSpeech(input: TtsInput): Promise<TtsOutput> {
@@ -49,7 +55,7 @@ const ttsFlow = ai.defineFlow(
     inputSchema: TtsInputSchema,
     outputSchema: TtsOutputSchema,
   },
-  async (input) => {
+  async (text) => {
     const { media } = await ai.generate({
       model: googleAI.model('gemini-2.5-flash-preview-tts'),
       config: {
@@ -60,7 +66,7 @@ const ttsFlow = ai.defineFlow(
           },
         },
       },
-      prompt: input.text,
+      prompt: text,
     });
 
     if (!media?.url) {
