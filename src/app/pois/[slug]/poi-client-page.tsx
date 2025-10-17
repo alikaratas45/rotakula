@@ -210,7 +210,7 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
               if (done) {
                 break;
               }
-              const chunk = decoder.decode(value);
+              const chunk = decoder.decode(value, {stream: true});
               if (!firstChunkReceived) {
                 setIsGenerating(false);
                 setIsPlaying(true);

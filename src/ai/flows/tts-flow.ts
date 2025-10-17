@@ -8,7 +8,7 @@
 
 import { ai } from '@/ai/genkit';
 import { googleAI } from '@genkit-ai/google-genai';
-import { type Stream } from 'genkit';
+import { Stream } from 'genkit';
 
 
 // This flow now streams the raw PCM audio data directly to the client.
