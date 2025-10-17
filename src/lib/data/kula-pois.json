@@ -143,6 +143,15 @@
       "imageId": "poi-evciler-village",
       "latitude": 38.65,
       "longitude": 28.52
+    },
+    {
+      "id": "poi-18",
+      "name": "Jeopark Ziyaretçi Merkezi",
+      "description": "Jeopark hakkında bilgi alabileceğiniz, turlarınızı planlayabileceğiniz ve bölgenin jeolojik mirasını interaktif sergilerle keşfedebileceğiniz başlangıç noktası.",
+      "category": "geopark",
+      "imageId": "poi-visitor-center",
+      "latitude": 38.5833,
+      "longitude": 28.5167
     }
   ]
 }

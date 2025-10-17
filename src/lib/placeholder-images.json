@@ -143,6 +143,12 @@
       "description": "Bir zanaatkarın el aletleriyle çalıştığı an",
       "imageUrl": "/elsanat.jpg",
       "imageHint": "artisan hands"
+    },
+    {
+      "id": "poi-visitor-center",
+      "description": "Kula-Salihli Jeopark Ziyaretçi Merkezi dış görünüşü",
+      "imageUrl": "https://picsum.photos/seed/kula-visitor-center/600/400",
+      "imageHint": "visitor center"
     }
   ]
 }
