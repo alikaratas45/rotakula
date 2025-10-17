@@ -8,7 +8,9 @@ export type Coordinate = {
 export type PointOfInterest = {
   id: string;
   name: string;
+  slug: string;
   description: string;
+  longDescription: string;
   category: 'geopark' | 'history' | 'food' | 'nature' | 'accommodation';
   imageId: string;
   latitude: number;

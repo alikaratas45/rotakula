@@ -3,12 +3,13 @@
 
 import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { getPois } from '@/lib/kula-data';
 import type { PointOfInterest } from '@/lib/types';
 import { getImageById } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, MapPin, Mountain } from 'lucide-react';
+import { Loader2, MapPin, Mountain, Info } from 'lucide-react';
 import { HistoricHouseIcon, FoodIcon, PlayIcon, PauseIcon } from '@/components/icons';
 import EmbeddedMap from '@/components/map';
 import { APIProvider } from '@vis.gl/react-google-maps';
@@ -67,7 +68,7 @@ export default function PoisPage() {
         setNowPlaying(null);
 
         try {
-            const { media } = await textToSpeech(poi.description);
+            const { media } = await textToSpeech(poi.longDescription);
             if (media) {
                 if (audioRef.current) {
                     audioRef.current.src = media;
@@ -150,9 +151,11 @@ export default function PoisPage() {
                                     <p className="text-foreground/80 mb-4">{poi.description}</p>
                                 </CardContent>
                                 <div className="p-4 pt-0 mt-auto flex items-center gap-2">
-                                    <Button variant="outline" size="sm" onClick={() => handleShowPoiOnMap(poi)}>
-                                        <MapPin className="mr-2 h-4 w-4" />
-                                        Google Haritalar'da Aç
+                                     <Button asChild variant="secondary" size="sm">
+                                        <Link href={`/pois/${poi.slug}`}>
+                                            <Info className="mr-2 h-4 w-4" />
+                                            Daha Fazla Bilgi
+                                        </Link>
                                     </Button>
                                     <Button
                                             variant="outline"

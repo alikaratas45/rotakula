@@ -37,6 +37,12 @@ export async function getStoryBySlug(slug: string): Promise<Story | undefined> {
   return stories.find(story => story.slug === slug);
 }
 
+export async function getPoiBySlug(slug: string): Promise<PointOfInterest | undefined> {
+  await new Promise(resolve => setTimeout(resolve, DELAY));
+  return pois.find(poi => poi.slug === slug);
+}
+
+
 export async function getPoiById(id: string): Promise<PointOfInterest | undefined> {
   await new Promise(resolve => setTimeout(resolve, DELAY));
   return pois.find(poi => poi.id === id);

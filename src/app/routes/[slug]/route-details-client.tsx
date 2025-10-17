@@ -6,8 +6,9 @@ import { useSavedRoutes } from '@/hooks/use-saved-routes';
 import { getImageById } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Heart, Loader2, MapPin, Mountain } from 'lucide-react';
+import { Heart, Loader2, MapPin, Mountain, Info } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { FoodIcon, HistoricHouseIcon, PauseIcon, PlayIcon } from '@/components/icons';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
@@ -52,7 +53,7 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
         setNowPlaying(null);
 
         try {
-            const { media } = await textToSpeech(poi.description);
+            const { media } = await textToSpeech(poi.longDescription);
             if (media) {
                 if (audioRef.current) {
                     audioRef.current.src = media;
@@ -129,9 +130,11 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
                                                 <CardContent>
                                                     <p className="text-foreground/80 mb-4">{poi.description}</p>
                                                      <div className="flex items-center gap-2">
-                                                        <Button variant="outline" size="sm" onClick={() => handleShowPoiOnMap(poi)}>
-                                                            <MapPin className="mr-2 h-4 w-4" />
-                                                            Haritada Gör
+                                                        <Button asChild variant="secondary" size="sm">
+                                                            <Link href={`/pois/${poi.slug}`}>
+                                                                <Info className="mr-2 h-4 w-4" />
+                                                                Daha Fazla Bilgi
+                                                            </Link>
                                                         </Button>
                                                         <Button
                                                             variant="outline"
