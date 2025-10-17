@@ -12,8 +12,8 @@ import wav from 'wav';
 import { TtsInputSchema, TtsOutputSchema, type TtsInput, type TtsOutput } from '@/lib/types';
 
 
-export async function textToSpeech(text: TtsInput): Promise<TtsOutput> {
-  return ttsFlow(text);
+export async function textToSpeech(input: TtsInput): Promise<TtsOutput> {
+  return ttsFlow(input);
 }
 
 async function toWav(
@@ -49,7 +49,7 @@ const ttsFlow = ai.defineFlow(
     inputSchema: TtsInputSchema,
     outputSchema: TtsOutputSchema,
   },
-  async (query) => {
+  async (input) => {
     const { media } = await ai.generate({
       model: googleAI.model('gemini-2.5-flash-preview-tts'),
       config: {
@@ -60,7 +60,7 @@ const ttsFlow = ai.defineFlow(
           },
         },
       },
-      prompt: query,
+      prompt: input.text,
     });
 
     if (!media?.url) {

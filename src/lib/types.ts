@@ -40,7 +40,9 @@ export type Story = {
   imageId: string;
 };
 
-export const TtsInputSchema = z.string();
+export const TtsInputSchema = z.object({
+  text: z.string(),
+});
 export const TtsOutputSchema = z.object({
   media: z.string().describe("The output audio as a data URI."),
 });

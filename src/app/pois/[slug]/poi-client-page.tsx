@@ -35,7 +35,7 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
         setIsGenerating(true);
 
         try {
-            const { media } = await textToSpeech(poi.longDescription);
+            const { media } = await textToSpeech({ text: poi.longDescription });
             if (media) {
                 if (audioRef.current) {
                     audioRef.current.src = media;
