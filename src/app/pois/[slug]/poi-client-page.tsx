@@ -195,21 +195,30 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
             });
             playerRef.current = newPlayer;
 
-            const stream = streamFlow({
+            const stream = await streamFlow({
                 flow: textToSpeech,
                 input: poi.longDescription,
                 signal: abortControllerRef.current.signal,
             });
 
             let firstChunkReceived = false;
-            for await (const chunk of stream) {
-                if (!firstChunkReceived) {
-                    setIsGenerating(false);
-                    setIsPlaying(true);
-                    firstChunkReceived = true;
-                }
-                newPlayer.playChunk(chunk);
+            const reader = stream.getReader();
+            const decoder = new TextDecoder();
+
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) {
+                break;
+              }
+              const chunk = decoder.decode(value);
+              if (!firstChunkReceived) {
+                setIsGenerating(false);
+                setIsPlaying(true);
+                firstChunkReceived = true;
+              }
+              newPlayer.playChunk(chunk);
             }
+
         } catch (error: any) {
             if (error.name !== 'AbortError') {
                 console.error("Failed to stream or play audio", error);

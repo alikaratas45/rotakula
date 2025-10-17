@@ -8,15 +8,13 @@
 
 import { ai } from '@/ai/genkit';
 import { googleAI } from '@genkit-ai/google-genai';
-import { z } from 'genkit';
-import { TtsInput } from '@/lib/types';
 import { Stream } from 'genkit/streaming';
 
 
 // This flow now streams the raw PCM audio data directly to the client.
 // The client will be responsible for playing this audio using the Web Audio API.
 export async function textToSpeech(
-  input: TtsInput,
+  input: string,
   stream: Stream<string>
 ) {
   const { stream: ttsStream } = await ai.generate({
