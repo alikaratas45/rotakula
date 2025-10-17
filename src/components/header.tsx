@@ -52,7 +52,7 @@ export function Header() {
                                 key={link.href}
                                 href={link.href}
                                 className={cn(
-                                    "transition-colors hover:text-foreground/80",
+                                    "font-bold uppercase transition-colors hover:text-foreground/80",
                                     pathname.startsWith(link.href) && link.href !== "/" || pathname === link.href ? "text-foreground" : "text-foreground/60"
                                 )}
                             >
@@ -90,7 +90,7 @@ export function Header() {
                                            href={link.href}
                                            onClick={handleLinkClick}
                                            className={cn(
-                                               "flex items-center gap-4 px-2.5",
+                                               "flex items-center gap-4 px-2.5 font-bold uppercase",
                                                pathname.startsWith(link.href) && link.href !== "/" || pathname === link.href ? "text-foreground" : "text-muted-foreground hover:text-foreground"
                                            )}
                                        >
