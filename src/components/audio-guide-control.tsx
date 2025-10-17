@@ -91,7 +91,7 @@ export function AudioGuideControl() {
         setNarratingPoi(poi);
 
         try {
-            const { media } = await textToSpeech(poi.description);
+            const { media } = await textToSpeech({ text: poi.description });
             if (media) {
                 setStatus('narrating');
                 if (audioRef.current) {
