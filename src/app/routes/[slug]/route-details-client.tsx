@@ -6,16 +6,14 @@ import { useSavedRoutes } from '@/hooks/use-saved-routes';
 import { getImageById } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Heart, Loader2, MapPin, Mountain, Info } from 'lucide-react';
+import { Heart, MapPin, Mountain, Info } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FoodIcon, HistoricHouseIcon, PauseIcon, PlayIcon } from '@/components/icons';
+import { FoodIcon, HistoricHouseIcon } from '@/components/icons';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import EmbeddedMap from '@/components/map';
 import { APIProvider } from '@vis.gl/react-google-maps';
-import { useState, useRef } from 'react';
-import { textToSpeech } from '@/ai/flows/tts-flow';
 
 function getCategoryIcon(category: PointOfInterest['category']) {
     switch (category) {
@@ -33,54 +31,7 @@ function getCategoryIcon(category: PointOfInterest['category']) {
 
 export default function RouteDetailsClient({ route, pois }: { route: ThematicRoute; pois: PointOfInterest[] }) {
     const { isLoaded, isRouteSaved, toggleSaveRoute } = useSavedRoutes();
-    const [nowPlaying, setNowPlaying] = useState<string | null>(null);
-    const [isGenerating, setIsGenerating] = useState<string | null>(null);
-    const audioRef = useRef<HTMLAudioElement | null>(null);
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
-
-    const handlePlayPause = async (poi: PointOfInterest) => {
-        if (audioRef.current && nowPlaying === poi.id) {
-            audioRef.current.pause();
-            setNowPlaying(null);
-            return;
-        }
-
-        if (audioRef.current && nowPlaying) {
-            audioRef.current.pause();
-        }
-
-        setIsGenerating(poi.id);
-        setNowPlaying(null);
-
-        try {
-            const { media } = await textToSpeech(poi.longDescription);
-            if (media) {
-                if (audioRef.current) {
-                    audioRef.current.src = media;
-                } else {
-                    audioRef.current = new Audio(media);
-                }
-                audioRef.current.play();
-                setNowPlaying(poi.id);
-                audioRef.current.onended = () => {
-                    setNowPlaying(null);
-                };
-            }
-        } catch (error) {
-            console.error("Failed to generate audio", error);
-        } finally {
-            setIsGenerating(null);
-        }
-    };
-
-    const handleShowPoiOnMap = (poi: PointOfInterest) => {
-        const query = poi.id === 'poi-13'
-            ? `${poi.latitude},${poi.longitude}`
-            : encodeURIComponent(`${poi.name}, Kula, Manisa`);
-        const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
-        window.open(url, '_blank');
-    };
-
     const isSaved = isRouteSaved(route.slug);
     
     return (
@@ -101,8 +52,6 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
                         <div className="space-y-6">
                             {pois.map((poi, index) => {
                                 const image = getImageById(poi.imageId);
-                                const isPlaying = nowPlaying === poi.id;
-                                const isGeneratingAudio = isGenerating === poi.id;
                                 return (
                                     <Card key={poi.id} className="overflow-hidden">
                                         <div className="flex flex-col md:flex-row">
@@ -135,21 +84,6 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
                                                                 <Info className="mr-2 h-4 w-4" />
                                                                 Daha Fazla Bilgi
                                                             </Link>
-                                                        </Button>
-                                                        <Button
-                                                            variant="outline"
-                                                            size="icon"
-                                                            onClick={() => handlePlayPause(poi)}
-                                                            disabled={isGeneratingAudio}
-                                                            aria-label={isPlaying ? "Anlatımı durdur" : "Anlatımı dinle"}
-                                                        >
-                                                            {isGeneratingAudio ? (
-                                                                <Loader2 className="h-4 w-4 animate-spin" />
-                                                            ) : isPlaying ? (
-                                                                <PauseIcon className="h-4 w-4" />
-                                                            ) : (
-                                                                <PlayIcon className="h-4 w-4" />
-                                                            )}
                                                         </Button>
                                                     </div>
                                                 </CardContent>
