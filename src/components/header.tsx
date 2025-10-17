@@ -3,7 +3,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu } from "lucide-react";
 import * as React from "react";
 import Image from "next/image";
 
@@ -18,6 +17,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { AudioGuideControl } from "./audio-guide-control";
+import { CustomMenuIcon } from "./icons";
 
 const navLinks = [
     { href: "/", label: "Ana Sayfa" },
@@ -69,7 +69,7 @@ export function Header() {
                          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                             <SheetTrigger asChild>
                                 <Button variant="ghost" className="p-0">
-                                    <Menu className="h-10 w-10" />
+                                    <CustomMenuIcon className="h-10 w-10" />
                                     <span className="sr-only">Menüyü Aç</span>
                                 </Button>
                             </SheetTrigger>
