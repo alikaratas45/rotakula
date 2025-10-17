@@ -4,9 +4,8 @@ import Image from 'next/image';
 import { APIProvider } from '@vis.gl/react-google-maps';
 import EmbeddedMap from '@/components/map';
 import { getImageById } from '@/lib/placeholder-images';
-import type { PointOfInterest, TtsOutput } from '@/lib/types';
+import type { PointOfInterest } from '@/lib/types';
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { textToSpeech } from '@/ai/flows/tts-flow';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { PlayIcon, PauseIcon } from '@/components/icons';
@@ -18,19 +17,14 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
     const heroImage = getImageById(poi.imageId);
 
     const [isPlaying, setIsPlaying] = useState(false);
-    const [isGenerating, setIsGenerating] = useState(false);
-    const audioRef = useRef<HTMLAudioElement | null>(null);
+    const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
     const { toast } = useToast();
 
     const cleanup = useCallback(() => {
-        if (audioRef.current) {
-            audioRef.current.pause();
-            audioRef.current.onended = null;
-            audioRef.current.onerror = null;
-            audioRef.current = null;
+        if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
         }
         setIsPlaying(false);
-        setIsGenerating(false);
     }, []);
 
     useEffect(() => {
@@ -41,78 +35,60 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
     }, [cleanup]);
 
     const handlePlayPause = useCallback(async () => {
-        if (isGenerating) return;
-
-        // If audio is playing, pause it.
-        if (isPlaying && audioRef.current) {
-            audioRef.current.pause();
-            setIsPlaying(false);
+        if (!('speechSynthesis' in window)) {
+            toast({
+                title: "Desteklenmiyor",
+                description: "Tarayıcınız sesli anlatım özelliğini desteklemiyor.",
+                variant: "destructive"
+            });
             return;
         }
 
-        // If audio is paused, resume it.
-        if (!isPlaying && audioRef.current) {
-            audioRef.current.play();
-            setIsPlaying(true);
+        if (window.speechSynthesis.speaking) {
+            if (window.speechSynthesis.paused) {
+                 window.speechSynthesis.resume();
+                 setIsPlaying(true);
+            } else {
+                window.speechSynthesis.pause();
+                setIsPlaying(false);
+            }
             return;
         }
         
-        // If no audio is loaded, generate and play it.
-        setIsGenerating(true);
+        cleanup(); // Start fresh
 
-        try {
-            const { media }: TtsOutput = await textToSpeech(poi.longDescription);
+        const utterance = new SpeechSynthesisUtterance(poi.longDescription);
+        utterance.lang = "tr-TR";
+        utteranceRef.current = utterance;
 
-            if (media) {
-                const newAudio = new Audio(media);
-                audioRef.current = newAudio;
-                
-                newAudio.onplaying = () => {
-                    setIsGenerating(false);
-                    setIsPlaying(true);
-                };
-                
-                newAudio.onpause = () => {
-                    // This handles both manual pause and end-of-track pause
-                    if (audioRef.current?.ended) {
-                        cleanup();
-                    } else {
-                        setIsPlaying(false);
-                    }
-                };
+        utterance.onstart = () => {
+            setIsPlaying(true);
+        };
 
-                newAudio.onended = () => {
-                   cleanup();
-                };
+        utterance.onpause = () => {
+            setIsPlaying(false);
+        };
+        
+        utterance.onresume = () => {
+            setIsPlaying(true);
+        }
 
-                newAudio.onerror = () => {
-                    toast({
-                        title: "Ses Hatası",
-                        description: "Ses dosyası çalınırken bir hata oluştu.",
-                        variant: "destructive"
-                    });
-                    cleanup();
-                };
+        utterance.onend = () => {
+           cleanup();
+        };
 
-                newAudio.play();
-            } else {
-                 throw new Error("No media received from the server.");
-            }
-
-        } catch (error: any) {
-            console.error("Failed to stream or play audio", error);
+        utterance.onerror = (event) => {
             toast({
                 title: "Ses Hatası",
-                description: "Sesli anlatım oluşturulurken bir hata oluştu.",
+                description: `Sesli anlatım sırasında bir hata oluştu: ${event.error}`,
                 variant: "destructive"
             });
             cleanup();
-        }
-    }, [poi.longDescription, isPlaying, isGenerating, cleanup, toast]);
+        };
 
-     const handleStop = useCallback(() => {
-        cleanup();
-    }, [cleanup]);
+        window.speechSynthesis.speak(utterance);
+
+    }, [poi.longDescription, cleanup, toast]);
 
     return (
         <APIProvider apiKey={apiKey}>
@@ -144,18 +120,15 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
                                 <h2 className="text-2xl font-headline font-bold">Detaylı Bilgi</h2>
                                 <Button
                                     variant="outline"
-                                    onClick={isPlaying ? handleStop : handlePlayPause}
-                                    disabled={isGenerating}
-                                    aria-label={isPlaying ? "Anlatımı durdur" : "Anlatımı dinle"}
+                                    onClick={handlePlayPause}
+                                    aria-label={isPlaying ? "Anlatımı duraklat" : "Anlatımı dinle"}
                                 >
-                                    {isGenerating ? (
-                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    ) : isPlaying ? (
+                                    {isPlaying ? (
                                         <PauseIcon className="mr-2 h-4 w-4" />
                                     ) : (
                                         <PlayIcon className="mr-2 h-4 w-4" />
                                     )}
-                                    {isGenerating ? 'Hazırlanıyor...' : isPlaying ? 'Durdur' : 'Sesli Dinle'}
+                                    {isPlaying ? 'Duraklat' : 'Sesli Dinle'}
                                 </Button>
                              </div>
                              <div className="prose prose-lg max-w-none text-foreground/90">

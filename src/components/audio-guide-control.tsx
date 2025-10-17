@@ -4,7 +4,6 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { getPois } from '@/lib/kula-data';
 import type { PointOfInterest } from '@/lib/types';
 import { haversineDistance } from '@/lib/utils';
-import { textToSpeech } from '@/ai/flows/tts-flow';
 import { Button } from './ui/button';
 import { Loader2, PauseIcon, PlayIcon, Radio, RadioTower } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -18,17 +17,28 @@ import {
 
 const PROXIMITY_THRESHOLD = 50; // meters
 
-type GuideStatus = 'idle' | 'listening' | 'narrating' | 'generating';
+type GuideStatus = 'idle' | 'listening' | 'narrating';
 
 export function AudioGuideControl() {
     const [status, setStatus] = useState<GuideStatus>('idle');
     const [pois, setPois] = useState<PointOfInterest[]>([]);
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
     const [triggeredPois, setTriggeredPois] = useState<Set<string>>(new Set());
-    const audioRef = useRef<HTMLAudioElement | null>(null);
     const watchIdRef = useRef<number | null>(null);
     const { toast, dismiss } = useToast();
     const [narratingPoi, setNarratingPoi] = useState<PointOfInterest | null>(null);
+    const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+
+     const cancelNarration = useCallback(() => {
+        if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+        }
+        setNarratingPoi(null);
+        if (status !== 'idle') {
+            setStatus('listening');
+        }
+    }, [status]);
+
 
     useEffect(() => {
         async function fetchPois() {
@@ -36,9 +46,23 @@ export function AudioGuideControl() {
             setPois(allPois);
         }
         fetchPois();
-    }, []);
+        
+        return () => {
+            cancelNarration();
+        }
+    }, [cancelNarration]);
     
     const startLocationTracking = () => {
+        if (!('geolocation' in navigator) || !('speechSynthesis'in window)) {
+            toast({
+                title: "Desteklenmiyor",
+                description: "Tarayıcınız sesli rehber özelliği için gerekli olan konum veya ses sentezleme servislerini desteklemiyor.",
+                variant: "destructive"
+            });
+            setStatus('idle');
+            return;
+        }
+
         if (watchIdRef.current !== null) return;
         
         watchIdRef.current = navigator.geolocation.watchPosition(
@@ -67,58 +91,42 @@ export function AudioGuideControl() {
             watchIdRef.current = null;
         }
         setUserLocation(null);
-        if (audioRef.current) {
-            audioRef.current.pause();
-            audioRef.current = null;
-        }
+        cancelNarration();
         setTriggeredPois(new Set());
-        setNarratingPoi(null);
         setStatus('idle');
         dismiss(); // Dismiss any active toasts
-    }, [dismiss]);
+    }, [dismiss, cancelNarration]);
 
-    const handlePlayAudio = useCallback(async (poi: PointOfInterest) => {
-        if (status === 'generating' || status === 'narrating') {
-             if (audioRef.current) {
-                audioRef.current.pause();
-                setNarratingPoi(null);
-                setStatus('listening');
-             }
+    const handlePlayAudio = useCallback((poi: PointOfInterest) => {
+        if (status === 'narrating') {
+             cancelNarration();
              return;
         }
 
-        setStatus('generating');
         setNarratingPoi(poi);
+        setStatus('narrating');
+        
+        const utterance = new SpeechSynthesisUtterance(poi.description);
+        utterance.lang = "tr-TR";
+        utteranceRef.current = utterance;
 
-        try {
-            const { media } = await textToSpeech(poi.description);
-            if (media) {
-                setStatus('narrating');
-                if (audioRef.current) {
-                    audioRef.current.src = media;
-                } else {
-                    audioRef.current = new Audio(media);
-                }
-                audioRef.current.play();
-                audioRef.current.onended = () => {
-                    setStatus('listening');
-                    setNarratingPoi(null);
-                };
-            } else {
-                 setStatus('listening');
-                 setNarratingPoi(null);
-            }
-        } catch (error) {
-            console.error("Failed to generate or play audio", error);
+        utterance.onend = () => {
+            setNarratingPoi(null);
+            setStatus('listening');
+        };
+
+        utterance.onerror = () => {
             toast({
                 title: "Ses Hatası",
                 description: "Sesli anlatım oluşturulurken bir hata oluştu.",
                 variant: "destructive"
             });
-            setStatus('listening');
             setNarratingPoi(null);
-        }
-    }, [status, toast]);
+            setStatus('listening');
+        };
+
+        window.speechSynthesis.speak(utterance);
+    }, [status, toast, cancelNarration]);
 
 
     useEffect(() => {
@@ -171,7 +179,6 @@ export function AudioGuideControl() {
     };
 
     const getButtonContent = () => {
-        if (status === 'generating') return <Loader2 className="h-5 w-5 animate-spin" />;
         if (status === 'narrating') return <PauseIcon className="h-5 w-5 text-blue-500" />;
         if (status === 'listening') return <RadioTower className="h-5 w-5 animate-pulse text-green-500" />;
         return <Radio className="h-5 w-5" />;
@@ -183,10 +190,8 @@ export function AudioGuideControl() {
                 return "Sesli Rehberi Başlat";
             case 'listening':
                 return "Sesli Rehber Aktif: Yerler dinleniyor. Kapatmak için tıklayın.";
-            case 'generating':
-                return "Anlatım hazırlanıyor...";
             case 'narrating':
-                return `Anlatım yapılıyor: ${narratingPoi?.name}. Duraklatmak için tıklayın.`;
+                return `Anlatım yapılıyor: ${narratingPoi?.name}. Durdurmak için tıklayın.`;
             default:
                 return "Sesli Rehber";
         }
