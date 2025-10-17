@@ -43,9 +43,9 @@ export default function MyRoutesPage() {
                         const image = getImageById(route.imageId);
                         return (
                              <Card key={route.id} className="flex flex-col perspective-1000">
-                                <Link href={`/routes/${route.slug}`} className="group block preserve-3d animate-unfold-in">
+                                <Link href={`/routes/${route.slug}`} className="group block preserve-3d">
                                     <CardHeader className="p-0">
-                                        <div className="relative h-48 w-full">
+                                        <div className="relative h-48 w-full animate-uncrumple-in">
                                             {image && (
                                                 <Image
                                                     src={image.imageUrl}

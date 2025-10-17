@@ -10,9 +10,9 @@ const StoryCard = ({ story }: { story: Story }) => {
   const image = getImageById(story.imageId);
   return (
     <Link href={`/stories/${story.slug}`} className="group block perspective-1000">
-      <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1 preserve-3d animate-unfold-in">
+      <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1 preserve-3d">
         <CardHeader className="p-0">
-          <div className="relative h-48 w-full">
+          <div className="relative h-48 w-full animate-uncrumple-in">
             {image && (
               <Image
                 src={image.imageUrl}
