@@ -6,7 +6,7 @@ import EmbeddedMap from '@/components/map';
 import { getImageById } from '@/lib/placeholder-images';
 import type { PointOfInterest } from '@/lib/types';
 import { useState, useRef, useCallback } from 'react';
-import { callStream } from '@genkit-ai/next/client';
+import { streamFlow } from '@genkit-ai/next/client';
 import { textToSpeech } from '@/ai/flows/tts-flow';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
@@ -195,7 +195,7 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
             });
             playerRef.current = newPlayer;
 
-            const stream = callStream({
+            const stream = streamFlow({
                 flow: textToSpeech,
                 input: poi.longDescription,
                 signal: abortControllerRef.current.signal,
