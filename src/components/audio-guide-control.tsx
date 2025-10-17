@@ -8,6 +8,13 @@ import { textToSpeech } from '@/ai/flows/tts-flow';
 import { Button } from './ui/button';
 import { Loader2, Radio, RadioTower } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 
 const PROXIMITY_THRESHOLD = 50; // meters
 
@@ -68,7 +75,7 @@ export function AudioGuideControl() {
         setTriggeredPois(new Set()); // Reset triggered pois when stopping
     };
 
-    const handlePlayAudio = async (poi: PointOfInterest) => {
+    const handlePlayAudio = useCallback(async (poi: PointOfInterest) => {
         if (audioRef.current?.src && status === 'narrating') {
             return; // Already narrating, don't interrupt
         }
@@ -104,7 +111,7 @@ export function AudioGuideControl() {
             });
             setStatus('listening');
         }
-    };
+    }, [status, toast]);
 
 
     // Check for nearby POIs when user location changes and guide is active
@@ -152,15 +159,15 @@ export function AudioGuideControl() {
     const getButtonContent = () => {
         switch (status) {
             case 'idle':
-                return <Radio className="h-6 w-6" />;
+                return <Radio className="h-5 w-5" />;
             case 'listening':
-                return <RadioTower className="h-6 w-6 animate-pulse text-green-500" />;
+                return <RadioTower className="h-5 w-5 animate-pulse text-green-500" />;
             case 'generating':
-                return <Loader2 className="h-6 w-6 animate-spin" />;
+                return <Loader2 className="h-5 w-5 animate-spin" />;
             case 'narrating':
-                return <RadioTower className="h-6 w-6 text-blue-500" />;
+                return <RadioTower className="h-5 w-5 text-blue-500" />;
             default:
-                return <Radio className="h-6 w-6" />;
+                return <Radio className="h-5 w-5" />;
         }
     };
      
@@ -180,16 +187,23 @@ export function AudioGuideControl() {
     };
 
     return (
-       <div className="fixed bottom-4 right-4 z-50">
-            <Button 
-                size="icon" 
-                className="rounded-full w-14 h-14 shadow-lg"
-                onClick={toggleGuide}
-                aria-label={getTooltipContent()}
-                disabled={status === 'generating'}
-            >
-                {getButtonContent()}
-            </Button>
-        </div>
+        <TooltipProvider>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button 
+                        variant="ghost"
+                        size="icon" 
+                        onClick={toggleGuide}
+                        aria-label={getTooltipContent()}
+                        disabled={status === 'generating'}
+                    >
+                        {getButtonContent()}
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                    <p>{getTooltipContent()}</p>
+                </TooltipContent>
+            </Tooltip>
+        </TooltipProvider>
     );
 }

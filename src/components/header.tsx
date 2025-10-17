@@ -16,6 +16,7 @@ import {
   SheetDescription,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { AudioGuideControl } from "./audio-guide-control";
 
 const navLinks = [
     { href: "/", label: "Ana Sayfa" },
@@ -37,7 +38,7 @@ export function Header() {
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container flex h-16 items-center">
-                <div className="mr-4 hidden md:flex">
+                <div className="mr-auto hidden md:flex">
                     <Link href="/" className="mr-6 flex items-center space-x-2">
                         <Image src="/logo.png" alt="RotaKula Logo" width={28} height={28} />
                         <span className="hidden font-bold sm:inline-block font-headline text-lg">
@@ -60,11 +61,12 @@ export function Header() {
                     </nav>
                 </div>
                 
-                <div className="flex flex-1 items-center justify-between md:justify-end">
-                    <Link href="/" className="flex items-center space-x-2 md:hidden">
+                <div className="flex flex-1 items-center justify-end gap-2">
+                    <Link href="/" className="flex items-center space-x-2 md:hidden mr-auto">
                         <Image src="/logo.png" alt="RotaKula Logo" width={28} height={28} />
                         <span className="font-bold font-headline text-lg">RotaKula</span>
                     </Link>
+                    <AudioGuideControl />
                     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                         <SheetTrigger asChild>
                             <Button variant="ghost" size="icon" className="md:hidden">
