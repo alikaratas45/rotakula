@@ -56,7 +56,7 @@ const ttsFlow = ai.defineFlow(
         responseModalities: ['AUDIO'],
         speechConfig: {
           voiceConfig: {
-            prebuiltVoiceConfig: { voiceName: 'Alloy' }, // Using a standard voice
+            prebuiltVoiceConfig: { voiceName: 'Algenib' }, // Using a standard voice
           },
         },
       },
