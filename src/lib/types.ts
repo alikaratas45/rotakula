@@ -1,5 +1,10 @@
 import { z } from 'genkit';
 
+export type Coordinate = {
+  lat: number;
+  lon: number;
+};
+
 export type PointOfInterest = {
   id: string;
   name: string;
