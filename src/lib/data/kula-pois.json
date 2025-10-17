@@ -6,8 +6,8 @@
       "description": "Türkiye'nin en genç volkan konilerinden biri olan Sandal Divlit, etkileyici krateri ve manzarasıyla jeoparkın önemli noktalarından biridir.",
       "category": "geopark",
       "imageId": "poi-sandal-volcano",
-      "latitude": 38.5833,
-      "longitude": 28.5167
+      "latitude": 38.5800,
+      "longitude": 28.5130
     },
     {
       "id": "poi-2",
@@ -150,8 +150,8 @@
       "description": "Jeopark ziyaretçi merkezi hem jeoparkı anlatan tanıtım merkezinin bulunduğu, hem de jeoparkın idari ofisinin bulunduğu yerdir. Ayrıca burada lavabo ihtiyacınızı karşılayabileceğiniz ve oturup, çay, kahve içebileceğiniz bir alandır. Buraya gelmişken 4000 yıllık ayak izlerini görmeden gitmeyin!",
       "category": "geopark",
       "imageId": "poi-visitor-center",
-      "latitude": 38.5833,
-      "longitude": 28.5167
+      "latitude": 38.5845,
+      "longitude": 28.5175
     }
   ]
 }
