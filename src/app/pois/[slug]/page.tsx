@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import type { PointOfInterest } from '@/lib/types';
 
 
-export default function PoiDetailPage({ params: { slug } }: { params: { slug: string } }) {
+export default function PoiDetailPage({ params }: { params: { slug: string } }) {
     const { language, translations } = useLanguage();
     const [poi, setPoi] = useState<PointOfInterest | null>(null);
     const [loading, setLoading] = useState(true);
@@ -17,14 +17,14 @@ export default function PoiDetailPage({ params: { slug } }: { params: { slug: st
     useEffect(() => {
       async function fetchData() {
         setLoading(true);
-        const poiData = await getPoiBySlug(slug, language);
+        const poiData = await getPoiBySlug(params.slug, language);
         if (poiData) {
           setPoi(poiData);
         }
         setLoading(false);
       }
       fetchData();
-    }, [slug, language]);
+    }, [params.slug, language]);
 
 
     if (loading) {

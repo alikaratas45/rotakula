@@ -10,7 +10,7 @@ import { useLanguage } from '@/context/language-context';
 import { useEffect, useState } from 'react';
 import type { ThematicRoute, PointOfInterest } from '@/lib/types';
 
-export default function RoutePage({ params: { slug } }: { params: { slug: string } }) {
+export default function RoutePage({ params }: { params: { slug: string } }) {
     const { language, translations } = useLanguage();
     const [route, setRoute] = useState<ThematicRoute | null>(null);
     const [pois, setPois] = useState<PointOfInterest[]>([]);
@@ -19,7 +19,7 @@ export default function RoutePage({ params: { slug } }: { params: { slug: string
     useEffect(() => {
         async function fetchData() {
             setLoading(true);
-            const routeData = await getRouteBySlug(slug, language);
+            const routeData = await getRouteBySlug(params.slug, language);
             if (routeData) {
                 const poisData = await getPoisByIds(routeData.poiIds, language);
                 setRoute(routeData);
@@ -28,7 +28,7 @@ export default function RoutePage({ params: { slug } }: { params: { slug: string
             setLoading(false);
         }
         fetchData();
-    }, [slug, language]);
+    }, [params.slug, language]);
 
     if (loading) {
         return <div>{translations.common.loading}...</div>;
