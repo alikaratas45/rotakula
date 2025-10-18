@@ -19,6 +19,7 @@ import {
 import { AudioGuideControl } from "./audio-guide-control";
 import { useLanguage } from "@/context/language-context";
 import { Globe } from "lucide-react";
+import { TurkishFlagIcon, UKFlagIcon } from "./icons";
 
 
 export function Header() {
@@ -79,7 +80,7 @@ export function Header() {
                     <div className="flex items-center gap-1">
                         <AudioGuideControl />
                         <Button variant="ghost" size="icon" onClick={toggleLanguage} aria-label="Change language">
-                            <Globe className="h-5 w-5" />
+                             {language === 'tr' ? <UKFlagIcon className="h-5 w-5 rounded-sm" /> : <TurkishFlagIcon className="h-5 w-5 rounded-sm" />}
                         </Button>
                         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                            <SheetTrigger asChild>
@@ -119,8 +120,17 @@ export function Header() {
                 <div className="hidden md:flex flex-1 items-center justify-end gap-2">
                     <AudioGuideControl />
                     <Button variant="outline" size="sm" onClick={toggleLanguage}>
-                        <Globe className="mr-2 h-4 w-4" />
-                        {language === 'tr' ? 'English' : 'Türkçe'}
+                        {language === 'tr' ? (
+                            <>
+                                <UKFlagIcon className="mr-2 h-4 w-4 rounded-sm" />
+                                <span>English</span>
+                            </>
+                        ) : (
+                            <>
+                                <TurkishFlagIcon className="mr-2 h-4 w-4 rounded-sm" />
+                                <span>Türkçe</span>
+                            </>
+                        )}
                     </Button>
                 </div>
             </div>
