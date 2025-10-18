@@ -12,8 +12,10 @@ import { Loader2, MapPin } from 'lucide-react';
 import { BedIcon } from '@/components/icons';
 import EmbeddedMap from '@/components/map';
 import { APIProvider } from '@vis.gl/react-google-maps';
+import { useLanguage } from '@/context/language-context';
 
 export default function AccommodationPage() {
+    const { language, translations } = useLanguage();
     const [pois, setPois] = useState<PointOfInterest[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
@@ -21,7 +23,8 @@ export default function AccommodationPage() {
     useEffect(() => {
         async function fetchPois() {
             try {
-                const allPois = await getPois();
+                setIsLoading(true);
+                const allPois = await getPois(language);
                 const filteredPois = allPois.filter(poi => poi.category === 'accommodation');
                 setPois(filteredPois);
             } catch (error) {
@@ -31,7 +34,7 @@ export default function AccommodationPage() {
             }
         }
         fetchPois();
-    }, []);
+    }, [language]);
 
     const handleShowPoiOnMap = (poi: PointOfInterest) => {
         const query = encodeURIComponent(`${poi.name}, Kula, Manisa`);
@@ -51,12 +54,12 @@ export default function AccommodationPage() {
         <APIProvider apiKey={apiKey}>
             <div className="container py-8 md:py-12">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-                    <h1 className="text-3xl md:text-4xl font-headline font-bold">Konaklama</h1>
+                    <h1 className="text-3xl md:text-4xl font-headline font-bold">{translations.accommodation.title}</h1>
                 </div>
 
                 {pois.length > 0 && (
                     <div className="mb-12">
-                        <h2 className="text-2xl font-headline font-bold mb-4">Harita</h2>
+                        <h2 className="text-2xl font-headline font-bold mb-4">{translations.common.map}</h2>
                         <EmbeddedMap pois={pois} />
                     </div>
                 )}
@@ -92,7 +95,7 @@ export default function AccommodationPage() {
                                 <div className="p-4 pt-0 mt-auto">
                                     <Button variant="outline" size="sm" onClick={() => handleShowPoiOnMap(poi)}>
                                         <MapPin className="mr-2 h-4 w-4" />
-                                        Google Haritalar'da Aç
+                                        {translations.accommodation.openInGoogleMaps}
                                     </Button>
                                 </div>
                             </Card>

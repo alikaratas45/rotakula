@@ -1,3 +1,4 @@
+
 "use client"
 
 import './globals.css';
@@ -7,13 +8,11 @@ import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { useEffect, useState } from 'react';
 import { SplashScreen } from '@/components/splash-screen';
+import { LanguageProvider, useLanguage } from '@/context/language-context';
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+function AppContent({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
+  const { language } = useLanguage();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -24,7 +23,7 @@ export default function RootLayout({
   }, []);
 
   return (
-    <html lang="tr" suppressHydrationWarning>
+    <html lang={language} suppressHydrationWarning>
       <head>
         <title>RotaKula - Kula Gezi Rehberi</title>
         <meta name="description" content="Manisa'nın Kula ilçesine özel tematik seyahat rotalarını, tarihi yerleri, doğal güzellikleri ve yöresel lezzetleri keşfedin." />
@@ -47,5 +46,18 @@ export default function RootLayout({
         )}
       </body>
     </html>
+  );
+}
+
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <LanguageProvider>
+      <AppContent>{children}</AppContent>
+    </LanguageProvider>
   );
 }

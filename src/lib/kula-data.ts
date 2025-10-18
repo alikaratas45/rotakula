@@ -12,54 +12,73 @@ const stories: Story[] = storiesData.stories;
 // Adding a delay to simulate network latency
 const DELAY = 50;
 
-export async function getRoutes(): Promise<ThematicRoute[]> {
-  await new Promise(resolve => setTimeout(resolve, DELAY));
-  return routes;
+function translateItem<T extends { [key: string]: any }>(item: T, lang: string): T {
+    if (lang === 'en') {
+        const translatedItem = { ...item };
+        Object.keys(item).forEach(key => {
+            const enKey = `${key}_en`;
+            if (enKey in item) {
+                translatedItem[key] = item[enKey];
+            }
+        });
+        return translatedItem;
+    }
+    return item;
 }
 
-export async function getPois(): Promise<PointOfInterest[]> {
+export async function getRoutes(lang: string = 'tr'): Promise<ThematicRoute[]> {
   await new Promise(resolve => setTimeout(resolve, DELAY));
-  return pois;
+  return routes.map(route => translateItem(route, lang));
 }
 
-export async function getStories(): Promise<Story[]> {
+export async function getPois(lang: string = 'tr'): Promise<PointOfInterest[]> {
   await new Promise(resolve => setTimeout(resolve, DELAY));
-  return stories;
+  return pois.map(poi => translateItem(poi, lang));
 }
 
-export async function getRouteBySlug(slug: string): Promise<ThematicRoute | undefined> {
+export async function getStories(lang: string = 'tr'): Promise<Story[]> {
   await new Promise(resolve => setTimeout(resolve, DELAY));
-  return routes.find(route => route.slug === slug);
+  return stories.map(story => translateItem(story, lang));
 }
 
-export async function getStoryBySlug(slug: string): Promise<Story | undefined> {
+export async function getRouteBySlug(slug: string, lang: string = 'tr'): Promise<ThematicRoute | undefined> {
   await new Promise(resolve => setTimeout(resolve, DELAY));
-  return stories.find(story => story.slug === slug);
+  const route = routes.find(route => route.slug === slug);
+  return route ? translateItem(route, lang) : undefined;
 }
 
-export async function getPoiBySlug(slug: string): Promise<PointOfInterest | undefined> {
+export async function getStoryBySlug(slug: string, lang: string = 'tr'): Promise<Story | undefined> {
   await new Promise(resolve => setTimeout(resolve, DELAY));
-  return pois.find(poi => poi.slug === slug);
+  const story = stories.find(story => story.slug === slug);
+  return story ? translateItem(story, lang) : undefined;
+}
+
+export async function getPoiBySlug(slug: string, lang: string = 'tr'): Promise<PointOfInterest | undefined> {
+  await new Promise(resolve => setTimeout(resolve, DELAY));
+  const poi = pois.find(poi => poi.slug === slug);
+  return poi ? translateItem(poi, lang) : undefined;
 }
 
 
-export async function getPoiById(id: string): Promise<PointOfInterest | undefined> {
+export async function getPoiById(id: string, lang: string = 'tr'): Promise<PointOfInterest | undefined> {
   await new Promise(resolve => setTimeout(resolve, DELAY));
-  return pois.find(poi => poi.id === id);
+  const poi = pois.find(poi => poi.id === id);
+  return poi ? translateItem(poi, lang) : undefined;
 }
 
-export async function getPoisByIds(ids: string[]): Promise<PointOfInterest[]> {
+export async function getPoisByIds(ids: string[], lang: string = 'tr'): Promise<PointOfInterest[]> {
     await new Promise(resolve => setTimeout(resolve, DELAY));
-    return pois.filter(poi => ids.includes(poi.id));
+    const filteredPois = pois.filter(poi => ids.includes(poi.id));
+    return filteredPois.map(poi => translateItem(poi, lang));
 }
 
-export async function getFeaturedRoute(): Promise<ThematicRoute | undefined> {
+export async function getFeaturedRoute(lang: string = 'tr'): Promise<ThematicRoute | undefined> {
     await new Promise(resolve => setTimeout(resolve, DELAY));
     if (routes.length === 0) {
         return undefined;
     }
-    // Monday is the first day of the week
     const weekOfYear = getWeek(new Date(), { weekStartsOn: 1 });
     const featuredIndex = (weekOfYear -1) % routes.length;
-    return routes[featuredIndex];
+    const route = routes[featuredIndex];
+    return route ? translateItem(route, lang) : undefined;
 }

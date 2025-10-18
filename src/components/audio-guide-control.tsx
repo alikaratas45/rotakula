@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from 'react';
@@ -13,6 +14,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useLanguage } from '@/context/language-context';
 
 
 const PROXIMITY_THRESHOLD = 50; // meters
@@ -20,6 +22,7 @@ const PROXIMITY_THRESHOLD = 50; // meters
 type GuideStatus = 'idle' | 'listening' | 'narrating';
 
 export function AudioGuideControl() {
+    const { language, translations } = useLanguage();
     const [status, setStatus] = useState<GuideStatus>('idle');
     const [pois, setPois] = useState<PointOfInterest[]>([]);
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
@@ -60,7 +63,7 @@ export function AudioGuideControl() {
 
     useEffect(() => {
         async function fetchPois() {
-            const allPois = await getPois();
+            const allPois = await getPois(language);
             setPois(allPois);
         }
         fetchPois();
@@ -68,13 +71,13 @@ export function AudioGuideControl() {
         return () => {
             cancelNarration();
         }
-    }, [cancelNarration]);
+    }, [cancelNarration, language]);
     
     const startLocationTracking = () => {
         if (!('geolocation' in navigator) || !('speechSynthesis'in window)) {
             toast({
-                title: "Desteklenmiyor",
-                description: "Tarayıcınız sesli rehber özelliği için gerekli olan konum veya ses sentezleme servislerini desteklemiyor.",
+                title: translations.toast.unsupportedTitle,
+                description: translations.toast.audioGuideUnsupported,
                 variant: "destructive"
             });
             setStatus('idle');
@@ -93,8 +96,8 @@ export function AudioGuideControl() {
             (error) => {
                 console.warn("Could not get user location:", error.message);
                 toast({
-                    title: "Konum Hatası",
-                    description: "Konumunuza erişilemiyor. Lütfen tarayıcı ayarlarınızı kontrol edin.",
+                    title: translations.toast.locationErrorTitle,
+                    description: translations.toast.locationErrorDescription,
                     variant: "destructive"
                 });
                 stopLocationTracking();
@@ -125,15 +128,18 @@ export function AudioGuideControl() {
         setStatus('narrating');
         
         const utterance = new SpeechSynthesisUtterance(poi.description);
-        utterance.lang = "tr-TR";
+        utterance.lang = language === 'tr' ? "tr-TR" : "en-US";
 
-        // Find a male Turkish voice
-        const maleVoice = voices.find(voice => voice.lang === 'tr-TR' && voice.name.toLowerCase().includes('male'));
+        const voiceCriteria = (v: SpeechSynthesisVoice) => 
+            v.lang.startsWith(language) && v.name.toLowerCase().includes('male');
+        
+        const maleVoice = voices.find(voiceCriteria);
+
         if (maleVoice) {
             utterance.voice = maleVoice;
         } else {
-            const turkishVoice = voices.find(voice => voice.lang === 'tr-TR');
-            if (turkishVoice) utterance.voice = turkishVoice;
+            const langVoice = voices.find(v => v.lang.startsWith(language));
+            if (langVoice) utterance.voice = langVoice;
         }
 
         utteranceRef.current = utterance;
@@ -145,8 +151,8 @@ export function AudioGuideControl() {
 
         utterance.onerror = (event) => {
             toast({
-                title: "Ses Hatası",
-                description: `Sesli anlatım sırasında bir hata oluştu: ${event.error}`,
+                title: translations.toast.audioErrorTitle,
+                description: `${translations.toast.audioErrorDescription}: ${event.error}`,
                 variant: "destructive"
             });
             setNarratingPoi(null);
@@ -154,7 +160,7 @@ export function AudioGuideControl() {
         };
 
         window.speechSynthesis.speak(utterance);
-    }, [status, toast, cancelNarration, voices]);
+    }, [status, toast, cancelNarration, voices, language, translations]);
 
 
     useEffect(() => {
@@ -162,7 +168,6 @@ export function AudioGuideControl() {
             return;
         }
 
-        // Do not trigger narration if another one is already playing
         if (narratingPoi) return;
 
         for (const poi of pois) {
@@ -178,19 +183,19 @@ export function AudioGuideControl() {
             if (distance < PROXIMITY_THRESHOLD) {
                 setTriggeredPois(prev => new Set(prev).add(poi.id));
                 toast({
-                    title: `📍 Yakınlardasınız: ${poi.name}`,
-                    description: "Anlatımı dinlemek için butona tıklayın.",
-                    duration: Infinity, // Keep toast until dismissed
+                    title: `${translations.audioGuide.nearby}: ${poi.name}`,
+                    description: translations.audioGuide.nearbyDescription,
+                    duration: Infinity, 
                     action: (
                         <Button onClick={() => handlePlayAudio(poi)}>
-                           <PlayIcon className="mr-2 h-4 w-4" /> Dinle
+                           <PlayIcon className="mr-2 h-4 w-4" /> {translations.poi.listen}
                         </Button>
                     )
                 });
                 break; 
             }
         }
-    }, [userLocation, pois, status, triggeredPois, handlePlayAudio, toast, narratingPoi]);
+    }, [userLocation, pois, status, triggeredPois, handlePlayAudio, toast, narratingPoi, translations]);
 
 
     const toggleGuide = () => {
@@ -198,13 +203,13 @@ export function AudioGuideControl() {
             setStatus('listening');
             startLocationTracking();
              toast({
-                title: "Sesli Rehber Başlatıldı",
-                description: "Yakınınızdaki yerler için bildirim alacaksınız.",
+                title: translations.audioGuide.started,
+                description: translations.audioGuide.startedDescription,
             });
         } else {
             stopLocationTracking();
             toast({
-                title: "Sesli Rehber Kapatıldı",
+                title: translations.audioGuide.stopped,
             });
         }
     };
@@ -218,13 +223,13 @@ export function AudioGuideControl() {
     const getTooltipContent = () => {
         switch (status) {
             case 'idle':
-                return "Sesli Rehberi Başlat";
+                return translations.audioGuide.start;
             case 'listening':
-                return "Sesli Rehber Aktif: Yerler dinleniyor. Kapatmak için tıklayın.";
+                return translations.audioGuide.active;
             case 'narrating':
-                return `Anlatım yapılıyor: ${narratingPoi?.name}. Durdurmak için tıklayın.`;
+                return `${translations.audioGuide.narrating}: ${narratingPoi?.name}.`;
             default:
-                return "Sesli Rehber";
+                return translations.audioGuide.title;
         }
     };
 
@@ -239,7 +244,7 @@ export function AudioGuideControl() {
                         aria-label={getTooltipContent()}
                     >
                         {getButtonContent()}
-                        <span className="ml-2">Sesli Rehber</span>
+                        <span className="ml-2">{translations.audioGuide.title}</span>
                     </Button>
                 </TooltipTrigger>
                 <TooltipContent>

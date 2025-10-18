@@ -8,11 +8,12 @@ import { Loader2, Star } from "lucide-react";
 import Image from "next/image";
 import { getImageById } from "@/lib/placeholder-images";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/context/language-context";
 
 // --- User Location Marker ---
 function UserLocationMarker() {
   const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
-
+  const { translations } = useLanguage();
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (geoPosition) => {
@@ -32,7 +33,7 @@ function UserLocationMarker() {
   if (!position) return null;
 
   return (
-    <AdvancedMarker position={position} title="Sizin Konumunuz">
+    <AdvancedMarker position={position} title={translations.map.yourLocation}>
       <div className="relative w-6 h-6 flex justify-center items-center">
         <div className="absolute w-full h-full rounded-full bg-blue-500/20 animate-ping"></div>
         <div className="w-4 h-4 rounded-full bg-blue-500 border-2 border-white shadow-md"></div>
@@ -98,6 +99,7 @@ function PoiMarker({
 // --- Main Map Component ---
 export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
   const map = useMap();
+  const { translations } = useLanguage();
   const [markersLoaded, setMarkersLoaded] = useState(false);
   const [selectedPoiId, setSelectedPoiId] = useState<string | null>(null);
   const [userPosition, setUserPosition] = useState<{ lat: number; lng: number } | null>(null);
@@ -199,7 +201,7 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
         <div className="absolute inset-0 bg-muted/50 flex items-center justify-center z-10">
             <div className="flex items-center gap-2 text-muted-foreground">
                 <Loader2 className="w-5 h-5 animate-spin" />
-                <span>Harita Yükleniyor...</span>
+                <span>{translations.map.loading}</span>
             </div>
         </div>
       )}
@@ -256,6 +258,7 @@ const PlaceMarker = ({ place, onClick }: { place: google.maps.places.PlaceResult
 
 export const NearbySearch = () => {
     const map = useMap();
+    const { translations } = useLanguage();
     const [places, setPlaces] = useState<google.maps.places.PlaceResult[]>([]);
     const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>(null);
     const [userPosition, setUserPosition] = useState<{ lat: number; lng: number } | null>(null);
@@ -271,11 +274,11 @@ export const NearbySearch = () => {
                 });
             },
             () => {
-                setError("Konum bilgisi alınamadı. Lütfen tarayıcı ayarlarınızdan konum izni verdiğinizden emin olun.");
+                setError(translations.map.locationError);
                 setUserPosition({ lat: 38.547, lng: 28.52 }); // Fallback to Kula center
             }
         );
-    }, []);
+    }, [translations]);
 
     // Perform nearby search
     useEffect(() => {
@@ -302,12 +305,12 @@ export const NearbySearch = () => {
                 });
                 map.fitBounds(bounds);
             } else if (status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
-                setError("Yakınınızda restoran bulunamadı.");
+                setError(translations.map.noRestaurantsFound);
             } else {
-                 setError("Restoranlar aranırken bir hata oluştu.");
+                 setError(translations.map.searchError);
             }
         });
-    }, [map, userPosition]);
+    }, [map, userPosition, translations]);
     
     const selectedPlace = selectedPlaceId ? places.find(p => p.place_id === selectedPlaceId) : null;
     const [markerRef, marker] = useAdvancedMarkerRef();
@@ -329,7 +332,7 @@ export const NearbySearch = () => {
             <div className="h-96 flex items-center justify-center bg-muted/50 rounded-lg">
                 <div className="flex items-center gap-2 text-muted-foreground">
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    <span>Konumunuz alınıyor...</span>
+                    <span>{translations.map.gettingLocation}</span>
                 </div>
             </div>
         );
@@ -362,7 +365,7 @@ export const NearbySearch = () => {
                              {selectedPlace.rating && (
                                 <div className="flex items-center gap-1 text-sm text-yellow-600 mb-2">
                                     <Star className="w-4 h-4 fill-current" /> 
-                                    <span>{selectedPlace.rating} ({selectedPlace.user_ratings_total} yorum)</span>
+                                    <span>{selectedPlace.rating} ({selectedPlace.user_ratings_total} {translations.map.reviews})</span>
                                 </div>
                             )}
                             <p className="text-sm text-foreground/80">{selectedPlace.vicinity}</p>

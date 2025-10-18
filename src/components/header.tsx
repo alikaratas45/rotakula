@@ -17,23 +17,31 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { AudioGuideControl } from "./audio-guide-control";
+import { useLanguage } from "@/context/language-context";
+import { Globe } from "lucide-react";
 
-const navLinks = [
-    { href: "/", label: "Ana Sayfa" },
-    { href: "/stories", label: "Hikayeler" },
-    { href: "/pois", label: "Gezilecek Yerler" },
-    { href: "/food", label: "Lezzet Durakları" },
-    { href: "/accommodation", label: "Konaklama" },
-    { href: "/my-routes", label: "Rotalarım" },
-];
 
 export function Header() {
     const pathname = usePathname();
     const [isSheetOpen, setIsSheetOpen] = React.useState(false);
+    const { language, setLanguage, translations } = useLanguage();
+
+    const navLinks = [
+        { href: "/", label: translations.nav.home },
+        { href: "/stories", label: translations.nav.stories },
+        { href: "/pois", label: translations.nav.places },
+        { href: "/food", label: translations.nav.food },
+        { href: "/accommodation", label: translations.nav.accommodation },
+        { href: "/my-routes", label: translations.nav.myRoutes },
+    ];
 
     const handleLinkClick = () => {
         setIsSheetOpen(false);
     };
+
+    const toggleLanguage = () => {
+        setLanguage(language === 'tr' ? 'en' : 'tr');
+    }
     
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -70,17 +78,20 @@ export function Header() {
                     </Link>
                     <div className="flex items-center gap-1">
                         <AudioGuideControl />
+                        <Button variant="ghost" size="icon" onClick={toggleLanguage} aria-label="Change language">
+                            <Globe className="h-5 w-5" />
+                        </Button>
                         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                            <SheetTrigger asChild>
                                <Button variant="ghost">
-                                   Menü
+                                   {translations.header.menu}
                                </Button>
                            </SheetTrigger>
                            <SheetContent side="left">
                                 <SheetHeader className="text-left">
-                                   <SheetTitle>Menü</SheetTitle>
+                                   <SheetTitle>{translations.header.menu}</SheetTitle>
                                    <SheetDescription>
-                                       Uygulama içinde gezinmek için aşağıdaki bağlantıları kullanabilirsiniz.
+                                       {translations.header.menuDescription}
                                    </SheetDescription>
                                </SheetHeader>
                                <nav className="grid gap-6 text-lg font-medium mt-8">
@@ -107,6 +118,10 @@ export function Header() {
                 {/* Desktop right side */}
                 <div className="hidden md:flex flex-1 items-center justify-end gap-2">
                     <AudioGuideControl />
+                    <Button variant="outline" size="sm" onClick={toggleLanguage}>
+                        <Globe className="mr-2 h-4 w-4" />
+                        {language === 'tr' ? 'English' : 'Türkçe'}
+                    </Button>
                 </div>
             </div>
         </header>

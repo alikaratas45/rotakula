@@ -1,7 +1,9 @@
+
 "use client"
 
 import { useState, useEffect, useCallback } from 'react';
 import { useToast } from './use-toast';
+import { useLanguage } from '@/context/language-context';
 
 const STORAGE_KEY = 'rota-kula-saved-routes';
 
@@ -9,6 +11,7 @@ export function useSavedRoutes() {
     const [savedRoutes, setSavedRoutes] = useState<string[]>([]);
     const [isLoaded, setIsLoaded] = useState(false);
     const { toast } = useToast();
+    const { translations } = useLanguage();
 
     useEffect(() => {
         try {
@@ -29,8 +32,8 @@ export function useSavedRoutes() {
         } catch (error) {
             console.error('Failed to save routes to localStorage', error);
             toast({
-                title: "Hata",
-                description: "Rotanız kaydedilirken bir sorun oluştu.",
+                title: translations.toast.errorTitle,
+                description: translations.toast.saveErrorDescription,
                 variant: "destructive",
             });
         }
@@ -44,24 +47,24 @@ export function useSavedRoutes() {
             const newRoutes = [...prevRoutes, slug];
             updateLocalStorage(newRoutes);
             toast({
-                title: "Kaydedildi",
-                description: "Rota, 'Rotalarım' sayfasına eklendi.",
+                title: translations.toast.savedTitle,
+                description: translations.toast.savedDescription,
             });
             return newRoutes;
         });
-    }, [toast]);
+    }, [toast, translations]);
 
     const removeRoute = useCallback((slug: string) => {
         setSavedRoutes(prevRoutes => {
             const newRoutes = prevRoutes.filter(r => r !== slug);
             updateLocalStorage(newRoutes);
             toast({
-                title: "Kaldırıldı",
-                description: "Rota, 'Rotalarım' sayfasından kaldırıldı.",
+                title: translations.toast.removedTitle,
+                description: translations.toast.removedDescription,
             });
             return newRoutes;
         });
-    }, [toast]);
+    }, [toast, translations]);
 
     const isRouteSaved = useCallback((slug: string) => {
         return savedRoutes.includes(slug);

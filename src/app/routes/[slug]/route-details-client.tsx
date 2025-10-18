@@ -14,6 +14,7 @@ import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import EmbeddedMap from '@/components/map';
 import { APIProvider } from '@vis.gl/react-google-maps';
+import { useLanguage } from '@/context/language-context';
 
 function getCategoryIcon(category: PointOfInterest['category']) {
     switch (category) {
@@ -31,6 +32,7 @@ function getCategoryIcon(category: PointOfInterest['category']) {
 
 export default function RouteDetailsClient({ route, pois }: { route: ThematicRoute; pois: PointOfInterest[] }) {
     const { isLoaded, isRouteSaved, toggleSaveRoute } = useSavedRoutes();
+    const { translations } = useLanguage();
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
     const isSaved = isRouteSaved(route.slug);
     
@@ -43,12 +45,12 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
 
                         {pois.length > 0 && (
                             <div className="mb-8">
-                                 <h2 className="text-2xl font-headline font-bold mb-4">Rota Haritası</h2>
+                                 <h2 className="text-2xl font-headline font-bold mb-4">{translations.route.mapTitle}</h2>
                                 <EmbeddedMap pois={pois} />
                             </div>
                         )}
                         
-                        <h2 className="text-2xl font-headline font-bold mb-6">Bu Rotada Neler Var?</h2>
+                        <h2 className="text-2xl font-headline font-bold mb-6">{translations.route.whatsOnThisRoute}</h2>
                         <div className="space-y-6">
                             {pois.map((poi, index) => {
                                 const image = getImageById(poi.imageId);
@@ -82,7 +84,7 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
                                                         <Button asChild variant="secondary" size="sm">
                                                             <Link href={`/pois/${poi.slug}`}>
                                                                 <Info className="mr-2 h-4 w-4" />
-                                                                Daha Fazla Bilgi
+                                                                {translations.common.moreInfo}
                                                             </Link>
                                                         </Button>
                                                     </div>
@@ -99,7 +101,7 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
                         <div className="sticky top-24">
                             <Card>
                                 <CardHeader>
-                                    <CardTitle className="font-headline text-xl">Rota Bilgileri</CardTitle>
+                                    <CardTitle className="font-headline text-xl">{translations.route.routeInfo}</CardTitle>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
                                     <Button
@@ -109,11 +111,11 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
                                         disabled={!isLoaded}
                                     >
                                         <Heart className={cn("mr-2 h-4 w-4", isSaved && "fill-current text-red-500")} />
-                                        {isSaved ? 'Kaydedildi' : 'Rotayı Kaydet'}
+                                        {isSaved ? translations.route.saved : translations.route.saveRoute}
                                     </Button>
                                     <Separator />
                                     <div className="space-y-2">
-                                         <h4 className="font-semibold">Duraklar</h4>
+                                         <h4 className="font-semibold">{translations.route.stops}</h4>
                                          <ul className="list-disc list-inside text-muted-foreground text-sm space-y-1">
                                              {pois.map(poi => <li key={poi.id}>{poi.name}</li>)}
                                          </ul>

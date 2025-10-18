@@ -2,33 +2,42 @@
   "stories": [
     {
       "id": "story-1",
-      "slug": "kuladokya-efsanesi",
+      "slug": "legend-of-kuladokya",
       "title": "Kuladokya Efsanesi: Peri Bacalarının Ardındaki Sır",
       "excerpt": "Kapadokya'ya benzetilen ama kendi özgün hikayesine sahip olan bu coğrafi harikanın ardındaki halk efsanelerini ve jeolojik gerçekleri keşfedin.",
       "content": "Kula'nın en büyüleyici yerlerinden biri olan ve sıkça 'Kuladokya' olarak anılan peri bacaları, sadece bir doğa harikası değil, aynı zamanda nesillerdir anlatılan efsanelerin de beşiğidir. Kapadokya'daki benzerlerinden farklı olarak, buradaki oluşumlar gölsel çökellerin rüzgar ve su erozyonuyla şekillenmesiyle meydana gelmiştir. Bu da onları daha kırılgan ve sürekli değişim halinde yapar; hızlı oluşur ve hızlı yok olurlar.\n\nHalk arasında anlatılan bir efsaneye göre, bu topraklarda yaşayan periler, insanlarla aralarındaki sınırı korumak için bu bacaları bir gecede inşa etmişlerdir. Bir başka rivayete göre ise devler, bu kayaları oyun oynarken üst üste yığmış ve zamanla bu şekilleri almışlardır. Bilimsel açıklaması ne kadar net olsa da, bu mistik atmosfer içinde efsanelere inanmak insana ayrı bir keyif verir. Gün batımında kızıla bürünen peri bacalarının arasında yürürken, kendinizi bir masalın içinde hissetmeniz işten bile değildir.",
       "author": "Ahmet Yılmaz",
       "date": "2024-05-10",
-      "imageId": "story-kuladokya"
+      "imageId": "story-kuladokya",
+      "title_en": "The Legend of Kuladokya: The Secret Behind the Fairy Chimneys",
+      "excerpt_en": "Discover the folk legends and geological facts behind this geographical wonder, often compared to Cappadocia but with its own unique story.",
+      "content_en": "The fairy chimneys in Kula, often referred to as 'Kuladokya', are not just a natural wonder but also the cradle of legends told for generations. Unlike their counterparts in Cappadocia, these formations were created by the wind and water erosion of lacustrine sediments. This makes them more fragile and in a constant state of change; they form quickly and disappear quickly.\n\nAccording to a local legend, the fairies living in these lands built these chimneys overnight to maintain the boundary between them and humans. Another tale suggests that giants stacked these rocks while playing, and they took their current shape over time. Although the scientific explanation is clear, believing in legends in this mystical atmosphere brings a unique joy. Walking among the fairy chimneys as they turn red at sunset, it's easy to feel like you're in a fairy tale."
     },
     {
       "id": "story-2",
-      "slug": "bir-zamanlar-kula-evleri",
+      "slug": "once-upon-a-time-in-kula-houses",
       "title": "Zamanda Yolculuk: Bir Kula Evinin Anıları",
       "excerpt": "Cumbalı pencereleri ve ahşap oymalarıyla Kula evleri, sadece bir mimari yapı değil, aynı zamanda yaşanmışlıkların da birer tanığıdır.",
       "content": "Kula'nın daracık arnavut kaldırımlı sokaklarında yürürken, her biri birer sanat eseri olan tarihi evler sizi selamlar. Bu evler, Osmanlı sivil mimarisinin en zarif örneklerini sunar. Genellikle iki katlı olan bu yapıların alt katları taştan, günlük yaşamın geçtiği üst katları ise ahşaptandır. Dışa taşkın cumbalı pencereler, sokaktaki sosyal yaşamı evin içine taşımanın bir yoludur.\n\nBir zamanlar bu evlerde yaşayan ailelerin hikayeleri, ahşap tavan işlemelerine, kapı tokmaklarına sinmiştir. Her evin 'hayat' adı verilen bir iç avlusu bulunur. Bu avlular, ailenin bir araya geldiği, düğünlerin, bayramların kutlandığı, acıların ve sevinçlerin paylaşıldığı kutsal mekanlardır. Restore edilerek butik otel veya kafe olarak yeniden hayat bulan bu konaklarda bir kahve molası verdiğinizde, duvarların size fısıldadığı hikayeleri dinlemeyi unutmayın.",
       "author": "Ayşe Kaya",
       "date": "2024-04-22",
-      "imageId": "story-kula-house"
+      "imageId": "story-kula-house",
+      "title_en": "Time Travel: Memories of a Kula House",
+      "excerpt_en": "With their bay windows and wooden carvings, Kula houses are not just architectural structures but also witnesses to lived experiences.",
+      "content_en": "As you walk through the narrow cobblestone streets of Kula, historic houses, each a work of art, greet you. These houses present the most elegant examples of Ottoman civil architecture. Usually two-storied, the ground floors of these buildings are made of stone, while the upper floors, where daily life took place, are made of wood. The protruding bay windows are a way to bring the social life of the street into the home.\n\nThe stories of the families who once lived in these houses are embedded in the wooden ceiling carvings and door knockers. Each house has an inner courtyard called a 'hayat'. These courtyards are sacred spaces where the family gathered, weddings and holidays were celebrated, and sorrows and joys were shared. When you take a coffee break in one of these mansions, restored and brought back to life as a boutique hotel or cafe, don't forget to listen to the stories the walls whisper to you."
     },
     {
       "id": "story-3",
-      "slug": "semerci-dedenin-atolyesi",
+      "slug": "saddler-dedes-workshop",
       "title": "Kaybolan Bir Sanat: Semerci Dede'nin Atölyesi",
       "excerpt": "Teknolojinin unutturduğu bir meslek olan semercilik, Kula'nın tarihi çarşısında son ustalarından birinin elinde yaşamaya devam ediyor.",
       "content": "Kula'nın tarihi zanaatkarlar çarşısına adım attığınızda, çekiç sesleri ve deri kokusu sizi karşılar. Bakırcıların, demircilerin arasında, belki de en çok dikkatinizi çekecek olan, ömrünü semer yapımına adamış son ustalardan birinin küçük atölyesidir. Semer, yük hayvanlarının sırtına konulan ve yükün dengeli taşınmasını sağlayan ahşap iskeletli bir eyerdir.\n\nSemerci dede, her biri el emeği göz nuru olan semerlerini yaparken, sadece bir zanaat icra etmez, aynı zamanda bir kültürü de yaşatır. Saz ve kamışları büyük bir ustalıkla işleyip, deriyle kapladığı semerlerin her birinin bir hikayesi vardır. Onunla yapacağınız kısa bir sohbet, sizi teknolojinin henüz hayatımıza bu kadar dahil olmadığı, insan emeğinin ve zanaatın en değerli olduğu zamanlara götürecektir. Kula'dan ayrılmadan önce bu kaybolmaya yüz tutmuş sanata tanıklık etmek, unutulmaz bir deneyim olacaktır.",
       "author": "Mehmet Öztürk",
       "date": "2024-03-15",
-      "imageId": "story-artisan"
+      "imageId": "story-artisan",
+      "title_en": "A Dying Art: The Saddler's Workshop",
+      "excerpt_en": "Saddlery, a profession forgotten by technology, continues to live on in the hands of one of its last masters in Kula's historic bazaar.",
+      "content_en": "When you step into Kula's historic artisans' bazaar, the sounds of hammers and the smell of leather greet you. Among the coppersmiths and blacksmiths, what might catch your eye the most is the small workshop of one of the last masters dedicated to the craft of saddle making. A saddle is a wooden-framed seat for the back of a pack animal, ensuring the load is carried in a balanced way.\n\nThe saddler, while making his saddles, each a product of meticulous handiwork, is not just practicing a craft but also keeping a culture alive. Each of the saddles he creates by skillfully processing reeds and rushes and covering them with leather has a story. A short chat with him will take you back to a time when technology had not yet entered our lives so much, and human labor and craftsmanship were most valued. Witnessing this dying art before leaving Kula will be an unforgettable experience."
     }
   ]
 }

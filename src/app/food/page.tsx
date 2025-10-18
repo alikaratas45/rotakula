@@ -11,9 +11,11 @@ import { Loader2, MapPin } from 'lucide-react';
 import { FoodIcon } from '@/components/icons';
 import { APIProvider } from '@vis.gl/react-google-maps';
 import { NearbySearch } from '@/components/map';
+import { useLanguage } from '@/context/language-context';
 
 
 export default function FoodPage() {
+    const { language, translations } = useLanguage();
     const [pois, setPois] = useState<PointOfInterest[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
@@ -21,7 +23,8 @@ export default function FoodPage() {
     useEffect(() => {
         async function fetchPois() {
             try {
-                const allPois = await getPois();
+                setIsLoading(true);
+                const allPois = await getPois(language);
                 const filteredPois = allPois.filter(poi => poi.category === 'food');
                 setPois(filteredPois);
             } catch (error) {
@@ -31,7 +34,7 @@ export default function FoodPage() {
             }
         }
         fetchPois();
-    }, []);
+    }, [language]);
 
     if (isLoading) {
         return (
@@ -45,16 +48,16 @@ export default function FoodPage() {
         <APIProvider apiKey={apiKey}>
             <div className="container py-8 md:py-12">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-                    <h1 className="text-3xl md:text-4xl font-headline font-bold">Lezzet Durakları</h1>
+                    <h1 className="text-3xl md:text-4xl font-headline font-bold">{translations.food.title}</h1>
                 </div>
 
                 <div className="mb-12">
-                    <h2 className="text-2xl font-headline font-bold mb-4">Yakınınızdaki Restoranlar</h2>
-                    <p className="text-muted-foreground mb-4">Harita, konumunuza göre yakındaki yeme içme mekanlarını göstermektedir. Yeni yerler keşfetmek için haritayı gezebilirsiniz.</p>
+                    <h2 className="text-2xl font-headline font-bold mb-4">{translations.food.nearbyRestaurants}</h2>
+                    <p className="text-muted-foreground mb-4">{translations.food.nearbyDescription}</p>
                     <NearbySearch />
                 </div>
                 
-                <h2 className="text-2xl font-headline font-bold mb-4 mt-12">Editörün Seçimi: Öne Çıkan Lezzetler</h2>
+                <h2 className="text-2xl font-headline font-bold mb-4 mt-12">{translations.food.editorsChoice}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {pois.map(poi => {
                         const image = getImageById(poi.imageId);
@@ -77,7 +80,7 @@ export default function FoodPage() {
                                     </div>
                                     <div>
                                         <CardTitle className="font-headline text-xl">{poi.name}</CardTitle>
-                                        <CardDescription>Öne Çıkan Lezzet</CardDescription>
+                                        <CardDescription>{translations.food.featuredFlavor}</CardDescription>
                                     </div>
                                 </CardHeader>
                                 <CardContent className="flex-grow">

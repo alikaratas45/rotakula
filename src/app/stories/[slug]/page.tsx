@@ -1,41 +1,45 @@
+
+"use client"
+
 import { getStoryBySlug } from '@/lib/kula-data';
-import { notFound } from 'next/navigation';
-import { getImageById } from '@/lib/placeholder-images';
 import Image from 'next/image';
-import type { Metadata } from 'next';
 import { Calendar, User } from 'lucide-react';
 import { format } from 'date-fns';
-import { tr } from 'date-fns/locale';
+import { tr, enUS } from 'date-fns/locale';
+import { useLanguage } from '@/context/language-context';
+import { useEffect, useState } from 'react';
+import type { Story } from '@/lib/types';
+import { notFound } from 'next/navigation';
 
-type Props = {
-    params: { slug: string };
-};
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const story = await getStoryBySlug(params.slug);
-
-  if (!story) {
-    return {
-      title: 'Hikaye Bulunamadı',
-    };
-  }
-
-  return {
-    title: `${story.title} | RotaKula Hikayeler`,
-    description: story.excerpt,
-  };
-}
-
-export default async function StoryPage({ params }: Props) {
+export default function StoryPage({ params }: { params: { slug: string } }) {
     const { slug } = params;
-    const story = await getStoryBySlug(slug);
+    const { language, translations } = useLanguage();
+    const [story, setStory] = useState<Story | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+      async function fetchData() {
+        setLoading(true);
+        const storyData = await getStoryBySlug(slug, language);
+        if (storyData) {
+          setStory(storyData);
+        }
+        setLoading(false);
+      }
+      fetchData();
+    }, [slug, language]);
+
+
+    if (loading) {
+      return <div>{translations.common.loading}...</div>;
+    }
 
     if (!story) {
         notFound();
     }
 
     const storyImage = getImageById(story.imageId);
-    const formattedDate = format(new Date(story.date), "d MMMM yyyy", { locale: tr });
+    const formattedDate = format(new Date(story.date), "d MMMM yyyy", { locale: language === 'tr' ? tr : enUS });
 
     return (
         <article>
@@ -80,3 +84,4 @@ export default async function StoryPage({ params }: Props) {
         </article>
     );
 }
+

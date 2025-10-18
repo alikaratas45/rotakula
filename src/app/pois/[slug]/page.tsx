@@ -1,38 +1,37 @@
-import { getPoiBySlug, getPois } from '@/lib/kula-data';
+
+"use client"
+
+import { getPoiBySlug } from '@/lib/kula-data';
 import { notFound } from 'next/navigation';
-import type { Metadata } from 'next';
 import PoiClientPage from './poi-client-page';
+import { useLanguage } from '@/context/language-context';
+import { useEffect, useState } from 'react';
+import type { PointOfInterest } from '@/lib/types';
 
-type Props = {
-    params: { slug: string };
-};
 
-export async function generateStaticParams() {
-    const pois = await getPois();
-    return pois.map((poi) => ({
-        slug: poi.slug,
-    }));
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const poi = await getPoiBySlug(params.slug);
-
-  if (!poi) {
-    return {
-      title: 'Yer Bulunamadı',
-    };
-  }
-
-  return {
-    title: `${poi.name} | RotaKula Gezilecek Yerler`,
-    description: poi.description,
-  };
-}
-
-export default async function PoiDetailPage({ params }: Props) {
+export default function PoiDetailPage({ params }: { params: { slug: string } }) {
     const { slug } = params;
-    const poi = await getPoiBySlug(slug);
-    
+    const { language, translations } = useLanguage();
+    const [poi, setPoi] = useState<PointOfInterest | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+      async function fetchData() {
+        setLoading(true);
+        const poiData = await getPoiBySlug(slug, language);
+        if (poiData) {
+          setPoi(poiData);
+        }
+        setLoading(false);
+      }
+      fetchData();
+    }, [slug, language]);
+
+
+    if (loading) {
+      return <div className="container py-8">{translations.common.loading}...</div>
+    }
+
     if (!poi) {
         notFound();
     }

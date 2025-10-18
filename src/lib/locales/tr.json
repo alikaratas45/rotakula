@@ -1,0 +1,99 @@
+
+{
+    "nav": {
+        "home": "Ana Sayfa",
+        "stories": "Hikayeler",
+        "places": "Gezilecek Yerler",
+        "food": "Lezzet Durakları",
+        "accommodation": "Konaklama",
+        "myRoutes": "Rotalarım"
+    },
+    "header": {
+        "menu": "Menü",
+        "menuDescription": "Uygulama içinde gezinmek için aşağıdaki bağlantıları kullanabilirsiniz."
+    },
+    "home": {
+        "heroTitle": "Kula'nın Saklı Hazinelerini Keşfedin",
+        "heroSubtitle": "UNESCO Global Jeoparkı'ndan tarihi evlere, eşsiz lezzetlerden doğal güzelliklere uzanan bir macera sizi bekliyor.",
+        "exploreNow": "Hemen Keşfet",
+        "routeOfWeek": "Haftanın Rotası",
+        "thematicRoutes": "Tematik Rotalar"
+    },
+    "stories": {
+        "title": "Kula'dan Hikayeler"
+    },
+    "pois": {
+        "title": "Gezilecek Yerler",
+        "details": "Detaylı Bilgi",
+        "listen": "Sesli Dinle",
+        "pause": "Duraklat",
+        "listenNarration": "Anlatımı dinle",
+        "pauseNarration": "Anlatımı duraklat"
+    },
+    "food": {
+        "title": "Lezzet Durakları",
+        "nearbyRestaurants": "Yakınınızdaki Restoranlar",
+        "nearbyDescription": "Harita, konumunuza göre yakındaki yeme içme mekanlarını göstermektedir. Yeni yerler keşfetmek için haritayı gezebilirsiniz.",
+        "editorsChoice": "Editörün Seçimi: Öne Çıkan Lezzetler",
+        "featuredFlavor": "Öne Çıkan Lezzet"
+    },
+    "accommodation": {
+        "title": "Konaklama",
+        "openInGoogleMaps": "Google Haritalar'da Aç"
+    },
+    "myRoutes": {
+        "title": "Rotalarım",
+        "remove": "Kaldır",
+        "noRoutes": "Henüz kaydedilmiş rotanız bulunmuyor.",
+        "noRoutesDescription": "Kula'yı keşfetmeye başlamak için rotalara göz atın.",
+        "exploreRoutes": "Rotaları Keşfet"
+    },
+    "route": {
+        "mapTitle": "Rota Haritası",
+        "whatsOnThisRoute": "Bu Rotada Neler Var?",
+        "routeInfo": "Rota Bilgileri",
+        "saveRoute": "Rotayı Kaydet",
+        "saved": "Kaydedildi",
+        "stops": "Duraklar"
+    },
+    "audioGuide": {
+        "title": "Sesli Rehber",
+        "start": "Sesli Rehberi Başlat",
+        "active": "Sesli Rehber Aktif: Yerler dinleniyor. Kapatmak için tıklayın.",
+        "narrating": "Anlatım yapılıyor",
+        "started": "Sesli Rehber Başlatıldı",
+        "startedDescription": "Yakınınızdaki yerler için bildirim alacaksınız.",
+        "stopped": "Sesli Rehber Kapatıldı",
+        "nearby": "📍 Yakınlardasınız",
+        "nearbyDescription": "Anlatımı dinlemek için butona tıklayın."
+    },
+    "map": {
+        "yourLocation": "Sizin Konumunuz",
+        "loading": "Harita Yükleniyor...",
+        "locationError": "Konum bilgisi alınamadı. Lütfen tarayıcı ayarlarınızdan konum izni verdiğinizden emin olun.",
+        "noRestaurantsFound": "Yakınınızda restoran bulunamadı.",
+        "searchError": "Restoranlar aranırken bir hata oluştu.",
+        "gettingLocation": "Konumunuz alınıyor...",
+        "reviews": "yorum"
+    },
+    "toast": {
+        "unsupportedTitle": "Desteklenmiyor",
+        "unsupportedDescription": "Tarayıcınız sesli anlatım özelliğini desteklemiyor.",
+        "audioErrorTitle": "Ses Hatası",
+        "audioErrorDescription": "Sesli anlatım sırasında bir hata oluştu",
+        "audioGuideUnsupported": "Tarayıcınız sesli rehber özelliği için gerekli olan konum veya ses sentezleme servislerini desteklemiyor.",
+        "locationErrorTitle": "Konum Hatası",
+        "locationErrorDescription": "Konumunuza erişilemiyor. Lütfen tarayıcı ayarlarınızı kontrol edin.",
+        "errorTitle": "Hata",
+        "saveErrorDescription": "Rotanız kaydedilirken bir sorun oluştu.",
+        "savedTitle": "Kaydedildi",
+        "savedDescription": "Rota, 'Rotalarım' sayfasına eklendi.",
+        "removedTitle": "Kaldırıldı",
+        "removedDescription": "Rota, 'Rotalarım' sayfasından kaldırıldı."
+    },
+    "common": {
+        "loading": "Yükleniyor",
+        "map": "Harita",
+        "moreInfo": "Daha Fazla Bilgi"
+    }
+}

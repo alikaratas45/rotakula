@@ -1,0 +1,99 @@
+
+{
+    "nav": {
+        "home": "Home",
+        "stories": "Stories",
+        "places": "Places to Visit",
+        "food": "Flavor Stops",
+        "accommodation": "Accommodation",
+        "myRoutes": "My Routes"
+    },
+    "header": {
+        "menu": "Menu",
+        "menuDescription": "You can use the links below to navigate within the application."
+    },
+    "home": {
+        "heroTitle": "Discover the Hidden Treasures of Kula",
+        "heroSubtitle": "An adventure awaits you, from the UNESCO Global Geopark to historic houses, unique flavors to natural beauties.",
+        "exploreNow": "Explore Now",
+        "routeOfWeek": "Route of the Week",
+        "thematicRoutes": "Thematic Routes"
+    },
+    "stories": {
+        "title": "Stories from Kula"
+    },
+    "pois": {
+        "title": "Places to Visit",
+        "details": "Detailed Information",
+        "listen": "Listen",
+        "pause": "Pause",
+        "listenNarration": "Listen to narration",
+        "pauseNarration": "Pause narration"
+    },
+    "food": {
+        "title": "Flavor Stops",
+        "nearbyRestaurants": "Nearby Restaurants",
+        "nearbyDescription": "The map shows nearby dining options based on your location. You can explore the map to discover new places.",
+        "editorsChoice": "Editor's Choice: Featured Flavors",
+        "featuredFlavor": "Featured Flavor"
+    },
+    "accommodation": {
+        "title": "Accommodation",
+        "openInGoogleMaps": "Open in Google Maps"
+    },
+    "myRoutes": {
+        "title": "My Routes",
+        "remove": "Remove",
+        "noRoutes": "You don't have any saved routes yet.",
+        "noRoutesDescription": "Browse the routes to start exploring Kula.",
+        "exploreRoutes": "Explore Routes"
+    },
+    "route": {
+        "mapTitle": "Route Map",
+        "whatsOnThisRoute": "What's on This Route?",
+        "routeInfo": "Route Information",
+        "saveRoute": "Save Route",
+        "saved": "Saved",
+        "stops": "Stops"
+    },
+    "audioGuide": {
+        "title": "Audio Guide",
+        "start": "Start Audio Guide",
+        "active": "Audio Guide Active: Listening for places. Click to turn off.",
+        "narrating": "Narrating",
+        "started": "Audio Guide Started",
+        "startedDescription": "You will receive notifications for nearby places.",
+        "stopped": "Audio Guide Stopped",
+        "nearby": "📍 You are nearby",
+        "nearbyDescription": "Click the button to listen to the narration."
+    },
+    "map": {
+        "yourLocation": "Your Location",
+        "loading": "Map is Loading...",
+        "locationError": "Could not get location information. Please make sure you have allowed location access in your browser settings.",
+        "noRestaurantsFound": "No restaurants found nearby.",
+        "searchError": "An error occurred while searching for restaurants.",
+        "gettingLocation": "Getting your location...",
+        "reviews": "reviews"
+    },
+    "toast": {
+        "unsupportedTitle": "Not Supported",
+        "unsupportedDescription": "Your browser does not support the audio narration feature.",
+        "audioErrorTitle": "Audio Error",
+        "audioErrorDescription": "An error occurred during audio narration",
+        "audioGuideUnsupported": "Your browser does not support the necessary location or speech synthesis services for the audio guide feature.",
+        "locationErrorTitle": "Location Error",
+        "locationErrorDescription": "Cannot access your location. Please check your browser settings.",
+        "errorTitle": "Error",
+        "saveErrorDescription": "There was a problem saving your route.",
+        "savedTitle": "Saved",
+        "savedDescription": "The route has been added to the 'My Routes' page.",
+        "removedTitle": "Removed",
+        "removedDescription": "The route has been removed from the 'My Routes' page."
+    },
+    "common": {
+        "loading": "Loading",
+        "map": "Map",
+        "moreInfo": "More Info"
+    }
+}

@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useEffect, useState } from 'react';
@@ -10,18 +11,20 @@ import { getImageById } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { BookmarkX, Loader2 } from 'lucide-react';
+import { useLanguage } from '@/context/language-context';
 
 export default function MyRoutesPage() {
     const { savedRoutes, isLoaded, removeRoute } = useSavedRoutes();
     const [allRoutes, setAllRoutes] = useState<ThematicRoute[]>([]);
+    const { language, translations } = useLanguage();
 
     useEffect(() => {
         async function fetchRoutes() {
-            const routes = await getRoutes();
+            const routes = await getRoutes(language);
             setAllRoutes(routes);
         }
         fetchRoutes();
-    }, []);
+    }, [language]);
 
     const userSavedRoutes = allRoutes.filter(route => savedRoutes.includes(route.slug));
 
@@ -35,7 +38,7 @@ export default function MyRoutesPage() {
 
     return (
         <div className="container py-8 md:py-12">
-            <h1 className="text-3xl md:text-4xl font-headline font-bold mb-8">Rotalarım</h1>
+            <h1 className="text-3xl md:text-4xl font-headline font-bold mb-8">{translations.myRoutes.title}</h1>
             
             {userSavedRoutes.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -65,7 +68,7 @@ export default function MyRoutesPage() {
                                 <div className="p-4 pt-0 mt-auto">
                                     <Button variant="outline" size="sm" onClick={() => removeRoute(route.slug)}>
                                         <BookmarkX className="mr-2 h-4 w-4" />
-                                        Kaldır
+                                        {translations.myRoutes.remove}
                                     </Button>
                                 </div>
                             </Card>
@@ -74,10 +77,10 @@ export default function MyRoutesPage() {
                 </div>
             ) : (
                 <div className="text-center py-16 border-2 border-dashed rounded-lg">
-                    <h2 className="text-xl font-semibold text-muted-foreground">Henüz kaydedilmiş rotanız bulunmuyor.</h2>
-                    <p className="text-muted-foreground mt-2">Kula'yı keşfetmeye başlamak için rotalara göz atın.</p>
+                    <h2 className="text-xl font-semibold text-muted-foreground">{translations.myRoutes.noRoutes}</h2>
+                    <p className="text-muted-foreground mt-2">{translations.myRoutes.noRoutesDescription}</p>
                     <Button asChild className="mt-4">
-                        <Link href="/">Rotaları Keşfet</Link>
+                        <Link href="/">{translations.myRoutes.exploreRoutes}</Link>
                     </Button>
                 </div>
             )}

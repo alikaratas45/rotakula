@@ -14,6 +14,10 @@ export type PointOfInterest = {
   latitude: number;
   longitude: number;
   mapQuery?: string;
+  name_en?: string;
+  description_en?: string;
+  longDescription_en?: string;
+  category_en?: string;
 };
 
 export type ThematicRoute = {
@@ -24,6 +28,9 @@ export type ThematicRoute = {
   longDescription: string;
   imageId: string;
   poiIds: string[];
+  title_en?: string;
+  description_en?: string;
+  longDescription_en?: string;
 };
 
 export type Story = {
@@ -35,4 +42,7 @@ export type Story = {
   author: string;
   date: string;
   imageId: string;
+  title_en?: string;
+  excerpt_en?: string;
+  content_en?: string;
 };

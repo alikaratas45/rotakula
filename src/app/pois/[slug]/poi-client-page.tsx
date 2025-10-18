@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from 'next/image';
@@ -10,11 +11,13 @@ import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { PlayIcon, PauseIcon } from '@/components/icons';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/context/language-context';
 
 
 export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
     const heroImage = getImageById(poi.imageId);
+    const { language, translations } = useLanguage();
 
     const [isPlaying, setIsPlaying] = useState(false);
     const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
@@ -55,8 +58,8 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
     const handlePlayPause = useCallback(async () => {
         if (!('speechSynthesis' in window)) {
             toast({
-                title: "Desteklenmiyor",
-                description: "Tarayıcınız sesli anlatım özelliğini desteklemiyor.",
+                title: translations.toast.unsupportedTitle,
+                description: translations.toast.unsupportedDescription,
                 variant: "destructive"
             });
             return;
@@ -76,15 +79,18 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
         cleanup(); // Start fresh
 
         const utterance = new SpeechSynthesisUtterance(poi.longDescription);
-        utterance.lang = "tr-TR";
+        utterance.lang = language === 'tr' ? "tr-TR" : "en-US";
         
-        // Find a male Turkish voice
-        const maleVoice = voices.find(voice => voice.lang === 'tr-TR' && voice.name.toLowerCase().includes('male'));
+        const voiceCriteria = (v: SpeechSynthesisVoice) => 
+            v.lang.startsWith(language) && v.name.toLowerCase().includes('male');
+        
+        const maleVoice = voices.find(voiceCriteria);
+
         if (maleVoice) {
             utterance.voice = maleVoice;
         } else {
-            const turkishVoice = voices.find(voice => voice.lang === 'tr-TR');
-            if (turkishVoice) utterance.voice = turkishVoice;
+            const langVoice = voices.find(v => v.lang.startsWith(language));
+            if (langVoice) utterance.voice = langVoice;
         }
         
         utteranceRef.current = utterance;
@@ -107,8 +113,8 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
 
         utterance.onerror = (event) => {
             toast({
-                title: "Ses Hatası",
-                description: `Sesli anlatım sırasında bir hata oluştu: ${event.error}`,
+                title: translations.toast.audioErrorTitle,
+                description: `${translations.toast.audioErrorDescription}: ${event.error}`,
                 variant: "destructive"
             });
             cleanup();
@@ -116,7 +122,7 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
 
         window.speechSynthesis.speak(utterance);
 
-    }, [poi.longDescription, cleanup, toast, voices]);
+    }, [poi.longDescription, cleanup, toast, voices, language, translations]);
 
     return (
         <APIProvider apiKey={apiKey}>
@@ -145,18 +151,18 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
                          <div className="lg:col-span-2">
                              <div className="flex items-center gap-4 mb-6">
-                                <h2 className="text-2xl font-headline font-bold">Detaylı Bilgi</h2>
+                                <h2 className="text-2xl font-headline font-bold">{translations.poi.details}</h2>
                                 <Button
                                     variant="outline"
                                     onClick={handlePlayPause}
-                                    aria-label={isPlaying ? "Anlatımı duraklat" : "Anlatımı dinle"}
+                                    aria-label={isPlaying ? translations.poi.pauseNarration : translations.poi.listenNarration}
                                 >
                                     {isPlaying ? (
                                         <PauseIcon className="mr-2 h-4 w-4" />
                                     ) : (
                                         <PlayIcon className="mr-2 h-4 w-4" />
                                     )}
-                                    {isPlaying ? 'Duraklat' : 'Sesli Dinle'}
+                                    {isPlaying ? translations.poi.pause : translations.poi.listen}
                                 </Button>
                              </div>
                              <div className="prose prose-lg max-w-none text-foreground/90">
@@ -169,7 +175,7 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
                         <aside className="lg:col-span-1">
                             <div className="sticky top-24 space-y-6">
                                 <div>
-                                    <h2 className="text-2xl font-headline font-bold mb-4">Harita</h2>
+                                    <h2 className="text-2xl font-headline font-bold mb-4">{translations.common.map}</h2>
                                     <EmbeddedMap pois={[poi]} />
                                 </div>
                             </div>
