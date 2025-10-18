@@ -7,10 +7,11 @@ import { getImageById } from '@/lib/placeholder-images';
 import Image from 'next/image';
 import RouteDetailsClient from './route-details-client';
 import { useLanguage } from '@/context/language-context';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import type { ThematicRoute, PointOfInterest } from '@/lib/types';
 
-export default function RoutePage({ params: { slug } }: { params: { slug: string } }) {
+export default function RoutePage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = use(params);
     const { language, translations } = useLanguage();
     const [route, setRoute] = useState<ThematicRoute | null>(null);
     const [pois, setPois] = useState<PointOfInterest[]>([]);

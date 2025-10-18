@@ -7,12 +7,13 @@ import { Calendar, User } from 'lucide-react';
 import { format } from 'date-fns';
 import { tr, enUS } from 'date-fns/locale';
 import { useLanguage } from '@/context/language-context';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import type { Story } from '@/lib/types';
 import { notFound } from 'next/navigation';
 import { getImageById } from '@/lib/placeholder-images';
 
-export default function StoryPage({ params: { slug } }: { params: { slug: string } }) {
+export default function StoryPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = use(params);
     const { language, translations } = useLanguage();
     const [story, setStory] = useState<Story | null>(null);
     const [loading, setLoading] = useState(true);
