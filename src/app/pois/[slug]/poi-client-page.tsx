@@ -151,18 +151,18 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
                          <div className="lg:col-span-2">
                              <div className="flex items-center gap-4 mb-6">
-                                <h2 className="text-2xl font-headline font-bold">{translations.poi.details}</h2>
+                                <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
                                 <Button
                                     variant="outline"
                                     onClick={handlePlayPause}
-                                    aria-label={isPlaying ? translations.poi.pauseNarration : translations.poi.listenNarration}
+                                    aria-label={isPlaying ? translations.pois.pauseNarration : translations.pois.listenNarration}
                                 >
                                     {isPlaying ? (
                                         <PauseIcon className="mr-2 h-4 w-4" />
                                     ) : (
                                         <PlayIcon className="mr-2 h-4 w-4" />
                                     )}
-                                    {isPlaying ? translations.poi.pause : translations.poi.listen}
+                                    {isPlaying ? translations.pois.pause : translations.pois.listen}
                                 </Button>
                              </div>
                              <div className="prose prose-lg max-w-none text-foreground/90">
