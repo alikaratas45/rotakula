@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import type { ThematicRoute, PointOfInterest } from '@/lib/types';
 
 export default function RoutePage({ params }: { params: { slug: string } }) {
+    const { slug } = params;
     const { language, translations } = useLanguage();
     const [route, setRoute] = useState<ThematicRoute | null>(null);
     const [pois, setPois] = useState<PointOfInterest[]>([]);
@@ -19,7 +20,7 @@ export default function RoutePage({ params }: { params: { slug: string } }) {
     useEffect(() => {
         async function fetchData() {
             setLoading(true);
-            const routeData = await getRouteBySlug(params.slug, language);
+            const routeData = await getRouteBySlug(slug, language);
             if (routeData) {
                 const poisData = await getPoisByIds(routeData.poiIds, language);
                 setRoute(routeData);
@@ -28,7 +29,7 @@ export default function RoutePage({ params }: { params: { slug: string } }) {
             setLoading(false);
         }
         fetchData();
-    }, [params.slug, language]);
+    }, [slug, language]);
 
     if (loading) {
         return <div>{translations.common.loading}...</div>;

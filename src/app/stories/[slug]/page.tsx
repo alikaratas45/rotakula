@@ -13,6 +13,7 @@ import { notFound } from 'next/navigation';
 import { getImageById } from '@/lib/placeholder-images';
 
 export default function StoryPage({ params }: { params: { slug: string } }) {
+    const { slug } = params;
     const { language, translations } = useLanguage();
     const [story, setStory] = useState<Story | null>(null);
     const [loading, setLoading] = useState(true);
@@ -20,14 +21,14 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
     useEffect(() => {
       async function fetchData() {
         setLoading(true);
-        const storyData = await getStoryBySlug(params.slug, language);
+        const storyData = await getStoryBySlug(slug, language);
         if (storyData) {
           setStory(storyData);
         }
         setLoading(false);
       }
       fetchData();
-    }, [params.slug, language]);
+    }, [slug, language]);
 
 
     if (loading) {
