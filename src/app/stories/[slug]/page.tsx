@@ -12,7 +12,8 @@ import type { Story } from '@/lib/types';
 import { notFound } from 'next/navigation';
 import { getImageById } from '@/lib/placeholder-images';
 
-export default function StoryPage({ params: { slug } }: { params: { slug: string } }) {
+export default function StoryPage({ params }: { params: { slug: string } }) {
+    const { slug } = params;
     const { language, translations } = useLanguage();
     const [story, setStory] = useState<Story | null>(null);
     const [loading, setLoading] = useState(true);
