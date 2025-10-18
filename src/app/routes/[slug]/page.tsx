@@ -10,8 +10,7 @@ import { useLanguage } from '@/context/language-context';
 import { useEffect, useState } from 'react';
 import type { ThematicRoute, PointOfInterest } from '@/lib/types';
 
-export default function RoutePage({ params }: { params: { slug: string } }) {
-    const { slug } = params;
+export default function RoutePage({ params: { slug } }: { params: { slug: string } }) {
     const { language, translations } = useLanguage();
     const [route, setRoute] = useState<ThematicRoute | null>(null);
     const [pois, setPois] = useState<PointOfInterest[]>([]);
@@ -32,7 +31,7 @@ export default function RoutePage({ params }: { params: { slug: string } }) {
     }, [slug, language]);
 
     if (loading) {
-        return <div>{translations.common.loading}...</div>;
+        return <div className="container py-8">{translations.common.loading}...</div>;
     }
 
     if (!route) {
