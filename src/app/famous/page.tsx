@@ -59,10 +59,10 @@ export default function FamousPage() {
         let selectedVoice = savedVoiceURI ? voices.find(v => v.voiceURI === savedVoiceURI) : null;
         
         if (!selectedVoice) {
-            selectedVoice = voices.find(v => v.lang === voiceLang && v.name.toLowerCase().includes('male'));
+            selectedVoice = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('erkek') || v.name.toLowerCase().includes('male')));
         }
         if (!selectedVoice) {
-            selectedVoice = voices.find(v => v.lang === voiceLang && v.name.toLowerCase().includes('erkek'));
+            selectedVoice = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('kadın') || v.name.toLowerCase().includes('female')));
         }
         if (!selectedVoice) {
             selectedVoice = voices.find(v => v.lang === voiceLang);
@@ -76,7 +76,7 @@ export default function FamousPage() {
              setTimeout(() => {
                 currentChunkIndexRef.current++;
                 speakChunk(currentChunkIndexRef.current);
-            }, 100);
+            }, 500); // Add a small delay
         };
 
         utterance.onerror = () => {
@@ -140,7 +140,6 @@ export default function FamousPage() {
             const voices = window.speechSynthesis.getVoices();
             if (voices.length === 0) {
                  window.speechSynthesis.onvoiceschanged = () => {
-                    setIsGenerating(false);
                     startPlayback();
                  };
             } else {

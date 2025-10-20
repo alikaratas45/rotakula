@@ -67,10 +67,10 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
             let selectedVoice = savedVoiceURI ? availableVoices.find(v => v.voiceURI === savedVoiceURI) : null;
 
             if (!selectedVoice) {
-                selectedVoice = availableVoices.find(v => v.lang === voiceLang && v.name.toLowerCase().includes('male'));
+                selectedVoice = availableVoices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('erkek') || v.name.toLowerCase().includes('male')));
             }
             if (!selectedVoice) {
-                selectedVoice = availableVoices.find(v => v.lang === voiceLang && v.name.toLowerCase().includes('erkek'));
+                selectedVoice = availableVoices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('kadın') || v.name.toLowerCase().includes('female')));
             }
             if (!selectedVoice) {
                 selectedVoice = availableVoices.find(v => v.lang === voiceLang);
@@ -109,11 +109,9 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
         const voices = window.speechSynthesis.getVoices();
         if (voices.length === 0) {
             window.speechSynthesis.onvoiceschanged = () => {
-                setIsGenerating(false);
                 startPlayback();
             };
         } else {
-            setIsGenerating(false);
             startPlayback();
         }
 

@@ -60,18 +60,31 @@ export function AudioGuideControl() {
     }, []);
 
     useEffect(() => {
-        if (!loadVoices()) {
-            window.speechSynthesis.onvoiceschanged = loadVoices;
+        // This function will be called to attempt loading voices.
+        const tryLoadVoices = () => {
+            const voices = window.speechSynthesis.getVoices();
+            if (voices.length > 0) {
+                const supportedVoices = voices.filter(v => v.lang.startsWith('tr') || v.lang.startsWith('en'));
+                setAvailableVoices(supportedVoices);
+                if (intervalIdRef.current) {
+                    clearInterval(intervalIdRef.current);
+                    intervalIdRef.current = null;
+                }
+                // Once voices are loaded, we don't need the onvoiceschanged event anymore for this session.
+                window.speechSynthesis.onvoiceschanged = null;
+            }
+        };
+
+        // Try loading immediately
+        tryLoadVoices();
+
+        // If they are not loaded, set up the event listener
+        if (window.speechSynthesis.getVoices().length === 0) {
+            window.speechSynthesis.onvoiceschanged = tryLoadVoices;
+
             // Fallback for browsers that don't fire onvoiceschanged reliably
             if (!intervalIdRef.current) {
-                intervalIdRef.current = setInterval(() => {
-                    if (loadVoices()) {
-                         if (intervalIdRef.current) {
-                            clearInterval(intervalIdRef.current);
-                            intervalIdRef.current = null;
-                         }
-                    }
-                }, 1000);
+                intervalIdRef.current = setInterval(tryLoadVoices, 1000);
             }
         }
         
@@ -86,7 +99,7 @@ export function AudioGuideControl() {
             }
              window.speechSynthesis.onvoiceschanged = null;
         }
-    }, [loadVoices]);
+    }, []);
 
 
     const handleVoiceSelect = (voiceURI: string) => {
@@ -176,17 +189,17 @@ export function AudioGuideControl() {
             speechUtteranceRef.current = utterance;
 
             const voices = window.speechSynthesis.getVoices();
+            const voiceLang = language === 'tr' ? 'tr-TR' : 'en-US';
             let voiceToUse = selectedVoiceURI ? voices.find(v => v.voiceURI === selectedVoiceURI) : null;
             
+            if (!voiceToUse) {
+                voiceToUse = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('erkek') || v.name.toLowerCase().includes('male')));
+            }
              if (!voiceToUse) {
-                const voiceLang = language === 'tr' ? 'tr-TR' : 'en-US';
-                voiceToUse = voices.find(v => v.lang === voiceLang && v.name.toLowerCase().includes('male'));
-                 if (!voiceToUse) {
-                    voiceToUse = voices.find(v => v.lang === voiceLang && v.name.toLowerCase().includes('erkek'));
-                }
-                if (!voiceToUse) {
-                    voiceToUse = voices.find(v => v.lang === voiceLang);
-                }
+                voiceToUse = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('kadın') || v.name.toLowerCase().includes('female')));
+            }
+            if (!voiceToUse) {
+                voiceToUse = voices.find(v => v.lang === voiceLang);
             }
 
 
@@ -212,7 +225,8 @@ export function AudioGuideControl() {
             window.speechSynthesis.speak(utterance);
         };
         
-        if (window.speechSynthesis.getVoices().length === 0) {
+        const voices = window.speechSynthesis.getVoices();
+        if (voices.length === 0) {
             window.speechSynthesis.onvoiceschanged = startPlayback;
         } else {
             startPlayback();
@@ -304,7 +318,7 @@ export function AudioGuideControl() {
             </Button>
             <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
                 <PopoverTrigger asChild>
-                    <Button variant="ghost" size="icon" aria-label={translations.audioGuide.voiceSettings}>
+                    <Button variant="ghost" size="icon" aria-label={translations.audioGuide.voiceSettings} disabled={availableVoices.length === 0}>
                         <Settings className="h-5 w-5" />
                     </Button>
                 </PopoverTrigger>
