@@ -55,7 +55,6 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
         }
 
         setIsGenerating(true);
-        const voices = window.speechSynthesis.getVoices();
 
         const startPlayback = () => {
             const utterance = new SpeechSynthesisUtterance(poi.longDescription);
@@ -106,6 +105,8 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
             window.speechSynthesis.speak(utterance);
         };
         
+        // Ensure voices are loaded
+        const voices = window.speechSynthesis.getVoices();
         if (voices.length === 0) {
             window.speechSynthesis.onvoiceschanged = () => {
                 setIsGenerating(false);

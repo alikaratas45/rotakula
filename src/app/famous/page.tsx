@@ -73,8 +73,7 @@ export default function FamousPage() {
         }
 
         utterance.onend = () => {
-            // Add a small delay to prevent issues with rapid-fire onend events
-            setTimeout(() => {
+             setTimeout(() => {
                 currentChunkIndexRef.current++;
                 speakChunk(currentChunkIndexRef.current);
             }, 100);
