@@ -4,10 +4,115 @@
 import Image from 'next/image';
 import { useLanguage } from '@/context/language-context';
 import { getImageById } from '@/lib/placeholder-images';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
+import { PlayIcon, PauseIcon } from '@/components/icons';
+
 
 export default function FamousPage() {
     const { language, translations } = useLanguage();
     const heroImage = getImageById('hero-home');
+    const { toast } = useToast();
+    
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [isPaused, setIsPaused] = useState(false);
+    const paragraphsRef = useRef<string[]>([]);
+    const currentParagraphIndexRef = useRef(0);
+
+    const cleanupSpeech = useCallback(() => {
+        if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+        }
+        setIsPlaying(false);
+        setIsPaused(false);
+        currentParagraphIndexRef.current = 0;
+    }, []);
+
+    useEffect(() => {
+        // Component unmount olduğunda tüm sesli okumayı durdur.
+        return () => {
+            cleanupSpeech();
+        };
+    }, [cleanupSpeech]);
+
+    useEffect(() => {
+        paragraphsRef.current = translations.famous.historyContent.split('\n').filter(p => p.trim() !== '');
+        cleanupSpeech(); // Dil değiştiğinde de temizle
+    }, [translations.famous.historyContent, cleanupSpeech]);
+
+    
+    const speakParagraph = useCallback((index: number) => {
+        if (index >= paragraphsRef.current.length) {
+            cleanupSpeech();
+            return;
+        }
+
+        const utterance = new SpeechSynthesisUtterance(paragraphsRef.current[index]);
+        utterance.lang = language === 'tr' ? "tr-TR" : "en-US";
+        
+        const voices = window.speechSynthesis.getVoices();
+        const voiceCriteria = (v: SpeechSynthesisVoice) => 
+            v.lang.startsWith(language) && (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('erkek'));
+        
+        const preferredVoice = voices.find(voiceCriteria);
+        if (preferredVoice) {
+            utterance.voice = preferredVoice;
+        } else {
+            const langVoice = voices.find(v => v.lang.startsWith(language));
+            if (langVoice) utterance.voice = langVoice;
+        }
+
+        utterance.onend = () => {
+            currentParagraphIndexRef.current += 1;
+            speakParagraph(currentParagraphIndexRef.current);
+        };
+        
+        utterance.onerror = (event) => {
+            toast({
+                title: translations.toast.audioErrorTitle,
+                description: `${translations.toast.audioErrorDescription}: ${event.error}`,
+                variant: "destructive"
+            });
+            cleanupSpeech();
+        };
+
+        window.speechSynthesis.speak(utterance);
+
+    }, [language, translations, toast, cleanupSpeech]);
+
+
+    const handlePlayPause = () => {
+        if (!('speechSynthesis' in window)) {
+            toast({
+                title: translations.toast.unsupportedTitle,
+                description: translations.toast.unsupportedDescription,
+                variant: "destructive"
+            });
+            return;
+        }
+        
+        if (isPlaying) {
+            if (isPaused) {
+                window.speechSynthesis.resume();
+                setIsPaused(false);
+            } else {
+                window.speechSynthesis.pause();
+                setIsPaused(true);
+            }
+        } else {
+            cleanupSpeech(); // Başlamadan önce önceki kalıntıları temizle
+            setIsPlaying(true);
+            setIsPaused(false);
+            currentParagraphIndexRef.current = 0;
+            // Seslerin yüklenmesi için küçük bir gecikme gerekebilir.
+            setTimeout(() => speakParagraph(0), 100);
+        }
+    };
+
+    const handleStop = () => {
+        cleanupSpeech();
+    }
     
     return (
         <div>
@@ -31,7 +136,24 @@ export default function FamousPage() {
             </section>
             <div className="container py-8 md:py-12">
                 <div className="max-w-4xl mx-auto">
-                    <h2 className="text-2xl font-headline font-bold mb-6">{translations.pois.details}</h2>
+                    <div className="flex items-center gap-4 mb-6">
+                        <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
+                         <Button
+                            variant="outline"
+                            onClick={handlePlayPause}
+                            aria-label={isPlaying && !isPaused ? translations.pois.pauseNarration : translations.pois.listenNarration}
+                        >
+                            {isPlaying && !isPaused ? (
+                                <PauseIcon className="mr-2 h-4 w-4" />
+                            ) : (
+                                <PlayIcon className="mr-2 h-4 w-4" />
+                            )}
+                            {isPlaying && !isPaused ? translations.pois.pause : (isPaused ? "Devam Et" : translations.pois.listen)}
+                        </Button>
+                         {isPlaying && (
+                             <Button variant="destructive" onClick={handleStop}>Durdur</Button>
+                         )}
+                    </div>
                     <div className="prose prose-lg max-w-none text-foreground/90">
                          {translations.famous.historyContent.split('\n').map((paragraph, index) => (
                             <p key={index}>{paragraph}</p>
