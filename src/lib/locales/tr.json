@@ -6,6 +6,7 @@
         "places": "Gezilecek Yerler",
         "food": "Lezzet Durakları",
         "accommodation": "Konaklama",
+        "nearby": "Çevremde Ne Var?",
         "myRoutes": "Rotalarım"
     },
     "header": {
@@ -47,6 +48,14 @@
         "noRoutes": "Henüz kaydedilmiş rotanız bulunmuyor.",
         "noRoutesDescription": "Kula'yı keşfetmeye başlamak için rotalara göz atın.",
         "exploreRoutes": "Rotaları Keşfet"
+    },
+    "nearby": {
+        "title": "Çevremde Ne Var?",
+        "description": "Mevcut konumunuza 20 km mesafedeki yerler aşağıda listelenmiştir.",
+        "gettingLocation": "Konumunuz alınıyor, lütfen bekleyin...",
+        "locationError": "Konumunuz alınamadı. Lütfen tarayıcınızın konum izinlerini kontrol edin.",
+        "noPoisFound": "Konumunuza 20 km mesafede gezilecek yer bulunamadı.",
+        "distance": "Uzaklık"
     },
     "route": {
         "mapTitle": "Rota Haritası",

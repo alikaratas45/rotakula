@@ -6,6 +6,7 @@
         "places": "Places to Visit",
         "food": "Flavor Stops",
         "accommodation": "Accommodation",
+        "nearby": "What's Around Me?",
         "myRoutes": "My Routes"
     },
     "header": {
@@ -47,6 +48,14 @@
         "noRoutes": "You don't have any saved routes yet.",
         "noRoutesDescription": "Browse the routes to start exploring Kula.",
         "exploreRoutes": "Explore Routes"
+    },
+    "nearby": {
+        "title": "What's Around Me?",
+        "description": "Places within a 20 km radius of your current location are listed below.",
+        "gettingLocation": "Getting your location, please wait...",
+        "locationError": "Could not get your location. Please check your browser's location permissions.",
+        "noPoisFound": "No points of interest found within 20 km of your location.",
+        "distance": "Distance"
     },
     "route": {
         "mapTitle": "Route Map",

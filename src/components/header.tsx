@@ -33,6 +33,7 @@ export function Header() {
         { href: "/pois", label: translations.nav.places },
         { href: "/food", label: translations.nav.food },
         { href: "/accommodation", label: translations.nav.accommodation },
+        { href: "/nearby", label: translations.nav.nearby },
         { href: "/my-routes", label: translations.nav.myRoutes },
     ];
 
