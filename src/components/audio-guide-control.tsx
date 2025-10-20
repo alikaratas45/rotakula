@@ -31,10 +31,7 @@ export function AudioGuideControl() {
             window.speechSynthesis.cancel();
         }
         setNarratingPoi(null);
-        if (status !== 'idle') {
-            setStatus('listening');
-        }
-    }, [status]);
+    }, []);
 
     useEffect(() => {
         async function fetchPois() {
@@ -117,6 +114,7 @@ export function AudioGuideControl() {
                 voiceToUse = voices.find(v => v.lang === voiceLang);
             }
 
+
             if (voiceToUse) {
                 utterance.voice = voiceToUse;
             }
@@ -126,6 +124,7 @@ export function AudioGuideControl() {
             };
             utterance.onend = () => {
                 cancelNarration();
+                setStatus('listening');
             };
             utterance.onerror = () => {
                 toast({
@@ -134,6 +133,7 @@ export function AudioGuideControl() {
                     variant: "destructive"
                 });
                 cancelNarration();
+                setStatus('listening');
             };
 
             window.speechSynthesis.speak(utterance);
@@ -203,6 +203,7 @@ export function AudioGuideControl() {
     const handleButtonClick = () => {
         if (status === 'narrating' || status === 'generating') {
             cancelNarration();
+            setStatus('listening');
         } else {
             toggleGuide();
         }
