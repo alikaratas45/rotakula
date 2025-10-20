@@ -40,7 +40,6 @@ export function AudioGuideControl() {
     const [narratingPoi, setNarratingPoi] = useState<PointOfInterest | null>(null);
     const speechUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
-    // Voice Selection State
     const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
     const [selectedVoiceURI, setSelectedVoiceURI] = useState<string | null>(null);
     const [popoverOpen, setPopoverOpen] = useState(false);
@@ -52,24 +51,18 @@ export function AudioGuideControl() {
         if (allVoices.length > 0) {
             const supportedVoices = allVoices.filter(v => v.lang.startsWith('tr') || v.lang.startsWith('en'));
             setAvailableVoices(supportedVoices);
+            return true;
         }
+        return false;
       };
 
-      // Voices might be loaded already.
-      if (window.speechSynthesis.getVoices().length > 0) {
-        loadVoices();
-      } else {
-        // Or they will be loaded asynchronously.
-        window.speechSynthesis.onvoiceschanged = loadVoices;
+      if (!loadVoices()) {
+          window.speechSynthesis.onvoiceschanged = loadVoices;
       }
       
       const savedVoice = localStorage.getItem(VOICE_STORAGE_KEY);
       if (savedVoice) {
         setSelectedVoiceURI(savedVoice);
-      }
-
-      return () => {
-          window.speechSynthesis.onvoiceschanged = null;
       }
     }, []);
 
@@ -162,7 +155,7 @@ export function AudioGuideControl() {
             const voices = window.speechSynthesis.getVoices();
             let selectedVoice = selectedVoiceURI ? voices.find(v => v.voiceURI === selectedVoiceURI) : null;
             
-            if (!selectedVoice) {
+             if (!selectedVoice) {
                 const voiceLang = language === 'tr' ? 'tr-TR' : 'en-US';
                 selectedVoice = voices.find(v => v.lang === voiceLang && v.name.toLowerCase().includes('erkek'));
                 if (!selectedVoice) {
@@ -172,6 +165,7 @@ export function AudioGuideControl() {
                     selectedVoice = voices.find(v => v.lang === voiceLang);
                 }
             }
+
 
             if (selectedVoice) {
                 utterance.voice = selectedVoice;
@@ -315,3 +309,5 @@ export function AudioGuideControl() {
         </div>
     );
 }
+
+    
