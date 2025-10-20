@@ -12,6 +12,7 @@ import { Loader2 } from 'lucide-react';
 import { PlayIcon, PauseIcon } from '@/components/icons';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/context/language-context';
+import { generateAudio, type AudioRequest } from '@/ai/flows/audio-flow';
 
 
 export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
@@ -20,109 +21,88 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
     const { language, translations } = useLanguage();
 
     const [isPlaying, setIsPlaying] = useState(false);
-    const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
-    const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+    const [isPaused, setIsPaused] = useState(false);
+    const [isGenerating, setIsGenerating] = useState(false);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+    const audioSrcRef = useRef<string | null>(null);
     const { toast } = useToast();
 
-    useEffect(() => {
-        if ('speechSynthesis' in window) {
-            const handleVoicesChanged = () => {
-                setVoices(window.speechSynthesis.getVoices());
-            };
-            window.speechSynthesis.onvoiceschanged = handleVoicesChanged;
-            handleVoicesChanged(); // Initial load
-            
-            return () => {
-                window.speechSynthesis.onvoiceschanged = null;
-                 if (window.speechSynthesis.speaking) {
-                    window.speechSynthesis.cancel();
-                }
-            };
+    const cleanupAudio = useCallback(() => {
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.remove();
+            audioRef.current = null;
         }
-    }, []);
-
-    const cleanup = useCallback(() => {
-        if (window.speechSynthesis) {
-            window.speechSynthesis.cancel();
-        }
+        audioSrcRef.current = null;
         setIsPlaying(false);
+        setIsPaused(false);
     }, []);
 
     useEffect(() => {
       // Cleanup on component unmount
       return () => {
-        cleanup();
+        cleanupAudio();
       };
-    }, [cleanup]);
+    }, [cleanupAudio, poi, language]);
 
     const handlePlayPause = useCallback(async () => {
-        if (!('speechSynthesis' in window)) {
-            toast({
-                title: translations.toast.unsupportedTitle,
-                description: translations.toast.unsupportedDescription,
-                variant: "destructive"
-            });
-            return;
-        }
+        if (isGenerating) return;
 
-        if (window.speechSynthesis.speaking) {
-            if (window.speechSynthesis.paused) {
-                 window.speechSynthesis.resume();
-                 setIsPlaying(true);
+        if (audioRef.current) {
+            if (isPlaying && !isPaused) {
+                audioRef.current.pause();
+                setIsPaused(true);
             } else {
-                window.speechSynthesis.pause();
-                setIsPlaying(false);
+                audioRef.current.play();
+                setIsPaused(false);
             }
             return;
         }
-        
-        cleanup(); // Start fresh
 
-        const utterance = new SpeechSynthesisUtterance(poi.longDescription);
-        utterance.lang = language === 'tr' ? "tr-TR" : "en-US";
-        
-        const voiceCriteria = (v: SpeechSynthesisVoice) => 
-            v.lang.startsWith(language) && (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('erkek'));
-        
-        const preferredVoice = voices.find(voiceCriteria);
+        try {
+            setIsGenerating(true);
+            const response = await generateAudio({ text: poi.longDescription });
+            audioSrcRef.current = response.media;
 
-        if (preferredVoice) {
-            utterance.voice = preferredVoice;
-        } else {
-            const langVoice = voices.find(v => v.lang.startsWith(language));
-            if (langVoice) utterance.voice = langVoice;
-        }
-        
-        utteranceRef.current = utterance;
+            const newAudio = new Audio(audioSrcRef.current);
+            audioRef.current = newAudio;
 
-        utterance.onstart = () => {
-            setIsPlaying(true);
-        };
+            newAudio.onplay = () => {
+                setIsPlaying(true);
+                setIsPaused(false);
+            };
+            newAudio.onpause = () => {
+                if (newAudio.currentTime < newAudio.duration) {
+                    setIsPaused(true);
+                }
+            };
+            newAudio.onended = () => {
+                cleanupAudio();
+            };
+            newAudio.onerror = () => {
+                toast({
+                    title: translations.toast.audioErrorTitle,
+                    description: translations.toast.audioErrorDescription,
+                    variant: "destructive"
+                });
+                cleanupAudio();
+            };
+            
+            await newAudio.play();
 
-        utterance.onpause = () => {
-            setIsPlaying(false);
-        };
-        
-        utterance.onresume = () => {
-            setIsPlaying(true);
-        }
-
-        utterance.onend = () => {
-           cleanup();
-        };
-
-        utterance.onerror = (event) => {
+        } catch (error) {
+            console.error("Audio generation failed:", error);
             toast({
                 title: translations.toast.audioErrorTitle,
-                description: `${translations.toast.audioErrorDescription}: ${event.error}`,
+                description: (error as Error).message || "Could not generate audio.",
                 variant: "destructive"
             });
-            cleanup();
-        };
+            cleanupAudio();
+        } finally {
+            setIsGenerating(false);
+        }
 
-        window.speechSynthesis.speak(utterance);
-
-    }, [poi.longDescription, cleanup, toast, voices, language, translations]);
+    }, [poi.longDescription, isPlaying, isPaused, isGenerating, cleanupAudio, toast, translations]);
 
     return (
         <APIProvider apiKey={apiKey}>
@@ -155,14 +135,17 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
                                 <Button
                                     variant="outline"
                                     onClick={handlePlayPause}
-                                    aria-label={isPlaying ? translations.pois.pauseNarration : translations.pois.listenNarration}
+                                    disabled={isGenerating}
+                                    aria-label={isPlaying && !isPaused ? translations.pois.pauseNarration : translations.pois.listenNarration}
                                 >
-                                    {isPlaying ? (
+                                    {isGenerating ? (
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    ) : isPlaying && !isPaused ? (
                                         <PauseIcon className="mr-2 h-4 w-4" />
                                     ) : (
                                         <PlayIcon className="mr-2 h-4 w-4" />
                                     )}
-                                    {isPlaying ? translations.pois.pause : translations.pois.listen}
+                                    {isGenerating ? translations.audioGuide.generating : (isPlaying && !isPaused ? translations.pois.pause : (isPaused ? translations.famous.continueNarration : translations.pois.listen))}
                                 </Button>
                              </div>
                              <div className="prose prose-lg max-w-none text-foreground/90">

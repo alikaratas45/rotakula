@@ -71,6 +71,7 @@
         "start": "Sesli Rehberi Başlat",
         "active": "Sesli Rehber Aktif: Yerler dinleniyor. Kapatmak için tıklayın.",
         "narrating": "Anlatım yapılıyor",
+        "generating": "Ses Oluşturuluyor",
         "started": "Sesli Rehber Başlatıldı",
         "startedDescription": "Yakınınızdaki yerler için bildirim alacaksınız.",
         "stopped": "Sesli Rehber Kapatıldı",

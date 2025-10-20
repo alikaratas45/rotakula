@@ -7,7 +7,8 @@ import { getImageById } from '@/lib/placeholder-images';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { PlayIcon, PauseIcon } from '@/components/icons';
+import { PlayIcon, PauseIcon, Loader2 } from 'lucide-react';
+import { generateAudio, type AudioRequest } from '@/ai/flows/audio-flow';
 
 
 export default function FamousPage() {
@@ -17,93 +18,86 @@ export default function FamousPage() {
     
     const [isPlaying, setIsPlaying] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
-    const paragraphsRef = useRef<string[]>([]);
-    const currentParagraphIndexRef = useRef(0);
+    const [isGenerating, setIsGenerating] = useState(false);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+    const audioSrcRef = useRef<string | null>(null);
 
-    const cleanupSpeech = useCallback(() => {
-        if (window.speechSynthesis) {
-            window.speechSynthesis.cancel();
+    const cleanupAudio = useCallback(() => {
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.remove();
+            audioRef.current = null;
         }
+        audioSrcRef.current = null;
         setIsPlaying(false);
         setIsPaused(false);
-        currentParagraphIndexRef.current = 0;
     }, []);
 
     useEffect(() => {
+        // Cleanup on language change or component unmount
         return () => {
-            cleanupSpeech();
+            cleanupAudio();
         };
-    }, [cleanupSpeech]);
+    }, [language, cleanupAudio]);
 
-    useEffect(() => {
-        paragraphsRef.current = translations.famous.historyContent.split('\n').filter(p => p.trim() !== '');
-        cleanupSpeech();
-    }, [translations.famous.historyContent, cleanupSpeech]);
+    const handlePlayPause = async () => {
+        if (isGenerating) return;
 
-    
-    const speakParagraph = useCallback((index: number) => {
-        if (index >= paragraphsRef.current.length) {
-            cleanupSpeech();
+        if (audioRef.current) {
+            if (isPlaying && !isPaused) {
+                audioRef.current.pause();
+                setIsPaused(true);
+            } else {
+                audioRef.current.play();
+                setIsPaused(false);
+            }
             return;
         }
 
-        const utterance = new SpeechSynthesisUtterance(paragraphsRef.current[index]);
-        utterance.lang = language === 'tr' ? "tr-TR" : "en-US";
-        
-        const voices = window.speechSynthesis.getVoices();
-        const voiceCriteria = (v: SpeechSynthesisVoice) => 
-            v.lang.startsWith(language) && (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('erkek'));
-        
-        const preferredVoice = voices.find(voiceCriteria);
-        if (preferredVoice) {
-            utterance.voice = preferredVoice;
-        } else {
-            const langVoice = voices.find(v => v.lang.startsWith(language));
-            if (langVoice) utterance.voice = langVoice;
-        }
+        try {
+            setIsGenerating(true);
+            const textToSpeak = translations.famous.historyContent;
+            
+            const response = await generateAudio({ text: textToSpeak });
+            audioSrcRef.current = response.media;
 
-        utterance.onend = () => {
-            currentParagraphIndexRef.current += 1;
-            speakParagraph(currentParagraphIndexRef.current);
-        };
-        
-        utterance.onerror = (event) => {
+            const newAudio = new Audio(audioSrcRef.current);
+            audioRef.current = newAudio;
+
+            newAudio.onplay = () => {
+                setIsPlaying(true);
+                setIsPaused(false);
+            };
+            newAudio.onpause = () => {
+                // This will be called for both pause and end of audio
+                 if (newAudio.currentTime < newAudio.duration) {
+                    setIsPaused(true);
+                }
+            };
+            newAudio.onended = () => {
+                cleanupAudio();
+            };
+            newAudio.onerror = () => {
+                toast({
+                    title: translations.toast.audioErrorTitle,
+                    description: translations.toast.audioErrorDescription,
+                    variant: "destructive"
+                });
+                cleanupAudio();
+            };
+            
+            await newAudio.play();
+
+        } catch (error) {
+            console.error("Audio generation failed:", error);
             toast({
                 title: translations.toast.audioErrorTitle,
-                description: `${translations.toast.audioErrorDescription}: ${event.error}`,
+                description: (error as Error).message || "Could not generate audio.",
                 variant: "destructive"
             });
-            cleanupSpeech();
-        };
-
-        window.speechSynthesis.speak(utterance);
-
-    }, [language, translations, toast, cleanupSpeech]);
-
-
-    const handlePlayPause = () => {
-        if (!('speechSynthesis' in window)) {
-            toast({
-                title: translations.toast.unsupportedTitle,
-                description: translations.toast.unsupportedDescription,
-                variant: "destructive"
-            });
-            return;
-        }
-        
-        if (!isPlaying) {
-            cleanupSpeech();
-            setIsPlaying(true);
-            setIsPaused(false);
-            currentParagraphIndexRef.current = 0;
-            // A small delay to allow voices to load on some browsers
-            setTimeout(() => speakParagraph(0), 100);
-        } else if (isPaused) {
-            window.speechSynthesis.resume();
-            setIsPaused(false);
-        } else {
-            window.speechSynthesis.pause();
-            setIsPaused(true);
+            cleanupAudio();
+        } finally {
+            setIsGenerating(false);
         }
     };
     
@@ -134,14 +128,17 @@ export default function FamousPage() {
                          <Button
                             variant="outline"
                             onClick={handlePlayPause}
+                            disabled={isGenerating}
                             aria-label={isPlaying && !isPaused ? translations.pois.pauseNarration : translations.pois.listenNarration}
                         >
-                            {isPlaying && !isPaused ? (
+                            {isGenerating ? (
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            ) : isPlaying && !isPaused ? (
                                 <PauseIcon className="mr-2 h-4 w-4" />
                             ) : (
                                 <PlayIcon className="mr-2 h-4 w-4" />
                             )}
-                            {isPlaying && !isPaused ? translations.pois.pause : (isPaused ? translations.famous.continueNarration : translations.pois.listen)}
+                            {isGenerating ? translations.audioGuide.generating : (isPlaying && !isPaused ? translations.pois.pause : (isPaused ? translations.famous.continueNarration : translations.pois.listen))}
                         </Button>
                     </div>
                     <div className="prose prose-lg max-w-none text-foreground/90">
