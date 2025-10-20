@@ -70,13 +70,18 @@
         "title": "Audio Guide",
         "start": "Start Audio Guide",
         "active": "Audio Guide Active: Listening for places. Click to turn off.",
+        "activeShort": "Guide Active",
         "narrating": "Narrating",
-        "generating": "Generating Audio",
+        "generating": "Generating",
         "started": "Audio Guide Started",
         "startedDescription": "You will receive notifications for nearby places.",
         "stopped": "Audio Guide Stopped",
         "nearby": "📍 You are nearby",
-        "nearbyDescription": "Click the button to listen to the narration."
+        "nearbyDescription": "Click the button to listen to the narration.",
+        "voiceSettings": "Voice Settings",
+        "searchVoice": "Search voice...",
+        "noVoiceFound": "No voice found.",
+        "availableVoices": "Available Voices"
     },
     "map": {
         "yourLocation": "Your Location",

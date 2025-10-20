@@ -13,6 +13,8 @@ import { PlayIcon, PauseIcon } from '@/components/icons';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/context/language-context';
 
+const VOICE_STORAGE_KEY = 'rota-kula-selected-voice';
+
 export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
     const heroImage = getImageById(poi.imageId);
@@ -62,7 +64,12 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
             const voiceLang = language === 'tr' ? 'tr-TR' : 'en-US';
             const availableVoices = window.speechSynthesis.getVoices();
             
-            let selectedVoice = availableVoices.find(v => v.lang === voiceLang && v.name.toLowerCase().includes('male'));
+            const savedVoiceURI = localStorage.getItem(VOICE_STORAGE_KEY);
+            let selectedVoice = savedVoiceURI ? availableVoices.find(v => v.voiceURI === savedVoiceURI) : null;
+
+            if (!selectedVoice) {
+                selectedVoice = availableVoices.find(v => v.lang === voiceLang && v.name.toLowerCase().includes('male'));
+            }
             if (!selectedVoice) {
                 selectedVoice = availableVoices.find(v => v.lang === voiceLang && v.name.toLowerCase().includes('erkek'));
             }

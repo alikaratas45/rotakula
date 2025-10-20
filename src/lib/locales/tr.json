@@ -70,13 +70,18 @@
         "title": "Sesli Rehber",
         "start": "Sesli Rehberi Başlat",
         "active": "Sesli Rehber Aktif: Yerler dinleniyor. Kapatmak için tıklayın.",
-        "narrating": "Anlatım yapılıyor",
-        "generating": "Ses Oluşturuluyor",
+        "activeShort": "Rehber Aktif",
+        "narrating": "Anlatılıyor",
+        "generating": "Oluşturuluyor",
         "started": "Sesli Rehber Başlatıldı",
         "startedDescription": "Yakınınızdaki yerler için bildirim alacaksınız.",
         "stopped": "Sesli Rehber Kapatıldı",
         "nearby": "📍 Yakınlardasınız",
-        "nearbyDescription": "Anlatımı dinlemek için butona tıklayın."
+        "nearbyDescription": "Anlatımı dinlemek için butona tıklayın.",
+        "voiceSettings": "Ses Ayarları",
+        "searchVoice": "Ses ara...",
+        "noVoiceFound": "Ses bulunamadı.",
+        "availableVoices": "Kullanılabilir Sesler"
     },
     "map": {
         "yourLocation": "Sizin Konumunuz",
