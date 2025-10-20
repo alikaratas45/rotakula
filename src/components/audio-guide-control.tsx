@@ -49,16 +49,27 @@ export function AudioGuideControl() {
     useEffect(() => {
       const loadVoices = () => {
         const allVoices = window.speechSynthesis.getVoices();
-        const supportedVoices = allVoices.filter(v => v.lang.startsWith('tr') || v.lang.startsWith('en'));
-        setAvailableVoices(supportedVoices);
+        if (allVoices.length > 0) {
+            const supportedVoices = allVoices.filter(v => v.lang.startsWith('tr') || v.lang.startsWith('en'));
+            setAvailableVoices(supportedVoices);
+        }
       };
 
-      loadVoices();
-      window.speechSynthesis.onvoiceschanged = loadVoices;
-
+      // Voices might be loaded already.
+      if (window.speechSynthesis.getVoices().length > 0) {
+        loadVoices();
+      } else {
+        // Or they will be loaded asynchronously.
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+      }
+      
       const savedVoice = localStorage.getItem(VOICE_STORAGE_KEY);
       if (savedVoice) {
         setSelectedVoiceURI(savedVoice);
+      }
+
+      return () => {
+          window.speechSynthesis.onvoiceschanged = null;
       }
     }, []);
 
@@ -153,9 +164,9 @@ export function AudioGuideControl() {
             
             if (!selectedVoice) {
                 const voiceLang = language === 'tr' ? 'tr-TR' : 'en-US';
-                selectedVoice = voices.find(v => v.lang === voiceLang && v.name.toLowerCase().includes('male'));
+                selectedVoice = voices.find(v => v.lang === voiceLang && v.name.toLowerCase().includes('erkek'));
                 if (!selectedVoice) {
-                    selectedVoice = voices.find(v => v.lang === voiceLang && v.name.toLowerCase().includes('erkek'));
+                    selectedVoice = voices.find(v => v.lang === voiceLang && v.name.toLowerCase().includes('male'));
                 }
                 if (!selectedVoice) {
                     selectedVoice = voices.find(v => v.lang === voiceLang);
