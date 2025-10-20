@@ -52,7 +52,7 @@ export default function FamousPage() {
         
         const voices = window.speechSynthesis.getVoices();
         const voiceCriteria = (v: SpeechSynthesisVoice) => 
-            v.lang.startsWith(language) && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('kadın'));
+            v.lang.startsWith(language) && (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('erkek'));
         
         const preferredVoice = voices.find(voiceCriteria);
         if (preferredVoice) {

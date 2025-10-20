@@ -82,12 +82,12 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
         utterance.lang = language === 'tr' ? "tr-TR" : "en-US";
         
         const voiceCriteria = (v: SpeechSynthesisVoice) => 
-            v.lang.startsWith(language) && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('kadın'));
+            v.lang.startsWith(language) && (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('erkek'));
         
-        const femaleVoice = voices.find(voiceCriteria);
+        const preferredVoice = voices.find(voiceCriteria);
 
-        if (femaleVoice) {
-            utterance.voice = femaleVoice;
+        if (preferredVoice) {
+            utterance.voice = preferredVoice;
         } else {
             const langVoice = voices.find(v => v.lang.startsWith(language));
             if (langVoice) utterance.voice = langVoice;
