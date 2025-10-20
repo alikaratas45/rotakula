@@ -45,7 +45,7 @@ export function AudioGuideControl() {
         }
     }, [cancelNarration, language]);
     
-    const stopLocationTracking = useCallback(() => {
+     const stopLocationTracking = useCallback(() => {
         if (watchIdRef.current !== null) {
             navigator.geolocation.clearWatch(watchIdRef.current);
             watchIdRef.current = null;
@@ -93,6 +93,7 @@ export function AudioGuideControl() {
     const handlePlayAudio = useCallback(async (poi: PointOfInterest) => {
         if (status === 'narrating' || status === 'generating') {
              cancelNarration();
+             if (status !== 'idle') { setStatus('listening'); }
              return;
         }
         
@@ -124,7 +125,9 @@ export function AudioGuideControl() {
             };
             utterance.onend = () => {
                 cancelNarration();
-                setStatus('listening');
+                if (status !== 'idle') {
+                    setStatus('listening');
+                }
             };
             utterance.onerror = () => {
                 toast({
@@ -133,7 +136,9 @@ export function AudioGuideControl() {
                     variant: "destructive"
                 });
                 cancelNarration();
-                setStatus('listening');
+                if (status !== 'idle') {
+                    setStatus('listening');
+                }
             };
 
             window.speechSynthesis.speak(utterance);
@@ -191,11 +196,13 @@ export function AudioGuideControl() {
              toast({
                 title: translations.audioGuide.started,
                 description: translations.audioGuide.startedDescription,
+                duration: 3000,
             });
         } else {
             stopLocationTracking();
             toast({
                 title: translations.audioGuide.stopped,
+                duration: 3000,
             });
         }
     };
@@ -203,7 +210,7 @@ export function AudioGuideControl() {
     const handleButtonClick = () => {
         if (status === 'narrating' || status === 'generating') {
             cancelNarration();
-            setStatus('listening');
+            if (status !== 'idle') { setStatus('listening'); }
         } else {
             toggleGuide();
         }
