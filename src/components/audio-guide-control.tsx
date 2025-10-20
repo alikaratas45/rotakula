@@ -6,25 +6,11 @@ import { getPois } from '@/lib/kula-data';
 import type { PointOfInterest } from '@/lib/types';
 import { haversineDistance } from '@/lib/utils';
 import { Button } from './ui/button';
-import { PauseIcon, PlayIcon, Radio, RadioTower, Loader2, Settings, Check } from 'lucide-react';
+import { PauseIcon, PlayIcon, Radio, RadioTower, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/context/language-context';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command"
 
 const PROXIMITY_THRESHOLD = 50; // meters
-const VOICE_STORAGE_KEY = 'rota-kula-selected-voice';
 
 type GuideStatus = 'idle' | 'listening' | 'narrating' | 'generating';
 
@@ -39,44 +25,6 @@ export function AudioGuideControl() {
     
     const [narratingPoi, setNarratingPoi] = useState<PointOfInterest | null>(null);
     const speechUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-
-    const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
-    const [selectedVoiceURI, setSelectedVoiceURI] = useState<string | null>(null);
-    const [popoverOpen, setPopoverOpen] = useState(false);
-
-    useEffect(() => {
-        const loadVoices = () => {
-            const allVoices = window.speechSynthesis.getVoices();
-             if (allVoices.length > 0) {
-                const supportedVoices = allVoices.filter(v => v.lang.startsWith('tr') || v.lang.startsWith('en'));
-                setAvailableVoices(supportedVoices);
-            }
-        };
-
-        // Load voices initially
-        loadVoices();
-
-        // If voices are not loaded yet, set up an event listener
-        if (window.speechSynthesis.onvoiceschanged !== undefined) {
-            window.speechSynthesis.onvoiceschanged = loadVoices;
-        }
-        
-        const savedVoice = localStorage.getItem(VOICE_STORAGE_KEY);
-        if (savedVoice) {
-          setSelectedVoiceURI(savedVoice);
-        }
-
-        return () => {
-             window.speechSynthesis.onvoiceschanged = null;
-        }
-    }, []);
-
-
-    const handleVoiceSelect = (voiceURI: string) => {
-      setSelectedVoiceURI(voiceURI);
-      localStorage.setItem(VOICE_STORAGE_KEY, voiceURI);
-      setPopoverOpen(false);
-    }
 
     const cancelNarration = useCallback(() => {
         if (window.speechSynthesis.speaking) {
@@ -160,13 +108,8 @@ export function AudioGuideControl() {
 
             const voices = window.speechSynthesis.getVoices();
             const voiceLang = language === 'tr' ? 'tr-TR' : 'en-US';
-            const savedVoiceURI = localStorage.getItem(VOICE_STORAGE_KEY);
             
-            let voiceToUse = savedVoiceURI ? voices.find(v => v.voiceURI === savedVoiceURI) : null;
-
-            if (!voiceToUse) {
-                voiceToUse = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('erkek') || v.name.toLowerCase().includes('male')));
-            }
+            let voiceToUse = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('erkek') || v.name.toLowerCase().includes('male')));
             if (!voiceToUse) {
                 voiceToUse = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('kadın') || v.name.toLowerCase().includes('female')));
             }
@@ -265,8 +208,6 @@ export function AudioGuideControl() {
         }
     };
 
-    const currentLangVoices = availableVoices.filter(v => v.lang.startsWith(language));
-
     return (
         <div className="flex items-center gap-1">
              <Button 
@@ -287,37 +228,6 @@ export function AudioGuideControl() {
                  : status === 'listening' ? translations.audioGuide.activeShort
                  : translations.audioGuide.title}
             </Button>
-            <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-                <PopoverTrigger asChild>
-                    <Button variant="ghost" size="icon" aria-label={translations.audioGuide.voiceSettings} disabled={availableVoices.length === 0}>
-                        <Settings className="h-5 w-5" />
-                    </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[300px] p-0">
-                    <Command>
-                        <CommandInput placeholder={translations.audioGuide.searchVoice} />
-                        <CommandList>
-                            <CommandEmpty>{translations.audioGuide.noVoiceFound}</CommandEmpty>
-                            <CommandGroup heading={translations.audioGuide.availableVoices}>
-                                {currentLangVoices.map(voice => (
-                                    <CommandItem
-                                        key={voice.voiceURI}
-                                        onSelect={() => handleVoiceSelect(voice.voiceURI)}
-                                        value={voice.name}
-                                    >
-                                        <Check className={`mr-2 h-4 w-4 ${selectedVoiceURI === voice.voiceURI ? 'opacity-100' : 'opacity-0'}`} />
-                                        {voice.name} ({voice.lang})
-                                    </CommandItem>
-                                ))}
-                            </CommandGroup>
-                        </CommandList>
-                    </Command>
-                </PopoverContent>
-            </Popover>
         </div>
     );
 }
-
-    
-
-    

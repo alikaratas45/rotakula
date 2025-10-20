@@ -10,7 +10,6 @@ import { useToast } from '@/hooks/use-toast';
 import { PlayIcon, PauseIcon, Loader2 } from 'lucide-react';
 
 const MAX_CHUNK_LENGTH = 200; // Max characters per speech chunk
-const VOICE_STORAGE_KEY = 'rota-kula-selected-voice';
 
 export default function FamousPage() {
     const { language, translations } = useLanguage();
@@ -55,12 +54,7 @@ export default function FamousPage() {
         const voices = window.speechSynthesis.getVoices();
         const voiceLang = language === 'tr' ? 'tr-TR' : 'en-US';
         
-        const savedVoiceURI = localStorage.getItem(VOICE_STORAGE_KEY);
-        let selectedVoice = savedVoiceURI ? voices.find(v => v.voiceURI === savedVoiceURI) : null;
-        
-        if (!selectedVoice) {
-            selectedVoice = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('erkek') || v.name.toLowerCase().includes('male')));
-        }
+        let selectedVoice = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('erkek') || v.name.toLowerCase().includes('male')));
         if (!selectedVoice) {
             selectedVoice = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('kadın') || v.name.toLowerCase().includes('female')));
         }
