@@ -52,7 +52,7 @@ export default function FamousPage() {
         
         const voices = window.speechSynthesis.getVoices();
         const voiceCriteria = (v: SpeechSynthesisVoice) => 
-            v.lang.startsWith(language) && (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('erkek'));
+            v.lang.startsWith(language) && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('kadın'));
         
         const preferredVoice = voices.find(voiceCriteria);
         if (preferredVoice) {
@@ -96,6 +96,7 @@ export default function FamousPage() {
             setIsPlaying(true);
             setIsPaused(false);
             currentParagraphIndexRef.current = 0;
+            // A small delay to allow voices to load on some browsers
             setTimeout(() => speakParagraph(0), 100);
         } else if (isPaused) {
             window.speechSynthesis.resume();

@@ -131,12 +131,12 @@ export function AudioGuideControl() {
         utterance.lang = language === 'tr' ? "tr-TR" : "en-US";
 
         const voiceCriteria = (v: SpeechSynthesisVoice) => 
-            v.lang.startsWith(language) && v.name.toLowerCase().includes('male');
+            v.lang.startsWith(language) && (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('kadın'));
         
-        const maleVoice = voices.find(voiceCriteria);
+        const femaleVoice = voices.find(voiceCriteria);
 
-        if (maleVoice) {
-            utterance.voice = maleVoice;
+        if (femaleVoice) {
+            utterance.voice = femaleVoice;
         } else {
             const langVoice = voices.find(v => v.lang.startsWith(language));
             if (langVoice) utterance.voice = langVoice;
@@ -188,7 +188,7 @@ export function AudioGuideControl() {
                     duration: Infinity, 
                     action: (
                         <Button onClick={() => handlePlayAudio(poi)}>
-                           <PlayIcon className="mr-2 h-4 w-4" /> {translations.poi.listen}
+                           <PlayIcon className="mr-2 h-4 w-4" /> {translations.pois.listen}
                         </Button>
                     )
                 });
