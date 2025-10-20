@@ -24,7 +24,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AudioGuideControl } from "./audio-guide-control";
 import { useLanguage } from "@/context/language-context";
-import { Globe } from "lucide-react";
 import { TurkishFlagIcon, UKFlagIcon, FrenchFlagIcon } from "./icons";
 
 
@@ -47,34 +46,32 @@ export function Header() {
     const handleLinkClick = () => {
         setIsSheetOpen(false);
     };
+
+    const languageOptions = {
+        tr: { name: 'Türkçe', Icon: TurkishFlagIcon },
+        en: { name: 'English', Icon: UKFlagIcon },
+        fr: { name: 'Français', Icon: FrenchFlagIcon },
+    };
     
+    const CurrentFlag = languageOptions[language].Icon;
+
     const LanguageSelector = ({ isMobile = false }: { isMobile?: boolean }) => (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                {isMobile ? (
-                    <Button variant="ghost" size="icon" aria-label="Change language">
-                        <Globe className="h-6 w-6" />
-                    </Button>
-                ) : (
-                    <Button variant="outline" size="sm">
-                        <Globe className="mr-2 h-4 w-4" />
-                        {language.toUpperCase()}
-                    </Button>
-                )}
+                 <Button variant="outline" size={isMobile ? "icon" : "sm"} className={cn(isMobile && "h-8 w-8")}>
+                    <CurrentFlag className={cn("rounded-sm", isMobile ? "h-5 w-5" : "h-4 w-4")} />
+                    {!isMobile && <span className="ml-2">{language.toUpperCase()}</span>}
+                </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align={isMobile ? "end" : "end"}>
-                <DropdownMenuItem onClick={() => setLanguage('tr')}>
-                    <TurkishFlagIcon className="mr-2 h-4 w-4 rounded-sm" />
-                    <span>Türkçe</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setLanguage('en')}>
-                    <UKFlagIcon className="mr-2 h-4 w-4 rounded-sm" />
-                    <span>English</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setLanguage('fr')}>
-                    <FrenchFlagIcon className="mr-2 h-4 w-4 rounded-sm" />
-                    <span>Français</span>
-                </DropdownMenuItem>
+                {Object.entries(languageOptions)
+                    .filter(([langCode]) => langCode !== language)
+                    .map(([langCode, { name, Icon }]) => (
+                    <DropdownMenuItem key={langCode} onClick={() => setLanguage(langCode as 'tr' | 'en' | 'fr')}>
+                        <Icon className="mr-2 h-4 w-4 rounded-sm" />
+                        <span>{name}</span>
+                    </DropdownMenuItem>
+                ))}
             </DropdownMenuContent>
         </DropdownMenu>
     );
