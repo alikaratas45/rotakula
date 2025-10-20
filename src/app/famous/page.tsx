@@ -19,7 +19,7 @@ export default function FamousPage() {
     
     const [isPlaying, setIsPlaying] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
-    const [isGenerating, setIsGenerating] = useState(false); // Used for initial voice loading
+    const [isGenerating, setIsGenerating] = useState(false);
     
     const speechUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
     const textChunksRef = useRef<string[]>([]);
@@ -27,7 +27,7 @@ export default function FamousPage() {
 
 
     const cleanupSpeech = useCallback(() => {
-        if (window.speechSynthesis.speaking) {
+        if (window.speechSynthesis) {
             window.speechSynthesis.cancel();
         }
         setIsPlaying(false);
@@ -73,12 +73,14 @@ export default function FamousPage() {
         }
 
         utterance.onend = () => {
-            currentChunkIndexRef.current++;
-            speakChunk(currentChunkIndexRef.current);
+            // Add a small delay to prevent issues with rapid-fire onend events
+            setTimeout(() => {
+                currentChunkIndexRef.current++;
+                speakChunk(currentChunkIndexRef.current);
+            }, 100);
         };
 
-        utterance.onerror = (event) => {
-            console.error("SpeechSynthesisUtterance.onerror", event);
+        utterance.onerror = () => {
             toast({
                 title: translations.toast.audioErrorTitle,
                 description: translations.toast.audioErrorDescription,
@@ -104,46 +106,49 @@ export default function FamousPage() {
             }
         } else {
             setIsGenerating(true); // Show loader while preparing
-            // Ensure voices are loaded
+            
+            const startPlayback = () => {
+                cleanupSpeech(); // Reset before starting new playback
+                setIsPlaying(true);
+                setIsPaused(false);
+                setIsGenerating(false);
+
+                const fullText = translations.famous.historyContent;
+                const sentences = fullText.match(/[^.!?]+[.!?\n]+/g) || [fullText];
+                const chunks: string[] = [];
+                let currentChunk = "";
+                
+                sentences.forEach(sentence => {
+                    const trimmedSentence = sentence.trim();
+                    if (!trimmedSentence) return;
+                    if ((currentChunk + ' ' + trimmedSentence).length > MAX_CHUNK_LENGTH && currentChunk) {
+                        chunks.push(currentChunk);
+                        currentChunk = trimmedSentence;
+                    } else {
+                        currentChunk = currentChunk ? currentChunk + ' ' + trimmedSentence : trimmedSentence;
+                    }
+                });
+                if (currentChunk) {
+                    chunks.push(currentChunk);
+                }
+                
+                textChunksRef.current = chunks;
+                currentChunkIndexRef.current = 0;
+                speakChunk(0);
+            }
+
+            // Ensure voices are loaded before starting playback
             const voices = window.speechSynthesis.getVoices();
             if (voices.length === 0) {
                  window.speechSynthesis.onvoiceschanged = () => {
-                     startPlayback();
+                    setIsGenerating(false);
+                    startPlayback();
                  };
             } else {
                  startPlayback();
             }
         }
     };
-    
-    const startPlayback = () => {
-        cleanupSpeech(); // Reset before starting new playback
-        setIsPlaying(true);
-        setIsPaused(false);
-        setIsGenerating(false);
-
-        const fullText = translations.famous.historyContent;
-        // Split text into manageable chunks
-        const sentences = fullText.match(/[^.!?]+[.!?]+/g) || [fullText];
-        const chunks: string[] = [];
-        let currentChunk = "";
-        
-        sentences.forEach(sentence => {
-            if ((currentChunk + sentence).length > MAX_CHUNK_LENGTH) {
-                chunks.push(currentChunk);
-                currentChunk = sentence;
-            } else {
-                currentChunk += sentence;
-            }
-        });
-        if (currentChunk) {
-            chunks.push(currentChunk);
-        }
-        
-        textChunksRef.current = chunks;
-        currentChunkIndexRef.current = 0;
-        speakChunk(0);
-    }
     
     return (
         <div>
