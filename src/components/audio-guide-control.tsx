@@ -196,13 +196,13 @@ export function AudioGuideControl() {
              toast({
                 title: translations.audioGuide.started,
                 description: translations.audioGuide.startedDescription,
-                duration: 3000,
+                duration: 2000,
             });
         } else {
             stopLocationTracking();
             toast({
                 title: translations.audioGuide.stopped,
-                duration: 3000,
+                duration: 2000,
             });
         }
     };
@@ -210,7 +210,6 @@ export function AudioGuideControl() {
     const handleButtonClick = () => {
         if (status === 'narrating' || status === 'generating') {
             cancelNarration();
-            if (status !== 'idle') { setStatus('listening'); }
         } else {
             toggleGuide();
         }
