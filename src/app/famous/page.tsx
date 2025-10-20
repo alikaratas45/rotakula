@@ -8,8 +8,8 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { PlayIcon, PauseIcon, Loader2 } from 'lucide-react';
-import { generateAudio, type AudioRequest } from '@/ai/flows/audio-flow';
 
+const MAX_CHUNK_LENGTH = 200; // Max characters per speech chunk
 
 export default function FamousPage() {
     const { language, translations } = useLanguage();
@@ -18,88 +18,126 @@ export default function FamousPage() {
     
     const [isPlaying, setIsPlaying] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
-    const [isGenerating, setIsGenerating] = useState(false);
-    const audioRef = useRef<HTMLAudioElement | null>(null);
-    const audioSrcRef = useRef<string | null>(null);
+    const [isGenerating, setIsGenerating] = useState(false); // Used for initial voice loading
+    
+    const speechUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+    const textChunksRef = useRef<string[]>([]);
+    const currentChunkIndexRef = useRef<number>(0);
 
-    const cleanupAudio = useCallback(() => {
-        if (audioRef.current) {
-            audioRef.current.pause();
-            audioRef.current.remove();
-            audioRef.current = null;
+
+    const cleanupSpeech = useCallback(() => {
+        if (window.speechSynthesis.speaking) {
+            window.speechSynthesis.cancel();
         }
-        audioSrcRef.current = null;
         setIsPlaying(false);
         setIsPaused(false);
+        currentChunkIndexRef.current = 0;
     }, []);
 
     useEffect(() => {
         // Cleanup on language change or component unmount
         return () => {
-            cleanupAudio();
+            cleanupSpeech();
         };
-    }, [language, cleanupAudio]);
+    }, [language, cleanupSpeech]);
+    
+    const speakChunk = useCallback((chunkIndex: number) => {
+        if (chunkIndex >= textChunksRef.current.length) {
+            cleanupSpeech();
+            return;
+        }
+
+        const chunk = textChunksRef.current[chunkIndex];
+        const utterance = new SpeechSynthesisUtterance(chunk);
+        speechUtteranceRef.current = utterance;
+
+        const voices = window.speechSynthesis.getVoices();
+        const voiceLang = language === 'tr' ? 'tr-TR' : 'en-US';
+        
+        let selectedVoice = voices.find(v => v.lang === voiceLang && v.name.toLowerCase().includes('male'));
+        if (!selectedVoice) {
+            selectedVoice = voices.find(v => v.lang === voiceLang && v.name.toLowerCase().includes('erkek'));
+        }
+        if (!selectedVoice) {
+            selectedVoice = voices.find(v => v.lang === voiceLang);
+        }
+
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
+        }
+
+        utterance.onend = () => {
+            currentChunkIndexRef.current++;
+            speakChunk(currentChunkIndexRef.current);
+        };
+
+        utterance.onerror = (event) => {
+            console.error("SpeechSynthesisUtterance.onerror", event);
+            toast({
+                title: translations.toast.audioErrorTitle,
+                description: translations.toast.audioErrorDescription,
+                variant: "destructive"
+            });
+            cleanupSpeech();
+        };
+        
+        window.speechSynthesis.speak(utterance);
+    }, [language, cleanupSpeech, toast, translations]);
+
 
     const handlePlayPause = async () => {
         if (isGenerating) return;
 
-        if (audioRef.current) {
-            if (isPlaying && !isPaused) {
-                audioRef.current.pause();
-                setIsPaused(true);
+        if (isPlaying) {
+            if (isPaused) {
+                window.speechSynthesis.resume();
+                setIsPaused(false);
             } else {
-                audioRef.current.play();
-                setIsPaused(false);
+                window.speechSynthesis.pause();
+                setIsPaused(true);
             }
-            return;
-        }
-
-        try {
-            setIsGenerating(true);
-            const textToSpeak = translations.famous.historyContent;
-            
-            const response = await generateAudio({ text: textToSpeak });
-            audioSrcRef.current = response.media;
-
-            const newAudio = new Audio(audioSrcRef.current);
-            audioRef.current = newAudio;
-
-            newAudio.onplay = () => {
-                setIsPlaying(true);
-                setIsPaused(false);
-            };
-            newAudio.onpause = () => {
-                // This will be called for both pause and end of audio
-                 if (newAudio.currentTime < newAudio.duration) {
-                    setIsPaused(true);
-                }
-            };
-            newAudio.onended = () => {
-                cleanupAudio();
-            };
-            newAudio.onerror = () => {
-                toast({
-                    title: translations.toast.audioErrorTitle,
-                    description: translations.toast.audioErrorDescription,
-                    variant: "destructive"
-                });
-                cleanupAudio();
-            };
-            
-            await newAudio.play();
-
-        } catch (error) {
-            console.error("Audio generation failed:", error);
-            toast({
-                title: translations.toast.audioErrorTitle,
-                description: (error as Error).message || "Could not generate audio.",
-                variant: "destructive"
-            });
-            cleanupAudio();
-        } finally {
-            setIsGenerating(false);
+        } else {
+            setIsGenerating(true); // Show loader while preparing
+            // Ensure voices are loaded
+            const voices = window.speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                 window.speechSynthesis.onvoiceschanged = () => {
+                     startPlayback();
+                 };
+            } else {
+                 startPlayback();
+            }
         }
     };
+    
+    const startPlayback = () => {
+        cleanupSpeech(); // Reset before starting new playback
+        setIsPlaying(true);
+        setIsPaused(false);
+        setIsGenerating(false);
+
+        const fullText = translations.famous.historyContent;
+        // Split text into manageable chunks
+        const sentences = fullText.match(/[^.!?]+[.!?]+/g) || [fullText];
+        const chunks: string[] = [];
+        let currentChunk = "";
+        
+        sentences.forEach(sentence => {
+            if ((currentChunk + sentence).length > MAX_CHUNK_LENGTH) {
+                chunks.push(currentChunk);
+                currentChunk = sentence;
+            } else {
+                currentChunk += sentence;
+            }
+        });
+        if (currentChunk) {
+            chunks.push(currentChunk);
+        }
+        
+        textChunksRef.current = chunks;
+        currentChunkIndexRef.current = 0;
+        speakChunk(0);
+    }
     
     return (
         <div>

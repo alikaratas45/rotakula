@@ -12,8 +12,6 @@ import { Loader2 } from 'lucide-react';
 import { PlayIcon, PauseIcon } from '@/components/icons';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/context/language-context';
-import { generateAudio, type AudioRequest } from '@/ai/flows/audio-flow';
-
 
 export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
@@ -23,86 +21,95 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
     const [isPlaying, setIsPlaying] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
-    const audioRef = useRef<HTMLAudioElement | null>(null);
-    const audioSrcRef = useRef<string | null>(null);
+    const speechUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
     const { toast } = useToast();
 
-    const cleanupAudio = useCallback(() => {
-        if (audioRef.current) {
-            audioRef.current.pause();
-            audioRef.current.remove();
-            audioRef.current = null;
+    const cleanupSpeech = useCallback(() => {
+        if (window.speechSynthesis.speaking) {
+            window.speechSynthesis.cancel();
         }
-        audioSrcRef.current = null;
         setIsPlaying(false);
         setIsPaused(false);
     }, []);
 
     useEffect(() => {
-      // Cleanup on component unmount
-      return () => {
-        cleanupAudio();
-      };
-    }, [cleanupAudio, poi, language]);
+        return () => {
+            cleanupSpeech();
+        };
+    }, [cleanupSpeech, poi, language]);
 
     const handlePlayPause = useCallback(async () => {
         if (isGenerating) return;
 
-        if (audioRef.current) {
-            if (isPlaying && !isPaused) {
-                audioRef.current.pause();
-                setIsPaused(true);
-            } else {
-                audioRef.current.play();
+        if (isPlaying) {
+            if (isPaused) {
+                window.speechSynthesis.resume();
                 setIsPaused(false);
+            } else {
+                window.speechSynthesis.pause();
+                setIsPaused(true);
             }
             return;
         }
 
-        try {
-            setIsGenerating(true);
-            const response = await generateAudio({ text: poi.longDescription });
-            audioSrcRef.current = response.media;
+        setIsGenerating(true);
+        const voices = window.speechSynthesis.getVoices();
 
-            const newAudio = new Audio(audioSrcRef.current);
-            audioRef.current = newAudio;
+        const startPlayback = () => {
+            const utterance = new SpeechSynthesisUtterance(poi.longDescription);
+            speechUtteranceRef.current = utterance;
+            
+            const voiceLang = language === 'tr' ? 'tr-TR' : 'en-US';
+            const availableVoices = window.speechSynthesis.getVoices();
+            
+            let selectedVoice = availableVoices.find(v => v.lang === voiceLang && v.name.toLowerCase().includes('male'));
+            if (!selectedVoice) {
+                selectedVoice = availableVoices.find(v => v.lang === voiceLang && v.name.toLowerCase().includes('erkek'));
+            }
+            if (!selectedVoice) {
+                selectedVoice = availableVoices.find(v => v.lang === voiceLang);
+            }
+            if (selectedVoice) {
+                utterance.voice = selectedVoice;
+            }
 
-            newAudio.onplay = () => {
+            utterance.onstart = () => {
                 setIsPlaying(true);
                 setIsPaused(false);
+                setIsGenerating(false);
             };
-            newAudio.onpause = () => {
-                if (newAudio.currentTime < newAudio.duration) {
-                    setIsPaused(true);
-                }
+            utterance.onpause = () => {
+                setIsPaused(true);
             };
-            newAudio.onended = () => {
-                cleanupAudio();
+            utterance.onresume = () => {
+                setIsPaused(false);
             };
-            newAudio.onerror = () => {
+            utterance.onend = () => {
+                cleanupSpeech();
+            };
+            utterance.onerror = () => {
                 toast({
                     title: translations.toast.audioErrorTitle,
                     description: translations.toast.audioErrorDescription,
                     variant: "destructive"
                 });
-                cleanupAudio();
+                cleanupSpeech();
             };
             
-            await newAudio.play();
-
-        } catch (error) {
-            console.error("Audio generation failed:", error);
-            toast({
-                title: translations.toast.audioErrorTitle,
-                description: (error as Error).message || "Could not generate audio.",
-                variant: "destructive"
-            });
-            cleanupAudio();
-        } finally {
+            window.speechSynthesis.speak(utterance);
+        };
+        
+        if (voices.length === 0) {
+            window.speechSynthesis.onvoiceschanged = () => {
+                setIsGenerating(false);
+                startPlayback();
+            };
+        } else {
             setIsGenerating(false);
+            startPlayback();
         }
 
-    }, [poi.longDescription, isPlaying, isPaused, isGenerating, cleanupAudio, toast, translations]);
+    }, [poi.longDescription, isPlaying, isPaused, isGenerating, cleanupSpeech, toast, translations, language]);
 
     return (
         <APIProvider apiKey={apiKey}>

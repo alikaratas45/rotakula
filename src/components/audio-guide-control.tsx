@@ -15,7 +15,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useLanguage } from '@/context/language-context';
-import { generateAudio } from '@/ai/flows/audio-flow';
 
 
 const PROXIMITY_THRESHOLD = 50; // meters
@@ -32,16 +31,12 @@ export function AudioGuideControl() {
     const { toast, dismiss } = useToast();
     
     const [narratingPoi, setNarratingPoi] = useState<PointOfInterest | null>(null);
-    const audioRef = useRef<HTMLAudioElement | null>(null);
-    const audioSrcRef = useRef<string | null>(null);
+    const speechUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
     const cancelNarration = useCallback(() => {
-        if (audioRef.current) {
-            audioRef.current.pause();
-            audioRef.current.remove();
-            audioRef.current = null;
+        if (window.speechSynthesis.speaking) {
+            window.speechSynthesis.cancel();
         }
-        audioSrcRef.current = null;
         setNarratingPoi(null);
         if (status !== 'idle') {
             setStatus('listening');
@@ -111,23 +106,34 @@ export function AudioGuideControl() {
              return;
         }
         
-        try {
-            setStatus('generating');
-            setNarratingPoi(poi); // Set POI early for UI feedback
+        setStatus('generating');
+        setNarratingPoi(poi);
 
-            const response = await generateAudio({ text: poi.description });
-            audioSrcRef.current = response.media;
+        const startPlayback = () => {
+            const utterance = new SpeechSynthesisUtterance(poi.description);
+            speechUtteranceRef.current = utterance;
 
-            const newAudio = new Audio(audioSrcRef.current);
-            audioRef.current = newAudio;
+            const voiceLang = language === 'tr' ? 'tr-TR' : 'en-US';
+            const voices = window.speechSynthesis.getVoices();
 
-            newAudio.onplay = () => {
+            let selectedVoice = voices.find(v => v.lang === voiceLang && v.name.toLowerCase().includes('male'));
+            if (!selectedVoice) {
+                selectedVoice = voices.find(v => v.lang === voiceLang && v.name.toLowerCase().includes('erkek'));
+            }
+            if (!selectedVoice) {
+                selectedVoice = voices.find(v => v.lang === voiceLang);
+            }
+            if (selectedVoice) {
+                utterance.voice = selectedVoice;
+            }
+
+            utterance.onstart = () => {
                 setStatus('narrating');
             };
-            newAudio.onended = () => {
+            utterance.onend = () => {
                 cancelNarration();
             };
-            newAudio.onerror = () => {
+            utterance.onerror = () => {
                 toast({
                     title: translations.toast.audioErrorTitle,
                     description: translations.toast.audioErrorDescription,
@@ -135,20 +141,17 @@ export function AudioGuideControl() {
                 });
                 cancelNarration();
             };
-            
-            await newAudio.play();
 
-        } catch (error) {
-             console.error("Audio generation failed:", error);
-            toast({
-                title: translations.toast.audioErrorTitle,
-                description: (error as Error).message || "Could not generate audio.",
-                variant: "destructive"
-            });
-            cancelNarration();
+            window.speechSynthesis.speak(utterance);
+        };
+        
+        if (window.speechSynthesis.getVoices().length === 0) {
+            window.speechSynthesis.onvoiceschanged = startPlayback;
+        } else {
+            startPlayback();
         }
 
-    }, [status, toast, cancelNarration, translations]);
+    }, [status, toast, cancelNarration, translations, language]);
 
 
     useEffect(() => {
