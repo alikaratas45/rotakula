@@ -4,8 +4,9 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import tr from '@/lib/locales/tr.json';
 import en from '@/lib/locales/en.json';
+import fr from '@/lib/locales/fr.json';
 
-type Language = 'tr' | 'en';
+type Language = 'tr' | 'en' | 'fr';
 
 interface LanguageContextType {
   language: Language;
@@ -13,7 +14,7 @@ interface LanguageContextType {
   translations: typeof tr;
 }
 
-const translations = { tr, en };
+const translations = { tr, en, fr };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
@@ -22,12 +23,12 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const storedLang = localStorage.getItem('rota-kula-language') as Language;
-    if (storedLang && (storedLang === 'tr' || storedLang === 'en')) {
+    if (storedLang && (storedLang === 'tr' || storedLang === 'en' || storedLang === 'fr')) {
       setLanguage(storedLang);
     } else {
         const browserLang = navigator.language.split('-')[0];
-        if (browserLang === 'en') {
-            setLanguage('en');
+        if (browserLang === 'en' || browserLang === 'fr') {
+            setLanguage(browserLang);
         }
     }
   }, []);

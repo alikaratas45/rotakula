@@ -13,12 +13,12 @@ const stories: Story[] = storiesData.stories;
 const DELAY = 50;
 
 function translateItem<T extends { [key: string]: any }>(item: T, lang: string): T {
-    if (lang === 'en') {
+    if (lang !== 'tr') { // Default is Turkish, so only translate if not Turkish
         const translatedItem = { ...item };
         Object.keys(item).forEach(key => {
-            const enKey = `${key}_en`;
-            if (enKey in item) {
-                translatedItem[key] = item[enKey];
+            const langKey = `${key}_${lang}`;
+            if (langKey in item) {
+                translatedItem[key] = item[langKey];
             }
         });
         return translatedItem;

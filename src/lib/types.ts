@@ -18,6 +18,10 @@ export type PointOfInterest = {
   description_en?: string;
   longDescription_en?: string;
   category_en?: string;
+  name_fr?: string;
+  description_fr?: string;
+  longDescription_fr?: string;
+  category_fr?: string;
 };
 
 export type ThematicRoute = {
@@ -31,6 +35,9 @@ export type ThematicRoute = {
   title_en?: string;
   description_en?: string;
   longDescription_en?: string;
+  title_fr?: string;
+  description_fr?: string;
+  longDescription_fr?: string;
 };
 
 export type Story = {
@@ -45,4 +52,7 @@ export type Story = {
   title_en?: string;
   excerpt_en?: string;
   content_en?: string;
+  title_fr?: string;
+  excerpt_fr?: string;
+  content_fr?: string;
 };

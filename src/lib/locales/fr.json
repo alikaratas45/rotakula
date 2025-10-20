@@ -1,0 +1,115 @@
+{
+    "nav": {
+        "home": "Accueil",
+        "stories": "Histoires",
+        "places": "Lieux",
+        "about": "À propos de Kula",
+        "food": "Arrêts Gourmands",
+        "accommodation": "Hébergement",
+        "nearby": "Qu'y a-t-il autour de moi ?",
+        "myRoutes": "Mes Itinéraires"
+    },
+    "header": {
+        "menu": "Menu",
+        "menuDescription": "Vous pouvez utiliser les liens ci-dessous pour naviguer dans l'application."
+    },
+    "home": {
+        "heroTitle": "Découvrez les trésors cachés de Kula",
+        "heroSubtitle": "Une aventure vous attend, du Géoparc Mondial de l'UNESCO aux maisons historiques, des saveurs uniques aux beautés naturelles.",
+        "exploreNow": "Explorer Maintenant",
+        "routeOfWeek": "Itinéraire de la Semaine",
+        "thematicRoutes": "Itinéraires Thématiques"
+    },
+    "stories": {
+        "title": "Histoires de Kula"
+    },
+    "pois": {
+        "title": "Lieux à Visiter",
+        "details": "Informations Détaillées",
+        "listen": "Écouter",
+        "pause": "Pause",
+        "listenNarration": "Écouter la narration",
+        "pauseNarration": "Mettre la narration en pause"
+    },
+    "food": {
+        "title": "Arrêts Gourmands",
+        "nearbyRestaurants": "Restaurants à Proximité",
+        "nearbyDescription": "La carte montre les options de restauration à proximité en fonction de votre emplacement. Vous pouvez explorer la carte pour découvrir de nouveaux endroits.",
+        "editorsChoice": "Le Choix de l'Éditeur : Saveurs en Vedette",
+        "featuredFlavor": "Saveur en Vedette"
+    },
+    "accommodation": {
+        "title": "Hébergement",
+        "openInGoogleMaps": "Ouvrir dans Google Maps"
+    },
+    "myRoutes": {
+        "title": "Mes Itinéraires",
+        "remove": "Supprimer",
+        "noRoutes": "Vous n'avez pas encore d'itinéraires enregistrés.",
+        "noRoutesDescription": "Parcourez les itinéraires pour commencer à explorer Kula.",
+        "exploreRoutes": "Explorer les Itinéraires"
+    },
+    "nearby": {
+        "title": "Qu'y a-t-il Autour de Moi ?",
+        "description": "Les lieux dans un rayon de 20 km de votre emplacement actuel sont listés ci-dessous.",
+        "gettingLocation": "Obtention de votre emplacement, veuillez patienter...",
+        "locationError": "Impossible d'obtenir votre emplacement. Veuillez vérifier les autorisations de localisation de votre navigateur.",
+        "noPoisFound": "Aucun point d'intérêt trouvé à moins de 20 km de votre emplacement.",
+        "distance": "Distance"
+    },
+    "route": {
+        "mapTitle": "Carte de l'Itinéraire",
+        "whatsOnThisRoute": "Qu'y a-t-il sur cet itinéraire ?",
+        "routeInfo": "Informations sur l'itinéraire",
+        "saveRoute": "Enregistrer l'itinéraire",
+        "saved": "Enregistré",
+        "stops": "Arrêts"
+    },
+    "audioGuide": {
+        "title": "Audio Guide",
+        "start": "Démarrer l'Audio Guide",
+        "active": "Audio Guide Actif : Écoute des lieux. Cliquez pour désactiver.",
+        "activeShort": "Guide Actif",
+        "narrating": "Narration",
+        "generating": "Génération",
+        "started": "Audio Guide Démarré",
+        "startedDescription": "Vous recevrez des notifications pour les lieux à proximité.",
+        "stopped": "Audio Guide Arrêté",
+        "nearby": "📍 Vous êtes à proximité",
+        "nearbyDescription": "Cliquez sur le bouton pour écouter la narration."
+    },
+    "map": {
+        "yourLocation": "Votre Emplacement",
+        "loading": "Chargement de la carte...",
+        "locationError": "Impossible d'obtenir les informations de localisation. Assurez-vous d'avoir autorisé l'accès à la localisation dans les paramètres de votre navigateur.",
+        "noRestaurantsFound": "Aucun restaurant trouvé à proximité.",
+        "searchError": "Une erreur s'est produite lors de la recherche de restaurants.",
+        "gettingLocation": "Obtention de votre emplacement...",
+        "reviews": "avis"
+    },
+    "toast": {
+        "unsupportedTitle": "Non Pris en Charge",
+        "unsupportedDescription": "Votre navigateur ne prend pas en charge la fonction de narration audio.",
+        "audioErrorTitle": "Erreur Audio",
+        "audioErrorDescription": "Une erreur s'est produite lors de la narration audio",
+        "audioGuideUnsupported": "Votre navigateur ne prend pas en charge les services de localisation ou de synthèse vocale nécessaires pour la fonction d'audio guide.",
+        "locationErrorTitle": "Erreur de Localisation",
+        "locationErrorDescription": "Impossible d'accéder à votre emplacement. Veuillez vérifier les paramètres de votre navigateur.",
+        "errorTitle": "Erreur",
+        "saveErrorDescription": "Un problème est survenu lors de l'enregistrement de votre itinéraire.",
+        "savedTitle": "Enregistré",
+        "savedDescription": "L'itinéraire a été ajouté à la page 'Mes Itinéraires'.",
+        "removedTitle": "Supprimé",
+        "removedDescription": "L'itinéraire a été supprimé de la page 'Mes Itinéraires'."
+    },
+    "common": {
+        "loading": "Chargement",
+        "map": "Carte",
+        "moreInfo": "Plus d'Infos"
+    },
+    "famous": {
+        "pageTitle": "À propos de Kula",
+        "continueNarration": "Continuer",
+        "historyContent": "La région volcanique autour de Kula était appelée Katakekaumene dans l'antiquité. Cette expression, signifiant ''Terre Brûlée, Calcinée'', se retrouve dans les œuvres d'écrivains anciens tels que Strabon d'Amasée (54 av. J.-C. – 24 apr. J.-C.), Vitruve (Ier siècle av. J.-C.), Stéphanos de Byzance (VIe-VIIe siècles apr. J.-C.), et Eustathe (XIIe siècle apr. J.-C.). Alors que d'autres écrivains ne mentionnent le nom de la région qu'à différentes occasions, Strabon fournit également une description détaillée de Katakekaumene : '…Puis vient la terre appelée Katakekaumene, qui mesure 500 stades (9 km) de long et 400 stades (7 km) de large. Elle est appelée à la fois Mysie et Maionie (Gökçeören/Menye). À l'exception des vignobles qui produisent le vin de Katakekaumene, qui n'est en rien inférieur à ses rivaux en qualité, tout est stérile. La surface de la plaine est couverte de cendres. La noirceur des terres montagneuses et rocheuses est attribuée aux incendies ici. Mais maintenant, certains expliquent cela par un feu résultant d'explosions souterraines et racontent ensuite le conte de Typhon. Mais il n'est pas juste de penser que toute la région est arrivée à cet état en une seule fois pour de telles raisons. La vraie raison en est le feu venant du sous-sol, et la source de ce feu est maintenant éteinte. Il y a ici trois fosses qu'ils appellent ''soufflets'', distantes de 40 stades les unes des autres. Une colline s'élève à côté de chacune d'elles. On pense à juste titre que celles-ci ont été formées par la matière chaude éjectée du sous-sol.' Ailleurs dans son œuvre, en décrivant la Phrygie, Strabon mentionne Katakekaumene et fait référence aux tremblements de terre dans la ville voisine d'Alaşehir, c'est-à-dire Philadelphie : 'La raison pour laquelle Katakekaumene, habitée par les Lydiens et les Mysiens, reçoit ce nom est la suivante : même les murs de la ville voisine de Philadelphie ne sont pas sûrs. Car cet endroit est secoué chaque jour et des fissures apparaissent. Tous les habitants ici sont attentifs à ces tremblements de terre et construisent leurs structures en conséquence. ...Magnésie au pied du mont Sipyle a subi de grands dommages lors du tremblement de terre qui s'est produit à notre époque et a gravement détruit non seulement Sardes mais aussi de nombreuses autres villes célèbres. Et l'empereur a donné de l'argent et reconstruit ces villes.'\n\nMais sous le règne de l'empereur romain Dèce (249–251 apr. J.-C.), le chef Pionius, tué par des païens, interprète cet état de la région comme une punition de Dieu aux incroyants tout en se défendant : ‘‘Ne voyez-vous pas la terre brûlée de Lydie, qui est un exemple pour les infidèles ?’’.Ces tremblements de terre, et en particulier le tremblement de terre de 17 apr. J.-C. mentionné par Strabon, ont sans aucun doute détruit la volcanique Katakekaumene. Il n'y a aucune information sur la destruction causée by ce tremblement de terre, qui a affecté toute l'Anatolie occidentale et même les îles de la mer Égée, dans les colonies autour de Kula.\n\nIl a été prouvé que Katakekaumene était la zone entourée par l'actuelle Kula et Esenyazı au sud, la rivière Gediz au nord, Gökçeören/Menye (Maionie) à l'ouest, et Kollyda (İncesu/Gölde) à l'est. Les deux villes de Katakekaumene, Maionie et Kollyda, ont été fondées sur la Route Royale, la première route commerciale du monde, partant de Sardes (Sart) et allant à la ville de Suse dans l'État perse (Iran). D'autres villes sont Thermai Theseos (Şehitlioğlu), Tabala (Güvercinlik), et Satala (Sandal). De plus, de nombreux villages anciens ont été établis, principalement près de la rivière Gediz. Ces colonies sont Koresa à Körez, Dora à Ayvatlar, Alkileura, Dima, Kerbia et Axiotta près de Hamidiye, et Iaza à Ayazören.\n\nOn pense que Kula était l'une des régions militaires et administratives byzantines, Opsikion, entre le 7e et le 11e siècle. Pendant la période byzantine, le pays était divisé en sections administratives et principalement défensives appelées Thema, initialement 4 puis 40, chacune dirigée par un Stratège (commandant). Selon des sources byzantines, un Thema appelé Opsikion a été établi dans le nord-ouest de l'Anatolie au 7ème siècle, et ce Thema a même été divisé en two au 9ème siècle.\n\nL'historien byzantin Pachymeres mentionne que Kula était une position fortifiée qui changeait fréquemment de mains entre les Turcs et les Byzantins. Le nom de la région pendant la période byzantine était Opsikion. L'interprétation de Ramsay selon laquelle Kula, qu'il accepte comme un mot purement turc, est lié à 'kale' (forteresse), qui signifie une ville fortifiée, est l'opinion la plus courante à ce sujet. Après que la fortification soit tombée aux mains des Turcs, les Byzantins ont utilisé ce nom pour Kula. En 1306, Roger De Flor a marché sur Philadelphie (Alaşehir) avec les Catalans sous son commandement et a avancé de là pour capturer Kula.\n\nL'histoire de la période turque de Kula a été clarifiée, en particulier à partir de la principauté de Germiyanides. Il est enregistré dans la célèbre fondation en pierre de Yakup Bey II que son père, Mehmet Bey (1340–1361), qui succéda à Yakup Bey I (1300–1340) à la tête de la principauté de Germiyanides, reprit Kula et Simav, que les Catalans avaient pris aux Turcs. 'Mon aïeul Mehmet Bey a pris Kula (Küldi) à l'infidèle, et mon aïeul Mehmet Bey a également pris le lac de Simav à l'infidèle. J'ai rendu cela légal pour les héritiers restants et j'ai doté ceux-ci.' Après Mehmet Bey, son fils Süleyman Şah lui succéda dans la principauté de Germiyanides. Les premières années du règne de Süleyman Şah (1361-1387) furent pacifiques. Cependant, son soutien à İlyas Bey des Hamidoğulları dans la lutte entre les Karamanides et les Hamidoğulları provoqua une rupture avec les Karamanides. En raison de cette pression, Süleyman Şah voulut conclure un accord avec les Ottomans. À cette fin, il maria sa fille Devlet Hatun à Yıldırım Bayezid, le fils du sultan Murad I, établissant ainsi des liens de parenté avec les Ottomans. En dot pour sa fille Devlet Hatun, il donna Kütahya, Tavşanlı, Simav et Emet aux Ottomans, et il se retira lui-même dans la ville de Kula, la déclarant capitale de la principauté. Ainsi, une partie des terres des Germiyanides passa sous domination ottomane. Süleyman Şah est décédé en 1388. Il a été enterré dans la madrasa Gürhane qu'il avait fait construire à Kula.\n\nAprès que Yıldırım Beyazıt soit monté sur le trône, le Bey germiyanide Yakup Çelebi, fils de Süleyman Şah, commença à récupérer les terres laissées aux Ottomans en dot de sa sœur. Sur ce, Yıldırım Beyazıt intégra la principauté germiyanide au territoire ottoman. Après la bataille d'Ankara en 1402, Timur rendit les terres de la principauté à Yakup Bey. Des sources ottomanes affirment que Yakup Bey II est venu dans la capitale Edirne en 1428, a légué la principauté germiyanide au sultan Murad II et est décédé en 1429. Sous l'administration ottomane, Kütahya est devenue le centre du sandjak. Kula était administrée comme un kaza (district) subordonné au sandjak de Kütahya. Sur la recommandation du gouverneur d'İzmir, il a été jugé approprié de rattacher le kaza de Kula au Sandjak de Saruhan à partir de mars 1852.\n\nAprès la Première Guerre mondiale, les territoires de l'Empire ottoman, qui signa l'Armistice de Mudros (30 octobre 1918), furent bientôt occupés. Le 15 mai 1919, les Grecs, avec le soutien des puissances alliées, débarquèrent des troupes à İzmir avec l'intention d'occuper toute la région égéenne. Les forces grecques sous le général Nider occupèrent le district de Kula le 28 juin 1920. Avec la victoire à la bataille de Dumlupınar le 30 août 1922, les forces grecques dispersées commencèrent à fuir vers İzmir. Fahrettin Altay, le commandant du corps, suivit l'ennemi avec la 2ème unité de cavalerie sous son commandement, et le 4 septembre 1922, les forces turques entrèrent dans Kula, libérant la ville de l'occupation et la ramenant sous administration nationale.\n\nLa ville de Kula, dont la fondation remonte aux profondeurs de l'histoire, porte toutes les traces du passé jusqu'à nos jours. La ville de Kula est aujourd'hui une porte s'ouvrant du passé au présent."
+    }
+}

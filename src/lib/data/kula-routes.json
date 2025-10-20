@@ -10,7 +10,10 @@
       "poiIds": ["poi-18", "poi-12", "poi-2", "poi-3", "poi-1"],
       "title_en": "Geopark Discovery Route",
       "description_en": "Witness Kula's volcanic past and discover its geological wonders.",
-      "longDescription_en": "This route takes you to the heart of Turkey's first and only UNESCO Global Geopark. See millions of years of geological formations, extinct volcanoes, and lava flows up close. An unforgettable experience for nature and science enthusiasts."
+      "longDescription_en": "This route takes you to the heart of Turkey's first and only UNESCO Global Geopark. See millions of years of geological formations, extinct volcanoes, and lava flows up close. An unforgettable experience for nature and science enthusiasts.",
+      "title_fr": "Route de Découverte du Géoparc",
+      "description_fr": "Soyez témoin du passé volcanique de Kula et découvrez ses merveilles géologiques.",
+      "longDescription_fr": "Cet itinéraire vous emmène au cœur du premier et unique Géoparc Mondial de l'UNESCO en Turquie. Observez de près des formations géologiques de plusieurs millions d'années, des volcans éteints et des coulées de lave. Une expérience inoubliable pour les amateurs de nature et de science."
     },
     {
       "id": "route-2",
@@ -22,7 +25,10 @@
       "poiIds": ["poi-4", "poi-5", "poi-6"],
       "title_en": "Feel the Historic Texture",
       "description_en": "Take a journey through time among the finest examples of Ottoman architecture.",
-      "longDescription_en": "Get lost in the narrow streets of Kula, listen to the stories of centuries-old mansions, and meet the artisans who keep traditional crafts alive. This walking route will make you feel the rich cultural heritage of Kula."
+      "longDescription_en": "Get lost in the narrow streets of Kula, listen to the stories of centuries-old mansions, and meet the artisans who keep traditional crafts alive. This walking route will make you feel the rich cultural heritage of Kula.",
+      "title_fr": "Ressentez la Texture Historique",
+      "description_fr": "Faites un voyage dans le temps parmi les plus beaux exemples de l'architecture ottomane.",
+      "longDescription_fr": "Perdez-vous dans les rues étroites de Kula, écoutez les histoires des manoirs centenaires et rencontrez les artisans qui maintiennent les métiers traditionnels en vie. Cet itinéraire de marche vous fera ressentir le riche patrimoine culturel de Kula."
     },
     {
       "id": "route-3",
@@ -34,7 +40,10 @@
       "poiIds": ["poi-8"],
       "title_en": "Kula Flavor Tour",
       "description_en": "A gastronomic adventure where you will experience the unique and authentic tastes of Kula.",
-      "longDescription_en": "Taste the most special flavors of Kula cuisine, from wood-fired meatballs to the famous güveç, from sweet pide to local herbs. This route brings together the best flavor stops in Kula for gourmet travelers."
+      "longDescription_en": "Taste the most special flavors of Kula cuisine, from wood-fired meatballs to the famous güveç, from sweet pide to local herbs. This route brings together the best flavor stops in Kula for gourmet travelers.",
+      "title_fr": "Tour des Saveurs de Kula",
+      "description_fr": "Une aventure gastronomique où vous découvrirez les goûts uniques et authentiques de Kula.",
+      "longDescription_fr": "Goûtez aux saveurs les plus spéciales de la cuisine de Kula, des boulettes de viande cuites au feu de bois au célèbre güveç, du pide sucré aux herbes locales. Cet itinéraire rassemble les meilleurs arrêts gourmands de Kula pour les voyageurs gourmets."
     },
     {
       "id": "route-4",
@@ -46,7 +55,10 @@
       "poiIds": ["poi-10", "poi-11", "poi-13", "poi-14", "poi-15", "poi-16", "poi-17"],
       "title_en": "Our Historic Villages",
       "description_en": "Discover Kula's authentic village life and hidden historical beauties.",
-      "longDescription_en": "Step outside of Kula's center and spend a peaceful day in historic villages that will greet you with their centuries-old stone houses, quiet streets, and lush nature. This route is ideal for experiencing the rural life and cultural richness of Kula."
+      "longDescription_en": "Step outside of Kula's center and spend a peaceful day in historic villages that will greet you with their centuries-old stone houses, quiet streets, and lush nature. This route is ideal for experiencing the rural life and cultural richness of Kula.",
+      "title_fr": "Nos Villages Historiques",
+      "description_fr": "Découvrez la vie de village authentique de Kula et ses beautés historiques cachées.",
+      "longDescription_fr": "Sortez du centre de Kula et passez une journée paisible dans des villages historiques qui vous accueilleront avec leurs maisons en pierre centenaires, leurs rues calmes et leur nature luxuriante. Cet itinéraire est idéal pour découvrir la vie rurale et la richesse culturelle de Kula."
     }
   ]
 }

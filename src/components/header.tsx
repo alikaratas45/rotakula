@@ -16,10 +16,16 @@ import {
   SheetDescription,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { AudioGuideControl } from "./audio-guide-control";
 import { useLanguage } from "@/context/language-context";
 import { Globe } from "lucide-react";
-import { TurkishFlagIcon, UKFlagIcon } from "./icons";
+import { TurkishFlagIcon, UKFlagIcon, FrenchFlagIcon } from "./icons";
 
 
 export function Header() {
@@ -41,11 +47,38 @@ export function Header() {
     const handleLinkClick = () => {
         setIsSheetOpen(false);
     };
-
-    const toggleLanguage = () => {
-        setLanguage(language === 'tr' ? 'en' : 'tr');
-    }
     
+    const LanguageSelector = ({ isMobile = false }: { isMobile?: boolean }) => (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                {isMobile ? (
+                    <Button variant="ghost" size="icon" aria-label="Change language">
+                        <Globe className="h-6 w-6" />
+                    </Button>
+                ) : (
+                    <Button variant="outline" size="sm">
+                        <Globe className="mr-2 h-4 w-4" />
+                        {language.toUpperCase()}
+                    </Button>
+                )}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align={isMobile ? "end" : "end"}>
+                <DropdownMenuItem onClick={() => setLanguage('tr')}>
+                    <TurkishFlagIcon className="mr-2 h-4 w-4 rounded-sm" />
+                    <span>Türkçe</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLanguage('en')}>
+                    <UKFlagIcon className="mr-2 h-4 w-4 rounded-sm" />
+                    <span>English</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLanguage('fr')}>
+                    <FrenchFlagIcon className="mr-2 h-4 w-4 rounded-sm" />
+                    <span>Français</span>
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    );
+
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container flex h-16 items-center">
@@ -81,9 +114,7 @@ export function Header() {
                     </Link>
                     <div className="flex items-center gap-1">
                         <AudioGuideControl />
-                        <Button variant="ghost" size="icon" onClick={toggleLanguage} aria-label="Change language">
-                             {language === 'tr' ? <UKFlagIcon className="h-5 w-5 rounded-sm" /> : <TurkishFlagIcon className="h-5 w-5 rounded-sm" />}
-                        </Button>
+                        <LanguageSelector isMobile={true} />
                         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                            <SheetTrigger asChild>
                                <Button variant="ghost">
@@ -121,19 +152,7 @@ export function Header() {
                 {/* Desktop right side */}
                 <div className="hidden md:flex flex-1 items-center justify-end gap-2">
                     <AudioGuideControl />
-                    <Button variant="outline" size="sm" onClick={toggleLanguage}>
-                        {language === 'tr' ? (
-                            <>
-                                <UKFlagIcon className="mr-2 h-4 w-4 rounded-sm" />
-                                <span>English</span>
-                            </>
-                        ) : (
-                            <>
-                                <TurkishFlagIcon className="mr-2 h-4 w-4 rounded-sm" />
-                                <span>Türkçe</span>
-                            </>
-                        )}
-                    </Button>
+                    <LanguageSelector />
                 </div>
             </div>
         </header>
