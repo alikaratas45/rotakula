@@ -4,7 +4,7 @@
         "home": "Ana Sayfa",
         "stories": "Hikayeler",
         "places": "Yerler",
-        "famous": "Nesi Meşhur",
+        "about": "Kula Hakkında",
         "food": "Lezzet Durakları",
         "accommodation": "Konaklama",
         "nearby": "Çevremde Ne Var?",
@@ -107,7 +107,7 @@
         "moreInfo": "Daha Fazla Bilgi"
     },
     "famous": {
-        "pageTitle": "Kula'nın Nesi Meşhur?",
+        "pageTitle": "Kula Hakkında",
         "intro": "Kula, tarih ve doğanın iç içe geçtiği eşsiz bir yerleşim yeridir. İşte Kula'yı özel kılan bazı meşhur özellikleri...",
         "geoparkTitle": "İlk ve Tek UNESCO Jeoparkı",
         "geoparkDescription": "Kula, Türkiye'nin ilk ve tek UNESCO Global Jeoparkı'na ev sahipliği yapmaktadır. Volkan konileri, lav akıntıları ve peri bacaları ile adeta başka bir gezegeni andıran manzaralar sunar. Doğa ve jeoloji meraklıları için mutlaka görülmesi gereken bir yerdir.",

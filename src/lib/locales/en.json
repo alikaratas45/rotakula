@@ -4,7 +4,7 @@
         "home": "Home",
         "stories": "Stories",
         "places": "Places",
-        "famous": "What's Famous",
+        "about": "About Kula",
         "food": "Flavor Stops",
         "accommodation": "Accommodation",
         "nearby": "What's Around Me?",
@@ -107,7 +107,7 @@
         "moreInfo": "More Info"
     },
     "famous": {
-        "pageTitle": "What is Kula Famous For?",
+        "pageTitle": "About Kula",
         "intro": "Kula is a unique town where history and nature intertwine. Here are some of the features that make Kula special...",
         "geoparkTitle": "First and Only UNESCO Geopark",
         "geoparkDescription": "Kula is home to Turkey's first and only UNESCO Global Geopark. With its volcanic cones, lava flows, and fairy chimneys, it offers a landscape that feels like another planet. It's a must-see for nature and geology enthusiasts.",

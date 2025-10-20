@@ -31,7 +31,7 @@ export function Header() {
         { href: "/", label: translations.nav.home },
         { href: "/stories", label: translations.nav.stories },
         { href: "/pois", label: translations.nav.places },
-        { href: "/famous", label: translations.nav.famous },
+        { href: "/famous", label: translations.nav.about },
         { href: "/food", label: translations.nav.food },
         { href: "/accommodation", label: translations.nav.accommodation },
         { href: "/nearby", label: translations.nav.nearby },
