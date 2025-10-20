@@ -3,7 +3,8 @@
     "nav": {
         "home": "Home",
         "stories": "Stories",
-        "places": "Places to Visit",
+        "places": "Places",
+        "famous": "What's Famous",
         "food": "Flavor Stops",
         "accommodation": "Accommodation",
         "nearby": "What's Around Me?",
@@ -104,5 +105,17 @@
         "loading": "Loading",
         "map": "Map",
         "moreInfo": "More Info"
+    },
+    "famous": {
+        "pageTitle": "What is Kula Famous For?",
+        "intro": "Kula is a unique town where history and nature intertwine. Here are some of the features that make Kula special...",
+        "geoparkTitle": "First and Only UNESCO Geopark",
+        "geoparkDescription": "Kula is home to Turkey's first and only UNESCO Global Geopark. With its volcanic cones, lava flows, and fairy chimneys, it offers a landscape that feels like another planet. It's a must-see for nature and geology enthusiasts.",
+        "housesTitle": "Historic Ottoman Houses",
+        "housesDescription": "The streets of Kula are adorned with elegant houses that are among the finest examples of Ottoman civil architecture. These houses, with their bay windows and intricate woodwork, take visitors on a historical journey.",
+        "craftsTitle": "Traditional Handicrafts",
+        "craftsDescription": "Kula keeps centuries-old handicrafts alive. You can visit the workshops of masters in trades such as coppersmithing, saddle making, and blacksmithing in the historic bazaar and witness these dying arts.",
+        "foodTitle": "Unique Local Flavors",
+        "foodDescription": "Kula's cuisine offers unique tastes. You must try the famous 'odun köftesi' (wood-fired meatballs), 'Kula güveci' (Kula-style stew), and especially the 'şekerli pide' (sweet pide with tahini)."
     }
 }

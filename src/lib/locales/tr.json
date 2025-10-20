@@ -3,7 +3,8 @@
     "nav": {
         "home": "Ana Sayfa",
         "stories": "Hikayeler",
-        "places": "Gezilecek Yerler",
+        "places": "Yerler",
+        "famous": "Nesi Meşhur",
         "food": "Lezzet Durakları",
         "accommodation": "Konaklama",
         "nearby": "Çevremde Ne Var?",
@@ -104,5 +105,17 @@
         "loading": "Yükleniyor",
         "map": "Harita",
         "moreInfo": "Daha Fazla Bilgi"
+    },
+    "famous": {
+        "pageTitle": "Kula'nın Nesi Meşhur?",
+        "intro": "Kula, tarih ve doğanın iç içe geçtiği eşsiz bir yerleşim yeridir. İşte Kula'yı özel kılan bazı meşhur özellikleri...",
+        "geoparkTitle": "İlk ve Tek UNESCO Jeoparkı",
+        "geoparkDescription": "Kula, Türkiye'nin ilk ve tek UNESCO Global Jeoparkı'na ev sahipliği yapmaktadır. Volkan konileri, lav akıntıları ve peri bacaları ile adeta başka bir gezegeni andıran manzaralar sunar. Doğa ve jeoloji meraklıları için mutlaka görülmesi gereken bir yerdir.",
+        "housesTitle": "Tarihi Osmanlı Evleri",
+        "housesDescription": "Kula sokakları, Osmanlı sivil mimarisinin en zarif örneklerinden olan evlerle süslüdür. Cumbaları ve ahşap işçilikleriyle bu evler, ziyaretçilerini tarihi bir yolculuğa çıkarır.",
+        "craftsTitle": "Geleneksel El Sanatları",
+        "craftsDescription": "Kula, asırlık el sanatlarını hala yaşatmaktadır. Tarihi çarşıda bakırcılık, semercilik, demircilik gibi mesleklerin ustalarını atölyelerinde ziyaret edebilir, kaybolmaya yüz tutmuş bu sanatlara tanıklık edebilirsiniz.",
+        "foodTitle": "Benzersiz Yöresel Lezzetler",
+        "foodDescription": "Kula mutfağı kendine has tatlar sunar. Meşhur odun köftesi, Kula güveci ve özellikle tahinli bir lezzet olan şekerli pidesi mutlaka denenmesi gereken lezzetler arasındadır."
     }
 }
