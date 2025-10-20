@@ -221,7 +221,7 @@ export function AudioGuideControl() {
                 {status === 'generating' && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {status === 'narrating' && <PauseIcon className="mr-2 h-4 w-4 text-blue-500" />}
                 {status === 'listening' && <RadioTower className="mr-2 h-4 w-4 animate-pulse text-green-500" />}
-                {(status === 'idle' || status === 'listening') && status !== 'narrating' && status !== 'generating' && <Radio className="mr-2 h-4 w-4" />}
+                {status === 'idle' && <Radio className="mr-2 h-4 w-4" />}
                 
                 {status === 'generating' ? translations.audioGuide.generating
                  : status === 'narrating' ? `${translations.audioGuide.narrating}...`
