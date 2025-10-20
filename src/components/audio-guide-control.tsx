@@ -43,49 +43,22 @@ export function AudioGuideControl() {
     const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
     const [selectedVoiceURI, setSelectedVoiceURI] = useState<string | null>(null);
     const [popoverOpen, setPopoverOpen] = useState(false);
-    const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
-
-    const loadVoices = useCallback(() => {
-        const allVoices = window.speechSynthesis.getVoices();
-        if (allVoices.length > 0) {
-            const supportedVoices = allVoices.filter(v => v.lang.startsWith('tr') || v.lang.startsWith('en'));
-            setAvailableVoices(supportedVoices);
-            if (intervalIdRef.current) {
-                clearInterval(intervalIdRef.current);
-                intervalIdRef.current = null;
-            }
-            return true;
-        }
-        return false;
-    }, []);
 
     useEffect(() => {
-        // This function will be called to attempt loading voices.
-        const tryLoadVoices = () => {
-            const voices = window.speechSynthesis.getVoices();
-            if (voices.length > 0) {
-                const supportedVoices = voices.filter(v => v.lang.startsWith('tr') || v.lang.startsWith('en'));
+        const loadVoices = () => {
+            const allVoices = window.speechSynthesis.getVoices();
+             if (allVoices.length > 0) {
+                const supportedVoices = allVoices.filter(v => v.lang.startsWith('tr') || v.lang.startsWith('en'));
                 setAvailableVoices(supportedVoices);
-                if (intervalIdRef.current) {
-                    clearInterval(intervalIdRef.current);
-                    intervalIdRef.current = null;
-                }
-                // Once voices are loaded, we don't need the onvoiceschanged event anymore for this session.
-                window.speechSynthesis.onvoiceschanged = null;
             }
         };
 
-        // Try loading immediately
-        tryLoadVoices();
+        // Load voices initially
+        loadVoices();
 
-        // If they are not loaded, set up the event listener
-        if (window.speechSynthesis.getVoices().length === 0) {
-            window.speechSynthesis.onvoiceschanged = tryLoadVoices;
-
-            // Fallback for browsers that don't fire onvoiceschanged reliably
-            if (!intervalIdRef.current) {
-                intervalIdRef.current = setInterval(tryLoadVoices, 1000);
-            }
+        // If voices are not loaded yet, set up an event listener
+        if (window.speechSynthesis.onvoiceschanged !== undefined) {
+            window.speechSynthesis.onvoiceschanged = loadVoices;
         }
         
         const savedVoice = localStorage.getItem(VOICE_STORAGE_KEY);
@@ -94,9 +67,6 @@ export function AudioGuideControl() {
         }
 
         return () => {
-            if (intervalIdRef.current) {
-                clearInterval(intervalIdRef.current);
-            }
              window.speechSynthesis.onvoiceschanged = null;
         }
     }, []);
@@ -190,18 +160,19 @@ export function AudioGuideControl() {
 
             const voices = window.speechSynthesis.getVoices();
             const voiceLang = language === 'tr' ? 'tr-TR' : 'en-US';
-            let voiceToUse = selectedVoiceURI ? voices.find(v => v.voiceURI === selectedVoiceURI) : null;
+            const savedVoiceURI = localStorage.getItem(VOICE_STORAGE_KEY);
             
+            let voiceToUse = savedVoiceURI ? voices.find(v => v.voiceURI === savedVoiceURI) : null;
+
             if (!voiceToUse) {
                 voiceToUse = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('erkek') || v.name.toLowerCase().includes('male')));
             }
-             if (!voiceToUse) {
+            if (!voiceToUse) {
                 voiceToUse = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('kadın') || v.name.toLowerCase().includes('female')));
             }
             if (!voiceToUse) {
                 voiceToUse = voices.find(v => v.lang === voiceLang);
             }
-
 
             if (voiceToUse) {
                 utterance.voice = voiceToUse;
@@ -232,7 +203,7 @@ export function AudioGuideControl() {
             startPlayback();
         }
 
-    }, [status, toast, cancelNarration, translations, language, selectedVoiceURI]);
+    }, [status, toast, cancelNarration, translations, language]);
 
 
     useEffect(() => {
@@ -346,5 +317,7 @@ export function AudioGuideControl() {
         </div>
     );
 }
+
+    
 
     
