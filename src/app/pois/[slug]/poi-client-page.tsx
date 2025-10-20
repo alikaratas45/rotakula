@@ -59,7 +59,7 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
             speechUtteranceRef.current = utterance;
             
             const availableVoices = window.speechSynthesis.getVoices();
-            const voiceLang = language === 'tr' ? 'tr-TR' : 'en-US';
+            const voiceLang = language === 'tr' ? 'tr-TR' : language === 'en' ? 'en-US' : 'fr-FR';
             
             let selectedVoice = availableVoices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('erkek') || v.name.toLowerCase().includes('male')));
             if (!selectedVoice) {

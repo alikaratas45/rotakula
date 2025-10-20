@@ -40,6 +40,9 @@ export function AudioGuideControl() {
         }
         fetchPois();
         
+        // Clean up on language change
+        cancelNarration();
+        
         return () => {
             cancelNarration();
         }
@@ -105,7 +108,7 @@ export function AudioGuideControl() {
             speechUtteranceRef.current = utterance;
 
             const voices = window.speechSynthesis.getVoices();
-            const voiceLang = language === 'tr' ? 'tr-TR' : 'en-US';
+            const voiceLang = language === 'tr' ? 'tr-TR' : language === 'en' ? 'en-US' : 'fr-FR';
             
             let voiceToUse = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('erkek') || v.name.toLowerCase().includes('male')));
             if (!voiceToUse) {
