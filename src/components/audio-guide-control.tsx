@@ -48,6 +48,18 @@ export function AudioGuideControl() {
         }
     }, [cancelNarration, language]);
     
+    const stopLocationTracking = useCallback(() => {
+        if (watchIdRef.current !== null) {
+            navigator.geolocation.clearWatch(watchIdRef.current);
+            watchIdRef.current = null;
+        }
+        setUserLocation(null);
+        cancelNarration();
+        setTriggeredPois(new Set());
+        setStatus('idle');
+        dismiss();
+    }, [dismiss, cancelNarration]);
+
     const startLocationTracking = () => {
         if (!('geolocation' in navigator)) {
             toast({
@@ -80,18 +92,6 @@ export function AudioGuideControl() {
             { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
         );
     };
-
-    const stopLocationTracking = useCallback(() => {
-        if (watchIdRef.current !== null) {
-            navigator.geolocation.clearWatch(watchIdRef.current);
-            watchIdRef.current = null;
-        }
-        setUserLocation(null);
-        cancelNarration();
-        setTriggeredPois(new Set());
-        setStatus('idle');
-        dismiss();
-    }, [dismiss, cancelNarration]);
 
     const handlePlayAudio = useCallback(async (poi: PointOfInterest) => {
         if (status === 'narrating' || status === 'generating') {
