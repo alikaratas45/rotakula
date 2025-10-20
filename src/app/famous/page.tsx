@@ -26,6 +26,10 @@ export default function FamousPage() {
 
 
     const cleanupSpeech = useCallback(() => {
+        if (speechUtteranceRef.current) {
+            speechUtteranceRef.current.onend = null;
+            speechUtteranceRef.current.onerror = null;
+        }
         if (window.speechSynthesis) {
             window.speechSynthesis.cancel();
         }
@@ -36,6 +40,7 @@ export default function FamousPage() {
 
     useEffect(() => {
         // Cleanup on language change or component unmount
+        cleanupSpeech();
         return () => {
             cleanupSpeech();
         };

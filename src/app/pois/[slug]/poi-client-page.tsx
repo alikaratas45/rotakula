@@ -25,6 +25,13 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
     const { toast } = useToast();
 
     const cleanupSpeech = useCallback(() => {
+        if (speechUtteranceRef.current) {
+            speechUtteranceRef.current.onstart = null;
+            speechUtteranceRef.current.onpause = null;
+            speechUtteranceRef.current.onresume = null;
+            speechUtteranceRef.current.onend = null;
+            speechUtteranceRef.current.onerror = null;
+        }
         if (window.speechSynthesis.speaking) {
             window.speechSynthesis.cancel();
         }
@@ -33,6 +40,7 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
     }, []);
 
     useEffect(() => {
+        cleanupSpeech();
         return () => {
             cleanupSpeech();
         };

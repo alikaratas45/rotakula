@@ -27,6 +27,11 @@ export function AudioGuideControl() {
     const speechUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
     const cancelNarration = useCallback(() => {
+        if (speechUtteranceRef.current) {
+            speechUtteranceRef.current.onstart = null;
+            speechUtteranceRef.current.onend = null;
+            speechUtteranceRef.current.onerror = null;
+        }
         if (window.speechSynthesis.speaking) {
             window.speechSynthesis.cancel();
         }
@@ -213,6 +218,7 @@ export function AudioGuideControl() {
     const handleButtonClick = () => {
         if (status === 'narrating' || status === 'generating') {
             cancelNarration();
+            if (status !== 'idle') { setStatus('listening'); }
         } else {
             toggleGuide();
         }
