@@ -30,7 +30,6 @@ export default function FamousPage() {
     }, []);
 
     useEffect(() => {
-        // Component unmount olduğunda tüm sesli okumayı durdur.
         return () => {
             cleanupSpeech();
         };
@@ -38,7 +37,7 @@ export default function FamousPage() {
 
     useEffect(() => {
         paragraphsRef.current = translations.famous.historyContent.split('\n').filter(p => p.trim() !== '');
-        cleanupSpeech(); // Dil değiştiğinde de temizle
+        cleanupSpeech();
     }, [translations.famous.historyContent, cleanupSpeech]);
 
     
@@ -92,27 +91,20 @@ export default function FamousPage() {
             return;
         }
         
-        if (isPlaying) {
-            if (isPaused) {
-                window.speechSynthesis.resume();
-                setIsPaused(false);
-            } else {
-                window.speechSynthesis.pause();
-                setIsPaused(true);
-            }
-        } else {
-            cleanupSpeech(); // Başlamadan önce önceki kalıntıları temizle
+        if (!isPlaying) {
+            cleanupSpeech();
             setIsPlaying(true);
             setIsPaused(false);
             currentParagraphIndexRef.current = 0;
-            // Seslerin yüklenmesi için küçük bir gecikme gerekebilir.
             setTimeout(() => speakParagraph(0), 100);
+        } else if (isPaused) {
+            window.speechSynthesis.resume();
+            setIsPaused(false);
+        } else {
+            window.speechSynthesis.pause();
+            setIsPaused(true);
         }
     };
-
-    const handleStop = () => {
-        cleanupSpeech();
-    }
     
     return (
         <div>
@@ -148,11 +140,8 @@ export default function FamousPage() {
                             ) : (
                                 <PlayIcon className="mr-2 h-4 w-4" />
                             )}
-                            {isPlaying && !isPaused ? translations.pois.pause : (isPaused ? "Devam Et" : translations.pois.listen)}
+                            {isPlaying && !isPaused ? translations.pois.pause : (isPaused ? translations.famous.continueNarration : translations.pois.listen)}
                         </Button>
-                         {isPlaying && (
-                             <Button variant="destructive" onClick={handleStop}>Durdur</Button>
-                         )}
                     </div>
                     <div className="prose prose-lg max-w-none text-foreground/90">
                          {translations.famous.historyContent.split('\n').map((paragraph, index) => (
