@@ -1,3 +1,4 @@
+
 export type Coordinate = {
   lat: number;
   lon: number;
@@ -22,6 +23,10 @@ export type PointOfInterest = {
   description_fr?: string;
   longDescription_fr?: string;
   category_fr?: string;
+  name_de?: string;
+  description_de?: string;
+  longDescription_de?: string;
+  category_de?: string;
 };
 
 export type ThematicRoute = {
@@ -38,6 +43,9 @@ export type ThematicRoute = {
   title_fr?: string;
   description_fr?: string;
   longDescription_fr?: string;
+  title_de?: string;
+  description_de?: string;
+  longDescription_de?: string;
 };
 
 export type Story = {
@@ -55,4 +63,9 @@ export type Story = {
   title_fr?: string;
   excerpt_fr?: string;
   content_fr?: string;
+  title_de?: string;
+  excerpt_de?: string;
+  content_de?: string;
 };
+
+    

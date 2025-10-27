@@ -1,3 +1,4 @@
+
 import { Bed, Play, Pause, type SVGProps } from "lucide-react";
 
 export function HistoricHouseIcon(props: SVGProps<SVGSVGElement>) {
@@ -130,3 +131,15 @@ export function FrenchFlagIcon(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+export function GermanFlagIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 3" {...props}>
+      <rect width="5" height="3" fill="#000"/>
+      <rect width="5" height="2" y="1" fill="#D00"/>
+      <rect width="5" height="1" y="2" fill="#FFCE00"/>
+    </svg>
+  );
+}
+
+    

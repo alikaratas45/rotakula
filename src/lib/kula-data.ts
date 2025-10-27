@@ -1,3 +1,4 @@
+
 import type { ThematicRoute, PointOfInterest, Story } from './types';
 import routesData from './data/kula-routes.json';
 import poisData from './data/kula-pois.json';
@@ -82,3 +83,5 @@ export async function getFeaturedRoute(lang: string = 'tr'): Promise<ThematicRou
     const route = routes[featuredIndex];
     return route ? translateItem(route, lang) : undefined;
 }
+
+    

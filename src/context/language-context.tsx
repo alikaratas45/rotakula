@@ -5,8 +5,9 @@ import React, { createContext, useContext, useState, useEffect, useMemo } from '
 import tr from '@/lib/locales/tr.json';
 import en from '@/lib/locales/en.json';
 import fr from '@/lib/locales/fr.json';
+import de from '@/lib/locales/de.json';
 
-type Language = 'tr' | 'en' | 'fr';
+type Language = 'tr' | 'en' | 'fr' | 'de';
 
 interface LanguageContextType {
   language: Language;
@@ -14,7 +15,7 @@ interface LanguageContextType {
   translations: typeof tr;
 }
 
-const translations = { tr, en, fr };
+const translations = { tr, en, fr, de };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
@@ -23,12 +24,12 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const storedLang = localStorage.getItem('rota-kula-language') as Language;
-    if (storedLang && (storedLang === 'tr' || storedLang === 'en' || storedLang === 'fr')) {
+    if (storedLang && ['tr', 'en', 'fr', 'de'].includes(storedLang)) {
       setLanguage(storedLang);
     } else {
         const browserLang = navigator.language.split('-')[0];
-        if (browserLang === 'en' || browserLang === 'fr') {
-            setLanguage(browserLang);
+        if (['en', 'fr', 'de'].includes(browserLang)) {
+            setLanguage(browserLang as Language);
         }
     }
   }, []);
@@ -54,3 +55,5 @@ export function useLanguage() {
   }
   return context;
 }
+
+    

@@ -57,11 +57,11 @@ export default function FamousPage() {
         speechUtteranceRef.current = utterance;
 
         const voices = window.speechSynthesis.getVoices();
-        const voiceLang = language === 'tr' ? 'tr-TR' : language === 'en' ? 'en-US' : 'fr-FR';
+        const voiceLang = language === 'tr' ? 'tr-TR' : language === 'en' ? 'en-US' : language === 'fr' ? 'fr-FR' : 'de-DE';
         
-        let selectedVoice = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('erkek') || v.name.toLowerCase().includes('male')));
+        let selectedVoice = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('erkek') || v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('männlich')));
         if (!selectedVoice) {
-            selectedVoice = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('kadın') || v.name.toLowerCase().includes('female')));
+            selectedVoice = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('kadın') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('weiblich')));
         }
         if (!selectedVoice) {
             selectedVoice = voices.find(v => v.lang === voiceLang);
@@ -79,12 +79,14 @@ export default function FamousPage() {
             }, 500); // Add a small delay
         };
 
-        utterance.onerror = () => {
-            toast({
-                title: translations.toast.audioErrorTitle,
-                description: translations.toast.audioErrorDescription,
-                variant: "destructive"
-            });
+        utterance.onerror = (event) => {
+            if (event.error !== 'interrupted') {
+                toast({
+                    title: translations.toast.audioErrorTitle,
+                    description: translations.toast.audioErrorDescription,
+                    variant: "destructive"
+                });
+            }
             cleanupSpeech();
         };
         
@@ -198,3 +200,5 @@ export default function FamousPage() {
         </div>
     );
 }
+
+    

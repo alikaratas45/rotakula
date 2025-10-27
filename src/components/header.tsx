@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AudioGuideControl } from "./audio-guide-control";
 import { useLanguage } from "@/context/language-context";
-import { TurkishFlagIcon, UKFlagIcon, FrenchFlagIcon } from "./icons";
+import { TurkishFlagIcon, UKFlagIcon, FrenchFlagIcon, GermanFlagIcon } from "./icons";
 
 
 export function Header() {
@@ -51,6 +51,7 @@ export function Header() {
         tr: { name: 'Türkçe', Icon: TurkishFlagIcon },
         en: { name: 'English', Icon: UKFlagIcon },
         fr: { name: 'Français', Icon: FrenchFlagIcon },
+        de: { name: 'Deutsch', Icon: GermanFlagIcon },
     };
     
     const CurrentFlag = languageOptions[language].Icon;
@@ -67,7 +68,7 @@ export function Header() {
                 {Object.entries(languageOptions)
                     .filter(([langCode]) => langCode !== language)
                     .map(([langCode, { name, Icon }]) => (
-                    <DropdownMenuItem key={langCode} onClick={() => setLanguage(langCode as 'tr' | 'en' | 'fr')}>
+                    <DropdownMenuItem key={langCode} onClick={() => setLanguage(langCode as 'tr' | 'en' | 'fr' | 'de')}>
                         <Icon className="mr-2 h-4 w-4 rounded-sm" />
                         <span>{name}</span>
                     </DropdownMenuItem>
@@ -155,3 +156,5 @@ export function Header() {
         </header>
     );
 }
+
+    

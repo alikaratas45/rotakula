@@ -1,3 +1,4 @@
+
 {
   "pois": [
     {
@@ -15,7 +16,10 @@
       "longDescription_en": "One of Turkey's youngest volcano cones, Sandal Divlit is a key site in the geopark with its impressive crater and views.",
       "name_fr": "Cône Volcanique de Sandal Divlit",
       "description_fr": "L'un des plus jeunes cônes volcaniques de Turquie, Sandal Divlit est un site clé du géoparc avec son cratère et ses vues impressionnantes.",
-      "longDescription_fr": "L'un des plus jeunes cônes volcaniques de Turquie, Sandal Divlit est un site clé du géoparc avec son cratère et ses vues impressionnantes."
+      "longDescription_fr": "L'un des plus jeunes cônes volcaniques de Turquie, Sandal Divlit est un site clé du géoparc avec son cratère et ses vues impressionnantes.",
+      "name_de": "Vulkankegel Sandal Divlit",
+      "description_de": "Als einer der jüngsten Vulkankegel der Türkei ist Sandal Divlit mit seinem beeindruckenden Krater und seiner Aussicht ein wichtiger Standort im Geopark.",
+      "longDescription_de": "Als einer der jüngsten Vulkankegel der Türkei ist Sandal Divlit mit seinem beeindruckenden Krater und seiner Aussicht ein wichtiger Standort im Geopark."
     },
     {
       "id": "poi-2",
@@ -32,7 +36,10 @@
       "longDescription_en": "Unlike Cappadocia, these are formed from lacustrine sediments, forming and eroding rapidly.",
       "name_fr": "Cheminées de Fées de Kula",
       "description_fr": "Contrairement à la Cappadoce, celles-ci sont formées de sédiments lacustres, se formant et s'érodant rapidement.",
-      "longDescription_fr": "Contrairement à la Cappadoce, celles-ci sont formées de sédiments lacustres, se formant et s'érodant rapidement."
+      "longDescription_fr": "Contrairement à la Cappadoce, celles-ci sont formées de sédiments lacustres, se formant et s'érodant rapidement.",
+      "name_de": "Feenkamine von Kula",
+      "description_de": "Im Gegensatz zu Kappadokien entstehen diese aus Seeablagerungen, die sich schnell bilden und wieder abgetragen werden.",
+      "longDescription_de": "Im Gegensatz zu Kappadokien entstehen diese aus Seeablagerungen, die sich schnell bilden und wieder abgetragen werden."
     },
     {
       "id": "poi-3",
@@ -49,7 +56,10 @@
       "longDescription_en": "Hexagonal basalt columns formed by cooling lava, a geometric wonder of nature.",
       "name_fr": "Colonnes de Basalte de Çakırca",
       "description_fr": "Colonnes de basalte hexagonales formées par le refroidissement de la lave, une merveille géométrique de la nature.",
-      "longDescription_fr": "Colonnes de basalte hexagonales formées par le refroidissement de la lave, une merveille géométrique de la nature."
+      "longDescription_fr": "Colonnes de basalte hexagonales formées par le refroidissement de la lave, une merveille géométrique de la nature.",
+      "name_de": "Basaltsäulen von Çakırca",
+      "description_de": "Sechseckige Basaltsäulen, die durch abkühlende Lava entstanden sind, ein geometrisches Wunder der Natur.",
+      "longDescription_de": "Sechseckige Basaltsäulen, die durch abkühlende Lava entstanden sind, ein geometrisches Wunder der Natur."
     },
     {
       "id": "poi-4",
@@ -64,11 +74,12 @@
       "name_en": "Historic Kula Houses",
       "description_en": "Elegant examples of Ottoman civil architecture, featuring bay windows and a fine blend of wood and stone craftsmanship.",
       "longDescription_en": "The Turkish and Greek communities in Kula lived in separate neighborhoods during the 15th, 16th, and 17th centuries. The change that began in the 18th century gave rise to the Kula houses we see today. Over time, these communities started living together in harmony. The houses of Turks and Greeks, living side by side, can be architecturally distinguished.\nBeliefs also played a significant role in the construction of these homes. Privacy is a key element in Kula houses. With extensive woodwork, tiled roofs, and high walls to ensure family privacy, these houses catered to large, patriarchal families.\nLife in Kula was largely inward-looking, leading to an attached housing layout. Courtyard walls around 3 meters high emphasized privacy, and every house, large or small, had a courtyard. The entrance from the street features massive double-winged wooden doors, usually without steps. This was to allow farmers and herders to enter with their horse and ox carts. These doors typically had two knockers: a large, thick one and a small, thin one. Sometimes, an iron ring was used instead of the thin knocker.\nFollowing Ottoman tradition, if a male guest arrived, he would use the thick knocker, and a man from the house would open the door. If the visitor was a woman or a family member, they would use the thin knocker, and a woman would answer. The locks and keys were forged by local blacksmiths.\nKula houses are generally two stories high, with three-story houses being rare. Some larger homes have functional areas like woodsheds, cellars, barns, and storage rooms on the ground floor. An intermediate floor, about 1.50 meters above the ground, is smaller than the other floors and usually contains the kitchen.",
-      "category_en": "history",
       "name_fr": "Maisons Historiques de Kula",
       "description_fr": "Exemples élégants d'architecture civile ottomane, avec des encorbellements et un fin mélange de bois et de pierre.",
       "longDescription_fr": "Les communautés turques et grecques de Kula vivaient dans des quartiers séparés aux XVe, XVIe et XVIIe siècles. Le changement qui a commencé au XVIIIe siècle a donné naissance aux maisons de Kula que nous voyons aujourd'hui. Au fil du temps, ces communautés ont commencé à vivre ensemble en harmonie. Les maisons des Turcs et des Grecs, vivant côte à côte, peuvent être distinguées sur le plan architectural.\nLes croyances ont également joué un rôle important dans la construction de ces maisons. L'intimité est un élément clé dans les maisons de Kula. Avec de nombreuses boiseries, des toits de tuiles et de hauts murs pour assurer l'intimité familiale, ces maisons étaient adaptées aux grandes familles patriarcales.\nLa vie à Kula était largement tournée vers l'intérieur, ce qui a conduit à un agencement de logements mitoyens. Des murs de cour d'environ 3 mètres de haut soulignaient l'intimité, et chaque maison, grande ou petite, avait une cour. L'entrée depuis la rue comporte d'imposantes portes en bois à double battant, généralement sans marches. C'était pour permettre aux agriculteurs et aux éleveurs d'entrer avec leurs chevaux et leurs charrettes à bœufs. Ces portes avaient généralement deux heurtoirs : un grand et épais, et un petit et fin. Parfois, un anneau de fer était utilisé à la place du heurtoir fin.\nSuivant la tradition ottomane, si un invité masculin arrivait, il utilisait le gros heurtoir, et un homme de la maison ouvrait la porte. Si le visiteur était une femme ou un membre de la famille, il utilisait le heurtoir fin, et une femme répondait. Les serrures et les clés étaient forgées par des forgerons locaux.\nLes maisons de Kula ont généralement deux étages, les maisons à three étages étant rares. Certaines grandes maisons ont des zones fonctionnelles comme des bûchers, des caves, des granges et des salles de stockage au rez-de-chaussée. Un étage intermédiaire, à environ 1,50 mètre au-dessus du sol, est plus petit que les autres étages et contient généralement la cuisine.",
-      "category_fr": "histoire"
+      "name_de": "Historische Kula-Häuser",
+      "description_de": "Elegante Beispiele osmanischer Zivilarchitektur mit Erkerfenstern und einer feinen Mischung aus Holz- und Steinhandwerk.",
+      "longDescription_de": "Die türkischen und griechischen Gemeinden in Kula lebten im 15., 16. und 17. Jahrhundert in getrennten Vierteln. Die Veränderung, die im 18. Jahrhundert begann, führte zu den Kula-Häusern, die wir heute sehen. Im Laufe der Zeit begannen diese Gemeinschaften, in Harmonie zusammenzuleben. Die Häuser von Türken und Griechen, die Seite an Seite lebten, lassen sich architektonisch unterscheiden.\nAuch der Glaube spielte eine wichtige Rolle beim Bau dieser Häuser. Privatsphäre ist ein Schlüsselelement in den Kula-Häusern. Mit ausgedehnten Holzarbeiten, Ziegeldächern und hohen Mauern, um die Privatsphäre der Familie zu gewährleisten, waren diese Häuser für große, patriarchalische Familien geeignet.\nDas Leben in Kula war größtenteils nach innen gerichtet, was zu einer Reihenhausbebauung führte. Etwa 3 Meter hohe Hofmauern betonten die Privatsphäre, und jedes Haus, ob groß oder klein, hatte einen Hof. Der Eingang von der Straße verfügt über massive doppelflügelige Holztüren, meist ohne Stufen. Dies sollte es Bauern und Hirten ermöglichen, mit ihren Pferde- und Ochsenkarren einzutreten. Diese Türen hatten typischerweise zwei Klopfer: einen großen, dicken und einen kleinen, dünnen. Manchmal wurde anstelle des dünnen Klopfers ein Eisenring verwendet.\nDer osmanischen Tradition folgend, benutzte ein männlicher Gast den dicken Klopfer, und ein Mann aus dem Haus öffnete die Tür. War der Besucher eine Frau oder ein Familienmitglied, benutzte er den dünnen Klopfer, und eine Frau antwortete. Die Schlösser und Schlüssel wurden von örtlichen Schmieden geschmiedet.\nKula-Häuser sind in der Regel zweistöckig, dreistöckige Häuser sind selten. Einige größere Häuser verfügen im Erdgeschoss über Funktionsbereiche wie Holzschuppen, Keller, Scheunen und Lagerräume. Ein Zwischengeschoss, etwa 1,50 Meter über dem Boden, ist kleiner als die anderen Stockwerke und enthält normalerweise die Küche."
     },
     {
       "id": "poi-5",
@@ -85,7 +96,10 @@
       "longDescription_en": "One of Kula's oldest mosques, built by an apprentice of Mimar Sinan, notable for its interior decorations.",
       "name_fr": "Mosquée Carullah Bin Süleyman",
       "description_fr": "L'une des plus anciennes mosquées de Kula, construite par un apprenti de Mimar Sinan, remarquable pour ses décorations intérieures.",
-      "longDescription_fr": "L'une des plus anciennes mosquées de Kula, construite par un apprenti de Mimar Sinan, remarquable pour ses décorations intérieures."
+      "longDescription_fr": "L'une des plus anciennes mosquées de Kula, construite par un apprenti de Mimar Sinan, remarquable pour ses décorations intérieures.",
+      "name_de": "Carullah Bin Süleyman Moschee",
+      "description_de": "Eine der ältesten Moscheen Kulas, erbaut von einem Schüler von Mimar Sinan, bekannt für ihre Innendekoration.",
+      "longDescription_de": "Eine der ältesten Moscheen Kulas, erbaut von einem Schüler von Mimar Sinan, bekannt für ihre Innendekoration."
     },
     {
       "id": "poi-6",
@@ -102,7 +116,10 @@
       "longDescription_en": "An authentic bazaar where you can visit masters of Kula's traditional crafts like coppersmithing, saddle making, and blacksmithing.",
       "name_fr": "Bazar des Artisans Locaux",
       "description_fr": "Un bazar authentique où vous pouvez visiter les maîtres des métiers traditionnels de Kula comme la dinanderie, la bourrellerie et la forge.",
-      "longDescription_fr": "Un bazar authentique où vous pouvez visiter les maîtres des métiers traditionnels de Kula comme la dinanderie, la bourrellerie et la forge."
+      "longDescription_fr": "Un bazar authentique où vous pouvez visiter les maîtres des métiers traditionnels de Kula comme la dinanderie, la bourrellerie et la forge.",
+      "name_de": "Basar der lokalen Handwerker",
+      "description_de": "Ein authentischer Basar, auf dem Sie Meister des traditionellen Handwerks von Kula wie Kupferschmiede, Sattlerei und Schmiedekunst besuchen können.",
+      "longDescription_de": "Ein authentischer Basar, auf dem Sie Meister des traditionellen Handwerks von Kula wie Kupferschmiede, Sattlerei und Schmiedekunst besuchen können."
     },
     {
       "id": "poi-8",
@@ -119,7 +136,10 @@
       "longDescription_en": "Venues where you can find various Kula-specific tastes, from pide with tahini to wood-fired meatballs.",
       "name_fr": "Arrêts Gourmands de Kula",
       "description_fr": "Lieux où vous pouvez trouver diverses saveurs spécifiques à Kula, du pide au tahini aux boulettes de viande cuites au feu de bois.",
-      "longDescription_fr": "Lieux où vous pouvez trouver diverses saveurs spécifiques à Kula, du pide au tahini aux boulettes de viande cuites au feu de bois."
+      "longDescription_fr": "Lieux où vous pouvez trouver diverses saveurs spécifiques à Kula, du pide au tahini aux boulettes de viande cuites au feu de bois.",
+      "name_de": "Kula-Geschmacksstopps",
+      "description_de": "Orte, an denen Sie verschiedene für Kula typische Geschmäcker finden, von Pide mit Tahini bis zu Holzofen-Fleischbällchen.",
+      "longDescription_de": "Orte, an denen Sie verschiedene für Kula typische Geschmäcker finden, von Pide mit Tahini bis zu Holzofen-Fleischbällchen."
     },
     {
       "id": "poi-9",
@@ -136,7 +156,10 @@
       "longDescription_en": "A boutique hotel offering an authentic accommodation experience, operating in a restored historic Kula house.",
       "name_fr": "Manoir d'Essanlar",
       "description_fr": "Un hôtel de charme offrant une expérience d'hébergement authentique, opérant dans une maison historique restaurée de Kula.",
-      "longDescription_fr": "Un hôtel de charme offrant une expérience d'hébergement authentique, opérant dans une maison historique restaurée de Kula."
+      "longDescription_fr": "Un hôtel de charme offrant une expérience d'hébergement authentique, opérant dans une maison historique restaurée de Kula.",
+      "name_de": "Essanlar-Herrenhaus",
+      "description_de": "Ein Boutique-Hotel, das ein authentisches Unterkunftserlebnis bietet und in einem restaurierten historischen Kula-Haus betrieben wird.",
+      "longDescription_de": "Ein Boutique-Hotel, das ein authentisches Unterkunftserlebnis bietet und in einem restaurierten historischen Kula-Haus betrieben wird."
     },
     {
       "id": "poi-10",
@@ -153,7 +176,10 @@
       "longDescription_en": "One of Kula's hidden gems, known for its historic stone houses and tranquil atmosphere.",
       "name_fr": "Village d'Encekler",
       "description_fr": "L'un des joyaux cachés de Kula, connu pour ses maisons en pierre historiques et son atmosphère tranquille.",
-      "longDescription_fr": "L'un des joyaux cachés de Kula, connu pour ses maisons en pierre historiques et son atmosphère tranquille."
+      "longDescription_fr": "L'un des joyaux cachés de Kula, connu pour ses maisons en pierre historiques et son atmosphère tranquille.",
+      "name_de": "Dorf Encekler",
+      "description_de": "Eines von Kulas verborgenen Juwelen, bekannt für seine historischen Steinhäuser und seine ruhige Atmosphäre.",
+      "longDescription_de": "Eines von Kulas verborgenen Juwelen, bekannt für seine historischen Steinhäuser und seine ruhige Atmosphäre."
     },
     {
       "id": "poi-11",
@@ -170,7 +196,10 @@
       "longDescription_en": "A village with a rich history, featuring Roman-era ruins and natural beauty.",
       "name_fr": "Village de Sandal",
       "description_fr": "Un village à l'histoire riche, présentant des ruines de l'époque romaine et une beauté naturelle.",
-      "longDescription_fr": "Un village à l'histoire riche, présentant des ruines de l'époque romaine et une beauté naturelle."
+      "longDescription_fr": "Un village à l'histoire riche, présentant des ruines de l'époque romaine et une beauté naturelle.",
+      "name_de": "Dorf Sandal",
+      "description_de": "Ein Dorf mit reicher Geschichte, das Ruinen aus der Römerzeit und Naturschönheiten aufweist.",
+      "longDescription_de": "Ein Dorf mit reicher Geschichte, das Ruinen aus der Römerzeit und Naturschönheiten aufweist."
     },
     {
       "id": "poi-12",
@@ -187,7 +216,10 @@
       "longDescription_en": "One of the most iconic symbols of the geopark, Kula Divlit offers visitors a walking experience resembling the lunar surface.",
       "name_fr": "Cône Volcanique de Kula Divlit",
       "description_fr": "L'un des symboles les plus emblématiques du géoparc, Kula Divlit offre aux visiteurs une expérience de marche ressemblant à la surface lunaire.",
-      "longDescription_fr": "L'un des symboles les plus emblématiques du géoparc, Kula Divlit offre aux visiteurs une expérience de marche ressemblant à la surface lunaire."
+      "longDescription_fr": "L'un des symboles les plus emblématiques du géoparc, Kula Divlit offre aux visiteurs une expérience de marche ressemblant à la surface lunaire.",
+      "name_de": "Vulkankegel Kula Divlit",
+      "description_de": "Als eines der bekanntesten Symbole des Geoparks bietet Kula Divlit den Besuchern ein Wandererlebnis, das der Mondoberfläche ähnelt.",
+      "longDescription_de": "Als eines der bekanntesten Symbole des Geoparks bietet Kula Divlit den Besuchern ein Wandererlebnis, das der Mondoberfläche ähnelt."
     },
     {
       "id": "poi-13",
@@ -204,7 +236,10 @@
       "longDescription_en": "Another significant historical village of Kula, known for its traditional architecture and natural beauty.",
       "name_fr": "Village de Gökçeören",
       "description_fr": "Autre village historique important de Kula, connu pour son architecture traditionnelle et sa beauté naturelle.",
-      "longDescription_fr": "Autre village historique important de Kula, connu pour son architecture traditionnelle et sa beauté naturelle."
+      "longDescription_fr": "Autre village historique important de Kula, connu pour son architecture traditionnelle et sa beauté naturelle.",
+      "name_de": "Dorf Gökçeören",
+      "description_de": "Ein weiteres bedeutendes historisches Dorf von Kula, bekannt für seine traditionelle Architektur und Naturschönheit.",
+      "longDescription_de": "Ein weiteres bedeutendes historisches Dorf von Kula, bekannt für seine traditionelle Architektur und Naturschönheit."
     },
     {
       "id": "poi-14",
@@ -221,7 +256,10 @@
       "longDescription_en": "A charming village with a peaceful atmosphere amidst greenery, named after the stream that flows through it.",
       "name_fr": "Village d'İncesu",
       "description_fr": "Un charmant village à l'atmosphère paisible au milieu de la verdure, nommé d'après le ruisseau qui le traverse.",
-      "longDescription_fr": "Un charmant village à l'atmosphère paisible au milieu de la verdure, nommé d'après le ruisseau qui le traverse."
+      "longDescription_fr": "Un charmant village à l'atmosphère paisible au milieu de la verdure, nommé d'après le ruisseau qui le traverse.",
+      "name_de": "Dorf İncesu",
+      "description_de": "Ein charmantes Dorf mit einer friedlichen Atmosphäre im Grünen, benannt nach dem Bach, der durch es fließt.",
+      "longDescription_de": "Ein charmantes Dorf mit einer friedlichen Atmosphäre im Grünen, benannt nach dem Bach, der durch es fließt."
     },
     {
       "id": "poi-15",
@@ -238,7 +276,10 @@
       "longDescription_en": "One of Kula's villages waiting to be discovered, notable for its historical structures and cultural texture.",
       "name_fr": "Village de Körez",
       "description_fr": "L'un des villages de Kula à découvrir, remarquable pour ses structures historiques et sa texture culturelle.",
-      "longDescription_fr": "L'un des villages de Kula à découvrir, remarquable pour ses structures historiques et sa texture culturelle."
+      "longDescription_fr": "L'un des villages de Kula à découvrir, remarquable pour ses structures historiques et sa texture culturelle.",
+      "name_de": "Dorf Körez",
+      "description_de": "Eines der Dörfer von Kula, das darauf wartet, entdeckt zu werden, bekannt für seine historischen Strukturen und seine kulturelle Textur.",
+      "longDescription_de": "Eines der Dörfer von Kula, das darauf wartet, entdeckt zu werden, bekannt für seine historischen Strukturen und seine kulturelle Textur."
     },
     {
       "id": "poi-16",
@@ -255,7 +296,10 @@
       "longDescription_en": "A village with a high spiritual atmosphere, believed to be the location of the tombs of Yunus Emre and his mentor Tabduk Emre.",
       "name_fr": "Village d'Emre",
       "description_fr": "Un village à l'atmosphère spirituelle élevée, que l'on croit être l'emplacement des tombes de Yunus Emre et de son mentor Tabduk Emre.",
-      "longDescription_fr": "Un village à l'atmosphère spirituelle élevée, que l'on croit être l'emplacement des tombes de Yunus Emre et de son mentor Tabduk Emre."
+      "longDescription_fr": "Un village à l'atmosphère spirituelle élevée, que l'on croit être l'emplacement des tombes de Yunus Emre et de son mentor Tabduk Emre.",
+      "name_de": "Dorf Emre",
+      "description_de": "Ein Dorf mit hoher spiritueller Atmosphäre, von dem angenommen wird, dass es der Standort der Gräber von Yunus Emre und seinem Mentor Tabduk Emre ist.",
+      "longDescription_de": "Ein Dorf mit hoher spiritueller Atmosphäre, von dem angenommen wird, dass es der Standort der Gräber von Yunus Emre und seinem Mentor Tabduk Emre ist."
     },
     {
       "id": "poi-17",
@@ -272,7 +316,10 @@
       "longDescription_en": "Another historic village known for its stone houses reflecting traditional Kula architecture and its peaceful life.",
       "name_fr": "Village d'Evciler",
       "description_fr": "Autre village historique connu pour ses maisons en pierre reflétant l'architecture traditionnelle de Kula et sa vie paisible.",
-      "longDescription_fr": "Autre village historique connu pour ses maisons en pierre reflétant l'architecture traditionnelle de Kula et sa vie paisible."
+      "longDescription_fr": "Autre village historique connu pour ses maisons en pierre reflétant l'architecture traditionnelle de Kula et sa vie paisible.",
+      "name_de": "Dorf Evciler",
+      "description_de": "Ein weiteres historisches Dorf, das für seine Steinhäuser bekannt ist, die die traditionelle Kula-Architektur und ihr friedliches Leben widerspiegeln.",
+      "longDescription_de": "Ein weiteres historisches Dorf, das für seine Steinhäuser bekannt ist, die die traditionelle Kula-Architektur und ihr friedliches Leben widerspiegeln."
     },
     {
       "id": "poi-18",
@@ -289,7 +336,12 @@
       "longDescription_en": "The Geopark visitor center is both a promotional center explaining the geopark and the administrative office. It also has facilities like restrooms and a cafe. Don't leave without seeing the 4000-year-old footprints!",
       "name_fr": "Centre d'Accueil du Géoparc",
       "description_fr": "Le centre d'accueil du Géoparc est à la fois un centre promotionnel expliquant le géoparc et le bureau administratif. Il dispose également d'installations comme des toilettes et un café. Ne partez pas sans avoir vu les empreintes de pas vieilles de 4000 ans !",
-      "longDescription_fr": "Le centre d'accueil du Géoparc est à la fois un centre promotionnel expliquant le géoparc et le bureau administratif. Il dispose également d'installations comme des toilettes et un café. Ne partez pas sans avoir vu les empreintes de pas vieilles de 4000 ans !"
+      "longDescription_fr": "Le centre d'accueil du Géoparc est à la fois un centre promotionnel expliquant le géoparc et le bureau administratif. Il dispose également d'installations comme des toilettes et un café. Ne partez pas sans avoir vu les empreintes de pas vieilles de 4000 ans !",
+      "name_de": "Geopark-Besucherzentrum",
+      "description_de": "Das Geopark-Besucherzentrum ist sowohl ein Werbezentrum, das den Geopark erklärt, als auch das Verwaltungsbüro. Es verfügt auch über Einrichtungen wie Toiletten und ein Café. Gehen Sie nicht, ohne die 4000 Jahre alten Fußabdrücke gesehen zu haben!",
+      "longDescription_de": "Das Geopark-Besucherzentrum ist sowohl ein Werbezentrum, das den Geopark erklärt, als auch das Verwaltungsbüro. Es verfügt auch über Einrichtungen wie Toiletten und ein Café. Gehen Sie nicht, ohne die 4000 Jahre alten Fußabdrücke gesehen zu haben!"
     }
   ]
 }
+
+    

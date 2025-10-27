@@ -113,11 +113,11 @@ export function AudioGuideControl() {
             speechUtteranceRef.current = utterance;
 
             const voices = window.speechSynthesis.getVoices();
-            const voiceLang = language === 'tr' ? 'tr-TR' : language === 'en' ? 'en-US' : 'fr-FR';
+            const voiceLang = language === 'tr' ? 'tr-TR' : language === 'en' ? 'en-US' : language === 'fr' ? 'fr-FR' : 'de-DE';
             
-            let voiceToUse = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('erkek') || v.name.toLowerCase().includes('male')));
+            let voiceToUse = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('erkek') || v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('männlich')));
             if (!voiceToUse) {
-                voiceToUse = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('kadın') || v.name.toLowerCase().includes('female')));
+                voiceToUse = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('kadın') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('weiblich')));
             }
             if (!voiceToUse) {
                 voiceToUse = voices.find(v => v.lang === voiceLang);
@@ -137,12 +137,14 @@ export function AudioGuideControl() {
                     setStatus('listening');
                 }
             };
-            utterance.onerror = () => {
-                toast({
-                    title: translations.toast.audioErrorTitle,
-                    description: translations.toast.audioErrorDescription,
-                    variant: "destructive"
-                });
+            utterance.onerror = (event) => {
+                if (event.error !== 'interrupted') {
+                    toast({
+                        title: translations.toast.audioErrorTitle,
+                        description: translations.toast.audioErrorDescription,
+                        variant: "destructive"
+                    });
+                }
                 cancelNarration();
                 if (status !== 'idle') {
                     setStatus('listening');
@@ -247,3 +249,5 @@ export function AudioGuideControl() {
         </div>
     );
 }
+
+    

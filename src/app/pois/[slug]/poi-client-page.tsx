@@ -67,11 +67,11 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
             speechUtteranceRef.current = utterance;
             
             const availableVoices = window.speechSynthesis.getVoices();
-            const voiceLang = language === 'tr' ? 'tr-TR' : language === 'en' ? 'en-US' : 'fr-FR';
+            const voiceLang = language === 'tr' ? 'tr-TR' : language === 'en' ? 'en-US' : language === 'fr' ? 'fr-FR' : 'de-DE';
             
-            let selectedVoice = availableVoices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('erkek') || v.name.toLowerCase().includes('male')));
+            let selectedVoice = availableVoices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('erkek') || v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('männlich')));
             if (!selectedVoice) {
-                selectedVoice = availableVoices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('kadın') || v.name.toLowerCase().includes('female')));
+                selectedVoice = availableVoices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('kadın') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('weiblich')));
             }
             if (!selectedVoice) {
                 selectedVoice = availableVoices.find(v => v.lang === voiceLang);
@@ -95,12 +95,14 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
             utterance.onend = () => {
                 cleanupSpeech();
             };
-            utterance.onerror = () => {
-                toast({
-                    title: translations.toast.audioErrorTitle,
-                    description: translations.toast.audioErrorDescription,
-                    variant: "destructive"
-                });
+            utterance.onerror = (event) => {
+                if (event.error !== 'interrupted') {
+                    toast({
+                        title: translations.toast.audioErrorTitle,
+                        description: translations.toast.audioErrorDescription,
+                        variant: "destructive"
+                    });
+                }
                 cleanupSpeech();
             };
             
@@ -184,3 +186,5 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
         </APIProvider>
     );
 }
+
+    

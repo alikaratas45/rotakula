@@ -1,3 +1,4 @@
+
 {
   "routes": [
     {
@@ -13,7 +14,10 @@
       "longDescription_en": "This route takes you to the heart of Turkey's first and only UNESCO Global Geopark. See millions of years of geological formations, extinct volcanoes, and lava flows up close. An unforgettable experience for nature and science enthusiasts.",
       "title_fr": "Route de Découverte du Géoparc",
       "description_fr": "Soyez témoin du passé volcanique de Kula et découvrez ses merveilles géologiques.",
-      "longDescription_fr": "Cet itinéraire vous emmène au cœur du premier et unique Géoparc Mondial de l'UNESCO en Turquie. Observez de près des formations géologiques de plusieurs millions d'années, des volcans éteints et des coulées de lave. Une expérience inoubliable pour les amateurs de nature et de science."
+      "longDescription_fr": "Cet itinéraire vous emmène au cœur du premier et unique Géoparc Mondial de l'UNESCO en Turquie. Observez de près des formations géologiques de plusieurs millions d'années, des volcans éteints et des coulées de lave. Une expérience inoubliable pour les amateurs de nature et de science.",
+      "title_de": "Geopark-Entdeckungsroute",
+      "description_de": "Erleben Sie Kulas vulkanische Vergangenheit und entdecken Sie seine geologischen Wunder.",
+      "longDescription_de": "Diese Route führt Sie ins Herz von Türkiyes erstem und einzigem UNESCO Global Geopark. Sehen Sie Millionen Jahre alte geologische Formationen, erloschene Vulkane und Lavaströme aus nächster Nähe. Ein unvergessliches Erlebnis für Natur- und Wissenschaftsbegeisterte."
     },
     {
       "id": "route-2",
@@ -28,7 +32,10 @@
       "longDescription_en": "Get lost in the narrow streets of Kula, listen to the stories of centuries-old mansions, and meet the artisans who keep traditional crafts alive. This walking route will make you feel the rich cultural heritage of Kula.",
       "title_fr": "Ressentez la Texture Historique",
       "description_fr": "Faites un voyage dans le temps parmi les plus beaux exemples de l'architecture ottomane.",
-      "longDescription_fr": "Perdez-vous dans les rues étroites de Kula, écoutez les histoires des manoirs centenaires et rencontrez les artisans qui maintiennent les métiers traditionnels en vie. Cet itinéraire de marche vous fera ressentir le riche patrimoine culturel de Kula."
+      "longDescription_fr": "Perdez-vous dans les rues étroites de Kula, écoutez les histoires des manoirs centenaires et rencontrez les artisans qui maintiennent les métiers traditionnels en vie. Cet itinéraire de marche vous fera ressentir le riche patrimoine culturel de Kula.",
+      "title_de": "Spüren Sie die historische Textur",
+      "description_de": "Machen Sie eine Zeitreise zwischen den schönsten Beispielen osmanischer Architektur.",
+      "longDescription_de": "Verlieren Sie sich in den engen Gassen von Kula, lauschen Sie den Geschichten jahrhundertealter Herrenhäuser und treffen Sie die Handwerker, die traditionelle Handwerkskunst am Leben erhalten. Dieser Wanderweg lässt Sie das reiche kulturelle Erbe von Kula spüren."
     },
     {
       "id": "route-3",
@@ -43,7 +50,10 @@
       "longDescription_en": "Taste the most special flavors of Kula cuisine, from wood-fired meatballs to the famous güveç, from sweet pide to local herbs. This route brings together the best flavor stops in Kula for gourmet travelers.",
       "title_fr": "Tour des Saveurs de Kula",
       "description_fr": "Une aventure gastronomique où vous découvrirez les goûts uniques et authentiques de Kula.",
-      "longDescription_fr": "Goûtez aux saveurs les plus spéciales de la cuisine de Kula, des boulettes de viande cuites au feu de bois au célèbre güveç, du pide sucré aux herbes locales. Cet itinéraire rassemble les meilleurs arrêts gourmands de Kula pour les voyageurs gourmets."
+      "longDescription_fr": "Goûtez aux saveurs les plus spéciales de la cuisine de Kula, des boulettes de viande cuites au feu de bois au célèbre güveç, du pide sucré aux herbes locales. Cet itinéraire rassemble les meilleurs arrêts gourmands de Kula pour les voyageurs gourmets.",
+      "title_de": "Kula-Geschmackstour",
+      "description_de": "Ein gastronomisches Abenteuer, bei dem Sie die einzigartigen und authentischen Geschmäcker von Kula erleben werden.",
+      "longDescription_de": "Probieren Sie die speziellsten Aromen der Kula-Küche, von im Holzofen gebackenen Fleischbällchen bis zum berühmten Güveç, von süßer Pide bis zu lokalen Kräutern. Diese Route vereint die besten Geschmacksstopps in Kula für Gourmet-Reisende."
     },
     {
       "id": "route-4",
@@ -58,7 +68,12 @@
       "longDescription_en": "Step outside of Kula's center and spend a peaceful day in historic villages that will greet you with their centuries-old stone houses, quiet streets, and lush nature. This route is ideal for experiencing the rural life and cultural richness of Kula.",
       "title_fr": "Nos Villages Historiques",
       "description_fr": "Découvrez la vie de village authentique de Kula et ses beautés historiques cachées.",
-      "longDescription_fr": "Sortez du centre de Kula et passez une journée paisible dans des villages historiques qui vous accueilleront avec leurs maisons en pierre centenaires, leurs rues calmes et leur nature luxuriante. Cet itinéraire est idéal pour découvrir la vie rurale et la richesse culturelle de Kula."
+      "longDescription_fr": "Sortez du centre de Kula et passez une journée paisible dans des villages historiques qui vous accueilleront avec leurs maisons en pierre centenaires, leurs rues calmes et leur nature luxuriante. Cet itinéraire est idéal pour découvrir la vie rurale et la richesse culturelle de Kula.",
+      "title_de": "Unsere historischen Dörfer",
+      "description_de": "Entdecken Sie Kulas authentisches Dorfleben und verborgene historische Schönheiten.",
+      "longDescription_de": "Verlassen Sie das Zentrum von Kula und verbringen Sie einen ruhigen Tag in historischen Dörfern, die Sie mit ihren jahrhundertealten Steinhäusern, ruhigen Straßen und üppiger Natur begrüßen werden. Diese Route ist ideal, um das ländliche Leben und den kulturellen Reichtum von Kula zu erleben."
     }
   ]
 }
+
+    
