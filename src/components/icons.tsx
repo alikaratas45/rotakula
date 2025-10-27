@@ -141,5 +141,3 @@ export function GermanFlagIcon(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
-
-    
