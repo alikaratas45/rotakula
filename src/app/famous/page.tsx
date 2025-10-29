@@ -55,9 +55,11 @@ export default function FamousPage() {
         const chunk = textChunksRef.current[chunkIndex];
         const utterance = new SpeechSynthesisUtterance(chunk);
         speechUtteranceRef.current = utterance;
+        
+        const voiceLang = language === 'tr' ? 'tr-TR' : language === 'en' ? 'en-US' : language === 'fr' ? 'fr-FR' : 'de-DE';
+        utterance.lang = voiceLang;
 
         const voices = window.speechSynthesis.getVoices();
-        const voiceLang = language === 'tr' ? 'tr-TR' : language === 'en' ? 'en-US' : language === 'fr' ? 'fr-FR' : 'de-DE';
         
         let selectedVoice = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('erkek') || v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('männlich')));
         if (!selectedVoice) {

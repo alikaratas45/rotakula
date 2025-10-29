@@ -112,8 +112,10 @@ export function AudioGuideControl() {
             const utterance = new SpeechSynthesisUtterance(poi.description);
             speechUtteranceRef.current = utterance;
 
-            const voices = window.speechSynthesis.getVoices();
             const voiceLang = language === 'tr' ? 'tr-TR' : language === 'en' ? 'en-US' : language === 'fr' ? 'fr-FR' : 'de-DE';
+            utterance.lang = voiceLang;
+
+            const voices = window.speechSynthesis.getVoices();
             
             let voiceToUse = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('erkek') || v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('männlich')));
             if (!voiceToUse) {
