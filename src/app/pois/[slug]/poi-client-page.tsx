@@ -63,6 +63,7 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
         setIsGenerating(true);
 
         const startPlayback = () => {
+            cleanupSpeech();
             const utterance = new SpeechSynthesisUtterance(poi.longDescription);
             speechUtteranceRef.current = utterance;
             
@@ -112,13 +113,15 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
         };
         
         // Ensure voices are loaded
-        const voices = window.speechSynthesis.getVoices();
-        if (voices.length === 0) {
-            window.speechSynthesis.onvoiceschanged = () => {
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            const voices = window.speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                window.speechSynthesis.onvoiceschanged = () => {
+                    startPlayback();
+                };
+            } else {
                 startPlayback();
-            };
-        } else {
-            startPlayback();
+            }
         }
 
     }, [poi.longDescription, isPlaying, isPaused, isGenerating, cleanupSpeech, toast, translations, language]);

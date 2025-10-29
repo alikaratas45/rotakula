@@ -109,6 +109,7 @@ export function AudioGuideControl() {
         setNarratingPoi(poi);
 
         const startPlayback = () => {
+            cancelNarration();
             const utterance = new SpeechSynthesisUtterance(poi.description);
             speechUtteranceRef.current = utterance;
 
@@ -156,11 +157,13 @@ export function AudioGuideControl() {
             window.speechSynthesis.speak(utterance);
         };
         
-        const voices = window.speechSynthesis.getVoices();
-        if (voices.length === 0) {
-            window.speechSynthesis.onvoiceschanged = startPlayback;
-        } else {
-            startPlayback();
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            const voices = window.speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                window.speechSynthesis.onvoiceschanged = startPlayback;
+            } else {
+                startPlayback();
+            }
         }
 
     }, [status, toast, cancelNarration, translations, language]);

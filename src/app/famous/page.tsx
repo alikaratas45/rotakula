@@ -141,13 +141,15 @@ export default function FamousPage() {
             }
 
             // Ensure voices are loaded before starting playback
-            const voices = window.speechSynthesis.getVoices();
-            if (voices.length === 0) {
-                 window.speechSynthesis.onvoiceschanged = () => {
-                    startPlayback();
-                 };
-            } else {
-                 startPlayback();
+            if (typeof window !== 'undefined' && window.speechSynthesis) {
+                const voices = window.speechSynthesis.getVoices();
+                if (voices.length === 0) {
+                     window.speechSynthesis.onvoiceschanged = () => {
+                        startPlayback();
+                     };
+                } else {
+                     startPlayback();
+                }
             }
         }
     };
