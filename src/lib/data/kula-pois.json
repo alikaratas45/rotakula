@@ -149,8 +149,8 @@
       "longDescription": "Tarihi bir Kula evinin restore edilmesiyle hizmet veren, otantik bir konaklama deneyimi sunan butik bir otel.",
       "category": "accommodation",
       "imageId": "poi-essanlar-konagi",
-      "latitude": 38.5478,
-      "longitude": 28.5218,
+      "latitude": 38.54500746299797,
+      "longitude": 28.6490208713005,
       "name_en": "Essanlar Mansion",
       "description_en": "A boutique hotel offering an authentic accommodation experience, operating in a restored historic Kula house.",
       "longDescription_en": "A boutique hotel offering an authentic accommodation experience, operating in a restored historic Kula house.",
@@ -343,4 +343,3 @@
     }
   ]
 }
-
