@@ -171,11 +171,15 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
     
     useEffect(() => {
         if (searchParams.get('autoplay') === 'true') {
-            handlePlayPause();
+            // A small delay to ensure the page is fully rendered and ready.
+            setTimeout(() => {
+                handlePlayPause();
+            }, 500);
             // Clean up URL
             const newPath = `/pois/${poi.slug}`;
             router.replace(newPath, { scroll: false });
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchParams, poi.slug, router]);
 
 
