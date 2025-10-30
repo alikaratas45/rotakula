@@ -168,7 +168,7 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
                 onCloseClick={() => setSelectedPoiId(null)}
                 pixelOffset={[0, -30]}
             >
-              <div className="w-64 p-1 flex flex-col gap-2">
+              <div className="w-96 p-1 flex flex-col gap-2">
                  {selectedImage && (
                    <div className="relative h-32 w-full rounded-md overflow-hidden">
                      <Image
@@ -330,3 +330,4 @@ export const NearbySearch = () => {
     
 
     
+
