@@ -14,6 +14,8 @@ import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/context/language-context';
 import { useRouter, useSearchParams } from 'next/navigation';
 
+const MAX_CHUNK_LENGTH = 200; // Max characters per speech chunk
+
 export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
     const heroImage = getImageById(poi.imageId);
@@ -22,85 +24,151 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
     const searchParams = useSearchParams();
 
     const [isPlaying, setIsPlaying] = useState(false);
+    const [isPaused, setIsPaused] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
-    const audioRef = useRef<HTMLAudioElement | null>(null);
+    
+    const speechUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+    const textChunksRef = useRef<string[]>([]);
+    const currentChunkIndexRef = useRef<number>(0);
+
     const { toast } = useToast();
 
-    const cleanupAudio = useCallback(() => {
-        if (audioRef.current) {
-            audioRef.current.pause();
-            audioRef.current.src = '';
-            audioRef.current = null;
+    const cleanupSpeech = useCallback(() => {
+        if (speechUtteranceRef.current) {
+            speechUtteranceRef.current.onend = null;
+            speechUtteranceRef.current.onerror = null;
+        }
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.cancel();
         }
         setIsPlaying(false);
+        setIsPaused(false);
+        currentChunkIndexRef.current = 0;
     }, []);
 
-    const handlePlayPause = useCallback(async () => {
-        if (isGenerating) return;
+    useEffect(() => {
+        // Cleanup on language or component change
+        return () => {
+            cleanupSpeech();
+        };
+    }, [poi, language, cleanupSpeech]);
 
-        if (audioRef.current && isPlaying) {
-            audioRef.current.pause();
-            setIsPlaying(false);
+    const speakChunk = useCallback((chunkIndex: number) => {
+        if (chunkIndex >= textChunksRef.current.length) {
+            cleanupSpeech();
             return;
         }
+
+        const chunk = textChunksRef.current[chunkIndex];
+        const utterance = new SpeechSynthesisUtterance(chunk);
+        speechUtteranceRef.current = utterance;
         
-        if (audioRef.current && !isPlaying && audioRef.current.src) {
-             audioRef.current.play();
-             setIsPlaying(true);
-             return;
+        const voiceLang = language === 'tr' ? 'tr-TR' : language === 'en' ? 'en-US' : language === 'fr' ? 'fr-FR' : 'de-DE';
+        utterance.lang = voiceLang;
+        
+        const voices = window.speechSynthesis.getVoices();
+        let selectedVoice = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('erkek') || v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('männlich')));
+        if (!selectedVoice) {
+            selectedVoice = voices.find(v => v.lang === voiceLang);
         }
         
-        setIsGenerating(true);
-        try {
-            const response = await fetch('/api/audio', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: poi.longDescription }),
-            });
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
+        }
 
-            if (!response.ok) {
-                 toast({
-                    title: translations.toast.audioErrorTitle,
-                    description: translations.toast.audioErrorApi,
-                    variant: "destructive"
-                });
-                throw new Error('Failed to generate audio');
-            }
+        utterance.onend = () => {
+            setTimeout(() => {
+                currentChunkIndexRef.current++;
+                speakChunk(currentChunkIndexRef.current);
+            }, 500); // Add a small delay between chunks
+        };
 
-            const { audioDataUri } = await response.json();
-            
-            if (!audioDataUri) {
-                toast({
-                    title: translations.toast.audioErrorTitle,
-                    description: translations.toast.audioErrorApi,
-                    variant: "destructive"
-                });
-                throw new Error('No audio data received');
-            }
-
-            const player = new Audio(audioDataUri);
-            audioRef.current = player;
-
-            player.play();
-            setIsPlaying(true);
-
-            player.onended = () => setIsPlaying(false);
-            player.onerror = () => {
+        utterance.onerror = (event) => {
+            if (event.error !== 'interrupted') {
                 toast({
                     title: translations.toast.audioErrorTitle,
                     description: translations.toast.audioErrorDescription,
                     variant: "destructive"
                 });
-                cleanupAudio();
-            };
+            }
+            cleanupSpeech();
+        };
+        
+        window.speechSynthesis.speak(utterance);
+    }, [language, cleanupSpeech, toast, translations]);
 
-        } catch (error) {
-            console.error("Audio generation/playback error:", error);
-        } finally {
-            setIsGenerating(false);
+
+    const handlePlayPause = async () => {
+        if (isGenerating) return;
+
+        // If it's currently playing and not paused, we want to pause it.
+        if (isPlaying && !isPaused) {
+            window.speechSynthesis.pause();
+            setIsPaused(true);
+            return;
         }
-    }, [poi.longDescription, isPlaying, isGenerating, cleanupAudio, toast, translations, language]);
 
+        // If it's paused, we want to resume.
+        if (isPlaying && isPaused) {
+            window.speechSynthesis.resume();
+            setIsPaused(false);
+            return;
+        }
+
+        // If it's not playing at all, we start from the beginning.
+        if (!isPlaying) {
+            setIsGenerating(true);
+            
+            const startPlayback = () => {
+                cleanupSpeech();
+                setIsPlaying(true);
+                setIsPaused(false);
+                setIsGenerating(false);
+
+                const fullText = poi.longDescription;
+                const sentences = fullText.match(/[^.!?]+[.!?\n]+/g) || [fullText];
+                const chunks: string[] = [];
+                let currentChunk = "";
+                
+                sentences.forEach(sentence => {
+                    const trimmedSentence = sentence.trim();
+                    if (!trimmedSentence) return;
+                    if ((currentChunk + ' ' + trimmedSentence).length > MAX_CHUNK_LENGTH && currentChunk) {
+                        chunks.push(currentChunk);
+                        currentChunk = trimmedSentence;
+                    } else {
+                        currentChunk = currentChunk ? currentChunk + ' ' + trimmedSentence : trimmedSentence;
+                    }
+                });
+                if (currentChunk) {
+                    chunks.push(currentChunk);
+                }
+                
+                textChunksRef.current = chunks;
+                currentChunkIndexRef.current = 0;
+                speakChunk(0);
+            }
+            
+            if (typeof window !== 'undefined' && window.speechSynthesis) {
+                const voices = window.speechSynthesis.getVoices();
+                if (voices.length === 0) {
+                     window.speechSynthesis.onvoiceschanged = () => {
+                        startPlayback();
+                     };
+                } else {
+                     startPlayback();
+                }
+            } else {
+                 toast({
+                    title: translations.toast.unsupportedTitle,
+                    description: translations.toast.unsupportedDescription,
+                    variant: "destructive"
+                });
+                setIsGenerating(false);
+            }
+        }
+    };
+    
     useEffect(() => {
         if (searchParams.get('autoplay') === 'true') {
             handlePlayPause();
@@ -108,14 +176,8 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
             const newPath = `/pois/${poi.slug}`;
             router.replace(newPath, { scroll: false });
         }
-    }, [searchParams, handlePlayPause, poi.slug, router]);
+    }, [searchParams, poi.slug, router]);
 
-
-    useEffect(() => {
-        return () => {
-            cleanupAudio();
-        };
-    }, [cleanupAudio, poi]);
 
     return (
         <APIProvider apiKey={apiKey}>
@@ -151,16 +213,16 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
                                     variant="outline"
                                     onClick={handlePlayPause}
                                     disabled={isGenerating}
-                                    aria-label={isPlaying ? translations.pois.pauseNarration : translations.pois.listenNarration}
+                                    aria-label={isPlaying && !isPaused ? translations.pois.pauseNarration : translations.pois.listenNarration}
                                 >
                                     {isGenerating ? (
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    ) : isPlaying ? (
+                                    ) : isPlaying && !isPaused ? (
                                         <PauseIcon className="mr-2 h-4 w-4" />
                                     ) : (
                                         <PlayIcon className="mr-2 h-4 w-4" />
                                     )}
-                                    {isGenerating ? translations.audioGuide.generating : (isPlaying ? translations.pois.pause : translations.pois.listen)}
+                                    {isGenerating ? translations.audioGuide.generating : (isPlaying && !isPaused ? translations.pois.pause : (isPaused ? translations.famous.continueNarration : translations.pois.listen))}
                                 </Button>
                              </div>
                              <div className="prose prose-lg max-w-none text-foreground/90">

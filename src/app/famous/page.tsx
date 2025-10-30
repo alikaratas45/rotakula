@@ -30,7 +30,7 @@ export default function FamousPage() {
             speechUtteranceRef.current.onend = null;
             speechUtteranceRef.current.onerror = null;
         }
-        if (window.speechSynthesis) {
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
             window.speechSynthesis.cancel();
         }
         setIsPlaying(false);
@@ -40,7 +40,6 @@ export default function FamousPage() {
 
     useEffect(() => {
         // Cleanup on language change or component unmount
-        cleanupSpeech();
         return () => {
             cleanupSpeech();
         };
@@ -62,9 +61,6 @@ export default function FamousPage() {
         const voices = window.speechSynthesis.getVoices();
         
         let selectedVoice = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('erkek') || v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('männlich')));
-        if (!selectedVoice) {
-            selectedVoice = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('kadın') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('weiblich')));
-        }
         if (!selectedVoice) {
             selectedVoice = voices.find(v => v.lang === voiceLang);
         }
@@ -99,15 +95,19 @@ export default function FamousPage() {
     const handlePlayPause = async () => {
         if (isGenerating) return;
 
-        if (isPlaying) {
-            if (isPaused) {
-                window.speechSynthesis.resume();
-                setIsPaused(false);
-            } else {
-                window.speechSynthesis.pause();
-                setIsPaused(true);
-            }
-        } else {
+        if (isPlaying && !isPaused) {
+            window.speechSynthesis.pause();
+            setIsPaused(true);
+            return;
+        }
+
+        if (isPlaying && isPaused) {
+            window.speechSynthesis.resume();
+            setIsPaused(false);
+            return;
+        }
+        
+        if (!isPlaying) {
             setIsGenerating(true); // Show loader while preparing
             
             const startPlayback = () => {
@@ -150,6 +150,13 @@ export default function FamousPage() {
                 } else {
                      startPlayback();
                 }
+            } else {
+                toast({
+                    title: translations.toast.unsupportedTitle,
+                    description: translations.toast.unsupportedDescription,
+                    variant: "destructive"
+                });
+                setIsGenerating(false);
             }
         }
     };
@@ -204,5 +211,3 @@ export default function FamousPage() {
         </div>
     );
 }
-
-    
