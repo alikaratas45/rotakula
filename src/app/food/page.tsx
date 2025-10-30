@@ -45,7 +45,7 @@ export default function FoodPage() {
     }
     
     return (
-        <APIProvider apiKey={apiKey}>
+        <APIProvider apiKey={apiKey} libraries={['places']}>
             <div className="container py-8 md:py-12">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
                     <h1 className="text-3xl md:text-4xl font-headline font-bold">{translations.food.title}</h1>
