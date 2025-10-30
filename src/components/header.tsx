@@ -118,7 +118,7 @@ export function Header() {
                                    {translations.header.menu}
                                </Button>
                            </SheetTrigger>
-                           <SheetContent side="left">
+                           <SheetContent side="left" className="curved-sheet">
                                 <SheetHeader className="text-left">
                                    <SheetTitle>{translations.header.menu}</SheetTitle>
                                    <SheetDescription>
