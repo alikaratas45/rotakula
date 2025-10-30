@@ -45,7 +45,13 @@ async function toWav(
   });
 }
 
-export async function generateAudio(input: AudioRequest): Promise<AudioResponse> {
+export const generateAudioFlow = ai.defineFlow(
+  {
+    name: 'generateAudioFlow',
+    inputSchema: AudioRequestSchema,
+    outputSchema: AudioResponseSchema,
+  },
+  async (input) => {
     const { media } = await ai.generate({
       model: googleAI.model('gemini-2.5-flash-preview-tts'),
       config: {
@@ -73,4 +79,10 @@ export async function generateAudio(input: AudioRequest): Promise<AudioResponse>
     return {
       media: 'data:audio/wav;base64,' + wavBase64,
     };
+  }
+);
+
+
+export async function generateAudio(input: AudioRequest): Promise<AudioResponse> {
+  return generateAudioFlow(input);
 }

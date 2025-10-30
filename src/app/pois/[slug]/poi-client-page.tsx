@@ -55,7 +55,7 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
             const response = await fetch('/api/audio', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: poi.longDescription, lang: language }),
+                body: JSON.stringify({ text: poi.longDescription }),
             });
 
             if (!response.ok) {
