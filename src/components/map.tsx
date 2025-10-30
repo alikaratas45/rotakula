@@ -226,9 +226,7 @@ export const NearbySearch = () => {
         const request: google.maps.places.PlaceSearchRequest = {
             location: userPosition,
             radius: 5000, // 5km radius
-            type: 'restaurant',
-            // Using 'type' is more general. Can combine with keywords.
-            // keyword: 'restaurant OR cafe OR food'
+            keyword: 'restaurant | lokanta | cafe',
         };
 
         placesService.nearbySearch(request, (results, status) => {
