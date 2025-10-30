@@ -123,17 +123,6 @@ export function Header() {
                                     <SheetTitle>{translations.header.menu}</SheetTitle>
                                 </VisuallyHidden>
                                <nav className="grid gap-6 text-lg font-medium mt-16">
-                                    <Link
-                                        href="/"
-                                        onClick={handleLinkClick}
-                                        className={cn(
-                                            "flex items-center gap-4 px-2.5 font-bold uppercase animate-slide-in-from-left",
-                                            pathname === "/" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-                                        )}
-                                        style={{ animationDelay: `150ms` }}
-                                    >
-                                        {translations.nav.home}
-                                    </Link>
                                    {navLinks.map((link, index) => (
                                        <Link
                                            key={link.href}
