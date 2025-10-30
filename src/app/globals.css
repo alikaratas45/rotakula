@@ -28,7 +28,7 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
+    --radius: 1rem;
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -85,7 +85,7 @@
 
 @layer utilities {
   .curved-sheet {
-    clip-path: path('M 0 1000 L 0 0 L 250 0 C 400 200, 150 750, 300 1000 L 0 1000 Z');
+    clip-path: path('M 0 1000 C 50 800, 250 1000, 280 500 S 250 0, 0 0 L 0 1000 Z');
   }
   @keyframes spin-slow {
     from {
