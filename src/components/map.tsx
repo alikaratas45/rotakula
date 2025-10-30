@@ -213,21 +213,10 @@ export const NearbySearch = () => {
     const [userPosition, setUserPosition] = useState<{ lat: number; lng: number } | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    // Get user's location
+    // Use Kula center as the location for nearby search
     useEffect(() => {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                setUserPosition({
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude,
-                });
-            },
-            () => {
-                setError(translations.map.locationError);
-                setUserPosition({ lat: 38.547, lng: 28.52 }); // Fallback to Kula center
-            }
-        );
-    }, [translations]);
+        setUserPosition({ lat: 38.547, lng: 28.52 });
+    }, []);
 
     // Perform nearby search
     useEffect(() => {
@@ -292,7 +281,7 @@ export const NearbySearch = () => {
             <div className="h-96 flex items-center justify-center bg-muted/50 rounded-lg">
                 <div className="flex items-center gap-2 text-muted-foreground">
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    <span>{translations.map.gettingLocation}</span>
+                    <span>{translations.map.loading}</span>
                 </div>
             </div>
         );
@@ -339,5 +328,7 @@ export const NearbySearch = () => {
         </div>
     );
 };
+
+    
 
     
