@@ -149,6 +149,54 @@
       "description": "Jeopark Ziyaretçi Merkezi",
       "imageUrl": "/zm.jpg",
       "imageHint": "visitor center"
+    },
+    {
+      "id": "poi-belediye",
+      "description": "Kula Belediyesi binası",
+      "imageUrl": "/belediye.png",
+      "imageHint": "municipal building"
+    },
+    {
+      "id": "poi-kursunlu-camii",
+      "description": "Kurşunlu Camii dış görünüşü",
+      "imageUrl": "/carullah.jpg",
+      "imageHint": "historic mosque"
+    },
+    {
+      "id": "poi-haci-muhsinler",
+      "description": "Hacı Muhsinler Evi",
+      "imageUrl": "/essanlar.jpg",
+      "imageHint": "old mansion"
+    },
+    {
+      "id": "poi-beyler-evi",
+      "description": "Beyler Evi dış görünüşü",
+      "imageUrl": "/essanlar.jpg",
+      "imageHint": "traditional house"
+    },
+    {
+      "id": "poi-meryem-ana",
+      "description": "Meryem Ana Kilisesi",
+      "imageUrl": "/kilise.jpg",
+      "imageHint": "old church"
+    },
+    {
+      "id": "poi-zafer-okulu",
+      "description": "Tarihi Zafer Okulu binası",
+      "imageUrl": "/zafer.jpg",
+      "imageHint": "historic school"
+    },
+    {
+      "id": "poi-turk-evi",
+      "description": "Türk Evi Etnografya Müzesi",
+      "imageUrl": "/essanlar.jpg",
+      "imageHint": "ethnography museum"
+    },
+    {
+      "id": "poi-anemon-otel",
+      "description": "Anemon Oteli",
+      "imageUrl": "/essanlar.jpg",
+      "imageHint": "historic hotel"
     }
   ]
 }
