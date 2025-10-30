@@ -81,13 +81,13 @@
     {
       "id": "poi-village-houses",
       "description": "Encekler köyünden tarihi taş evler.",
-      "imageUrl": "/village-houses.jpg",
+      "imageUrl": "/encekler.jpg",
       "imageHint": "stone houses"
     },
     {
       "id": "poi-sandal-village",
       "description": "Sandal köyünün genel görünümü.",
-      "imageUrl": "/sandal-village.jpg",
+      "imageUrl": "/sandal.jpg",
       "imageHint": "village view"
     },
     {
@@ -105,7 +105,7 @@
     {
       "id": "poi-incesu-village",
       "description": "İncesu köyü ve çevresindeki doğal güzellikler.",
-      "imageUrl": "/incesu.jpg",
+      "imageUrl": "/goldeli.jpg",
       "imageHint": "village stream"
     },
     {
