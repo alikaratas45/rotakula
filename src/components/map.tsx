@@ -51,49 +51,12 @@ function PoiMarker({
     poi: PointOfInterest, 
     onClick: () => void 
 }) {
-  const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
-  const map = useMap();
-
-  useEffect(() => {
-    if (!map) {
-      setPosition({ lat: poi.latitude, lng: poi.longitude });
-      return;
-    };
-
-    const geocoder = new google.maps.Geocoder();
-    
-    let addressQuery: string;
-    if (poi.id === 'poi-2') { // Kula Peri Bacaları
-        addressQuery = 'Kuladokya Peri Bacaları';
-    } else if (poi.id === 'poi-13') { // Gökçeören Köyü - special handling
-        addressQuery = `${poi.latitude},${poi.longitude}`;
-    } else {
-        addressQuery = `${poi.name}, Kula, Manisa, Türkiye`;
-    }
-
-    const query = poi.id === 'poi-13'
-      ? { location: { lat: poi.latitude, lng: poi.longitude } }
-      : { address: addressQuery };
-
-
-    geocoder.geocode(query, (results, status) => {
-        if (status === 'OK' && results && results[0]) {
-            const location = results[0].geometry.location;
-            setPosition({ lat: location.lat(), lng: location.lng() });
-        } else {
-            // Fallback to static coordinates if geocoding fails, without logging an error to console.
-            setPosition({ lat: poi.latitude, lng: poi.longitude });
-        }
-    });
-  }, [map, poi]);
-
-  if (!position) return null;
-
-  return (
-    <AdvancedMarker onClick={onClick} position={position} title={poi.name}>
-        <div className="w-6 h-6 bg-red-500 rounded-full border-2 border-white shadow-md" />
-    </AdvancedMarker>
-  );
+    const [markerRef, marker] = useAdvancedMarkerRef();
+    return (
+        <AdvancedMarker ref={markerRef} onClick={onClick} position={{ lat: poi.latitude, lng: poi.longitude }} title={poi.name}>
+            <div className="w-6 h-6 bg-red-500 rounded-full border-2 border-white shadow-md" />
+        </AdvancedMarker>
+    );
 }
 
 // --- Main Map Component ---
@@ -107,7 +70,13 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
   const selectedPoi = selectedPoiId ? pois.find(p => p.id === selectedPoiId) : null;
   const selectedImage = selectedPoi ? getImageById(selectedPoi.imageId) : null;
   
-  const [markerRef, marker] = useAdvancedMarkerRef();
+  const handleMarkerClick = (poiId: string) => {
+    if (poiId === selectedPoiId) {
+      setSelectedPoiId(null);
+    } else {
+      setSelectedPoiId(poiId);
+    }
+  };
 
   useEffect(() => {
     // Get user's location
@@ -129,9 +98,6 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
    useEffect(() => {
     if (map && pois.length > 0) {
       const bounds = new google.maps.LatLngBounds();
-      const geocoder = new google.maps.Geocoder();
-      let geocodedCount = 0;
-      let hasSuccessfulGeocode = false;
 
       // Add user's position to bounds if available
       if (userPosition) {
@@ -139,43 +105,16 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
       }
 
       pois.forEach((poi) => {
-        let addressQuery: string;
-        if (poi.id === 'poi-2') { // Kula Peri Bacaları
-            addressQuery = 'Kuladokya Peri Bacaları';
-        } else if (poi.id === 'poi-13') { // Gökçeören Köyü
-            addressQuery = `${poi.latitude},${poi.longitude}`;
-        } else {
-            addressQuery = `${poi.name}, Kula, Manisa, Türkiye`;
-        }
-
-        const query = poi.id === 'poi-13'
-            ? { location: { lat: poi.latitude, lng: poi.longitude } }
-            : { address: addressQuery };
-        
-        geocoder.geocode(query, (results, status) => {
-            geocodedCount++;
-            if (status === 'OK' && results && results[0]) {
-                bounds.extend(results[0].geometry.location);
-                hasSuccessfulGeocode = true;
-            } else {
-                // Fallback for failed geocoding
-                bounds.extend(new google.maps.LatLng(poi.latitude, poi.longitude));
-            }
-
-            // When all pois are geocoded, fit bounds
-            if (geocodedCount === pois.length) {
-                if (hasSuccessfulGeocode || userPosition) {
-                    map.fitBounds(bounds, 100); // 100px padding
-                } else if (!bounds.isEmpty()) {
-                    map.fitBounds(bounds);
-                    if (pois.length === 1 && !userPosition) {
-                        map.setZoom(13);
-                    }
-                }
-                setMarkersLoaded(true);
-            }
-        });
+        bounds.extend(new google.maps.LatLng(poi.latitude, poi.longitude));
       });
+      
+      map.fitBounds(bounds, 100);
+
+      if (pois.length === 1 && !userPosition) {
+        map.setZoom(13);
+      }
+      setMarkersLoaded(true);
+
     } else if (map && userPosition) {
         // If there are no POIs but we have user location, center on them
         map.setCenter(userPosition);
@@ -215,13 +154,14 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
       >
         {userPosition && <UserLocationMarker />}
         {pois.map((poi) => (
-          <PoiMarker key={poi.id} poi={poi} onClick={() => setSelectedPoiId(poi.id)} />
+          <PoiMarker key={poi.id} poi={poi} onClick={() => handleMarkerClick(poi.id)} />
         ))}
         
         {selectedPoi && (
             <InfoWindow
-                anchor={marker}
+                position={{ lat: selectedPoi.latitude, lng: selectedPoi.longitude }}
                 onCloseClick={() => setSelectedPoiId(null)}
+                pixelOffset={[0, -30]}
             >
               <div className="w-64 p-1">
                  {selectedImage && (
@@ -236,7 +176,7 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
                    </div>
                  )}
                  <h3 className="font-bold font-headline text-md mb-1">{selectedPoi.name}</h3>
-                 <p className="text-sm text-foreground/80">{selectedPoi.description}</p>
+                 <p className="text-sm text-foreground/80 line-clamp-3">{selectedPoi.description}</p>
               </div>
             </InfoWindow>
         )}
@@ -313,7 +253,6 @@ export const NearbySearch = () => {
     }, [map, userPosition, translations]);
     
     const selectedPlace = selectedPlaceId ? places.find(p => p.place_id === selectedPlaceId) : null;
-    const [markerRef, marker] = useAdvancedMarkerRef();
     
     const handleMarkerClick = (placeId: string) => {
         setSelectedPlaceId(placeId);
@@ -356,7 +295,6 @@ export const NearbySearch = () => {
 
                 {selectedPlace && (
                     <InfoWindow
-                        anchor={marker}
                         onCloseClick={() => setSelectedPlaceId(null)}
                         position={selectedPlace.geometry?.location}
                     >
@@ -376,3 +314,5 @@ export const NearbySearch = () => {
         </div>
     );
 };
+
+    
