@@ -53,9 +53,9 @@
     "nearby": {
         "title": "Çevremde Ne Var?",
         "description": "Mevcut konumunuza 20 km mesafedeki yerler aşağıda listelenmiştir.",
-        "gettingLocation": "Konumunuz alınıyor, lütfen bekleyin...",
+        "gettingLocation": "Konumunuz alınıyor...",
         "locationError": "Konumunuz alınamadı. Lütfen tarayıcınızın konum izinlerini kontrol edin.",
-        "noPoisFound": "Konumunuza 20 km mesafede gezilecek yer bulunamadı.",
+        "noPoisFound": "Konumunuza 100 metre mesafede gezilecek yer bulunamadı.",
         "distance": "Uzaklık"
     },
     "route": {
@@ -77,7 +77,7 @@
         "startedDescription": "Yakınınızdaki yerler için bildirim alacaksınız.",
         "stopped": "Sesli Rehber Kapatıldı",
         "nearby": "📍 Yakınlardasınız",
-        "nearbyDescription": "Anlatımı dinlemek için butona tıklayın.",
+        "nearbyDescription": "Anlatımı dinlemek için ilgili yerin sayfasına gidin.",
         "voiceSettings": "Ses Ayarları",
         "searchVoice": "Ses ara...",
         "noVoiceFound": "Ses bulunamadı.",

@@ -53,9 +53,9 @@
     "nearby": {
         "title": "What's Around Me?",
         "description": "Places within a 20 km radius of your current location are listed below.",
-        "gettingLocation": "Getting your location, please wait...",
+        "gettingLocation": "Getting your location...",
         "locationError": "Could not get your location. Please check your browser's location permissions.",
-        "noPoisFound": "No points of interest found within 20 km of your location.",
+        "noPoisFound": "No points of interest found within 100 meters of your location.",
         "distance": "Distance"
     },
     "route": {
@@ -77,7 +77,7 @@
         "startedDescription": "You will receive notifications for nearby places.",
         "stopped": "Audio Guide Stopped",
         "nearby": "📍 You are nearby",
-        "nearbyDescription": "Click the button to go to the page and listen to the narration.",
+        "nearbyDescription": "Go to the relevant place's page to listen to the narration.",
         "voiceSettings": "Voice Settings",
         "searchVoice": "Search voice...",
         "noVoiceFound": "No voice found.",

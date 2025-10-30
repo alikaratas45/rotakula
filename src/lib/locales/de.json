@@ -53,9 +53,9 @@
     "nearby": {
         "title": "Was ist in meiner Nähe?",
         "description": "Orte im Umkreis von 20 km von Ihrem aktuellen Standort sind unten aufgeführt.",
-        "gettingLocation": "Ihr Standort wird abgerufen, bitte warten...",
+        "gettingLocation": "Ihr Standort wird abgerufen...",
         "locationError": "Ihr Standort konnte nicht abgerufen werden. Bitte überprüfen Sie die Standorteinstellungen Ihres Browsers.",
-        "noPoisFound": "Keine Sehenswürdigkeiten im Umkreis von 20 km von Ihrem Standort gefunden.",
+        "noPoisFound": "Keine Sehenswürdigkeiten im Umkreis von 100 Metern von Ihrem Standort gefunden.",
         "distance": "Entfernung"
     },
     "route": {
@@ -77,7 +77,7 @@
         "startedDescription": "Sie erhalten Benachrichtigungen für Orte in der Nähe.",
         "stopped": "Audioguide Gestoppt",
         "nearby": "📍 Sie sind in der Nähe",
-        "nearbyDescription": "Klicken Sie auf die Schaltfläche, um zur Seite zu gelangen und die Erzählung anzuhören.",
+        "nearbyDescription": "Gehen Sie zur Seite des entsprechenden Ortes, um die Erzählung anzuhören.",
         "voiceSettings": "Stimmeinstellungen",
         "searchVoice": "Stimme suchen...",
         "noVoiceFound": "Keine Stimme gefunden.",

@@ -53,9 +53,9 @@
     "nearby": {
         "title": "Qu'y a-t-il Autour de Moi ?",
         "description": "Les lieux dans un rayon de 20 km de votre emplacement actuel sont listés ci-dessous.",
-        "gettingLocation": "Obtention de votre emplacement, veuillez patienter...",
+        "gettingLocation": "Obtention de votre emplacement...",
         "locationError": "Impossible d'obtenir votre emplacement. Veuillez vérifier les autorisations de localisation de votre navigateur.",
-        "noPoisFound": "Aucun point d'intérêt trouvé à moins de 20 km de votre emplacement.",
+        "noPoisFound": "Aucun point d'intérêt trouvé à moins de 100 mètres de votre emplacement.",
         "distance": "Distance"
     },
     "route": {
@@ -77,7 +77,7 @@
         "startedDescription": "Vous recevrez des notifications pour les lieux à proximité.",
         "stopped": "Audio Guide Arrêté",
         "nearby": "📍 Vous êtes à proximité",
-        "nearbyDescription": "Cliquez sur le bouton pour accéder à la page et écouter la narration.",
+        "nearbyDescription": "Accédez à la page du lieu concerné pour écouter la narration.",
         "voiceSettings": "Paramètres vocaux",
         "searchVoice": "Rechercher une voix...",
         "noVoiceFound": "Aucune voix trouvée.",

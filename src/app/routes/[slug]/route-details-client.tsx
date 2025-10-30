@@ -6,7 +6,7 @@ import { useSavedRoutes } from '@/hooks/use-saved-routes';
 import { getImageById } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Heart, MapPin, Mountain, Info } from 'lucide-react';
+import { Heart, MapPin, Mountain, Info, Footprints, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FoodIcon, HistoricHouseIcon } from '@/components/icons';
@@ -15,6 +15,8 @@ import { cn } from '@/lib/utils';
 import EmbeddedMap from '@/components/map';
 import { APIProvider } from '@vis.gl/react-google-maps';
 import { useLanguage } from '@/context/language-context';
+import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
 function getCategoryIcon(category: PointOfInterest['category']) {
     switch (category) {
@@ -33,8 +35,53 @@ function getCategoryIcon(category: PointOfInterest['category']) {
 export default function RouteDetailsClient({ route, pois }: { route: ThematicRoute; pois: PointOfInterest[] }) {
     const { isLoaded, isRouteSaved, toggleSaveRoute } = useSavedRoutes();
     const { translations } = useLanguage();
+    const { toast } = useToast();
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
     const isSaved = isRouteSaved(route.slug);
+    const [isStartingRoute, setIsStartingRoute] = useState(false);
+
+    const handleStartRoute = () => {
+        if (!navigator.geolocation) {
+            toast({
+                title: translations.toast.locationErrorTitle,
+                description: translations.map.locationError,
+                variant: 'destructive',
+            });
+            return;
+        }
+
+        if (pois.length < 1) return;
+
+        setIsStartingRoute(true);
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                const origin = `${latitude},${longitude}`;
+                
+                const destination = `${pois[pois.length - 1].latitude},${pois[pois.length - 1].longitude}`;
+
+                const waypoints = pois
+                    .slice(0, -1)
+                    .map(p => `${p.latitude},${p.longitude}`)
+                    .join('|');
+
+                const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&waypoints=${waypoints}&travelmode=walking`;
+
+                window.open(googleMapsUrl, '_blank');
+                setIsStartingRoute(false);
+            },
+            (error) => {
+                toast({
+                    title: translations.toast.locationErrorTitle,
+                    description: translations.nearby.locationError,
+                    variant: 'destructive',
+                });
+                setIsStartingRoute(false);
+            },
+            { enableHighAccuracy: true }
+        );
+    };
     
     return (
         <APIProvider apiKey={apiKey}>
@@ -106,6 +153,19 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
                                     <CardTitle className="font-headline text-xl">{translations.route.routeInfo}</CardTitle>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
+                                     <Button
+                                        onClick={handleStartRoute}
+                                        className="w-full"
+                                        disabled={isStartingRoute}
+                                    >
+                                        {isStartingRoute ? (
+                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        ) : (
+                                            <Footprints className="mr-2 h-4 w-4" />
+                                        )}
+                                        {isStartingRoute ? translations.nearby.gettingLocation : "Rotayı Haritada Başlat"}
+                                    </Button>
+                                    <Separator />
                                     <Button
                                         onClick={() => isLoaded && toggleSaveRoute(route.slug)}
                                         variant={isSaved ? "secondary" : "default"}
