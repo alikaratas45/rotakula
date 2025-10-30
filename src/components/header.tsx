@@ -11,9 +11,6 @@ import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import {
@@ -119,13 +116,7 @@ export function Header() {
                                </Button>
                            </SheetTrigger>
                            <SheetContent side="left" className="curved-sheet">
-                                <SheetHeader className="text-left">
-                                   <SheetTitle>{translations.header.menu}</SheetTitle>
-                                   <SheetDescription>
-                                       {translations.header.menuDescription}
-                                   </SheetDescription>
-                               </SheetHeader>
-                               <nav className="grid gap-6 text-lg font-medium mt-8">
+                               <nav className="grid gap-6 text-lg font-medium mt-16">
                                     <Link
                                         href="/"
                                         onClick={handleLinkClick}
