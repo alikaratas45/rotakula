@@ -206,7 +206,7 @@
       "slug": "kula-divlit-volcano-cone-area",
       "name": "Kula Divlit Volkan Konisi",
       "description": "Jeoparkın en bilinen simgelerinden biri olan Kula Divlit, ziyaretçilere ay yüzeyini andıran bir yürüyüş deneyimi sunar.",
-      "longDescription": "Jeoparkın en bilinen simgelerinden biri olan Kula Divlit, ziyaretçilere ay yüzeyini andıran bir yürüyüş deneyimi sunar.",
+      "longDescription": "Jeoparkın en bilinen simgelerinden biri olan Kula Divlit, ziyaretçilere ay yüzeyini اندıran bir yürüyüş deneyimi sunar.",
       "category": "geopark",
       "imageId": "poi-divlit-volcano",
       "latitude": 38.564990342506405,
@@ -344,4 +344,3 @@
   ]
 }
 
-    
