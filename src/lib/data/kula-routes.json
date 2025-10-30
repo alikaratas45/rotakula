@@ -57,21 +57,21 @@
     },
     {
       "id": "route-4",
-      "slug": "historic-villages",
-      "title": "Tarihi Köylerimiz",
-      "description": "Kula'nın otantik köy yaşamını ve saklı kalmış tarihi güzelliklerini keşfedin.",
-      "longDescription": "Kula merkezinin dışına çıkarak, asırlık taş evleri, sakin sokakları ve yemyeşil doğasıyla sizi karşılayacak tarihi köylerde huzurlu bir gün geçirin. Bu rota, Kula'nın kırsal yaşamını ve kültürel zenginliğini deneyimlemek için idealdir.",
+      "slug": "historic-neighborhoods",
+      "title": "Tarihi Mahallelerimiz",
+      "description": "Kula'nın otantik mahalle yaşamını ve saklı kalmış tarihi güzelliklerini keşfedin.",
+      "longDescription": "Kula merkezinin dışına çıkarak, asırlık taş evleri, sakin sokakları ve yemyeşil doğasıyla sizi karşılayacak tarihi mahallelerde huzurlu bir gün geçirin. Bu rota, Kula'nın kırsal yaşamını ve kültürel zenginliğini deneyimlemek için idealdir.",
       "imageId": "route-villages",
       "poiIds": ["poi-10", "poi-11", "poi-13", "poi-14", "poi-15", "poi-16", "poi-17"],
-      "title_en": "Our Historic Villages",
-      "description_en": "Discover Kula's authentic village life and hidden historical beauties.",
-      "longDescription_en": "Step outside of Kula's center and spend a peaceful day in historic villages that will greet you with their centuries-old stone houses, quiet streets, and lush nature. This route is ideal for experiencing the rural life and cultural richness of Kula.",
-      "title_fr": "Nos Villages Historiques",
-      "description_fr": "Découvrez la vie de village authentique de Kula et ses beautés historiques cachées.",
-      "longDescription_fr": "Sortez du centre de Kula et passez une journée paisible dans des villages historiques qui vous accueilleront avec leurs maisons en pierre centenaires, leurs rues calmes et leur nature luxuriante. Cet itinéraire est idéal pour découvrir la vie rurale et la richesse culturelle de Kula.",
-      "title_de": "Unsere historischen Dörfer",
-      "description_de": "Entdecken Sie Kulas authentisches Dorfleben und verborgene historische Schönheiten.",
-      "longDescription_de": "Verlassen Sie das Zentrum von Kula und verbringen Sie einen ruhigen Tag in historischen Dörfern, die Sie mit ihren jahrhundertealten Steinhäusern, ruhigen Straßen und üppiger Natur begrüßen werden. Diese Route ist ideal, um das ländliche Leben und den kulturellen Reichtum von Kula zu erleben."
+      "title_en": "Our Historic Neighborhoods",
+      "description_en": "Discover Kula's authentic neighborhood life and hidden historical beauties.",
+      "longDescription_en": "Step outside of Kula's center and spend a peaceful day in historic neighborhoods that will greet you with their centuries-old stone houses, quiet streets, and lush nature. This route is ideal for experiencing the rural life and cultural richness of Kula.",
+      "title_fr": "Nos Quartiers Historiques",
+      "description_fr": "Découvrez la vie de quartier authentique de Kula et ses beautés historiques cachées.",
+      "longDescription_fr": "Sortez du centre de Kula et passez une journée paisible dans des quartiers historiques qui vous accueilleront avec leurs maisons en pierre centenaires, leurs rues calmes et leur nature luxuriante. Cet itinéraire est idéal pour découvrir la vie rurale et la richesse culturelle de Kula.",
+      "title_de": "Unsere historischen Stadtteile",
+      "description_de": "Entdecken Sie Kulas authentisches Nachbarschaftsleben und verborgene historische Schönheiten.",
+      "longDescription_de": "Verlassen Sie das Zentrum von Kula und verbringen Sie einen ruhigen Tag in historischen Vierteln, die Sie mit ihren jahrhundertealten Steinhäusern, ruhigen Straßen und üppiger Natur begrüßen werden. Diese Route ist ideal, um das ländliche Leben und den kulturellen Reichtum von Kula zu erleben."
     }
   ]
 }
