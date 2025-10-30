@@ -85,7 +85,7 @@
 
 @layer utilities {
   .curved-sheet {
-    clip-path: path('M 0 1000 L 0 0 L 250 0 C 400 200, 250 600, 300 1000 L 0 1000 Z');
+    clip-path: path('M 0 1000 L 0 0 L 250 0 C 400 200, 150 750, 300 1000 L 0 1000 Z');
   }
   @keyframes spin-slow {
     from {
