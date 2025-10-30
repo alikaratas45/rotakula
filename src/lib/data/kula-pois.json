@@ -329,8 +329,8 @@
       "longDescription": "Jeopark ziyaretçi merkezi hem jeoparkı anlatan tanıtım merkezinin bulunduğu, hem de jeoparkın idari ofisinin bulunduğu yerdir. Ayrıca burada lavabo ihtiyacınızı karşılayabileceğiniz ve oturup, çay, kahve içebileceğiniz bir alandır. Buraya gelmişken 4000 yıllık ayak izlerini görmeden gitmeyin!",
       "category": "geopark",
       "imageId": "poi-visitor-center",
-      "latitude": 38.5845,
-      "longitude": 28.5175,
+      "latitude": 38.5828,
+      "longitude": 28.5152,
       "name_en": "Geopark Visitor Center",
       "description_en": "The Geopark visitor center is both a promotional center explaining the geopark and the administrative office. It also has facilities like restrooms and a cafe. Don't leave without seeing the 4000-year-old footprints!",
       "longDescription_en": "The Geopark visitor center is both a promotional center explaining the geopark and the administrative office. It also has facilities like restrooms and a cafe. Don't leave without seeing the 4000-year-old footprints!",
@@ -343,5 +343,3 @@
     }
   ]
 }
-
-    
