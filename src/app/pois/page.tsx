@@ -96,7 +96,9 @@ export default function PoisPage() {
                                     </div>
                                     <div>
                                         <CardTitle className="font-headline text-xl">{poi.name}</CardTitle>
-                                        <CardDescription className="capitalize">{poi.category}</CardDescription>
+                                        <CardDescription className="capitalize">
+                                            {translations.category[poi.category as keyof typeof translations.category] || poi.category}
+                                        </CardDescription>
                                     </div>
                                 </CardHeader>
                                 <CardContent className="flex-grow">

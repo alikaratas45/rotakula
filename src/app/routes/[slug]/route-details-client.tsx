@@ -75,7 +75,9 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
                                                     </div>
                                                     <div>
                                                         <CardTitle className="font-headline text-xl">{index + 1}. {poi.name}</CardTitle>
-                                                        <CardDescription className="capitalize">{poi.category}</CardDescription>
+                                                        <CardDescription className="capitalize">
+                                                            {translations.category[poi.category as keyof typeof translations.category] || poi.category}
+                                                        </CardDescription>
                                                     </div>
                                                 </CardHeader>
                                                 <CardContent>

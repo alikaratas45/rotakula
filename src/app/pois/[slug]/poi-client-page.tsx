@@ -12,119 +12,110 @@ import { Loader2 } from 'lucide-react';
 import { PlayIcon, PauseIcon } from '@/components/icons';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/context/language-context';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
     const heroImage = getImageById(poi.imageId);
     const { language, translations } = useLanguage();
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
     const [isPlaying, setIsPlaying] = useState(false);
-    const [isPaused, setIsPaused] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
-    const speechUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
     const { toast } = useToast();
 
-    const cleanupSpeech = useCallback(() => {
-        if (speechUtteranceRef.current) {
-            speechUtteranceRef.current.onstart = null;
-            speechUtteranceRef.current.onpause = null;
-            speechUtteranceRef.current.onresume = null;
-            speechUtteranceRef.current.onend = null;
-            speechUtteranceRef.current.onerror = null;
-        }
-        if (window.speechSynthesis.speaking) {
-            window.speechSynthesis.cancel();
+    const cleanupAudio = useCallback(() => {
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.src = '';
+            audioRef.current = null;
         }
         setIsPlaying(false);
-        setIsPaused(false);
     }, []);
-
-    useEffect(() => {
-        cleanupSpeech();
-        return () => {
-            cleanupSpeech();
-        };
-    }, [cleanupSpeech, poi, language]);
 
     const handlePlayPause = useCallback(async () => {
         if (isGenerating) return;
 
-        if (isPlaying) {
-            if (isPaused) {
-                window.speechSynthesis.resume();
-                setIsPaused(false);
-            } else {
-                window.speechSynthesis.pause();
-                setIsPaused(true);
-            }
+        if (audioRef.current && isPlaying) {
+            audioRef.current.pause();
+            setIsPlaying(false);
             return;
         }
-
-        setIsGenerating(true);
-
-        const startPlayback = () => {
-            cleanupSpeech();
-            const utterance = new SpeechSynthesisUtterance(poi.longDescription);
-            speechUtteranceRef.current = utterance;
-            
-            const voiceLang = language === 'tr' ? 'tr-TR' : language === 'en' ? 'en-US' : language === 'fr' ? 'fr-FR' : 'de-DE';
-            utterance.lang = voiceLang;
-            
-            const availableVoices = window.speechSynthesis.getVoices();
-            
-            let selectedVoice = availableVoices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('erkek') || v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('männlich')));
-            if (!selectedVoice) {
-                selectedVoice = availableVoices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('kadın') || v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('weiblich')));
-            }
-            if (!selectedVoice) {
-                selectedVoice = availableVoices.find(v => v.lang === voiceLang);
-            }
-
-            if (selectedVoice) {
-                utterance.voice = selectedVoice;
-            }
-
-            utterance.onstart = () => {
-                setIsPlaying(true);
-                setIsPaused(false);
-                setIsGenerating(false);
-            };
-            utterance.onpause = () => {
-                setIsPaused(true);
-            };
-            utterance.onresume = () => {
-                setIsPaused(false);
-            };
-            utterance.onend = () => {
-                cleanupSpeech();
-            };
-            utterance.onerror = (event) => {
-                if (event.error !== 'interrupted') {
-                    toast({
-                        title: translations.toast.audioErrorTitle,
-                        description: translations.toast.audioErrorDescription,
-                        variant: "destructive"
-                    });
-                }
-                cleanupSpeech();
-            };
-            
-            window.speechSynthesis.speak(utterance);
-        };
         
-        // Ensure voices are loaded
-        if (typeof window !== 'undefined' && window.speechSynthesis) {
-            const voices = window.speechSynthesis.getVoices();
-            if (voices.length === 0) {
-                window.speechSynthesis.onvoiceschanged = () => {
-                    startPlayback();
-                };
-            } else {
-                startPlayback();
-            }
+        if (audioRef.current && !isPlaying && audioRef.current.src) {
+             audioRef.current.play();
+             setIsPlaying(true);
+             return;
         }
+        
+        setIsGenerating(true);
+        try {
+            const response = await fetch('/api/audio', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: poi.longDescription, lang: language }),
+            });
 
-    }, [poi.longDescription, isPlaying, isPaused, isGenerating, cleanupSpeech, toast, translations, language]);
+            if (!response.ok) {
+                 toast({
+                    title: translations.toast.audioErrorTitle,
+                    description: translations.toast.audioErrorApi,
+                    variant: "destructive"
+                });
+                throw new Error('Failed to generate audio');
+            }
+
+            const { audioDataUri } = await response.json();
+            
+            if (!audioDataUri) {
+                toast({
+                    title: translations.toast.audioErrorTitle,
+                    description: translations.toast.audioErrorApi,
+                    variant: "destructive"
+                });
+                throw new Error('No audio data received');
+            }
+
+            const player = new Audio(audioDataUri);
+            audioRef.current = player;
+
+            player.play();
+            setIsPlaying(true);
+
+            player.onended = () => setIsPlaying(false);
+            player.onerror = () => {
+                toast({
+                    title: translations.toast.audioErrorTitle,
+                    description: translations.toast.audioErrorDescription,
+                    variant: "destructive"
+                });
+                cleanupAudio();
+            };
+
+        } catch (error) {
+            console.error("Audio generation/playback error:", error);
+        } finally {
+            setIsGenerating(false);
+        }
+    }, [poi.longDescription, isPlaying, isGenerating, cleanupAudio, toast, translations, language]);
+
+    useEffect(() => {
+        if (searchParams.get('autoplay') === 'true') {
+            handlePlayPause();
+            // Clean up URL
+            const newPath = `/pois/${poi.slug}`;
+            router.replace(newPath, { scroll: false });
+        }
+    }, [searchParams, handlePlayPause, poi.slug, router]);
+
+
+    useEffect(() => {
+        return () => {
+            cleanupAudio();
+        };
+    }, [cleanupAudio, poi]);
 
     return (
         <APIProvider apiKey={apiKey}>
@@ -145,7 +136,9 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
                         <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight drop-shadow-lg">
                             {poi.name}
                         </h1>
-                         <p className="mt-2 text-lg text-white/90 capitalize">{poi.category}</p>
+                         <p className="mt-2 text-lg text-white/90 capitalize">
+                            {translations.category[poi.category as keyof typeof translations.category] || poi.category}
+                         </p>
                     </div>
                 </section>
                 
@@ -158,16 +151,16 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
                                     variant="outline"
                                     onClick={handlePlayPause}
                                     disabled={isGenerating}
-                                    aria-label={isPlaying && !isPaused ? translations.pois.pauseNarration : translations.pois.listenNarration}
+                                    aria-label={isPlaying ? translations.pois.pauseNarration : translations.pois.listenNarration}
                                 >
                                     {isGenerating ? (
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    ) : isPlaying && !isPaused ? (
+                                    ) : isPlaying ? (
                                         <PauseIcon className="mr-2 h-4 w-4" />
                                     ) : (
                                         <PlayIcon className="mr-2 h-4 w-4" />
                                     )}
-                                    {isGenerating ? translations.audioGuide.generating : (isPlaying && !isPaused ? translations.pois.pause : (isPaused ? translations.famous.continueNarration : translations.pois.listen))}
+                                    {isGenerating ? translations.audioGuide.generating : (isPlaying ? translations.pois.pause : translations.pois.listen)}
                                 </Button>
                              </div>
                              <div className="prose prose-lg max-w-none text-foreground/90">
@@ -191,5 +184,3 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
         </APIProvider>
     );
 }
-
-    
