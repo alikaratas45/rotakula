@@ -12,6 +12,8 @@ import {
   Sheet,
   SheetContent,
   SheetTrigger,
+  SheetTitle,
+  VisuallyHidden,
 } from "@/components/ui/sheet";
 import {
   DropdownMenu,
@@ -116,6 +118,9 @@ export function Header() {
                                </Button>
                            </SheetTrigger>
                            <SheetContent side="left" className="curved-sheet">
+                                <VisuallyHidden>
+                                    <SheetTitle>{translations.header.menu}</SheetTitle>
+                                </VisuallyHidden>
                                <nav className="grid gap-6 text-lg font-medium mt-16">
                                     <Link
                                         href="/"
