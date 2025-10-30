@@ -90,7 +90,8 @@
         "noRestaurantsFound": "No restaurants found nearby.",
         "searchError": "An error occurred while searching for restaurants.",
         "gettingLocation": "Getting your location...",
-        "reviews": "reviews"
+        "reviews": "reviews",
+        "getDirections": "Get Directions"
     },
     "toast": {
         "unsupportedTitle": "Not Supported",

@@ -1,3 +1,4 @@
+
 {
     "nav": {
         "home": "Accueil",
@@ -73,6 +74,7 @@
         "narrating": "Narration",
         "generating": "Génération",
         "started": "Audio Guide Démarré",
+        "startedDescription": "Vous recevrez des notifications pour les lieux à proximité.",
         "stopped": "Audio Guide Arrêté",
         "nearby": "📍 Vous êtes à proximité",
         "nearbyDescription": "Cliquez sur le bouton pour écouter la narration."
@@ -84,7 +86,8 @@
         "noRestaurantsFound": "Aucun restaurant trouvé à proximité.",
         "searchError": "Une erreur s'est produite lors de la recherche de restaurants.",
         "gettingLocation": "Obtention de votre emplacement...",
-        "reviews": "avis"
+        "reviews": "avis",
+        "getDirections": "Obtenir l'Itinéraire"
     },
     "toast": {
         "unsupportedTitle": "Non Pris en Charge",

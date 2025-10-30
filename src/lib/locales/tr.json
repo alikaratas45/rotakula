@@ -90,7 +90,8 @@
         "noRestaurantsFound": "Yakınınızda restoran bulunamadı.",
         "searchError": "Restoranlar aranırken bir hata oluştu.",
         "gettingLocation": "Konumunuz alınıyor...",
-        "reviews": "yorum"
+        "reviews": "yorum",
+        "getDirections": "Yol Tarifi Al"
     },
     "toast": {
         "unsupportedTitle": "Desteklenmiyor",

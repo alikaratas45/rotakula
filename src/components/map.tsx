@@ -1,13 +1,13 @@
 
 "use client";
 
-import { Map, AdvancedMarker, useMap, InfoWindow, useAdvancedMarkerRef } from "@vis.gl/react-google-maps";
+import { Map, AdvancedMarker, useMap, InfoWindow } from "@vis.gl/react-google-maps";
 import { PointOfInterest } from "@/lib/types";
 import { useCallback, useEffect, useState } from "react";
-import { Loader2, Star } from "lucide-react";
+import { Loader2, Star, Navigation } from "lucide-react";
 import Image from "next/image";
 import { getImageById } from "@/lib/placeholder-images";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/context/language-context";
 
 // --- User Location Marker ---
@@ -51,10 +51,9 @@ function PoiMarker({
     poi: PointOfInterest, 
     onClick: () => void 
 }) {
-    const [markerRef, marker] = useAdvancedMarkerRef();
     return (
-        <AdvancedMarker ref={markerRef} onClick={onClick} position={{ lat: poi.latitude, lng: poi.longitude }} title={poi.name}>
-            <div className="w-6 h-6 bg-red-500 rounded-full border-2 border-white shadow-md" />
+        <AdvancedMarker onClick={onClick} position={{ lat: poi.latitude, lng: poi.longitude }} title={poi.name}>
+            <div className="w-6 h-6 bg-red-500 rounded-full border-2 border-white shadow-md cursor-pointer" />
         </AdvancedMarker>
     );
 }
@@ -76,6 +75,12 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
     } else {
       setSelectedPoiId(poiId);
     }
+  };
+  
+  const handleGetDirections = (poi: PointOfInterest) => {
+    if (!poi) return;
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${poi.latitude},${poi.longitude}`;
+    window.open(url, '_blank');
   };
 
   useEffect(() => {
@@ -163,9 +168,9 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
                 onCloseClick={() => setSelectedPoiId(null)}
                 pixelOffset={[0, -30]}
             >
-              <div className="w-64 p-1">
+              <div className="w-64 p-1 flex flex-col gap-2">
                  {selectedImage && (
-                   <div className="relative h-32 w-full mb-2 rounded-md overflow-hidden">
+                   <div className="relative h-32 w-full rounded-md overflow-hidden">
                      <Image
                        src={selectedImage.imageUrl}
                        alt={selectedImage.description}
@@ -175,8 +180,12 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
                      />
                    </div>
                  )}
-                 <h3 className="font-bold font-headline text-md mb-1">{selectedPoi.name}</h3>
-                 <p className="text-sm text-foreground/80 line-clamp-3">{selectedPoi.description}</p>
+                 <h3 className="font-bold font-headline text-md">{selectedPoi.name}</h3>
+                 <p className="text-sm text-foreground/80 line-clamp-2">{selectedPoi.description}</p>
+                 <Button size="sm" variant="outline" onClick={() => handleGetDirections(selectedPoi)}>
+                    <Navigation className="mr-2 h-4 w-4"/>
+                    {translations.map.getDirections}
+                 </Button>
               </div>
             </InfoWindow>
         )}
@@ -191,7 +200,7 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
 const PlaceMarker = ({ place, onClick }: { place: google.maps.places.PlaceResult, onClick: () => void }) => {
     return (
         <AdvancedMarker position={place.geometry?.location} onClick={onClick} title={place.name!}>
-            <div className="w-6 h-6 bg-blue-600 rounded-full border-2 border-white shadow-md" />
+            <div className="w-6 h-6 bg-blue-600 rounded-full border-2 border-white shadow-md cursor-pointer" />
         </AdvancedMarker>
     )
 }
@@ -255,8 +264,20 @@ export const NearbySearch = () => {
     const selectedPlace = selectedPlaceId ? places.find(p => p.place_id === selectedPlaceId) : null;
     
     const handleMarkerClick = (placeId: string) => {
-        setSelectedPlaceId(placeId);
+        if (placeId === selectedPlaceId) {
+            setSelectedPlaceId(null);
+        } else {
+            setSelectedPlaceId(placeId);
+        }
     }
+    
+    const handleGetDirectionsToPlace = (place: google.maps.places.PlaceResult) => {
+        if (!place.geometry?.location) return;
+        const lat = place.geometry.location.lat();
+        const lng = place.geometry.location.lng();
+        const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+        window.open(url, '_blank');
+    };
     
     if (error && places.length === 0) {
         return (
@@ -298,15 +319,19 @@ export const NearbySearch = () => {
                         onCloseClick={() => setSelectedPlaceId(null)}
                         position={selectedPlace.geometry?.location}
                     >
-                        <div className="w-64 p-1">
-                            <h3 className="font-bold font-headline text-md mb-1">{selectedPlace.name}</h3>
+                        <div className="w-64 p-1 flex flex-col gap-2">
+                            <h3 className="font-bold font-headline text-md">{selectedPlace.name}</h3>
                              {selectedPlace.rating && (
-                                <div className="flex items-center gap-1 text-sm text-yellow-600 mb-2">
+                                <div className="flex items-center gap-1 text-sm text-yellow-600">
                                     <Star className="w-4 h-4 fill-current" /> 
                                     <span>{selectedPlace.rating} ({selectedPlace.user_ratings_total} {translations.map.reviews})</span>
                                 </div>
                             )}
                             <p className="text-sm text-foreground/80">{selectedPlace.vicinity}</p>
+                            <Button size="sm" variant="outline" onClick={() => handleGetDirectionsToPlace(selectedPlace)}>
+                                <Navigation className="mr-2 h-4 w-4"/>
+                                {translations.map.getDirections}
+                            </Button>
                         </div>
                     </InfoWindow>
                 )}
