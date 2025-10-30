@@ -55,7 +55,7 @@
         "description": "Places within a 20 km radius of your current location are listed below.",
         "gettingLocation": "Getting your location...",
         "locationError": "Could not get your location. Please check your browser's location permissions.",
-        "noPoisFound": "No points of interest found within 100 meters of your location.",
+        "noPoisFound": "No points of interest found within 20 km of your location.",
         "distance": "Distance"
     },
     "route": {

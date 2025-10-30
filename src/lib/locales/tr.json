@@ -55,7 +55,7 @@
         "description": "Mevcut konumunuza 20 km mesafedeki yerler aşağıda listelenmiştir.",
         "gettingLocation": "Konumunuz alınıyor...",
         "locationError": "Konumunuz alınamadı. Lütfen tarayıcınızın konum izinlerini kontrol edin.",
-        "noPoisFound": "Konumunuza 100 metre mesafede gezilecek yer bulunamadı.",
+        "noPoisFound": "Konumunuza 20 km mesafede gezilecek yer bulunamadı.",
         "distance": "Uzaklık"
     },
     "route": {
