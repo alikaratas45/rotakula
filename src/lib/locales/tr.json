@@ -2,6 +2,7 @@
 {
     "nav": {
         "home": "Ana Sayfa",
+        "thematicRoutes": "Tematik Rotalar",
         "stories": "Hikayeler",
         "places": "Gezilecek Yerler",
         "about": "Kula Hakkında",

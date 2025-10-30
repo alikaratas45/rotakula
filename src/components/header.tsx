@@ -32,6 +32,7 @@ export function Header() {
     const { language, setLanguage, translations } = useLanguage();
 
     const navLinks = [
+        { href: "/", label: translations.nav.thematicRoutes },
         { href: "/pois", label: translations.nav.places },
         { href: "/nearby", label: translations.nav.nearby },
         { href: "/food", label: translations.nav.food },
@@ -93,7 +94,7 @@ export function Header() {
                                 href={link.href}
                                 className={cn(
                                     "font-bold uppercase transition-colors hover:text-foreground/80",
-                                    pathname.startsWith(link.href) && link.href !== "/" || pathname === link.href ? "text-foreground" : "text-foreground/60"
+                                    (pathname.startsWith(link.href) && link.href !== "/") || pathname === link.href ? "text-foreground" : "text-foreground/60"
                                 )}
                             >
                                 {link.label}
@@ -140,7 +141,7 @@ export function Header() {
                                            onClick={handleLinkClick}
                                            className={cn(
                                                "flex items-center gap-4 px-2.5 font-bold uppercase animate-slide-in-from-left",
-                                               pathname.startsWith(link.href) && link.href !== "/" || pathname === link.href ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                                               (pathname.startsWith(link.href) && link.href !== "/") || pathname === link.href ? "text-foreground" : "text-muted-foreground hover:text-foreground"
                                            )}
                                             style={{ animationDelay: `${200 + index * 50}ms` }}
                                        >
