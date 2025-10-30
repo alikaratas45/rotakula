@@ -9,6 +9,7 @@ import Image from "next/image";
 import { getImageById } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/context/language-context";
+import { useRouter } from "next/navigation";
 
 // --- User Location Marker ---
 function UserLocationMarker() {
@@ -61,26 +62,13 @@ function PoiMarker({
 // --- Main Map Component ---
 export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
   const map = useMap();
+  const router = useRouter();
   const { translations } = useLanguage();
   const [markersLoaded, setMarkersLoaded] = useState(false);
-  const [selectedPoiId, setSelectedPoiId] = useState<string | null>(null);
   const [userPosition, setUserPosition] = useState<{ lat: number; lng: number } | null>(null);
 
-  const selectedPoi = selectedPoiId ? pois.find(p => p.id === selectedPoiId) : null;
-  const selectedImage = selectedPoi ? getImageById(selectedPoi.imageId) : null;
-  
-  const handleMarkerClick = (poiId: string) => {
-    if (poiId === selectedPoiId) {
-      setSelectedPoiId(null);
-    } else {
-      setSelectedPoiId(poiId);
-    }
-  };
-  
-  const handleGetDirections = (poi: PointOfInterest) => {
-    if (!poi) return;
-    const url = `https://www.google.com/maps/dir/?api=1&destination=${poi.latitude},${poi.longitude}`;
-    window.open(url, '_blank');
+  const handleMarkerClick = (poi: PointOfInterest) => {
+    router.push(`/pois/${poi.slug}`);
   };
 
   useEffect(() => {
@@ -130,11 +118,6 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
     }
   }, [map, pois, userPosition]);
 
-  useEffect(() => {
-    // Reset selection when POIs change
-    setSelectedPoiId(null);
-  }, [pois]);
-
   const center = pois.length > 0
     ? { lat: pois[0].latitude, lng: pois[0].longitude }
     : { lat: 38.547, lng: 28.52 };
@@ -155,40 +138,11 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
         gestureHandling={"greedy"}
         disableDefaultUI={true}
         mapId="rotakula-map"
-        onClick={() => setSelectedPoiId(null)}
       >
         {userPosition && <UserLocationMarker />}
         {pois.map((poi) => (
-          <PoiMarker key={poi.id} poi={poi} onClick={() => handleMarkerClick(poi.id)} />
+          <PoiMarker key={poi.id} poi={poi} onClick={() => handleMarkerClick(poi)} />
         ))}
-        
-        {selectedPoi && (
-            <InfoWindow
-                position={{ lat: selectedPoi.latitude, lng: selectedPoi.longitude }}
-                onCloseClick={() => setSelectedPoiId(null)}
-                pixelOffset={[0, -30]}
-            >
-              <div className="w-96 p-1 flex flex-col gap-2">
-                 {selectedImage && (
-                   <div className="relative h-32 w-full rounded-md overflow-hidden">
-                     <Image
-                       src={selectedImage.imageUrl}
-                       alt={selectedImage.description}
-                       fill
-                       className="object-cover"
-                       data-ai-hint={selectedImage.imageHint}
-                     />
-                   </div>
-                 )}
-                 <h3 className="font-bold font-headline text-md">{selectedPoi.name}</h3>
-                 <p className="text-sm text-foreground/80 line-clamp-2">{selectedPoi.description}</p>
-                 <Button size="sm" variant="outline" onClick={() => handleGetDirections(selectedPoi)}>
-                    <Navigation className="mr-2 h-4 w-4"/>
-                    {translations.map.getDirections}
-                 </Button>
-              </div>
-            </InfoWindow>
-        )}
       </Map>
     </div>
   );
@@ -330,4 +284,5 @@ export const NearbySearch = () => {
     
 
     
+
 
