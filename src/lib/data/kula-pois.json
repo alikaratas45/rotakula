@@ -109,8 +109,8 @@
       "longDescription": "Kula'nın geleneksel el sanatlarını (bakırcılık, semercilik, demircilik) yaşatan ustaları ziyaret edebileceğiniz otantik bir çarşı.",
       "category": "history",
       "imageId": "poi-local-artisans",
-      "latitude": 38.5465,
-      "longitude": 28.5215,
+      "latitude": 38.54484622051393,
+      "longitude": 28.64626872002142,
       "name_en": "Local Artisans' Bazaar",
       "description_en": "An authentic bazaar where you can visit masters of Kula's traditional crafts like coppersmithing, saddle making, and blacksmithing.",
       "longDescription_en": "An authentic bazaar where you can visit masters of Kula's traditional crafts like coppersmithing, saddle making, and blacksmithing.",
@@ -343,3 +343,5 @@
     }
   ]
 }
+
+    
