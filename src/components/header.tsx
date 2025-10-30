@@ -33,14 +33,13 @@ export function Header() {
     const { language, setLanguage, translations } = useLanguage();
 
     const navLinks = [
-        { href: "/", label: translations.nav.home },
-        { href: "/stories", label: translations.nav.stories },
         { href: "/pois", label: translations.nav.places },
-        { href: "/famous", label: translations.nav.about },
+        { href: "/nearby", label: translations.nav.nearby },
         { href: "/food", label: translations.nav.food },
         { href: "/accommodation", label: translations.nav.accommodation },
-        { href: "/nearby", label: translations.nav.nearby },
+        { href: "/stories", label: translations.nav.stories },
         { href: "/my-routes", label: translations.nav.myRoutes },
+        { href: "/famous", label: translations.nav.about },
     ];
 
     const handleLinkClick = () => {
@@ -127,6 +126,17 @@ export function Header() {
                                    </SheetDescription>
                                </SheetHeader>
                                <nav className="grid gap-6 text-lg font-medium mt-8">
+                                    <Link
+                                        href="/"
+                                        onClick={handleLinkClick}
+                                        className={cn(
+                                            "flex items-center gap-4 px-2.5 font-bold uppercase animate-slide-in-from-left",
+                                            pathname === "/" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                                        )}
+                                        style={{ animationDelay: `150ms` }}
+                                    >
+                                        {translations.nav.home}
+                                    </Link>
                                    {navLinks.map((link, index) => (
                                        <Link
                                            key={link.href}
@@ -136,7 +146,7 @@ export function Header() {
                                                "flex items-center gap-4 px-2.5 font-bold uppercase animate-slide-in-from-left",
                                                pathname.startsWith(link.href) && link.href !== "/" || pathname === link.href ? "text-foreground" : "text-muted-foreground hover:text-foreground"
                                            )}
-                                            style={{ animationDelay: `${150 + index * 50}ms` }}
+                                            style={{ animationDelay: `${200 + index * 50}ms` }}
                                        >
                                            {link.label}
                                        </Link>
