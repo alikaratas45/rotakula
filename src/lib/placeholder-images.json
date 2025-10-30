@@ -26,7 +26,7 @@
     },
     {
       "id": "route-villages",
-      "description": "Kula'da tarihi bir köyden taş evler",
+      "description": "Kula'da tarihi bir mahalleden taş evler",
       "imageUrl": "/goldeli.jpg",
       "imageHint": "village houses"
     },
@@ -80,13 +80,13 @@
     },
     {
       "id": "poi-village-houses",
-      "description": "Encekler köyünden tarihi taş evler.",
+      "description": "Encekler mahallesinden tarihi taş evler.",
       "imageUrl": "/encekler.jpg",
       "imageHint": "stone houses"
     },
     {
       "id": "poi-sandal-village",
-      "description": "Sandal köyünün genel görünümü.",
+      "description": "Sandal mahallesinin genel görünümü.",
       "imageUrl": "/sandal.jpg",
       "imageHint": "village view"
     },
@@ -98,31 +98,31 @@
     },
     {
       "id": "poi-gokceoren-village",
-      "description": "Gökçeören köyünün genel görünümü.",
-      "imageUrl": "/gokceoren.jpg",
+      "description": "Gökçeören mahallesinin genel görünümü.",
+      "imageUrl": "/gokce.jpg",
       "imageHint": "village landscape"
     },
     {
       "id": "poi-incesu-village",
-      "description": "İncesu köyü ve çevresindeki doğal güzellikler.",
+      "description": "İncesu mahallesi ve çevresindeki doğal güzellikler.",
       "imageUrl": "/goldeli.jpg",
       "imageHint": "village stream"
     },
     {
       "id": "poi-korez-village",
-      "description": "Körez köyünden tarihi bir sokak.",
+      "description": "Körez mahallesinden tarihi bir sokak.",
       "imageUrl": "/korez.jpg",
       "imageHint": "historic village street"
     },
     {
       "id": "poi-emre-village",
-      "description": "Emre Köyü ve Yunus Emre Türbesi",
-      "imageUrl": "/emre-village.jpg",
+      "description": "Emre Mahallesi ve Yunus Emre Türbesi",
+      "imageUrl": "/yunus.jpg",
       "imageHint": "village tomb"
     },
     {
       "id": "poi-evciler-village",
-      "description": "Evciler köyünden bir sokak.",
+      "description": "Evciler mahallesinden bir sokak.",
       "imageUrl": "/evci.jpg",
       "imageHint": "village street"
     },
