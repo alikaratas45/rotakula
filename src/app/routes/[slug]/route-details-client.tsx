@@ -6,7 +6,7 @@ import { useSavedRoutes } from '@/hooks/use-saved-routes';
 import { getImageById } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Heart, MapPin, Mountain, Info, Footprints, Loader2 } from 'lucide-react';
+import { Heart, MapPin, Mountain, Info, Footprints, Loader2, Car } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FoodIcon, HistoricHouseIcon } from '@/components/icons';
@@ -66,7 +66,8 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
                     .map(p => `${p.latitude},${p.longitude}`)
                     .join('|');
 
-                const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&waypoints=${waypoints}&travelmode=walking`;
+                const travelMode = route.slug === 'geopark-discovery-route' ? 'driving' : 'walking';
+                const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&waypoints=${waypoints}&travelmode=${travelMode}`;
 
                 window.open(googleMapsUrl, '_blank');
                 setIsStartingRoute(false);
@@ -161,7 +162,7 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
                                         {isStartingRoute ? (
                                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                         ) : (
-                                            <Footprints className="mr-2 h-4 w-4" />
+                                            route.slug === 'geopark-discovery-route' ? <Car className="mr-2 h-4 w-4" /> : <Footprints className="mr-2 h-4 w-4" />
                                         )}
                                         {isStartingRoute ? translations.nearby.gettingLocation : "Rotayı Haritada Başlat"}
                                     </Button>
