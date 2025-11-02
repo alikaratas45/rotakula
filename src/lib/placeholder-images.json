@@ -151,6 +151,12 @@
       "imageHint": "village stream"
     },
     {
+      "id": "story-maionia",
+      "description": "Gökçeören mahallesinin genel görünümü.",
+      "imageUrl": "/gokce.jpg",
+      "imageHint": "village landscape"
+    },
+    {
       "id": "poi-visitor-center",
       "description": "Jeopark Ziyaretçi Merkezi",
       "imageUrl": "/zm.jpg",
