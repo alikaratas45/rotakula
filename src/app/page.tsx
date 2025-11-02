@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import Image from 'next/image';
 import Link from 'next/link';
 import { getImageById } from '@/lib/placeholder-images';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useLanguage } from '@/context/language-context';
 
 const RouteCard = ({ route }: { route: ThematicRoute }) => {
@@ -48,6 +48,12 @@ export default function Home() {
     }
     fetchData();
   }, [language]);
+
+  const sortedRoutes = useMemo(() => {
+    const flavorTour = allRoutes.find(route => route.slug === 'kula-flavor-tour');
+    const otherRoutes = allRoutes.filter(route => route.slug !== 'kula-flavor-tour');
+    return flavorTour ? [...otherRoutes, flavorTour] : otherRoutes;
+  }, [allRoutes]);
   
   const heroImage = getImageById('hero-home');
 
@@ -79,7 +85,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-headline font-bold text-center mb-8">{translations.home.thematicRoutes}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {allRoutes.map(route => (
+            {sortedRoutes.map(route => (
               <RouteCard key={route.id} route={route} />
             ))}
           </div>
