@@ -34,8 +34,8 @@
     },
     "food": {
         "title": "Geschmacksstopps",
-        "nearbyRestaurants": "Restaurants in der Nähe",
-        "nearbyDescription": "Die Karte zeigt nahegelegene Essensmöglichkeiten basierend auf Ihrem Standort. Sie können die Karte erkunden, um neue Orte zu entdecken.",
+        "nearbyRestaurants": "Alle Restaurants Anzeigen",
+        "nearbyDescription": "Klicken Sie auf die Schaltfläche, um alle lokalen Aromen und Restaurants in Kula auf Google Maps zu erkunden.",
         "editorsChoice": "Auswahl des Herausgebers: Empfohlene Geschmäcker",
         "featuredFlavor": "Empfohlener Geschmack"
     },

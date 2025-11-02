@@ -34,8 +34,8 @@
     },
     "food": {
         "title": "Lezzet Durakları",
-        "nearbyRestaurants": "Yakınınızdaki Restoranlar",
-        "nearbyDescription": "Harita, konumunuza göre yakındaki yeme içme mekanlarını göstermektedir. Yeni yerler keşfetmek için haritayı gezebilirsiniz.",
+        "nearbyRestaurants": "Tüm Lokantaları Gör",
+        "nearbyDescription": "Kula'daki tüm yerel lezzetleri ve lokantaları görmek için butona tıklayarak Google Haritalar'da keşfe çıkın.",
         "editorsChoice": "Editörün Seçimi: Öne Çıkan Lezzetler",
         "featuredFlavor": "Öne Çıkan Lezzet"
     },

@@ -34,8 +34,8 @@
     },
     "food": {
         "title": "Flavor Stops",
-        "nearbyRestaurants": "Nearby Restaurants",
-        "nearbyDescription": "The map shows nearby dining options based on your location. You can explore the map to discover new places.",
+        "nearbyRestaurants": "See All Restaurants",
+        "nearbyDescription": "Click the button to explore all local flavors and restaurants in Kula on Google Maps.",
         "editorsChoice": "Editor's Choice: Featured Flavors",
         "featuredFlavor": "Featured Flavor"
     },

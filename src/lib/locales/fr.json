@@ -34,8 +34,8 @@
     },
     "food": {
         "title": "Arrêts Gourmands",
-        "nearbyRestaurants": "Restaurants à Proximité",
-        "nearbyDescription": "La carte montre les options de restauration à proximité en fonction de votre emplacement. Vous pouvez explorer la carte pour découvrir de nouveaux endroits.",
+        "nearbyRestaurants": "Voir Tous les Restaurants",
+        "nearbyDescription": "Cliquez sur le bouton pour explorer toutes les saveurs locales et les restaurants de Kula sur Google Maps.",
         "editorsChoice": "Le Choix de l'Éditeur : Saveurs en Vedette",
         "featuredFlavor": "Saveur en Vedette"
     },
