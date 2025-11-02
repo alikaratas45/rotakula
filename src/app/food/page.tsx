@@ -35,8 +35,8 @@ export default function FoodPage() {
     }, [language]);
     
     const openGoogleMapsSearch = () => {
-        const query = encodeURIComponent('Kula\'daki lokantalar');
-        const url = `https://www.google.com/maps/search/${query}`;
+        const query = encodeURIComponent('Kula\'daki lokanta ve restoranlar');
+        const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
         window.open(url, '_blank');
     };
 
@@ -54,7 +54,7 @@ export default function FoodPage() {
                 <h1 className="text-3xl md:text-4xl font-headline font-bold">{translations.food.title}</h1>
                  <Button variant="outline" onClick={openGoogleMapsSearch}>
                     <MapPin className="mr-2 h-4 w-4" />
-                    {translations.food.nearbyRestaurants}
+                    Kula'daki Lezzet Durakları
                 </Button>
             </div>
              <p className="text-muted-foreground mb-8">{translations.food.nearbyDescription}</p>
