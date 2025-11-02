@@ -62,7 +62,7 @@
       "description": "Kula'nın otantik mahalle yaşamını ve saklı kalmış tarihi güzelliklerini keşfedin.",
       "longDescription": "Kula merkezinin dışına çıkarak, asırlık taş evleri, sakin sokakları ve yemyeşil doğasıyla sizi karşılayacak tarihi mahallelerde huzurlu bir gün geçirin. Bu rota, Kula'nın kırsal yaşamını ve kültürel zenginliğini deneyimlemek için idealdir.",
       "imageId": "route-villages",
-      "poiIds": ["poi-10", "poi-11", "poi-13", "poi-14", "poi-15", "poi-16", "poi-17"],
+      "poiIds": ["poi-10", "poi-11", "poi-13", "poi-14", "poi-15", "poi-16", "poi-17", "poi-27"],
       "title_en": "Our Historic Neighborhoods",
       "description_en": "Discover Kula's authentic neighborhood life and hidden historical beauties.",
       "longDescription_en": "Step outside of Kula's center and spend a peaceful day in historic neighborhoods that will greet you with their centuries-old stone houses, quiet streets, and lush nature. This route is ideal for experiencing the rural life and cultural richness of Kula.",
