@@ -145,6 +145,12 @@
       "imageHint": "artisan hands"
     },
     {
+      "id": "story-kollyda",
+      "description": "İncesu mahallesi yakınlarında bir dere.",
+      "imageUrl": "/goldeli.jpg",
+      "imageHint": "village stream"
+    },
+    {
       "id": "poi-visitor-center",
       "description": "Jeopark Ziyaretçi Merkezi",
       "imageUrl": "/zm.jpg",
