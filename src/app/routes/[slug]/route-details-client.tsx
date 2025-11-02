@@ -6,7 +6,7 @@ import { useSavedRoutes } from '@/hooks/use-saved-routes';
 import { getImageById } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Heart, MapPin, Mountain, Info, Footprints, Loader2, Car } from 'lucide-react';
+import { Heart, MapPin, Mountain, Info, Footprints, Loader2, Car, UtensilsCrossed } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FoodIcon, HistoricHouseIcon } from '@/components/icons';
@@ -39,6 +39,14 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
     const isSaved = isRouteSaved(route.slug);
     const [isStartingRoute, setIsStartingRoute] = useState(false);
+
+    const isFlavorTour = route.slug === 'kula-flavor-tour';
+
+    const handleFlavorTourClick = () => {
+        const query = encodeURIComponent('Kula\'daki lokanta ve restoranlar');
+        const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
+        window.open(url, '_blank');
+    };
 
     const handleStartRoute = () => {
         if (!navigator.geolocation) {
@@ -91,7 +99,7 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
                     <div className="lg:col-span-2">
                         <p className="text-lg text-foreground/80 mb-8">{route.longDescription}</p>
 
-                        {pois.length > 0 && (
+                        {!isFlavorTour && pois.length > 0 && (
                             <div className="mb-8">
                                  <h2 className="text-2xl font-headline font-bold mb-4">{translations.route.mapTitle}</h2>
                                 <EmbeddedMap pois={pois} />
@@ -154,18 +162,28 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
                                     <CardTitle className="font-headline text-xl">{translations.route.routeInfo}</CardTitle>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
-                                     <Button
-                                        onClick={handleStartRoute}
-                                        className="w-full"
-                                        disabled={isStartingRoute}
-                                    >
-                                        {isStartingRoute ? (
-                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                        ) : (
-                                            route.slug === 'geopark-discovery-route' ? <Car className="mr-2 h-4 w-4" /> : <Footprints className="mr-2 h-4 w-4" />
-                                        )}
-                                        {isStartingRoute ? translations.nearby.gettingLocation : "Rotayı Haritada Başlat"}
-                                    </Button>
+                                    {isFlavorTour ? (
+                                        <Button
+                                            onClick={handleFlavorTourClick}
+                                            className="w-full"
+                                        >
+                                            <UtensilsCrossed className="mr-2 h-4 w-4" />
+                                            Kula'daki Lezzet Duraklarını Gör
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            onClick={handleStartRoute}
+                                            className="w-full"
+                                            disabled={isStartingRoute}
+                                        >
+                                            {isStartingRoute ? (
+                                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                            ) : (
+                                                route.slug === 'geopark-discovery-route' ? <Car className="mr-2 h-4 w-4" /> : <Footprints className="mr-2 h-4 w-4" />
+                                            )}
+                                            {isStartingRoute ? translations.nearby.gettingLocation : "Rotayı Haritada Başlat"}
+                                        </Button>
+                                    )}
                                     <Separator />
                                     <Button
                                         onClick={() => isLoaded && toggleSaveRoute(route.slug)}
