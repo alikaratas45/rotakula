@@ -35,10 +35,10 @@ export function Header() {
         { href: "/", label: translations.nav.thematicRoutes },
         { href: "/pois", label: translations.nav.places },
         { href: "/nearby", label: translations.nav.nearby },
-        { href: "/food", label: translations.nav.food },
         { href: "/accommodation", label: translations.nav.accommodation },
         { href: "/stories", label: translations.nav.stories },
         { href: "/my-routes", label: translations.nav.myRoutes },
+        { href: "/food", label: translations.nav.food },
         { href: "/famous", label: translations.nav.about },
     ];
 
