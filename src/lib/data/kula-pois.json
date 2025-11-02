@@ -13,13 +13,13 @@
       "longitude": 28.55369872579898,
       "name_en": "Sandal Divlit Volcano Cone",
       "description_en": "One of Turkey's youngest volcano cones, Sandal Divlit is a key site in the geopark with its impressive crater and views.",
-      "longDescription_en": "It is one of the most important volcanic forms created during the 3rd phase of Kula volcanism (Divlit Tepe Volcanites) and is a typical cinder or scoria cone in terms of its formation and shape. It is generally composed of black and dark brown, hazelnut-lentil sized, highly porous, and loose volcanic materials. Its height above sea level is 900 meters, with a relative height of 150 meters from its surroundings. The cone, which has a crater width of approximately 225 meters, is one of the most characteristic cones of Kula volcanism, visible from the İzmir-Ankara highway. Having largely preserved its natural structure, Sandal Volcano Cone is one of Turkey's youngest volcano cones, and its lava flow covers an area of approximately 11 km².",
+      "longDescription_en": "These basalt columns, located in the Çakırca area of Kula's Şehitlioğlu Neighborhood, were formed as a result of lava spreading into the environment when the Toytepe Volcano erupted approximately 1.26 million years ago. The lava, initially at a temperature of about 800°C, slowly cooled and solidified over a period of about one hundred years. This cooling process caused volumetric contraction and shrinkage in the lava flows. The process initially created hexagonal cracks on the lava surface, which then extended deep into the mass over time. As a result, perfectly interlocked hexagonal prism-shaped basalt columns, a geometric marvel of nature, were formed.",
       "name_fr": "Cône Volcanique de Sandal Divlit",
       "description_fr": "L'un des plus jeunes cônes volcaniques de Turquie, Sandal Divlit est un site clé du géoparc avec son cratère et ses vues impressionnantes.",
-      "longDescription_fr": "C'est l'une des formes volcaniques les plus importantes créées lors de la 3ème phase du volcanisme de Kula (Volcanites de Divlit Tepe) et c'est un cône de scories ou de cendres typique en termes de formation et de forme. Il est généralement composé de matériaux volcaniques noirs et marron foncé, de la taille d'une noisette ou d'une lentille, très poreux et meubles. Sa hauteur au-dessus du niveau de la mer est de 900 mètres, avec une hauteur relative de 150 mètres par rapport à ses environs. Le cône, qui a une largeur de cratère d'environ 225 mètres, est l'un des cônes les plus caractéristiques du volcanisme de Kula, visible depuis l'autoroute İzmir-Ankara. Ayant largement préservé sa structure naturelle, le Cône Volcanique de Sandal est l'un des plus jeunes cônes volcaniques de Turquie, et sa coulée de lave couvre une superficie d'environ 11 km².",
+      "longDescription_fr": "Ces colonnes de basalte, situées dans la région de Çakırca du quartier de Şehitlioğlu à Kula, ont été formées par la lave qui s'est répandue dans l'environnement lors de l'éruption du volcan Toytepe il y a environ 1,26 million d'années. La lave, initialement à une température d'environ 800°C, a lentement refroidi et s'est solidifiée sur une période d'environ cent ans. Ce processus de refroidissement a provoqué une contraction volumétrique et un rétrécissement des coulées de lave. Le processus a d'abord créé des fissures hexagonales à la surface de la lave, qui se sont ensuite étendues en profondeur dans la masse au fil du temps. En conséquence, des colonnes de basalte en forme de prisme hexagonal parfaitement emboîtées, une merveille géométrique de la nature, ont été formées.",
       "name_de": "Vulkankegel Sandal Divlit",
       "description_de": "Als einer der jüngsten Vulkankegel der Türkei ist Sandal Divlit mit seinem beeindruckenden Krater und seiner Aussicht ein wichtiger Standort im Geopark.",
-      "longDescription_de": "Es ist eine der wichtigsten vulkanischen Formen, die während der 3. Phase des Kula-Vulkanismus (Divlit-Tepe-Vulkanite) entstanden sind, und ist ein typischer Asche- oder Schlackenkegel in Bezug auf seine Entstehung und Form. Er besteht im Allgemeinen aus schwarzen und dunkelbraunen, haselnuss-linsengroßen, sehr porösen und lockeren vulkanischen Materialien. Seine Höhe über dem Meeresspiegel beträgt 900 Meter, mit einer relativen Höhe von 150 Metern zu seiner Umgebung. Der Kegel mit einer Kraterbreite von ca. 225 Metern ist einer der charakteristischsten Kegel des Kula-Vulkanismus und von der Autobahn İzmir-Ankara aus sichtbar. Der Vulkankegel Sandal, der seine natürliche Struktur weitgehend bewahrt hat, ist einer der jüngsten Vulkankegel der Türkei, und sein Lavastrom erstreckt sich über eine Fläche von ca. 11 km²."
+      "longDescription_de": "Diese Basaltsäulen in der Gegend von Çakırca im Stadtteil Şehitlioğlu von Kula entstanden durch die Ausbreitung von Lava in die Umgebung, als der Vulkan Toytepe vor etwa 1,26 Millionen Jahren ausbrach. Die Lava, die anfangs eine Temperatur von etwa 800°C hatte, kühlte langsam ab und erstarrte über einen Zeitraum von etwa hundert Jahren. Dieser Abkühlungsprozess führte zu einer volumetrischen Kontraktion und Schrumpfung der Lavaströme. Der Prozess erzeugte zunächst sechseckige Risse an der Lavaoberfläche, die sich dann im Laufe der Zeit tief in die Masse ausdehnten. Als Ergebnis bildeten sich perfekt ineinandergreifende, sechseckige prismenförmige Basaltsäulen, ein geometrisches Wunder der Natur."
     },
     {
       "id": "poi-2",
@@ -482,8 +482,26 @@
       "name_en": "Anemon Hotel",
       "description_en": "A hotel offering comfortable accommodation in a historic building.",
       "longDescription_en": "A hotel offering comfortable accommodation in a historic building."
+    },
+    {
+      "id": "poi-27",
+      "slug": "yurtbasi-tabala-mahallesi",
+      "name": "Yurtbaşı (Tabala) Mahallesi",
+      "description": "Antik Tabala kentinin üzerine kurulu bu mahalle, Roma İmparatoru'nun mektubuna ev sahipliği yapmış zengin bir tarihe sahiptir.",
+      "longDescription": "Antik Tabala kentinin üzerine kurulu bu mahalle, Roma İmparatoru'nun mektubuna ev sahipliği yapmış zengin bir tarihe sahiptir. Daha fazlasını keşfetmek için 'Hikayeler' bölümündeki 'Kayıp Şehir Tabala ve İmparatorun Mektubu' yazısını okuyabilirsiniz.",
+      "category": "history",
+      "imageId": "poi-tabala",
+      "latitude": 38.6019,
+      "longitude": 28.7845,
+      "name_en": "Yurtbaşı (Tabala) Neighborhood",
+      "description_en": "This neighborhood, built on the ancient city of Tabala, has a rich history that includes hosting a letter from the Roman Emperor.",
+      "longDescription_en": "This neighborhood, built on the ancient city of Tabala, has a rich history that includes hosting a letter from the Roman Emperor. To discover more, you can read 'The Lost City of Tabala and the Emperor's Letter' in the 'Stories' section.",
+      "name_fr": "Quartier de Yurtbaşı (Tabala)",
+      "description_fr": "Ce quartier, construit sur l'ancienne cité de Tabala, possède une histoire riche qui inclut l'hébergement d'une lettre de l'Empereur romain.",
+      "longDescription_fr": "Ce quartier, construit sur l'ancienne cité de Tabala, possède une histoire riche qui inclut l'hébergement d'une lettre de l'Empereur romain. Pour en savoir plus, vous pouvez lire 'La Cité Perdue de Tabala et la Lettre de l'Empereur' dans la section 'Histoires'.",
+      "name_de": "Nachbarschaft Yurtbaşı (Tabala)",
+      "description_de": "Dieses Viertel, das auf der antiken Stadt Tabala erbaut wurde, hat eine reiche Geschichte, zu der auch ein Brief des römischen Kaisers gehört.",
+      "longDescription_de": "Dieses Viertel, das auf der antiken Stadt Tabala erbaut wurde, hat eine reiche Geschichte, zu der auch ein Brief des römischen Kaisers gehört. Um mehr zu erfahren, können Sie 'Die verlorene Stadt Tabala und der Brief des Kaisers' im Abschnitt 'Geschichten' lesen."
     }
   ]
 }
-
-    

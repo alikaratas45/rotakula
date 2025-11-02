@@ -209,6 +209,18 @@
       "description": "Anemon Oteli",
       "imageUrl": "/essanlar.jpg",
       "imageHint": "historic hotel"
+    },
+    {
+      "id": "poi-tabala",
+      "description": "Yurtbaşı mahallesinden bir görünüm.",
+      "imageUrl": "/peri-bacalari.jpg",
+      "imageHint": "ancient ruins"
+    },
+    {
+      "id": "story-tabala",
+      "description": "Antik Tabala kentinden kalıntılar ve Roma dönemi yazıtları.",
+      "imageUrl": "/peri-bacalari.jpg",
+      "imageHint": "roman inscription"
     }
   ]
 }
