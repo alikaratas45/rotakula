@@ -6,11 +6,12 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type PropsWithChildren } from 'react';
 import { SplashScreen } from '@/components/splash-screen';
 import { LanguageProvider, useLanguage } from '@/context/language-context';
+import { ThemeProvider, useTheme } from 'next-themes';
 
-function AppContent({ children }: { children: React.ReactNode }) {
+function AppContent({ children }: PropsWithChildren) {
   const [loading, setLoading] = useState(true);
   const { language } = useLanguage();
 
@@ -23,7 +24,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <html lang={language} suppressHydrationWarning>
+    <>
       <head>
         <title>RotaKula - Kula Gezi Rehberi</title>
         <meta name="description" content="Manisa'nın Kula ilçesine özel tematik seyahat rotalarını, tarihi yerleri, doğal güzellikleri ve yöresel lezzetleri keşfedin." />
@@ -45,7 +46,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
           </>
         )}
       </body>
-    </html>
+    </>
   );
 }
 
@@ -56,8 +57,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <LanguageProvider>
-      <AppContent>{children}</AppContent>
-    </LanguageProvider>
+    <html lang="tr" suppressHydrationWarning>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="dark"
+        enableSystem
+        disableTransitionOnChange
+      >
+        <LanguageProvider>
+          <AppContent>{children}</AppContent>
+        </LanguageProvider>
+      </ThemeProvider>
+    </html>
   );
 }

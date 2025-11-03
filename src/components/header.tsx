@@ -5,6 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as React from "react";
 import Image from "next/image";
+import { useTheme } from "next-themes";
+import { Moon, Sun } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -25,6 +27,23 @@ import { AudioGuideControl } from "./audio-guide-control";
 import { useLanguage } from "@/context/language-context";
 import { TurkishFlagIcon, UKFlagIcon, FrenchFlagIcon, GermanFlagIcon } from "./icons";
 
+
+function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
+    const { setTheme, theme } = useTheme();
+    
+    return (
+         <Button
+            variant="outline"
+            size={isMobile ? "icon" : "sm"}
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            className={cn(isMobile && "h-8 w-8")}
+        >
+            <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            <span className="sr-only">Toggle theme</span>
+        </Button>
+    )
+}
 
 export function Header() {
     const pathname = usePathname();
@@ -112,6 +131,7 @@ export function Header() {
                     <div className="flex items-center gap-1">
                         <AudioGuideControl />
                         <LanguageSelector isMobile={true} />
+                        <ThemeSwitcher isMobile={true} />
                         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                            <SheetTrigger asChild>
                                <Button variant="ghost">
@@ -148,6 +168,7 @@ export function Header() {
                 <div className="hidden md:flex flex-1 items-center justify-end gap-2">
                     <AudioGuideControl />
                     <LanguageSelector />
+                    <ThemeSwitcher />
                 </div>
             </div>
         </header>
