@@ -45,23 +45,24 @@ export default function MyRoutesPage() {
                     {userSavedRoutes.map(route => {
                         const image = getImageById(route.imageId);
                         return (
-                             <Card key={route.id} className="flex flex-col perspective-1000">
-                                <Link href={`/routes/${route.slug}`} className="group block preserve-3d">
+                             <Card key={route.id} className="flex flex-col group overflow-hidden transition-all duration-300 ease-in-out bg-card/50 hover:bg-card hover:shadow-xl hover:-translate-y-1">
+                                <Link href={`/routes/${route.slug}`} className="block">
                                     <CardHeader className="p-0">
-                                        <div className="relative h-48 w-full animate-uncrumple-in">
+                                        <div className="relative h-48 w-full overflow-hidden">
                                             {image && (
                                                 <Image
                                                     src={image.imageUrl}
                                                     alt={image.description}
                                                     fill
-                                                    className="object-cover rounded-t-lg transition-transform duration-300 group-hover:scale-105"
+                                                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                                                     data-ai-hint={image.imageHint}
                                                 />
                                             )}
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent group-hover:from-black/40 transition-colors"></div>
                                         </div>
                                     </CardHeader>
                                     <CardContent className="p-4 flex-grow">
-                                        <CardTitle className="font-headline text-xl mb-2">{route.title}</CardTitle>
+                                        <CardTitle className="font-headline text-xl mb-2 group-hover:text-primary transition-colors">{route.title}</CardTitle>
                                         <CardDescription>{route.description}</CardDescription>
                                     </CardContent>
                                 </Link>

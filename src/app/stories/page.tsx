@@ -13,23 +13,24 @@ import { useEffect, useState } from 'react';
 const StoryCard = ({ story }: { story: Story }) => {
   const image = getImageById(story.imageId);
   return (
-    <Link href={`/stories/${story.slug}`} className="group block perspective-1000">
-      <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1 preserve-3d">
+    <Link href={`/stories/${story.slug}`} className="group block">
+      <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out bg-card/50 hover:bg-card hover:shadow-xl hover:-translate-y-1">
         <CardHeader className="p-0">
-          <div className="relative h-48 w-full animate-uncrumple-in">
+          <div className="relative h-48 w-full overflow-hidden">
             {image && (
               <Image
                 src={image.imageUrl}
                 alt={image.description}
                 fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
                 data-ai-hint={image.imageHint}
               />
             )}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent group-hover:from-black/40 transition-colors"></div>
           </div>
         </CardHeader>
         <CardContent className="p-4">
-          <CardTitle className="font-headline text-xl mb-2">{story.title}</CardTitle>
+          <CardTitle className="font-headline text-xl mb-2 group-hover:text-primary transition-colors">{story.title}</CardTitle>
           <CardDescription className="text-sm">{story.excerpt}</CardDescription>
         </CardContent>
       </Card>

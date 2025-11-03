@@ -77,7 +77,7 @@ export function Header() {
     );
 
     return (
-        <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container flex h-16 items-center">
                 {/* Desktop Header */}
                 <div className="hidden md:flex mr-6">
@@ -93,8 +93,8 @@ export function Header() {
                                 key={link.href}
                                 href={link.href}
                                 className={cn(
-                                    "font-bold uppercase transition-colors hover:text-foreground/80",
-                                    (pathname.startsWith(link.href) && link.href !== "/") || pathname === link.href ? "text-foreground" : "text-foreground/60"
+                                    "font-bold uppercase tracking-wider transition-colors hover:text-primary",
+                                    (pathname.startsWith(link.href) && link.href !== "/") || pathname === link.href ? "text-primary" : "text-foreground/60"
                                 )}
                             >
                                 {link.label}
@@ -118,7 +118,7 @@ export function Header() {
                                    {translations.header.menu}
                                </Button>
                            </SheetTrigger>
-                           <SheetContent side="left" className="curved-sheet">
+                           <SheetContent side="left" className="w-[80vw] bg-background/95 backdrop-blur-xl">
                                 <VisuallyHidden>
                                     <SheetTitle>{translations.header.menu}</SheetTitle>
                                 </VisuallyHidden>
@@ -129,10 +129,10 @@ export function Header() {
                                            href={link.href}
                                            onClick={handleLinkClick}
                                            className={cn(
-                                               "flex items-center gap-4 px-2.5 font-bold uppercase animate-slide-in-from-left",
-                                               (pathname.startsWith(link.href) && link.href !== "/") || pathname === link.href ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                                               "flex items-center gap-4 px-2.5 font-bold uppercase tracking-wider animate-slide-in-from-left",
+                                               (pathname.startsWith(link.href) && link.href !== "/") || pathname === link.href ? "text-primary" : "text-muted-foreground hover:text-primary"
                                            )}
-                                            style={{ animationDelay: `${200 + index * 50}ms` }}
+                                            style={{ animationDelay: `${150 + index * 50}ms` }}
                                        >
                                            {link.label}
                                        </Link>

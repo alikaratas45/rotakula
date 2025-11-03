@@ -10,26 +10,31 @@ import { getImageById } from '@/lib/placeholder-images';
 import { useEffect, useState, useMemo } from 'react';
 import { useLanguage } from '@/context/language-context';
 
-const RouteCard = ({ route }: { route: ThematicRoute }) => {
+const RouteCard = ({ route, delay }: { route: ThematicRoute, delay: number }) => {
   const image = getImageById(route.imageId);
   return (
-    <Link href={`/routes/${route.slug}`} className="group block perspective-1000">
-      <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1 preserve-3d">
+    <Link 
+      href={`/routes/${route.slug}`} 
+      className="group block animate-fade-in-up"
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out bg-card/50 hover:bg-card hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-2">
         <CardHeader className="p-0">
-          <div className="relative h-48 w-full animate-uncrumple-in">
+          <div className="relative h-48 w-full">
             {image && (
               <Image
                 src={image.imageUrl}
                 alt={image.description}
                 fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
                 data-ai-hint={image.imageHint}
               />
             )}
+             <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent group-hover:from-black/40 transition-colors"></div>
           </div>
         </CardHeader>
         <CardContent className="p-4">
-          <CardTitle className="font-headline text-xl mb-2">{route.title}</CardTitle>
+          <CardTitle className="font-headline text-xl mb-2 group-hover:text-primary transition-colors">{route.title}</CardTitle>
           <CardDescription className="text-sm">{route.description}</CardDescription>
         </CardContent>
       </Card>
@@ -59,7 +64,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      <section className="relative h-[60vh] md:h-[80vh] w-full flex items-center justify-center text-center text-white">
+      <section className="relative h-[70vh] md:h-[90vh] w-full flex items-center justify-center text-center text-white">
         {heroImage && (
           <Image
             src={heroImage.imageUrl}
@@ -70,12 +75,12 @@ export default function Home() {
             data-ai-hint={heroImage.imageHint}
           />
         )}
-        <div className="absolute inset-0 bg-black/50" />
-        <div className="relative z-10 max-w-4xl p-4">
-          <h1 className="font-headline text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight drop-shadow-lg">
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
+        <div className="relative z-10 max-w-4xl p-4 mt-24">
+          <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight drop-shadow-lg animate-fade-in" style={{animationDelay: '200ms'}}>
             {translations.home.heroTitle}
           </h1>
-          <p className="mt-4 text-lg md:text-xl max-w-2xl mx-auto drop-shadow-md">
+          <p className="mt-6 text-lg md:text-xl max-w-3xl mx-auto drop-shadow-md animate-fade-in" style={{animationDelay: '600ms'}}>
             {translations.home.heroSubtitle}
           </p>
         </div>
@@ -83,10 +88,10 @@ export default function Home() {
 
       <section className="py-16 px-4 md:px-8 bg-background">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-headline font-bold text-center mb-8">{translations.home.thematicRoutes}</h2>
+          <h2 className="text-4xl font-headline font-bold text-center mb-12 animate-fade-in-up">{translations.home.thematicRoutes}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {sortedRoutes.map(route => (
-              <RouteCard key={route.id} route={route} />
+            {sortedRoutes.map((route, index) => (
+              <RouteCard key={route.id} route={route} delay={index * 150} />
             ))}
           </div>
         </div>
