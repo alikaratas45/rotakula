@@ -11,9 +11,8 @@ import { SplashScreen } from '@/components/splash-screen';
 import { LanguageProvider, useLanguage } from '@/context/language-context';
 import { ThemeProvider, useTheme } from 'next-themes';
 
-function AppContent({ children }: PropsWithChildren) {
+function AppBody({ children }: PropsWithChildren) {
   const [loading, setLoading] = useState(true);
-  const { language } = useLanguage();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -24,29 +23,18 @@ function AppContent({ children }: PropsWithChildren) {
   }, []);
 
   return (
-    <>
-      <head>
-        <title>RotaKula - Kula Gezi Rehberi</title>
-        <meta name="description" content="Manisa'nın Kula ilçesine özel tematik seyahat rotalarını, tarihi yerleri, doğal güzellikleri ve yöresel lezzetleri keşfedin." />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
-        <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#4E342E" />
-      </head>
-      <body className={cn('font-body antialiased min-h-screen flex flex-col')}>
-        {loading ? (
-          <SplashScreen />
-        ) : (
-          <>
-            <Header />
-            <main className="flex-grow">{children}</main>
-            <Footer />
-            <Toaster />
-          </>
-        )}
-      </body>
-    </>
+    <body className={cn('font-body antialiased min-h-screen flex flex-col')}>
+      {loading ? (
+        <SplashScreen />
+      ) : (
+        <>
+          <Header />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+          <Toaster />
+        </>
+      )}
+    </body>
   );
 }
 
@@ -58,6 +46,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="tr" suppressHydrationWarning>
+      <head>
+        <title>RotaKula - Kula Gezi Rehberi</title>
+        <meta name="description" content="Manisa'nın Kula ilçesine özel tematik seyahat rotalarını, tarihi yerleri, doğal güzellikleri ve yöresel lezzetleri keşfedin." />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#4E342E" />
+      </head>
       <ThemeProvider
         attribute="class"
         defaultTheme="dark"
@@ -65,7 +62,7 @@ export default function RootLayout({
         disableTransitionOnChange
       >
         <LanguageProvider>
-          <AppContent>{children}</AppContent>
+          <AppBody>{children}</AppBody>
         </LanguageProvider>
       </ThemeProvider>
     </html>
