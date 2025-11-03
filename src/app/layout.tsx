@@ -8,8 +8,8 @@ import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { useEffect, useState, type PropsWithChildren } from 'react';
 import { SplashScreen } from '@/components/splash-screen';
-import { LanguageProvider, useLanguage } from '@/context/language-context';
-import { ThemeProvider, useTheme } from 'next-themes';
+import { LanguageProvider } from '@/context/language-context';
+import { ThemeProvider } from 'next-themes';
 
 function AppBody({ children }: PropsWithChildren) {
   const [loading, setLoading] = useState(true);
@@ -22,22 +22,34 @@ function AppBody({ children }: PropsWithChildren) {
     return () => clearTimeout(timer);
   }, []);
 
+  if (loading) {
+    return <SplashScreen />;
+  }
+
   return (
-    <body className={cn('font-body antialiased min-h-screen flex flex-col')}>
-      {loading ? (
-        <SplashScreen />
-      ) : (
-        <>
-          <Header />
-          <main className="flex-grow">{children}</main>
-          <Footer />
-          <Toaster />
-        </>
-      )}
-    </body>
+    <>
+      <Header />
+      <main className="flex-grow">{children}</main>
+      <Footer />
+      <Toaster />
+    </>
   );
 }
 
+function Providers({ children }: PropsWithChildren) {
+  return (
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="dark"
+      enableSystem
+      disableTransitionOnChange
+    >
+      <LanguageProvider>
+        <AppBody>{children}</AppBody>
+      </LanguageProvider>
+    </ThemeProvider>
+  );
+}
 
 export default function RootLayout({
   children,
@@ -55,16 +67,9 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#4E342E" />
       </head>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="dark"
-        enableSystem
-        disableTransitionOnChange
-      >
-        <LanguageProvider>
-          <AppBody>{children}</AppBody>
-        </LanguageProvider>
-      </ThemeProvider>
+      <body className={cn('font-body antialiased min-h-screen flex flex-col')}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
