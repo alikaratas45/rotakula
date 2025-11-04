@@ -5,12 +5,12 @@ import { getPoiBySlug } from '@/lib/kula-data';
 import { notFound } from 'next/navigation';
 import PoiClientPage from './poi-client-page';
 import { useLanguage } from '@/context/language-context';
-import { useEffect, useState, use } from 'react';
+import { useEffect, useState } from 'react';
 import type { PointOfInterest } from '@/lib/types';
 
 
-export default function PoiDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = use(params);
+export default function PoiDetailPage({ params }: { params: { slug: string } }) {
+    const { slug } = params;
     const { language, translations } = useLanguage();
     const [poi, setPoi] = useState<PointOfInterest | null>(null);
     const [loading, setLoading] = useState(true);
