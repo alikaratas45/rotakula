@@ -11,7 +11,7 @@ import { notFound } from 'next/navigation';
 import { getImageById } from '@/lib/placeholder-images';
 
 export default function StoryPage({ params }: { params: { slug: string } }) {
-    const { slug } = params;
+    const slug = params.slug;
     const { language, translations } = useLanguage();
     const [story, setStory] = useState<Story | null>(null);
     const [loading, setLoading] = useState(true);
@@ -39,7 +39,6 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
 
     const storyImage = getImageById(story.imageId);
     
-    // Simplified date to avoid hydration mismatch
     const displayDate = story.date;
 
     return (
