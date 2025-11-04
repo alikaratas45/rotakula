@@ -13,8 +13,8 @@ import { cn } from '@/lib/utils';
 function SplashScreen() {
     return (
         <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background text-foreground">
-            <div className="flex flex-col items-center gap-4">
-                 <Image src="/logo.png" alt="RotaKula Logo" width={400} height={400} className="h-48 w-48 mb-4 animate-spin" />
+            <div className="flex flex-col items-center gap-4 perspective-1000">
+                 <Image src="/logo.png" alt="RotaKula Logo" width={400} height={400} className="h-48 w-48 mb-4 animate-spin-slow preserve-3d" />
                  <p className="text-2xl text-foreground text-center">Kula'nın dijital rehberine hoş geldiniz.</p>
             </div>
         </div>
