@@ -4,8 +4,6 @@
 import { getStoryBySlug } from '@/lib/kula-data';
 import Image from 'next/image';
 import { Calendar, User } from 'lucide-react';
-import { format } from 'date-fns';
-import { tr, enUS } from 'date-fns/locale';
 import { useLanguage } from '@/context/language-context';
 import { useEffect, useState } from 'react';
 import type { Story } from '@/lib/types';
@@ -40,7 +38,9 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
     }
 
     const storyImage = getImageById(story.imageId);
-    const formattedDate = format(new Date(story.date), "d MMMM yyyy", { locale: language === 'tr' ? tr : enUS });
+    
+    // Simplified date to avoid hydration mismatch
+    const displayDate = new Date(story.date).toLocaleDateString(language);
 
     return (
         <article>
@@ -72,7 +72,7 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
                         </div>
                         <div className="flex items-center gap-2">
                             <Calendar className="h-4 w-4" />
-                            <time dateTime={story.date}>{formattedDate}</time>
+                            <time dateTime={story.date}>{displayDate}</time>
                         </div>
                     </div>
                     <div className="prose prose-lg max-w-none text-foreground/90">
