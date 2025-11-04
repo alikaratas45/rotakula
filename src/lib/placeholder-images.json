@@ -213,14 +213,20 @@
     {
       "id": "poi-tabala",
       "description": "Yurtbaşı mahallesinden bir görünüm.",
-      "imageUrl": "/peri-bacalari.jpg",
+      "imageUrl": "/yurtbasi.jpg",
       "imageHint": "ancient ruins"
     },
     {
       "id": "story-tabala",
       "description": "Antik Tabala kentinden kalıntılar ve Roma dönemi yazıtları.",
-      "imageUrl": "/peri-bacalari.jpg",
+      "imageUrl": "/yurtbasi.jpg",
       "imageHint": "roman inscription"
+    },
+    {
+      "id": "poi-carsi",
+      "description": "Tarihi Kula Çarşısı",
+      "imageUrl": "/carsi.jpg",
+      "imageHint": "historic bazaar"
     }
   ]
 }
