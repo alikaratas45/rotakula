@@ -180,13 +180,13 @@ export function AudioGuideControl() {
         <div className="flex items-center gap-1">
              <Button 
                 variant="outline"
-                size="sm" 
+                size="icon" 
                 onClick={toggleGuide}
                 aria-label={status === 'idle' ? translations.audioGuide.start : translations.audioGuide.active}
-                className="w-[150px]"
+                className="w-8 h-8 md:w-[150px] md:h-9"
             >
-                {status === 'listening' ? <RadioTower className="mr-2 h-4 w-4 animate-pulse text-green-500" /> : <Radio className="mr-2 h-4 w-4" />}
-                {status === 'listening' ? translations.audioGuide.activeShort : translations.audioGuide.title}
+                {status === 'listening' ? <RadioTower className="h-4 w-4 animate-pulse text-green-500" /> : <Radio className="h-4 w-4" />}
+                <span className="hidden md:inline">{status === 'listening' ? translations.audioGuide.activeShort : translations.audioGuide.title}</span>
             </Button>
         </div>
     );
