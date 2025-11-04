@@ -34,7 +34,7 @@ function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
     return (
          <Button
             variant="outline"
-            size={isMobile ? "icon" : "sm"}
+            size={isMobile ? "sm" : "sm"}
             onClick={() => setTheme(theme === "light" ? "dark" : "light")}
             className={cn(isMobile && "h-8 w-8")}
         >
@@ -77,7 +77,7 @@ export function Header() {
     const LanguageSelector = ({ isMobile = false }: { isMobile?: boolean }) => (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                 <Button variant="outline" size={isMobile ? "icon" : "sm"} className={cn(isMobile && "h-8 w-8")}>
+                 <Button variant="outline" size={isMobile ? "sm" : "sm"} className={cn(isMobile && "h-8")}>
                     <CurrentFlag className={cn("rounded-sm", isMobile ? "h-5 w-5" : "h-4 w-4")} />
                     {!isMobile && <span className="ml-2">{language.toUpperCase()}</span>}
                 </Button>
@@ -154,9 +154,9 @@ export function Header() {
                                                href={link.href}
                                                onClick={handleLinkClick}
                                                className={cn(
-                                                   "border-b py-4 text-lg font-bold uppercase tracking-wider opacity-0",
+                                                   "border-b py-4 text-lg font-bold uppercase tracking-wider",
                                                    (pathname.startsWith(link.href) && link.href !== "/") || pathname === link.href ? "text-primary" : "text-muted-foreground hover:text-primary",
-                                                    isSheetOpen && "animate-slide-in-from-left"
+                                                   isSheetOpen ? "animate-slide-in-from-left opacity-0" : "opacity-0"
                                                )}
                                                 style={{ animationDelay: `${150 + index * 100}ms` }}
                                            >
