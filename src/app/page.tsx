@@ -15,10 +15,10 @@ const RouteCard = ({ route, delay }: { route: ThematicRoute, delay: number }) =>
   return (
     <Link 
       href={`/routes/${route.slug}`} 
-      className="group block animate-fade-in-up"
+      className="group block animate-fade-in-up card-3d"
       style={{ animationDelay: `${delay}ms` }}
     >
-      <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out bg-card/50 hover:bg-card hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-2">
+      <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out bg-card/50 hover:bg-card hover:shadow-2xl card-3d-hover">
         <CardHeader className="p-0">
           <div className="relative h-48 w-full">
             {image && (
