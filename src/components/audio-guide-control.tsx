@@ -44,6 +44,7 @@ export function AudioGuideControl() {
         setTriggeredPois(new Set());
         setStatus('idle');
         dismiss();
+        window.speechSynthesis.cancel();
     }, [dismiss]);
 
     const startLocationTracking = () => {
@@ -82,6 +83,31 @@ export function AudioGuideControl() {
     const handlePlayAudioForPoi = useCallback((poi: PointOfInterest) => {
         router.push(`/pois/${poi.slug}?autoplay=true`);
     }, [router]);
+    
+    const playProximityAlert = useCallback((poiName: string) => {
+        if (typeof window === 'undefined' || !window.speechSynthesis) {
+            return;
+        }
+
+        const notificationText = `${poiName}'na geldiniz. Anlatmamı ister misiniz?`;
+        const utterance = new SpeechSynthesisUtterance(notificationText);
+        
+        const voiceLang = language === 'tr' ? 'tr-TR' : language === 'en' ? 'en-US' : language === 'fr' ? 'fr-FR' : 'de-DE';
+        utterance.lang = voiceLang;
+
+        const voices = window.speechSynthesis.getVoices();
+        let selectedVoice = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('kadın') || v.name.toLowerCase().includes('female')));
+        if (!selectedVoice) {
+            selectedVoice = voices.find(v => v.lang === voiceLang);
+        }
+
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
+        }
+        
+        window.speechSynthesis.cancel(); // Cancel any ongoing speech
+        window.speechSynthesis.speak(utterance);
+    }, [language]);
 
 
     useEffect(() => {
@@ -101,6 +127,21 @@ export function AudioGuideControl() {
 
             if (distance < PROXIMITY_THRESHOLD) {
                 setTriggeredPois(prev => new Set(prev).add(poi.id));
+                
+                // Play audio alert
+                const startPlayback = () => {
+                   playProximityAlert(poi.name);
+                }
+
+                if (window.speechSynthesis.getVoices().length === 0) {
+                     window.speechSynthesis.onvoiceschanged = () => {
+                        startPlayback();
+                     };
+                } else {
+                    startPlayback();
+                }
+                
+                // Show visual toast notification
                 toast({
                     title: `${translations.audioGuide.nearby}: ${poi.name}`,
                     description: translations.audioGuide.nearbyDescription,
@@ -114,7 +155,7 @@ export function AudioGuideControl() {
                 break; 
             }
         }
-    }, [userLocation, pois, status, triggeredPois, handlePlayAudioForPoi, toast, translations]);
+    }, [userLocation, pois, status, triggeredPois, handlePlayAudioForPoi, toast, translations, playProximityAlert]);
 
 
     const toggleGuide = () => {
