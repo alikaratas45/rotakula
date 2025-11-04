@@ -149,10 +149,11 @@ export function Header() {
                                            href={link.href}
                                            onClick={handleLinkClick}
                                            className={cn(
-                                               "border-b py-4 text-lg font-bold uppercase tracking-wider animate-slide-in-from-left",
-                                               (pathname.startsWith(link.href) && link.href !== "/") || pathname === link.href ? "text-primary" : "text-muted-foreground hover:text-primary"
+                                               "border-b py-4 text-lg font-bold uppercase tracking-wider opacity-0",
+                                               (pathname.startsWith(link.href) && link.href !== "/") || pathname === link.href ? "text-primary" : "text-muted-foreground hover:text-primary",
+                                                isSheetOpen && "animate-slide-in-from-left"
                                            )}
-                                            style={{ animationDelay: `${150 + index * 50}ms`, animationFillMode: 'both' }}
+                                            style={{ animationDelay: `${150 + index * 100}ms` }}
                                        >
                                            {link.label}
                                        </Link>
