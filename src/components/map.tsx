@@ -169,7 +169,7 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
                 position={{ lat: selectedPoi.latitude, lng: selectedPoi.longitude }}
                 onCloseClick={handleInfoWindowClose}
             >
-                <div className="p-1 flex flex-col gap-2 w-72">
+                <div className="p-2 flex flex-col gap-2 max-w-xs">
                     {poiImage && (
                         <div className="relative h-32 w-full rounded-md overflow-hidden">
                             <Image
