@@ -142,23 +142,29 @@ export function Header() {
                                 <VisuallyHidden>
                                     <SheetTitle>{translations.header.menu}</SheetTitle>
                                 </VisuallyHidden>
-                               <nav className="flex flex-col pt-16">
-                                   {navLinks.map((link, index) => (
-                                       <Link
-                                           key={link.href}
-                                           href={link.href}
-                                           onClick={handleLinkClick}
-                                           className={cn(
-                                               "border-b py-4 text-lg font-bold uppercase tracking-wider opacity-0",
-                                               (pathname.startsWith(link.href) && link.href !== "/") || pathname === link.href ? "text-primary" : "text-muted-foreground hover:text-primary",
-                                                isSheetOpen && "animate-slide-in-from-left"
-                                           )}
-                                            style={{ animationDelay: `${150 + index * 100}ms` }}
-                                       >
-                                           {link.label}
-                                       </Link>
-                                   ))}
-                               </nav>
+                                <div className="p-6 pt-12">
+                                     <Link href="/" onClick={handleLinkClick} className="flex items-center space-x-2 mb-8">
+                                        <Image src="/logo.png" alt="RotaKula Logo" width={32} height={32} />
+                                        <span className="font-bold font-headline text-xl">RotaKula</span>
+                                    </Link>
+                                   <nav className="flex flex-col">
+                                       {navLinks.map((link, index) => (
+                                           <Link
+                                               key={link.href}
+                                               href={link.href}
+                                               onClick={handleLinkClick}
+                                               className={cn(
+                                                   "border-b py-4 text-lg font-bold uppercase tracking-wider opacity-0",
+                                                   (pathname.startsWith(link.href) && link.href !== "/") || pathname === link.href ? "text-primary" : "text-muted-foreground hover:text-primary",
+                                                    isSheetOpen && "animate-slide-in-from-left"
+                                               )}
+                                                style={{ animationDelay: `${150 + index * 100}ms` }}
+                                           >
+                                               {link.label}
+                                           </Link>
+                                       ))}
+                                   </nav>
+                               </div>
                            </SheetContent>
                        </Sheet>
                     </div>
