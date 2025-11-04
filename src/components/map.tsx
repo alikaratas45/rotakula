@@ -4,7 +4,7 @@
 import { Map, AdvancedMarker, useMap, InfoWindow } from "@vis.gl/react-google-maps";
 import { PointOfInterest } from "@/lib/types";
 import { useCallback, useEffect, useState } from "react";
-import { Loader2, Star, Navigation } from "lucide-react";
+import { Loader2, Star, Navigation, X } from "lucide-react";
 import Image from "next/image";
 import { getImageById } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
@@ -66,10 +66,22 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
   const { translations } = useLanguage();
   const [markersLoaded, setMarkersLoaded] = useState(false);
   const [userPosition, setUserPosition] = useState<{ lat: number; lng: number } | null>(null);
+  const [selectedPoiId, setSelectedPoiId] = useState<string | null>(null);
 
-  const handleMarkerClick = (poi: PointOfInterest) => {
-    router.push(`/pois/${poi.slug}`);
+
+  const handleMarkerClick = (poiId: string) => {
+    setSelectedPoiId(poiId);
   };
+  
+  const handleInfoWindowClose = () => {
+    setSelectedPoiId(null);
+  }
+
+  const handleGetDirections = (poi: PointOfInterest) => {
+      if (!poi) return;
+      const url = `https://www.google.com/maps/dir/?api=1&destination=${poi.latitude},${poi.longitude}`;
+      window.open(url, '_blank');
+  }
 
   useEffect(() => {
     // Get user's location
@@ -125,6 +137,10 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
   const center = pois.length > 0
     ? { lat: pois[0].latitude, lng: pois[0].longitude }
     : { lat: 38.547, lng: 28.52 };
+    
+  const selectedPoi = selectedPoiId ? pois.find(p => p.id === selectedPoiId) : null;
+  const poiImage = selectedPoi ? getImageById(selectedPoi.imageId) : null;
+
 
   return (
     <div className="h-96 w-full rounded-lg overflow-hidden relative">
@@ -142,11 +158,42 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
         gestureHandling={"greedy"}
         disableDefaultUI={true}
         mapId="rotakula-map"
+        onClick={handleInfoWindowClose}
       >
         {userPosition && <UserLocationMarker />}
         {pois.map((poi) => (
-          <PoiMarker key={poi.id} poi={poi} onClick={() => handleMarkerClick(poi)} />
+          <PoiMarker key={poi.id} poi={poi} onClick={() => handleMarkerClick(poi.id)} />
         ))}
+        {selectedPoi && (
+            <InfoWindow
+                position={{ lat: selectedPoi.latitude, lng: selectedPoi.longitude }}
+                onCloseClick={handleInfoWindowClose}
+            >
+                <div className="p-1 flex flex-col gap-2 w-64">
+                    {poiImage && (
+                        <div className="relative h-32 w-full rounded-md overflow-hidden">
+                            <Image
+                                src={poiImage.imageUrl}
+                                alt={poiImage.description}
+                                fill
+                                className="object-cover"
+                            />
+                        </div>
+                    )}
+                    <h3 className="font-bold font-headline text-md">{selectedPoi.name}</h3>
+                    <p className="text-sm text-foreground/80 line-clamp-2">{selectedPoi.description}</p>
+                    <div className="flex gap-2 mt-2">
+                        <Button size="sm" variant="outline" onClick={() => handleGetDirections(selectedPoi)}>
+                            <Navigation className="mr-2 h-4 w-4"/>
+                            {translations.map.getDirections}
+                        </Button>
+                        <Button size="sm" variant="secondary" onClick={() => router.push(`/pois/${selectedPoi.slug}`)}>
+                            {translations.common.moreInfo}
+                        </Button>
+                    </div>
+                </div>
+            </InfoWindow>
+        )}
       </Map>
     </div>
   );
@@ -284,10 +331,3 @@ export const NearbySearch = () => {
         </div>
     );
 };
-
-    
-
-    
-
-
-
