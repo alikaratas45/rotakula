@@ -14,9 +14,9 @@ function SplashScreen() {
     return (
         <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background text-foreground">
             <div className="flex flex-col items-center gap-4">
-                 <Image src="/logo.png" alt="RotaKula Logo" width={100} height={100} className="h-24 w-24 mb-4" />
-                 <h1 className="text-2xl font-headline font-bold">RotaKula</h1>
-                 <p className="text-muted-foreground">Kula'nın dijital rehberine hoş geldiniz.</p>
+                 <Image src="/logo.png" alt="RotaKula Logo" width={200} height={200} className="h-48 w-48 mb-4" />
+                 <h1 className="text-5xl font-headline font-bold">RotaKula</h1>
+                 <p className="text-lg text-muted-foreground">Kula'nın dijital rehberine hoş geldiniz.</p>
             </div>
         </div>
     )
