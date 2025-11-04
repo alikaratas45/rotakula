@@ -142,17 +142,17 @@ export function Header() {
                                 <VisuallyHidden>
                                     <SheetTitle>{translations.header.menu}</SheetTitle>
                                 </VisuallyHidden>
-                               <nav className="grid gap-6 text-lg font-medium mt-16">
+                               <nav className="flex flex-col pt-16">
                                    {navLinks.map((link, index) => (
                                        <Link
                                            key={link.href}
                                            href={link.href}
                                            onClick={handleLinkClick}
                                            className={cn(
-                                               "flex items-center gap-4 px-2.5 font-bold uppercase tracking-wider animate-slide-in-from-left",
+                                               "border-b py-4 text-lg font-bold uppercase tracking-wider animate-slide-in-from-left",
                                                (pathname.startsWith(link.href) && link.href !== "/") || pathname === link.href ? "text-primary" : "text-muted-foreground hover:text-primary"
                                            )}
-                                            style={{ animationDelay: `${150 + index * 50}ms` }}
+                                            style={{ animationDelay: `${150 + index * 50}ms`, animationFillMode: 'both' }}
                                        >
                                            {link.label}
                                        </Link>
