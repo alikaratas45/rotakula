@@ -143,7 +143,7 @@ export function Header() {
                                     <SheetTitle>{translations.header.menu}</SheetTitle>
                                 </VisuallyHidden>
                                 <div className="p-6 pt-12">
-                                     <Link href="/" onClick={handleLinkClick} className="flex items-center space-x-2 mb-8">
+                                     <Link href="/" onClick={handleLinkClick} className="flex items-center space-x-2 mb-6">
                                         <Image src="/logo.png" alt="RotaKula Logo" width={32} height={32} />
                                         <span className="font-bold font-headline text-xl">RotaKula</span>
                                     </Link>
