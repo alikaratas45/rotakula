@@ -37,7 +37,13 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const handleSetLanguage = (lang: Language) => {
     setLanguage(lang);
     localStorage.setItem('rota-kula-language', lang);
+    document.documentElement.lang = lang;
   };
+  
+  useEffect(() => {
+      document.documentElement.lang = language;
+  }, [language]);
+
 
   const currentTranslations = useMemo(() => translations[language], [language]);
 
