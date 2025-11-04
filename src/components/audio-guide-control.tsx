@@ -165,13 +165,13 @@ export function AudioGuideControl() {
              toast({
                 title: translations.audioGuide.started,
                 description: translations.audioGuide.startedDescription,
-                duration: 2000,
+                duration: 1500,
             });
         } else {
             stopLocationTracking();
             toast({
                 title: translations.audioGuide.stopped,
-                duration: 2000,
+                duration: 1500,
             });
         }
     };
