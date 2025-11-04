@@ -9,7 +9,7 @@ import type { PointOfInterest } from '@/lib/types';
 import { getImageById } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, MapPin, Mountain, Info, Compass } from 'lucide-react';
+import { Loader2, MapPin, Mountain, Info, Compass, Navigation } from 'lucide-react';
 import { HistoricHouseIcon, FoodIcon, BedIcon } from '@/components/icons';
 import EmbeddedMap from '@/components/map';
 import { APIProvider } from '@vis.gl/react-google-maps';
@@ -89,6 +89,11 @@ export default function NearbyPage() {
     
     const poisForMap = userLocation ? nearbyPois : [];
 
+    const handleGetDirections = (poi: PointOfInterest) => {
+        const url = `https://www.google.com/maps/dir/?api=1&destination=${poi.latitude},${poi.longitude}`;
+        window.open(url, '_blank');
+    };
+
     const renderContent = () => {
         switch (status) {
             case 'loading':
@@ -153,6 +158,10 @@ export default function NearbyPage() {
                                                 <Info className="mr-2 h-4 w-4" />
                                                 {translations.common.moreInfo}
                                             </Link>
+                                        </Button>
+                                        <Button variant="outline" size="sm" onClick={() => handleGetDirections(poi)}>
+                                            <Navigation className="mr-2 h-4 w-4" />
+                                            {translations.map.getDirections}
                                         </Button>
                                     </div>
                                 </Card>

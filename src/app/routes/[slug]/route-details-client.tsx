@@ -6,7 +6,7 @@ import { useSavedRoutes } from '@/hooks/use-saved-routes';
 import { getImageById } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Heart, MapPin, Mountain, Info, Footprints, Loader2, Car, UtensilsCrossed } from 'lucide-react';
+import { Heart, MapPin, Mountain, Info, Footprints, Loader2, Car, UtensilsCrossed, Navigation } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FoodIcon, HistoricHouseIcon } from '@/components/icons';
@@ -45,6 +45,11 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
     const handleFlavorTourClick = () => {
         const query = encodeURIComponent('Kula\'daki lokanta ve restoranlar');
         const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
+        window.open(url, '_blank');
+    };
+
+    const handleGetDirections = (poi: PointOfInterest) => {
+        const url = `https://www.google.com/maps/dir/?api=1&destination=${poi.latitude},${poi.longitude}`;
         window.open(url, '_blank');
     };
 
@@ -144,6 +149,10 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
                                                                 <Info className="mr-2 h-4 w-4" />
                                                                 {translations.common.moreInfo}
                                                             </Link>
+                                                        </Button>
+                                                        <Button variant="outline" size="sm" onClick={() => handleGetDirections(poi)}>
+                                                            <Navigation className="mr-2 h-4 w-4" />
+                                                            {translations.map.getDirections}
                                                         </Button>
                                                     </div>
                                                 </CardContent>
