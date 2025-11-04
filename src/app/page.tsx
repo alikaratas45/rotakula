@@ -87,6 +87,17 @@ export default function Home() {
       </section>
 
       <section className="py-16 px-4 md:px-8 bg-background">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-4xl font-headline font-bold text-center mb-12 animate-fade-in-up">{translations.home.thematicRoutes}</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {sortedRoutes.map((route, index) => (
+              <RouteCard key={route.id} route={route} delay={index * 150} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 px-4 md:px-8 bg-background">
         <div className="max-w-4xl mx-auto">
           <div className="aspect-w-16 aspect-h-9 w-full">
             <iframe 
@@ -102,16 +113,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-16 px-4 md:px-8 bg-background">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-headline font-bold text-center mb-12 animate-fade-in-up">{translations.home.thematicRoutes}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {sortedRoutes.map((route, index) => (
-              <RouteCard key={route.id} route={route} delay={index * 150} />
-            ))}
-          </div>
-        </div>
-      </section>
     </div>
   );
 }
