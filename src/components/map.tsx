@@ -89,33 +89,37 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
 
 
    useEffect(() => {
-    if (map && pois.length > 0) {
-      const bounds = new google.maps.LatLngBounds();
+    if (!map) return;
 
-      // Add user's position to bounds if available
-      if (userPosition) {
-        bounds.extend(new google.maps.LatLng(userPosition.lat, userPosition.lng));
-      }
-
-      pois.forEach((poi) => {
-        bounds.extend(new google.maps.LatLng(poi.latitude, poi.longitude));
-      });
-      
-      map.fitBounds(bounds, 100);
-
-      if (pois.length === 1 && !userPosition) {
-        map.setZoom(13);
-      }
-      setMarkersLoaded(true);
-
-    } else if (map && userPosition) {
-        // If there are no POIs but we have user location, center on them
+    if (pois.length > 0) {
+        if (pois.length === 1) {
+            // Single POI: center on it with a closer zoom
+            const poi = pois[0];
+            map.setCenter({ lat: poi.latitude, lng: poi.longitude });
+            map.setZoom(15);
+        } else {
+            // Multiple POIs: fit them all
+            const bounds = new google.maps.LatLngBounds();
+            if (userPosition) {
+                bounds.extend(new google.maps.LatLng(userPosition.lat, userPosition.lng));
+            }
+            pois.forEach((poi) => {
+                bounds.extend(new google.maps.LatLng(poi.latitude, poi.longitude));
+            });
+            map.fitBounds(bounds, 60); // Reduced padding for a tighter fit
+        }
+    } else if (userPosition) {
+        // No POIs, but we have user location, center on them
         map.setCenter(userPosition);
         map.setZoom(13);
-        setMarkersLoaded(true);
-    } else if (pois.length === 0) {
-        setMarkersLoaded(true);
+    } else {
+        // No POIs and no user location, set a default view of Kula
+        map.setCenter({ lat: 38.547, lng: 28.65 });
+        map.setZoom(13);
     }
+
+    setMarkersLoaded(true);
+
   }, [map, pois, userPosition]);
 
   const center = pois.length > 0
@@ -284,5 +288,6 @@ export const NearbySearch = () => {
     
 
     
+
 
 
