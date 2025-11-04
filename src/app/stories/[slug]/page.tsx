@@ -1,4 +1,3 @@
-
 "use client"
 
 import { getStoryBySlug } from '@/lib/kula-data';
@@ -11,7 +10,7 @@ import { notFound } from 'next/navigation';
 import { getImageById } from '@/lib/placeholder-images';
 
 export default function StoryPage({ params }: { params: { slug: string } }) {
-    const slug = params.slug;
+    const slug = use(params).slug;
     const { language, translations } = useLanguage();
     const [story, setStory] = useState<Story | null>(null);
     const [loading, setLoading] = useState(true);

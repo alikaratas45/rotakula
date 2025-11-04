@@ -1,4 +1,3 @@
-
 "use client"
 
 import { getRouteBySlug, getPoisByIds } from '@/lib/kula-data';
@@ -11,7 +10,7 @@ import { useEffect, useState, use } from 'react';
 import type { ThematicRoute, PointOfInterest } from '@/lib/types';
 
 export default function RoutePage({ params }: { params: { slug: string } }) {
-    const slug = params.slug;
+    const slug = use(params).slug;
     const { language, translations } = useLanguage();
     const [route, setRoute] = useState<ThematicRoute | null>(null);
     const [pois, setPois] = useState<PointOfInterest[]>([]);
