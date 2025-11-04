@@ -213,13 +213,13 @@
       "longitude": 28.665493189717854,
       "name_en": "Kula Divlit Volcano Cone",
       "description_en": "One of the most iconic symbols of the geopark, Kula Divlit offers visitors a walking experience resembling the lunar surface.",
-      "longDescription_en": "One of the most iconic symbols of the geopark, Kula Divlit offers visitors a walking experience resembling the lunar surface.",
+      "longDescription_en": "Kula Divlit Volcano is one of the important volcanic hills formed in the last phase of Kula volcanism. In terms of formation and shape, it is a cinder cone or scoria cone type. The fragments that make up the volcano cone can range in size from very fine-grained ash-sized material to volcanic bombs with diameters exceeding 1 meter. The Kula Divlit cone is among the important geosites of the Kula-Salihli UNESCO Global Geopark, and the area where it is located is called the Kula Divlit Volcanic Park. The cone's height above sea level is 860m, and its relative elevation is 170 meters. The last eruption is thought to have occurred 10,000 years ago. It does not have a crater because its volcanic vent was destroyed by explosions. The lava has spread over an area of approximately 20 km². It is one of Turkey's youngest volcano cones. Aa-type lavas are predominant.",
       "name_fr": "Cône Volcanique de Kula Divlit",
       "description_fr": "L'un des symboles les plus emblématiques du géoparc, Kula Divlit offre aux visiteurs une expérience de marche ressemblant à la surface lunaire.",
-      "longDescription_fr": "L'un des symboles les plus emblématiques du géoparc, Kula Divlit offre aux visiteurs une expérience de marche ressemblant à la surface lunaire.",
+      "longDescription_fr": "Le volcan Kula Divlit est l'une des collines volcaniques importantes formées lors de la dernière phase du volcanisme de Kula. En termes de formation et de forme, il s'agit d'un cône de scories ou d'un cône de cendres. Les fragments qui composent le cône volcanique peuvent varier en taille, allant de matériaux de la taille de cendres très fines à des bombes volcaniques d'un diamètre supérieur à 1 mètre. Le cône de Kula Divlit fait partie des géosites importants du Géoparc Mondial de l'UNESCO de Kula-Salihli, et la zone où il se trouve est appelée le Parc Volcanique de Kula Divlit. L'altitude du cône au-dessus du niveau de la mer est de 860 m et son élévation relative est de 170 mètres. On pense que la dernière éruption a eu lieu il y a 10 000 ans. Il n'a pas de cratère car sa cheminée volcanique a été détruite par des explosions. La lave s'est étendue sur une superficie d'environ 20 km². C'est l'un des plus jeunes cônes volcaniques de Turquie. Les laves de type Aa sont prédominantes.",
       "name_de": "Vulkankegel Kula Divlit",
       "description_de": "Als eines der bekanntesten Symbole des Geoparks bietet Kula Divlit den Besuchern ein Wandererlebnis, das der Mondoberfläche ähnelt.",
-      "longDescription_de": "Als eines der bekanntesten Symbole des Geoparks bietet Kula Divlit den Besuchern ein Wandererlebnis, das der Mondoberfläche ähnelt."
+      "longDescription_de": "Der Vulkan Kula Divlit ist einer der wichtigen vulkanischen Hügel, die in der letzten Phase des Kula-Vulkanismus entstanden sind. In Bezug auf Bildung und Form handelt es sich um einen Aschekegel oder einen Schlackenkegel. Die Fragmente, aus denen der Vulkankegel besteht, können in der Größe von sehr feinkörnigem aschegroßem Material bis hin zu vulkanischen Bomben mit einem Durchmesser von mehr als 1 Meter reichen. Der Kula-Divlit-Kegel gehört zu den wichtigen Geostandorten des Kula-Salihli UNESCO Global Geoparks, und das Gebiet, in dem er sich befindet, wird als Kula-Divlit-Vulkanpark bezeichnet. Die Höhe des Kegels über dem Meeresspiegel beträgt 860 m, und seine relative Höhe beträgt 170 Meter. Man nimmt an, dass der letzte Ausbruch vor 10.000 Jahren stattfand. Er hat keinen Krater, da sein Vulkanschlot durch Explosionen zerstört wurde. Die Lava hat sich über eine Fläche von ungefähr 20 km² ausgebreitet. Er ist einer der jüngsten Vulkankegel der Türkei. Aa-Laven sind vorherrschend."
     },
     {
       "id": "poi-13",
@@ -525,5 +525,7 @@
     }
   ]
 }
+
+    
 
     
