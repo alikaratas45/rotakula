@@ -169,9 +169,9 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
                 position={{ lat: selectedPoi.latitude, lng: selectedPoi.longitude }}
                 onCloseClick={handleInfoWindowClose}
             >
-                <div className="p-2 flex flex-col gap-2 max-w-sm">
+                <div className="p-1 max-w-sm flex gap-4">
                     {poiImage && (
-                        <div className="relative h-32 w-full rounded-md overflow-hidden">
+                        <div className="relative h-32 w-24 rounded-md overflow-hidden flex-shrink-0">
                             <Image
                                 src={poiImage.imageUrl}
                                 alt={poiImage.description}
@@ -180,16 +180,18 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
                             />
                         </div>
                     )}
-                    <h3 className="font-bold font-headline text-md">{selectedPoi.name}</h3>
-                    <p className="text-sm text-foreground/80 line-clamp-2">{selectedPoi.description}</p>
-                    <div className="flex gap-2 mt-2">
-                        <Button size="sm" variant="outline" onClick={() => handleGetDirections(selectedPoi)}>
-                            <Navigation className="mr-2 h-4 w-4"/>
-                            {translations.map.getDirections}
-                        </Button>
-                        <Button size="sm" variant="secondary" onClick={() => router.push(`/pois/${selectedPoi.slug}`)}>
-                            {translations.common.moreInfo}
-                        </Button>
+                    <div className="flex flex-col gap-2 py-1">
+                        <h3 className="font-bold font-headline text-md">{selectedPoi.name}</h3>
+                        <p className="text-sm text-foreground/80 line-clamp-2">{selectedPoi.description}</p>
+                        <div className="flex flex-col sm:flex-row gap-2 mt-auto">
+                            <Button size="sm" variant="outline" onClick={() => handleGetDirections(selectedPoi)}>
+                                <Navigation className="mr-2 h-4 w-4"/>
+                                {translations.map.getDirections}
+                            </Button>
+                            <Button size="sm" variant="secondary" onClick={() => router.push(`/pois/${selectedPoi.slug}`)}>
+                                {translations.common.moreInfo}
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </InfoWindow>
