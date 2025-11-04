@@ -64,7 +64,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      <section className="relative h-[70vh] md:h-[90vh] w-full flex items-center justify-center text-center text-white">
+      <section className="relative h-[70vh] md:h-[90vh] w-full flex items-center justify-center text-center">
         {heroImage && (
           <Image
             src={heroImage.imageUrl}
@@ -77,10 +77,10 @@ export default function Home() {
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
         <div className="relative z-10 max-w-4xl p-4 mt-24">
-          <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight drop-shadow-lg animate-fade-in" style={{animationDelay: '200ms'}}>
+          <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight drop-shadow-lg animate-fade-in text-white dark:text-white light:text-black" style={{animationDelay: '200ms'}}>
             {translations.home.heroTitle}
           </h1>
-          <p className="mt-6 text-lg md:text-xl max-w-3xl mx-auto drop-shadow-md animate-fade-in" style={{animationDelay: '600ms'}}>
+          <p className="mt-6 text-lg md:text-xl max-w-3xl mx-auto drop-shadow-md animate-fade-in text-white dark:text-white light:text-black" style={{animationDelay: '600ms'}}>
             {translations.home.heroSubtitle}
           </p>
         </div>
