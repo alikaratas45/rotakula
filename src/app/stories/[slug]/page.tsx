@@ -40,7 +40,7 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
     const storyImage = getImageById(story.imageId);
     
     // Simplified date to avoid hydration mismatch
-    const displayDate = new Date(story.date).toLocaleDateString(language);
+    const displayDate = story.date;
 
     return (
         <article>
