@@ -5,7 +5,7 @@ import { getStoryBySlug } from '@/lib/kula-data';
 import Image from 'next/image';
 import { Calendar, User } from 'lucide-react';
 import { useLanguage } from '@/context/language-context';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import type { Story } from '@/lib/types';
 import { notFound } from 'next/navigation';
 import { getImageById } from '@/lib/placeholder-images';

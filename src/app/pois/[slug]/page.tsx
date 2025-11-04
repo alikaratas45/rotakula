@@ -5,7 +5,7 @@ import { getPoiBySlug } from '@/lib/kula-data';
 import { notFound } from 'next/navigation';
 import PoiClientPage from './poi-client-page';
 import { useLanguage } from '@/context/language-context';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import type { PointOfInterest } from '@/lib/types';
 
 

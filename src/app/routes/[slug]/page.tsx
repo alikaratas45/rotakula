@@ -7,7 +7,7 @@ import { getImageById } from '@/lib/placeholder-images';
 import Image from 'next/image';
 import RouteDetailsClient from './route-details-client';
 import { useLanguage } from '@/context/language-context';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import type { ThematicRoute, PointOfInterest } from '@/lib/types';
 
 export default function RoutePage({ params }: { params: { slug: string } }) {
