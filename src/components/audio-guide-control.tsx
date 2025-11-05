@@ -11,7 +11,8 @@ import { PauseIcon, PlayIcon, Radio, RadioTower, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/context/language-context';
 
-const PROXIMITY_THRESHOLD = 50; // meters
+const PROXIMITY_THRESHOLD_CENTER = 10; // meters for city center
+const PROXIMITY_THRESHOLD_OUTSIDE = 50; // meters for geopark/villages
 
 type GuideStatus = 'idle' | 'listening';
 
@@ -125,7 +126,11 @@ export function AudioGuideControl() {
                 { lat: poi.latitude, lon: poi.longitude }
             );
 
-            if (distance < PROXIMITY_THRESHOLD) {
+            const threshold = (poi.category === 'geopark' || poi.category === 'nature') 
+                ? PROXIMITY_THRESHOLD_OUTSIDE
+                : PROXIMITY_THRESHOLD_CENTER;
+
+            if (distance < threshold) {
                 setTriggeredPois(prev => new Set(prev).add(poi.id));
                 
                 // Play audio alert
