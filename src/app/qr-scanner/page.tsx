@@ -28,6 +28,11 @@ export default function QRScannerPage() {
 
   useEffect(() => {
     const startScanner = async () => {
+      // Ensure this code runs only on the client
+      if (typeof window === "undefined") {
+          return;
+      }
+      
       try {
         const cameras = await Html5Qrcode.getCameras();
         if (!cameras || cameras.length === 0) {
@@ -75,7 +80,6 @@ export default function QRScannerPage() {
             fps: 10,
             qrbox: qrboxFunction,
             supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
-            disableFlip: false, // Keep this for better compatibility
           },
           onSuccess,
           onError
@@ -100,7 +104,7 @@ export default function QRScannerPage() {
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router, translations]);
+  }, []);
 
   return (
     <div className="container py-8 md:py-12">
