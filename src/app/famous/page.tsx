@@ -10,7 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { PlayIcon, PauseIcon, Loader2 } from 'lucide-react';
 
 export default function FamousPage() {
-    const { language, translations, selectedVoice } = useLanguage();
+    const { language, translations } = useLanguage();
     const heroImage = getImageById('hero-home');
     const { toast } = useToast();
     
@@ -33,14 +33,6 @@ export default function FamousPage() {
         const utterance = new SpeechSynthesisUtterance(translations.famous.historyContent);
         utterance.lang = language;
         
-        if (selectedVoice) {
-            const voices = synthRef.current.getVoices();
-            const voice = voices.find(v => v.name === selectedVoice);
-            if (voice) {
-                utterance.voice = voice;
-            }
-        }
-
         utterance.onend = () => {
             setIsPlaying(false);
             setIsPaused(false);
@@ -58,11 +50,14 @@ export default function FamousPage() {
         return () => {
             cleanupSpeech();
         };
-    }, [language, translations, selectedVoice, toast, cleanupSpeech]);
+    }, [language, translations, toast, cleanupSpeech]);
     
 
     const handlePlayPause = () => {
-        if (!synthRef.current || !utteranceRef.current) {
+        const synth = synthRef.current;
+        const utterance = utteranceRef.current;
+
+        if (!synth || !utterance) {
             toast({
                 title: translations.toast.unsupportedTitle,
                 description: translations.toast.unsupportedDescription,
@@ -70,33 +65,33 @@ export default function FamousPage() {
             });
             return;
         }
-
-        // Make sure voices are loaded
-        if (synthRef.current.getVoices().length === 0) {
-            synthRef.current.onvoiceschanged = () => {
-                handlePlayPause();
-            };
-            return;
-        }
-
-        if (synthRef.current.speaking && !synthRef.current.paused) {
-            synthRef.current.pause();
-            setIsPaused(true);
-        } else if (synthRef.current.speaking && synthRef.current.paused) {
-            synthRef.current.resume();
-            setIsPaused(false);
-        } else {
-             if (synthRef.current.speaking) {
-                synthRef.current.cancel();
+        
+        const startPlayback = () => {
+            const voices = synth.getVoices();
+            const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
+            if (voice) {
+                utterance.voice = voice;
             }
-            // Re-assign voice in case it changed
-            if (selectedVoice) {
-                const voice = synthRef.current.getVoices().find(v => v.name === selectedVoice);
-                if (voice) utteranceRef.current.voice = voice;
-            }
-            synthRef.current.speak(utteranceRef.current);
+            synth.speak(utterance);
             setIsPlaying(true);
             setIsPaused(false);
+        }
+
+        if (synth.speaking && !synth.paused) {
+            synth.pause();
+            setIsPaused(true);
+        } else if (synth.speaking && synth.paused) {
+            synth.resume();
+            setIsPaused(false);
+        } else {
+             if (synth.speaking) {
+                synth.cancel();
+            }
+            if (synth.getVoices().length === 0) {
+                 synth.onvoiceschanged = startPlayback;
+            } else {
+                startPlayback();
+            }
         }
     };
     

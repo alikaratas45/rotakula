@@ -41,7 +41,7 @@ const isPoiOutsideCenter = (poi: PointOfInterest): boolean => {
 }
 
 export function AudioGuideControl() {
-    const { language, translations, selectedVoice } = useLanguage();
+    const { language, translations } = useLanguage();
     const router = useRouter();
 
     const [status, setStatus] = useState<GuideStatus>('idle');
@@ -113,23 +113,22 @@ export function AudioGuideControl() {
     }, [router]);
     
     const playProximityAlert = useCallback((poiName: string) => {
-        if (!synthRef.current) return;
-        if (synthRef.current.speaking) {
-            synthRef.current.cancel();
+        const synth = synthRef.current;
+        if (!synth) return;
+        if (synth.speaking) {
+            synth.cancel();
         }
         const notificationText = translations.audioGuide.proximityPrompt.replace('{poiName}', poiName);
         const utterance = new SpeechSynthesisUtterance(notificationText);
         utterance.lang = language;
         
-        if (selectedVoice) {
-            const voices = synthRef.current.getVoices();
-            const voice = voices.find(v => v.name === selectedVoice);
-            if (voice) {
-                utterance.voice = voice;
-            }
+        const voices = synth.getVoices();
+        const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
+        if (voice) {
+            utterance.voice = voice;
         }
-        synthRef.current.speak(utterance);
-    }, [language, translations, selectedVoice]);
+        synth.speak(utterance);
+    }, [language, translations]);
 
 
     useEffect(() => {

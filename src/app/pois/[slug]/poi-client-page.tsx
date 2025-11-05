@@ -16,7 +16,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
     const heroImage = getImageById(poi.imageId);
-    const { language, translations, selectedVoice } = useLanguage();
+    const { language, translations } = useLanguage();
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -41,14 +41,6 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
         const utterance = new SpeechSynthesisUtterance(poi.longDescription);
         utterance.lang = language;
         
-        if (selectedVoice) {
-            const voices = synthRef.current.getVoices();
-            const voice = voices.find(v => v.name === selectedVoice);
-            if (voice) {
-                utterance.voice = voice;
-            }
-        }
-
         utterance.onend = () => {
             setIsPlaying(false);
             setIsPaused(false);
@@ -76,7 +68,7 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
             cleanupSpeech();
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [poi, language, selectedVoice, cleanupSpeech, toast, translations]);
+    }, [poi, language, cleanupSpeech, toast, translations]);
 
 
     const handlePlayPause = useCallback(() => {
@@ -88,35 +80,38 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
             });
             return;
         }
+        
+        const synth = synthRef.current;
+        const utterance = utteranceRef.current;
 
-        // Make sure voices are loaded
-        if (synthRef.current.getVoices().length === 0) {
-            synthRef.current.onvoiceschanged = () => {
-                handlePlayPause();
-            };
-            return;
-        }
-
-        if (synthRef.current.speaking && !synthRef.current.paused) {
-            synthRef.current.pause();
-            setIsPaused(true);
-        } else if (synthRef.current.speaking && synthRef.current.paused) {
-            synthRef.current.resume();
-            setIsPaused(false);
-        } else {
-            if (synthRef.current.speaking) {
-                synthRef.current.cancel();
+        const startPlayback = () => {
+            const voices = synth.getVoices();
+            const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
+            if (voice) {
+                utterance.voice = voice;
             }
-            // Re-assign voice in case it changed
-            if (selectedVoice) {
-                const voice = synthRef.current.getVoices().find(v => v.name === selectedVoice);
-                if (voice) utteranceRef.current.voice = voice;
-            }
-            synthRef.current.speak(utteranceRef.current);
+            synth.speak(utterance);
             setIsPlaying(true);
             setIsPaused(false);
         }
-    }, [toast, translations, selectedVoice]);
+
+        if (synth.speaking && !synth.paused) {
+            synth.pause();
+            setIsPaused(true);
+        } else if (synth.speaking && synth.paused) {
+            synth.resume();
+            setIsPaused(false);
+        } else {
+            if (synth.speaking) {
+                synth.cancel();
+            }
+            if (synth.getVoices().length === 0) {
+                 synth.onvoiceschanged = startPlayback;
+            } else {
+                startPlayback();
+            }
+        }
+    }, [toast, translations, language]);
 
     return (
         <APIProvider apiKey={apiKey}>

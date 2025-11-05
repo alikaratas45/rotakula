@@ -13,73 +13,15 @@ interface LanguageContextType {
   language: Language;
   setLanguage: (language: Language) => void;
   translations: typeof tr;
-  selectedVoice: string | null;
-  setSelectedVoice: (voice: string) => void;
-  availableVoices: SpeechSynthesisVoice[];
 }
 
 const translations = { tr, en, fr, de };
-const VOICE_STORAGE_KEY = 'rota-kula-selected-voice';
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<Language>('tr');
-  const [selectedVoice, setSelectedVoiceState] = useState<string | null>(null);
-  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
 
-  // --- Voice Management ---
-  useEffect(() => {
-    const getVoices = () => {
-        const voices = window.speechSynthesis.getVoices();
-        setAvailableVoices(voices);
-    };
-
-    // Initial fetch
-    getVoices();
-
-    // Fetch when voices change
-    window.speechSynthesis.onvoiceschanged = getVoices;
-
-    return () => {
-        window.speechSynthesis.onvoiceschanged = null;
-    };
-  }, []);
-  
-  useEffect(() => {
-    if (availableVoices.length > 0) {
-        const storedVoiceName = localStorage.getItem(VOICE_STORAGE_KEY);
-        const voicesForLang = availableVoices.filter(v => v.lang.startsWith(language));
-        
-        // Check if stored voice is valid for the current language
-        const storedVoiceIsValid = storedVoiceName && voicesForLang.some(v => v.name === storedVoiceName);
-
-        if (storedVoiceIsValid) {
-            setSelectedVoiceState(storedVoiceName);
-        } else {
-            // Find the best default voice for the current language
-            const defaultVoice = 
-                voicesForLang.find(v => v.name.includes('Google') && v.default) ||
-                voicesForLang.find(v => v.name.includes('Google')) ||
-                voicesForLang.find(v => v.default) ||
-                voicesForLang[0];
-            
-            if (defaultVoice) {
-                setSelectedVoiceState(defaultVoice.name);
-                localStorage.setItem(VOICE_STORAGE_KEY, defaultVoice.name);
-            }
-        }
-    }
-  }, [availableVoices, language]);
-
-
-  const handleSetSelectedVoice = useCallback((voiceName: string) => {
-    setSelectedVoiceState(voiceName);
-    localStorage.setItem(VOICE_STORAGE_KEY, voiceName);
-  }, []);
-
-
-  // --- Language Management ---
   useEffect(() => {
     const storedLang = localStorage.getItem('rota-kula-language') as Language;
     if (storedLang && ['tr', 'en', 'fr', 'de'].includes(storedLang)) {
@@ -109,9 +51,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     language, 
     setLanguage: handleSetLanguage, 
     translations: currentTranslations,
-    selectedVoice,
-    setSelectedVoice: handleSetSelectedVoice,
-    availableVoices,
   };
 
   return (
