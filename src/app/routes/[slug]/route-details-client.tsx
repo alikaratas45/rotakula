@@ -72,15 +72,14 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
                 const { latitude, longitude } = position.coords;
                 const origin = `${latitude},${longitude}`;
                 
-                const destination = `${pois[pois.length - 1].latitude},${pois[pois.length - 1].longitude}`;
-
-                const waypoints = pois
-                    .slice(0, -1)
+                const waypointsString = pois
                     .map(p => `${p.latitude},${p.longitude}`)
-                    .join('|');
+                    .join('/');
 
                 const travelMode = route.slug === 'geopark-discovery-route' ? 'driving' : 'walking';
-                const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&waypoints=${waypoints}&travelmode=${travelMode}`;
+                
+                // Use a URL structure that lists all waypoints including the origin
+                const googleMapsUrl = `https://www.google.com/maps/dir/${origin}/${waypointsString}`;
 
                 window.open(googleMapsUrl, '_blank');
                 setIsStartingRoute(false);
