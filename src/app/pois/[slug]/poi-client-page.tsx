@@ -27,14 +27,6 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
     const synthRef = useRef<SpeechSynthesis | null>(null);
     const { toast } = useToast();
 
-    const cleanupSpeech = useCallback(() => {
-        if (synthRef.current && synthRef.current.speaking) {
-            synthRef.current.cancel();
-        }
-        setIsPlaying(false);
-        setIsPaused(false);
-    }, []);
-
     useEffect(() => {
         synthRef.current = window.speechSynthesis;
         
@@ -51,7 +43,8 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
                 description: `${translations.toast.audioErrorDescription} (${event.error})`,
                 variant: "destructive"
             });
-            cleanupSpeech();
+            setIsPlaying(false);
+            setIsPaused(false);
         };
         utteranceRef.current = utterance;
 
@@ -65,10 +58,16 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
         }
 
         return () => {
-            cleanupSpeech();
+             if (synthRef.current) {
+                synthRef.current.cancel();
+            }
+            utteranceRef.current = null;
+            synthRef.current = null;
+            setIsPlaying(false);
+            setIsPaused(false);
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [poi, language, cleanupSpeech, toast, translations]);
+    }, [poi, language, toast, translations]);
 
 
     const handlePlayPause = useCallback(() => {

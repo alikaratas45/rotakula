@@ -19,13 +19,6 @@ export default function FamousPage() {
     const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
     const synthRef = useRef<SpeechSynthesis | null>(null);
 
-    const cleanupSpeech = useCallback(() => {
-        if (synthRef.current && synthRef.current.speaking) {
-            synthRef.current.cancel();
-        }
-        setIsPlaying(false);
-        setIsPaused(false);
-    }, []);
 
     useEffect(() => {
         synthRef.current = window.speechSynthesis;
@@ -43,14 +36,21 @@ export default function FamousPage() {
                 description: `${translations.toast.audioErrorDescription} (${event.error})`,
                 variant: "destructive"
             });
-            cleanupSpeech();
+            setIsPlaying(false);
+            setIsPaused(false);
         };
         utteranceRef.current = utterance;
         
         return () => {
-            cleanupSpeech();
+            if (synthRef.current) {
+                synthRef.current.cancel();
+            }
+            utteranceRef.current = null;
+            synthRef.current = null;
+            setIsPlaying(false);
+            setIsPaused(false);
         };
-    }, [language, translations, toast, cleanupSpeech]);
+    }, [language, translations, toast]);
     
 
     const handlePlayPause = () => {
