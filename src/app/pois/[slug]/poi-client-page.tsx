@@ -28,7 +28,8 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
     const { toast } = useToast();
 
     useEffect(() => {
-        synthRef.current = window.speechSynthesis;
+        const synth = window.speechSynthesis;
+        synthRef.current = synth;
         
         const utterance = new SpeechSynthesisUtterance(poi.longDescription);
         utterance.lang = language;
@@ -60,16 +61,14 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
         }
 
         return () => {
-             if (synthRef.current) {
-                synthRef.current.cancel();
+             if (synth) {
+                synth.cancel();
             }
-            utteranceRef.current = null;
-            synthRef.current = null;
             setIsPlaying(false);
             setIsPaused(false);
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [poi, language]);
+    }, [poi.longDescription, language]);
 
 
     const handlePlayPause = useCallback(() => {

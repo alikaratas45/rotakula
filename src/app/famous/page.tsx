@@ -21,7 +21,8 @@ export default function FamousPage() {
 
 
     useEffect(() => {
-        synthRef.current = window.speechSynthesis;
+        const synth = window.speechSynthesis;
+        synthRef.current = synth;
         
         const utterance = new SpeechSynthesisUtterance(translations.famous.historyContent);
         utterance.lang = language;
@@ -44,11 +45,9 @@ export default function FamousPage() {
         utteranceRef.current = utterance;
         
         return () => {
-            if (synthRef.current) {
-                synthRef.current.cancel();
+            if (synth) {
+                synth.cancel();
             }
-            utteranceRef.current = null;
-            synthRef.current = null;
             setIsPlaying(false);
             setIsPaused(false);
         };
