@@ -16,7 +16,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
     const heroImage = getImageById(poi.imageId);
-    const { language, translations } = useLanguage();
+    const { language, translations, selectedVoice } = useLanguage();
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -33,47 +33,50 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
         }
         setIsPlaying(false);
         setIsPaused(false);
-        utteranceRef.current = null;
     }, []);
 
     useEffect(() => {
-        // Initialize SpeechSynthesis
         synthRef.current = window.speechSynthesis;
         
-        // Create and configure the utterance
         const utterance = new SpeechSynthesisUtterance(poi.longDescription);
         utterance.lang = language;
+        
+        if (selectedVoice) {
+            const voices = synthRef.current.getVoices();
+            const voice = voices.find(v => v.name === selectedVoice);
+            if (voice) {
+                utterance.voice = voice;
+            }
+        }
+
         utterance.onend = () => {
             setIsPlaying(false);
             setIsPaused(false);
         };
-        utterance.onerror = () => {
+        utterance.onerror = (event) => {
             toast({
                 title: translations.toast.audioErrorTitle,
-                description: translations.toast.audioErrorDescription,
+                description: `${translations.toast.audioErrorDescription} (${event.error})`,
                 variant: "destructive"
             });
             cleanupSpeech();
         };
         utteranceRef.current = utterance;
 
-        // Autoplay logic
         const shouldAutoplay = searchParams.get('autoplay') === 'true';
         if (shouldAutoplay) {
              const newPath = `/pois/${poi.slug}`;
             router.replace(newPath, { scroll: false });
-            // A short delay to ensure the page is ready
             setTimeout(() => {
                 handlePlayPause();
             }, 500);
         }
 
-        // Cleanup on component unmount or POI/language change
         return () => {
             cleanupSpeech();
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [poi, language, cleanupSpeech, toast, translations]);
+    }, [poi, language, selectedVoice, cleanupSpeech, toast, translations]);
 
 
     const handlePlayPause = useCallback(() => {
@@ -86,6 +89,14 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
             return;
         }
 
+        // Make sure voices are loaded
+        if (synthRef.current.getVoices().length === 0) {
+            synthRef.current.onvoiceschanged = () => {
+                handlePlayPause();
+            };
+            return;
+        }
+
         if (synthRef.current.speaking && !synthRef.current.paused) {
             synthRef.current.pause();
             setIsPaused(true);
@@ -93,15 +104,19 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
             synthRef.current.resume();
             setIsPaused(false);
         } else {
-            // Cancel any previous speech before starting a new one
             if (synthRef.current.speaking) {
                 synthRef.current.cancel();
+            }
+            // Re-assign voice in case it changed
+            if (selectedVoice) {
+                const voice = synthRef.current.getVoices().find(v => v.name === selectedVoice);
+                if (voice) utteranceRef.current.voice = voice;
             }
             synthRef.current.speak(utteranceRef.current);
             setIsPlaying(true);
             setIsPaused(false);
         }
-    }, [toast, translations]);
+    }, [toast, translations, selectedVoice]);
 
     return (
         <APIProvider apiKey={apiKey}>

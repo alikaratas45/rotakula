@@ -10,7 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { PlayIcon, PauseIcon, Loader2 } from 'lucide-react';
 
 export default function FamousPage() {
-    const { language, translations } = useLanguage();
+    const { language, translations, selectedVoice } = useLanguage();
     const heroImage = getImageById('hero-home');
     const { toast } = useToast();
     
@@ -25,32 +25,40 @@ export default function FamousPage() {
         }
         setIsPlaying(false);
         setIsPaused(false);
-        utteranceRef.current = null;
     }, []);
 
     useEffect(() => {
         synthRef.current = window.speechSynthesis;
+        
         const utterance = new SpeechSynthesisUtterance(translations.famous.historyContent);
         utterance.lang = language;
+        
+        if (selectedVoice) {
+            const voices = synthRef.current.getVoices();
+            const voice = voices.find(v => v.name === selectedVoice);
+            if (voice) {
+                utterance.voice = voice;
+            }
+        }
+
         utterance.onend = () => {
             setIsPlaying(false);
             setIsPaused(false);
         };
-        utterance.onerror = () => {
+        utterance.onerror = (event) => {
             toast({
                 title: translations.toast.audioErrorTitle,
-                description: translations.toast.audioErrorDescription,
+                description: `${translations.toast.audioErrorDescription} (${event.error})`,
                 variant: "destructive"
             });
             cleanupSpeech();
         };
         utteranceRef.current = utterance;
         
-        // Cleanup on component unmount or language change
         return () => {
             cleanupSpeech();
         };
-    }, [language, translations, toast, cleanupSpeech]);
+    }, [language, translations, selectedVoice, toast, cleanupSpeech]);
     
 
     const handlePlayPause = () => {
@@ -63,6 +71,14 @@ export default function FamousPage() {
             return;
         }
 
+        // Make sure voices are loaded
+        if (synthRef.current.getVoices().length === 0) {
+            synthRef.current.onvoiceschanged = () => {
+                handlePlayPause();
+            };
+            return;
+        }
+
         if (synthRef.current.speaking && !synthRef.current.paused) {
             synthRef.current.pause();
             setIsPaused(true);
@@ -70,6 +86,14 @@ export default function FamousPage() {
             synthRef.current.resume();
             setIsPaused(false);
         } else {
+             if (synthRef.current.speaking) {
+                synthRef.current.cancel();
+            }
+            // Re-assign voice in case it changed
+            if (selectedVoice) {
+                const voice = synthRef.current.getVoices().find(v => v.name === selectedVoice);
+                if (voice) utteranceRef.current.voice = voice;
+            }
             synthRef.current.speak(utteranceRef.current);
             setIsPlaying(true);
             setIsPaused(false);
