@@ -81,7 +81,8 @@
         "voiceSettings": "Ses Ayarları",
         "searchVoice": "Ses ara...",
         "noVoiceFound": "Ses bulunamadı.",
-        "availableVoices": "Kullanılabilir Sesler"
+        "availableVoices": "Kullanılabilir Sesler",
+        "proximityPrompt": "{poiName}'na geldiniz. Anlatmamı ister misiniz?"
     },
     "map": {
         "yourLocation": "Sizin Konumunuz",

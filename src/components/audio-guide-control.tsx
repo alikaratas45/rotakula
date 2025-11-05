@@ -89,7 +89,7 @@ export function AudioGuideControl() {
             return;
         }
 
-        const notificationText = `${poiName}'na geldiniz. Anlatmamı ister misiniz?`;
+        const notificationText = translations.audioGuide.proximityPrompt.replace('{poiName}', poiName);
         const utterance = new SpeechSynthesisUtterance(notificationText);
         
         const voiceLang = language === 'tr' ? 'tr-TR' : language === 'en' ? 'en-US' : language === 'fr' ? 'fr-FR' : 'de-DE';
@@ -107,7 +107,7 @@ export function AudioGuideControl() {
         
         window.speechSynthesis.cancel(); // Cancel any ongoing speech
         window.speechSynthesis.speak(utterance);
-    }, [language]);
+    }, [language, translations]);
 
 
     useEffect(() => {

@@ -81,7 +81,8 @@
         "voiceSettings": "Stimmeinstellungen",
         "searchVoice": "Stimme suchen...",
         "noVoiceFound": "Keine Stimme gefunden.",
-        "availableVoices": "Verfügbare Stimmen"
+        "availableVoices": "Verfügbare Stimmen",
+        "proximityPrompt": "Sie sind in {poiName} angekommen. Soll ich erzählen?"
     },
     "map": {
         "yourLocation": "Ihr Standort",

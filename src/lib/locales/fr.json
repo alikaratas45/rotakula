@@ -81,7 +81,8 @@
         "voiceSettings": "Paramètres vocaux",
         "searchVoice": "Rechercher une voix...",
         "noVoiceFound": "Aucune voix trouvée.",
-        "availableVoices": "Voix disponibles"
+        "availableVoices": "Voix disponibles",
+        "proximityPrompt": "Vous êtes arrivé à {poiName}. Voulez-vous que je raconte ?"
     },
     "map": {
         "yourLocation": "Votre Emplacement",

@@ -81,7 +81,8 @@
         "voiceSettings": "Voice Settings",
         "searchVoice": "Search voice...",
         "noVoiceFound": "No voice found.",
-        "availableVoices": "Available Voices"
+        "availableVoices": "Available Voices",
+        "proximityPrompt": "You have arrived at {poiName}. Would you like me to narrate?"
     },
     "map": {
         "yourLocation": "Your Location",
