@@ -111,7 +111,7 @@ export default function QRScannerPage() {
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router]);
+  }, []);
 
   return (
     <div className="container py-8 md:py-12">
