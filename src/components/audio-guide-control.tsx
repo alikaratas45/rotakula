@@ -16,6 +16,30 @@ const PROXIMITY_THRESHOLD_OUTSIDE = 50; // meters for geopark/villages
 
 type GuideStatus = 'idle' | 'listening';
 
+// Helper to check if a POI is likely outside the dense city center
+const isPoiOutsideCenter = (poi: PointOfInterest): boolean => {
+    // Geopark and Nature are always considered outside
+    if (poi.category === 'geopark' || poi.category === 'nature') {
+        return true;
+    }
+    // Specific history POIs that are villages/neighborhoods outside the main walking tour area
+    const outsideSlugs = [
+        'sandal-village', 
+        'gokceoren-village', 
+        'incesu-village',
+        'korez-village',
+        'emre-village',
+        'evciler-village',
+        'yurtbasi-tabala-village',
+        'encekler-village'
+    ];
+    if (poi.category === 'history' && outsideSlugs.includes(poi.slug)) {
+        return true;
+    }
+    return false;
+}
+
+
 export function AudioGuideControl() {
     const { language, translations } = useLanguage();
     const router = useRouter();
@@ -126,7 +150,7 @@ export function AudioGuideControl() {
                 { lat: poi.latitude, lon: poi.longitude }
             );
 
-            const threshold = (poi.category === 'geopark' || poi.category === 'nature') 
+            const threshold = isPoiOutsideCenter(poi)
                 ? PROXIMITY_THRESHOLD_OUTSIDE
                 : PROXIMITY_THRESHOLD_CENTER;
 
@@ -196,3 +220,5 @@ export function AudioGuideControl() {
         </div>
     );
 }
+
+    
