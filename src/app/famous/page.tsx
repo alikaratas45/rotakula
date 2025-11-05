@@ -31,6 +31,8 @@ export default function FamousPage() {
             setIsPaused(false);
         };
         utterance.onerror = (event) => {
+            // Don't show an error if the language was changed while speaking
+            if (event.error === 'interrupted') return;
             toast({
                 title: translations.toast.audioErrorTitle,
                 description: `${translations.toast.audioErrorDescription} (${event.error})`,
@@ -50,7 +52,7 @@ export default function FamousPage() {
             setIsPlaying(false);
             setIsPaused(false);
         };
-    }, [language, translations, toast]);
+    }, [language, translations.famous.historyContent, toast, translations.toast.audioErrorTitle, translations.toast.audioErrorDescription]);
     
 
     const handlePlayPause = () => {

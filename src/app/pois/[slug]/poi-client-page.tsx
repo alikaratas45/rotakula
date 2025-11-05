@@ -38,6 +38,8 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
             setIsPaused(false);
         };
         utterance.onerror = (event) => {
+             // Don't show an error if the language was changed while speaking
+            if (event.error === 'interrupted') return;
             toast({
                 title: translations.toast.audioErrorTitle,
                 description: `${translations.toast.audioErrorDescription} (${event.error})`,
@@ -67,7 +69,7 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
             setIsPaused(false);
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [poi, language, toast, translations, router, searchParams]);
+    }, [poi, language]);
 
 
     const handlePlayPause = useCallback(() => {
