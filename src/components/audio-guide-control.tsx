@@ -7,9 +7,11 @@ import { getPois } from '@/lib/kula-data';
 import type { PointOfInterest } from '@/lib/types';
 import { haversineDistance } from '@/lib/utils';
 import { Button } from './ui/button';
-import { PauseIcon, PlayIcon, Radio, RadioTower, Loader2 } from 'lucide-react';
+import { Radio, RadioTower } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/context/language-context';
+import { textToSpeech } from '@/ai/flows/text-to-speech';
+import { PlayIcon } from 'lucide-react';
 
 const PROXIMITY_THRESHOLD_CENTER = 10; // meters for city center
 const PROXIMITY_THRESHOLD_OUTSIDE = 50; // meters for geopark/villages
@@ -49,6 +51,7 @@ export function AudioGuideControl() {
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
     const [triggeredPois, setTriggeredPois] = useState<Set<string>>(new Set());
     const watchIdRef = useRef<number | null>(null);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
     const { toast, dismiss } = useToast();
     
 
@@ -65,11 +68,14 @@ export function AudioGuideControl() {
             navigator.geolocation.clearWatch(watchIdRef.current);
             watchIdRef.current = null;
         }
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current = null;
+        }
         setUserLocation(null);
         setTriggeredPois(new Set());
         setStatus('idle');
         dismiss();
-        window.speechSynthesis.cancel();
     }, [dismiss]);
 
     const startLocationTracking = () => {
@@ -109,29 +115,24 @@ export function AudioGuideControl() {
         router.push(`/pois/${poi.slug}?autoplay=true`);
     }, [router]);
     
-    const playProximityAlert = useCallback((poiName: string) => {
-        if (typeof window === 'undefined' || !window.speechSynthesis) {
-            return;
+    const playProximityAlert = useCallback(async (poiName: string) => {
+        if (audioRef.current) {
+            audioRef.current.pause();
         }
-
-        const notificationText = translations.audioGuide.proximityPrompt.replace('{poiName}', poiName);
-        const utterance = new SpeechSynthesisUtterance(notificationText);
-        
-        const voiceLang = language === 'tr' ? 'tr-TR' : language === 'en' ? 'en-US' : language === 'fr' ? 'fr-FR' : 'de-DE';
-        utterance.lang = voiceLang;
-
-        const voices = window.speechSynthesis.getVoices();
-        let selectedVoice = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('kadın') || v.name.toLowerCase().includes('female')));
-        if (!selectedVoice) {
-            selectedVoice = voices.find(v => v.lang === voiceLang);
+        try {
+            const notificationText = translations.audioGuide.proximityPrompt.replace('{poiName}', poiName);
+            const voiceLang = language === 'tr' ? 'tr-TR-Standard-A' : language === 'en' ? 'en-US-Standard-A' : language === 'fr' ? 'fr-FR-Standard-A' : 'de-DE-Standard-A';
+            
+            const response = await textToSpeech({ text: notificationText, voice: voiceLang });
+            if (response?.media) {
+                const audio = new Audio(response.media);
+                audioRef.current = audio;
+                audio.play();
+            }
+        } catch (error) {
+            console.error("Proximity alert TTS error:", error);
+            // We don't show a toast here to avoid spamming the user
         }
-
-        if (selectedVoice) {
-            utterance.voice = selectedVoice;
-        }
-        
-        window.speechSynthesis.cancel(); // Cancel any ongoing speech
-        window.speechSynthesis.speak(utterance);
     }, [language, translations]);
 
 
@@ -157,20 +158,8 @@ export function AudioGuideControl() {
             if (distance < threshold) {
                 setTriggeredPois(prev => new Set(prev).add(poi.id));
                 
-                // Play audio alert
-                const startPlayback = () => {
-                   playProximityAlert(poi.name);
-                }
-
-                if (window.speechSynthesis.getVoices().length === 0) {
-                     window.speechSynthesis.onvoiceschanged = () => {
-                        startPlayback();
-                     };
-                } else {
-                    startPlayback();
-                }
+                playProximityAlert(poi.name);
                 
-                // Show visual toast notification
                 toast({
                     title: `${translations.audioGuide.nearby}: ${poi.name}`,
                     description: translations.audioGuide.nearbyDescription,
@@ -194,13 +183,13 @@ export function AudioGuideControl() {
              toast({
                 title: translations.audioGuide.started,
                 description: translations.audioGuide.startedDescription,
-                duration: 1500,
+                duration: 5000,
             });
         } else {
             stopLocationTracking();
             toast({
                 title: translations.audioGuide.stopped,
-                duration: 1500,
+                duration: 3000,
             });
         }
     };

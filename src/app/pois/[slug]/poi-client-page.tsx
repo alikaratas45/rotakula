@@ -8,13 +8,11 @@ import { getImageById } from '@/lib/placeholder-images';
 import type { PointOfInterest } from '@/lib/types';
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
-import { PlayIcon, PauseIcon } from '@/components/icons';
+import { Loader2, PlayIcon, PauseIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/context/language-context';
 import { useRouter, useSearchParams } from 'next/navigation';
-
-const MAX_CHUNK_LENGTH = 200; // Max characters per speech chunk
+import { textToSpeech } from '@/ai/flows/text-to-speech';
 
 export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
@@ -26,161 +24,100 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
     const [isPlaying, setIsPlaying] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
-    
-    const speechUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-    const textChunksRef = useRef<string[]>([]);
-    const currentChunkIndexRef = useRef<number>(0);
+    const [audioSrc, setAudioSrc] = useState<string | null>(null);
 
+    const audioRef = useRef<HTMLAudioElement | null>(null);
     const { toast } = useToast();
 
-    const cleanupSpeech = useCallback(() => {
-        if (speechUtteranceRef.current) {
-            speechUtteranceRef.current.onend = null;
-            speechUtteranceRef.current.onerror = null;
-        }
-        if (typeof window !== 'undefined' && window.speechSynthesis) {
-            window.speechSynthesis.cancel();
+    const cleanupAudio = useCallback(() => {
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.onended = null;
+            audioRef.current = null;
         }
         setIsPlaying(false);
         setIsPaused(false);
-        currentChunkIndexRef.current = 0;
+        setAudioSrc(null);
     }, []);
 
     useEffect(() => {
-        // Cleanup on language or component change
+        // Cleanup on component unmount or POI change
         return () => {
-            cleanupSpeech();
+            cleanupAudio();
         };
-    }, [poi, language, cleanupSpeech]);
+    }, [poi, language, cleanupAudio]);
 
-    const speakChunk = useCallback((chunkIndex: number) => {
-        if (chunkIndex >= textChunksRef.current.length) {
-            cleanupSpeech();
+    const handlePlayPause = useCallback(async () => {
+        if (isGenerating) return;
+
+        // If audio is already loaded and playing/paused
+        if (audioRef.current) {
+            if (isPlaying && !isPaused) {
+                audioRef.current.pause();
+                setIsPaused(true);
+            } else {
+                audioRef.current.play();
+                setIsPaused(false);
+            }
             return;
         }
 
-        const chunk = textChunksRef.current[chunkIndex];
-        const utterance = new SpeechSynthesisUtterance(chunk);
-        speechUtteranceRef.current = utterance;
-        
-        const voiceLang = language === 'tr' ? 'tr-TR' : language === 'en' ? 'en-US' : language === 'fr' ? 'fr-FR' : 'de-DE';
-        utterance.lang = voiceLang;
-        
-        const voices = window.speechSynthesis.getVoices();
-        let selectedVoice = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('erkek') || v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('männlich')));
-        if (!selectedVoice) {
-            selectedVoice = voices.find(v => v.lang === voiceLang);
-        }
-        
-        if (selectedVoice) {
-            utterance.voice = selectedVoice;
-        }
+        // If audio is not loaded, generate it
+        setIsGenerating(true);
+        try {
+            const voiceLang = language === 'tr' ? 'tr-TR' : language === 'en' ? 'en-US' : language === 'fr' ? 'fr-FR' : 'de-DE';
+            const response = await textToSpeech({ text: poi.longDescription, voice: voiceLang });
 
-        utterance.onend = () => {
-            setTimeout(() => {
-                currentChunkIndexRef.current++;
-                speakChunk(currentChunkIndexRef.current);
-            }, 500); // Add a small delay between chunks
-        };
+            if (response?.media) {
+                setAudioSrc(response.media);
+            } else {
+                throw new Error('No media in response');
+            }
+        } catch (error) {
+            console.error("TTS Error:", error);
+            toast({
+                title: translations.toast.audioErrorTitle,
+                description: translations.toast.audioErrorApi,
+                variant: "destructive"
+            });
+        } finally {
+            setIsGenerating(false);
+        }
+    }, [isGenerating, isPlaying, isPaused, language, poi.longDescription, translations, toast]);
 
-        utterance.onerror = (event) => {
-            if (event.error !== 'interrupted') {
+    useEffect(() => {
+        if (audioSrc && !audioRef.current) {
+            const audio = new Audio(audioSrc);
+            audioRef.current = audio;
+            audio.play();
+            setIsPlaying(true);
+
+            audio.onended = () => {
+                cleanupAudio();
+            };
+
+            audio.onerror = () => {
                 toast({
                     title: translations.toast.audioErrorTitle,
                     description: translations.toast.audioErrorDescription,
                     variant: "destructive"
                 });
-            }
-            cleanupSpeech();
-        };
-        
-        window.speechSynthesis.speak(utterance);
-    }, [language, cleanupSpeech, toast, translations]);
-
-
-    const handlePlayPause = async () => {
-        if (isGenerating) return;
-
-        // If it's currently playing and not paused, we want to pause it.
-        if (isPlaying && !isPaused) {
-            window.speechSynthesis.pause();
-            setIsPaused(true);
-            return;
+                cleanupAudio();
+            };
         }
-
-        // If it's paused, we want to resume.
-        if (isPlaying && isPaused) {
-            window.speechSynthesis.resume();
-            setIsPaused(false);
-            return;
-        }
-
-        // If it's not playing at all, we start from the beginning.
-        if (!isPlaying) {
-            setIsGenerating(true);
-            
-            const startPlayback = () => {
-                cleanupSpeech();
-                setIsPlaying(true);
-                setIsPaused(false);
-                setIsGenerating(false);
-
-                const fullText = poi.longDescription;
-                const sentences = fullText.match(/[^.!?]+[.!?\n]+/g) || [fullText];
-                const chunks: string[] = [];
-                let currentChunk = "";
-                
-                sentences.forEach(sentence => {
-                    const trimmedSentence = sentence.trim();
-                    if (!trimmedSentence) return;
-                    if ((currentChunk + ' ' + trimmedSentence).length > MAX_CHUNK_LENGTH && currentChunk) {
-                        chunks.push(currentChunk);
-                        currentChunk = trimmedSentence;
-                    } else {
-                        currentChunk = currentChunk ? currentChunk + ' ' + trimmedSentence : trimmedSentence;
-                    }
-                });
-                if (currentChunk) {
-                    chunks.push(currentChunk);
-                }
-                
-                textChunksRef.current = chunks;
-                currentChunkIndexRef.current = 0;
-                speakChunk(0);
-            }
-            
-            if (typeof window !== 'undefined' && window.speechSynthesis) {
-                const voices = window.speechSynthesis.getVoices();
-                if (voices.length === 0) {
-                     window.speechSynthesis.onvoiceschanged = () => {
-                        startPlayback();
-                     };
-                } else {
-                     startPlayback();
-                }
-            } else {
-                 toast({
-                    title: translations.toast.unsupportedTitle,
-                    description: translations.toast.unsupportedDescription,
-                    variant: "destructive"
-                });
-                setIsGenerating(false);
-            }
-        }
-    };
+    }, [audioSrc, cleanupAudio, toast, translations]);
     
     useEffect(() => {
         if (searchParams.get('autoplay') === 'true') {
-            // A small delay to ensure the page is fully rendered and ready.
+            const newPath = `/pois/${poi.slug}`;
+            router.replace(newPath, { scroll: false });
+            
             setTimeout(() => {
                 handlePlayPause();
             }, 500);
-            // Clean up URL
-            const newPath = `/pois/${poi.slug}`;
-            router.replace(newPath, { scroll: false });
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchParams, poi.slug, router]);
+    }, [searchParams, poi.slug]);
 
 
     return (

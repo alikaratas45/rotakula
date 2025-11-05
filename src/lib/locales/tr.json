@@ -82,7 +82,7 @@
         "searchVoice": "Ses ara...",
         "noVoiceFound": "Ses bulunamadı.",
         "availableVoices": "Kullanılabilir Sesler",
-        "proximityPrompt": "{poiName}'na geldiniz. Anlatmamı ister misiniz?"
+        "proximityPrompt": "{poiName} konumuna geldiniz. Anlatmamı ister misiniz?"
     },
     "map": {
         "yourLocation": "Sizin Konumunuz",

@@ -8,8 +8,8 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { PlayIcon, PauseIcon, Loader2 } from 'lucide-react';
+import { textToSpeech } from '@/ai/flows/text-to-speech';
 
-const MAX_CHUNK_LENGTH = 200; // Max characters per speech chunk
 
 export default function FamousPage() {
     const { language, translations } = useLanguage();
@@ -19,150 +19,93 @@ export default function FamousPage() {
     const [isPlaying, setIsPlaying] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
-    
-    const speechUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-    const textChunksRef = useRef<string[]>([]);
-    const currentChunkIndexRef = useRef<number>(0);
+    const [audioSrc, setAudioSrc] = useState<string | null>(null);
 
+    const audioRef = useRef<HTMLAudioElement | null>(null);
 
-    const cleanupSpeech = useCallback(() => {
-        if (speechUtteranceRef.current) {
-            speechUtteranceRef.current.onend = null;
-            speechUtteranceRef.current.onerror = null;
-        }
-        if (typeof window !== 'undefined' && window.speechSynthesis) {
-            window.speechSynthesis.cancel();
+    const cleanupAudio = useCallback(() => {
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.onended = null;
+            audioRef.current = null;
         }
         setIsPlaying(false);
         setIsPaused(false);
-        currentChunkIndexRef.current = 0;
+        setAudioSrc(null);
     }, []);
 
     useEffect(() => {
         // Cleanup on language change or component unmount
         return () => {
-            cleanupSpeech();
+            cleanupAudio();
         };
-    }, [language, cleanupSpeech]);
+    }, [language, cleanupAudio]);
     
-    const speakChunk = useCallback((chunkIndex: number) => {
-        if (chunkIndex >= textChunksRef.current.length) {
-            cleanupSpeech();
+
+    const handlePlayPause = async () => {
+        if (isGenerating) return;
+
+        if (audioRef.current) {
+            if (isPlaying && !isPaused) {
+                audioRef.current.pause();
+                setIsPaused(true);
+            } else {
+                audioRef.current.play();
+                setIsPaused(false);
+            }
             return;
         }
 
-        const chunk = textChunksRef.current[chunkIndex];
-        const utterance = new SpeechSynthesisUtterance(chunk);
-        speechUtteranceRef.current = utterance;
-        
-        const voiceLang = language === 'tr' ? 'tr-TR' : language === 'en' ? 'en-US' : language === 'fr' ? 'fr-FR' : 'de-DE';
-        utterance.lang = voiceLang;
+        setIsGenerating(true);
+        try {
+            const fullText = translations.famous.historyContent;
+            const voiceLang = language === 'tr' ? 'tr-TR' : language === 'en' ? 'en-US' : language === 'fr' ? 'fr-FR' : 'de-DE';
+            
+            const response = await textToSpeech({ text: fullText, voice: voiceLang });
 
-        const voices = window.speechSynthesis.getVoices();
-        
-        let selectedVoice = voices.find(v => v.lang === voiceLang && (v.name.toLowerCase().includes('erkek') || v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('männlich')));
-        if (!selectedVoice) {
-            selectedVoice = voices.find(v => v.lang === voiceLang);
+            if (response?.media) {
+                setAudioSrc(response.media);
+            } else {
+                throw new Error('No media in response');
+            }
+        } catch (error) {
+            console.error("TTS Error:", error);
+            toast({
+                title: translations.toast.audioErrorTitle,
+                description: translations.toast.audioErrorApi,
+                variant: "destructive"
+            });
+        } finally {
+            setIsGenerating(false);
         }
+    };
+    
+    useEffect(() => {
+        if (audioSrc && !audioRef.current) {
+            const audio = new Audio(audioSrc);
+            audioRef.current = audio;
+            audio.play();
+            setIsPlaying(true);
 
+            audio.onended = () => {
+                cleanupAudio();
+            };
 
-        if (selectedVoice) {
-            utterance.voice = selectedVoice;
-        }
-
-        utterance.onend = () => {
-             setTimeout(() => {
-                currentChunkIndexRef.current++;
-                speakChunk(currentChunkIndexRef.current);
-            }, 500); // Add a small delay
-        };
-
-        utterance.onerror = (event) => {
-            if (event.error !== 'interrupted') {
+            audio.onerror = () => {
                 toast({
                     title: translations.toast.audioErrorTitle,
                     description: translations.toast.audioErrorDescription,
                     variant: "destructive"
                 });
-            }
-            cleanupSpeech();
-        };
-        
-        window.speechSynthesis.speak(utterance);
-    }, [language, cleanupSpeech, toast, translations]);
-
-
-    const handlePlayPause = async () => {
-        if (isGenerating) return;
-
-        if (isPlaying && !isPaused) {
-            window.speechSynthesis.pause();
-            setIsPaused(true);
-            return;
+                cleanupAudio();
+            };
         }
+    }, [audioSrc, cleanupAudio, toast, translations]);
 
-        if (isPlaying && isPaused) {
-            window.speechSynthesis.resume();
-            setIsPaused(false);
-            return;
-        }
-        
-        if (!isPlaying) {
-            setIsGenerating(true); // Show loader while preparing
-            
-            const startPlayback = () => {
-                cleanupSpeech(); // Reset before starting new playback
-                setIsPlaying(true);
-                setIsPaused(false);
-                setIsGenerating(false);
-
-                const fullText = translations.famous.historyContent;
-                const sentences = fullText.match(/[^.!?]+[.!?\n]+/g) || [fullText];
-                const chunks: string[] = [];
-                let currentChunk = "";
-                
-                sentences.forEach(sentence => {
-                    const trimmedSentence = sentence.trim();
-                    if (!trimmedSentence) return;
-                    if ((currentChunk + ' ' + trimmedSentence).length > MAX_CHUNK_LENGTH && currentChunk) {
-                        chunks.push(currentChunk);
-                        currentChunk = trimmedSentence;
-                    } else {
-                        currentChunk = currentChunk ? currentChunk + ' ' + trimmedSentence : trimmedSentence;
-                    }
-                });
-                if (currentChunk) {
-                    chunks.push(currentChunk);
-                }
-                
-                textChunksRef.current = chunks;
-                currentChunkIndexRef.current = 0;
-                speakChunk(0);
-            }
-
-            // Ensure voices are loaded before starting playback
-            if (typeof window !== 'undefined' && window.speechSynthesis) {
-                const voices = window.speechSynthesis.getVoices();
-                if (voices.length === 0) {
-                     window.speechSynthesis.onvoiceschanged = () => {
-                        startPlayback();
-                     };
-                } else {
-                     startPlayback();
-                }
-            } else {
-                toast({
-                    title: translations.toast.unsupportedTitle,
-                    description: translations.toast.unsupportedDescription,
-                    variant: "destructive"
-                });
-                setIsGenerating(false);
-            }
-        }
-    };
     
     return (
         <div>
+            {audioSrc && <audio src={audioSrc} ref={audioRef} />}
             <section className="relative h-[40vh] md:h-[50vh] w-full flex items-end text-white">
                 {heroImage && (
                     <Image
