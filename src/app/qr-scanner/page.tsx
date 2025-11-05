@@ -27,12 +27,12 @@ export default function QRScannerPage() {
   const scannerContainerId = "qr-reader";
 
   useEffect(() => {
+    // Ensure this code runs only on the client
+    if (typeof window === "undefined" || scannerRef.current) {
+        return;
+    }
+
     const startScanner = async () => {
-      // Ensure this code runs only on the client
-      if (typeof window === "undefined") {
-          return;
-      }
-      
       try {
         const cameras = await Html5Qrcode.getCameras();
         if (!cameras || cameras.length === 0) {
@@ -84,6 +84,7 @@ export default function QRScannerPage() {
           onSuccess,
           onError
         );
+         setErrorMessage(null); // Clear any previous errors on successful start
       } catch (err: any) {
         console.error("Failed to start scanner", err);
         let userFriendlyMessage = "Kamera başlatılırken bir hata oluştu. Lütfen başka bir uygulamanın kamerayı kullanmadığından emin olun.";
@@ -102,6 +103,7 @@ export default function QRScannerPage() {
       if (scannerRef.current && scannerRef.current.isScanning) {
         scannerRef.current.stop().catch(err => console.error("Failed to stop scanner on cleanup", err));
       }
+      scannerRef.current = null;
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
