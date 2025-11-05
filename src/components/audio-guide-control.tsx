@@ -10,7 +10,6 @@ import { Button } from './ui/button';
 import { Radio, RadioTower } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/context/language-context';
-import { textToSpeech } from '@/ai/flows/text-to-speech';
 import { PlayIcon } from 'lucide-react';
 
 const PROXIMITY_THRESHOLD_CENTER = 10; // meters for city center
@@ -41,7 +40,6 @@ const isPoiOutsideCenter = (poi: PointOfInterest): boolean => {
     return false;
 }
 
-
 export function AudioGuideControl() {
     const { language, translations } = useLanguage();
     const router = useRouter();
@@ -51,9 +49,8 @@ export function AudioGuideControl() {
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
     const [triggeredPois, setTriggeredPois] = useState<Set<string>>(new Set());
     const watchIdRef = useRef<number | null>(null);
-    const audioRef = useRef<HTMLAudioElement | null>(null);
+    const synthRef = useRef<SpeechSynthesis | null>(null);
     const { toast, dismiss } = useToast();
-    
 
     useEffect(() => {
         async function fetchPois() {
@@ -61,6 +58,7 @@ export function AudioGuideControl() {
             setPois(allPois);
         }
         fetchPois();
+        synthRef.current = window.speechSynthesis;
     }, [language]);
     
      const stopLocationTracking = useCallback(() => {
@@ -68,9 +66,8 @@ export function AudioGuideControl() {
             navigator.geolocation.clearWatch(watchIdRef.current);
             watchIdRef.current = null;
         }
-        if (audioRef.current) {
-            audioRef.current.pause();
-            audioRef.current = null;
+        if (synthRef.current && synthRef.current.speaking) {
+            synthRef.current.cancel();
         }
         setUserLocation(null);
         setTriggeredPois(new Set());
@@ -79,7 +76,7 @@ export function AudioGuideControl() {
     }, [dismiss]);
 
     const startLocationTracking = () => {
-        if (!('geolocation' in navigator)) {
+        if (!('geolocation' in navigator) || !('speechSynthesis' in window)) {
             toast({
                 title: translations.toast.unsupportedTitle,
                 description: translations.toast.audioGuideUnsupported,
@@ -115,24 +112,15 @@ export function AudioGuideControl() {
         router.push(`/pois/${poi.slug}?autoplay=true`);
     }, [router]);
     
-    const playProximityAlert = useCallback(async (poiName: string) => {
-        if (audioRef.current) {
-            audioRef.current.pause();
+    const playProximityAlert = useCallback((poiName: string) => {
+        if (!synthRef.current) return;
+        if (synthRef.current.speaking) {
+            synthRef.current.cancel();
         }
-        try {
-            const notificationText = translations.audioGuide.proximityPrompt.replace('{poiName}', poiName);
-            const voiceLang = language === 'tr' ? 'tr-TR-Standard-A' : language === 'en' ? 'en-US-Standard-A' : language === 'fr' ? 'fr-FR-Standard-A' : 'de-DE-Standard-A';
-            
-            const response = await textToSpeech({ text: notificationText, voice: voiceLang });
-            if (response?.media) {
-                const audio = new Audio(response.media);
-                audioRef.current = audio;
-                audio.play();
-            }
-        } catch (error) {
-            console.error("Proximity alert TTS error:", error);
-            // We don't show a toast here to avoid spamming the user
-        }
+        const notificationText = translations.audioGuide.proximityPrompt.replace('{poiName}', poiName);
+        const utterance = new SpeechSynthesisUtterance(notificationText);
+        utterance.lang = language;
+        synthRef.current.speak(utterance);
     }, [language, translations]);
 
 
@@ -209,5 +197,3 @@ export function AudioGuideControl() {
         </div>
     );
 }
-
-    
