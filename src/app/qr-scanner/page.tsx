@@ -25,13 +25,15 @@ export default function QRScannerPage() {
   const { translations } = useLanguage();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const scannerRef = useRef<Html5Qrcode | null>(null);
+  const isScannerInitialized = useRef(false);
   const scannerContainerId = "qr-reader";
 
   useEffect(() => {
-    // Ensure this code runs only on the client
-    if (typeof window === "undefined") {
+    if (typeof window === "undefined" || isScannerInitialized.current) {
         return;
     }
+    
+    isScannerInitialized.current = true;
 
     const scanner = new Html5Qrcode(scannerContainerId);
     scannerRef.current = scanner;
@@ -42,7 +44,6 @@ export default function QRScannerPage() {
             scannerRef.current.stop().then(() => {
                 console.log(`Scan result: ${decodedText}`, decodedResult);
                 try {
-                    // Only allow relative paths within the same origin for security
                     const url = new URL(decodedText, window.location.origin);
                     if (url.origin === window.location.origin) {
                         router.push(url.pathname + url.search + url.hash);
@@ -50,7 +51,6 @@ export default function QRScannerPage() {
                         setErrorMessage("Geçersiz QR Kod. Lütfen sadece bu uygulamaya ait kodları tarayın.");
                     }
                 } catch(e) {
-                    // If it's not a valid URL, check if it's a relative path starting with /
                     if (decodedText.startsWith('/')) {
                         router.push(decodedText);
                     } else {
@@ -62,7 +62,6 @@ export default function QRScannerPage() {
     };
 
     const onError = (error: Html5QrcodeError) => {
-      // This is called frequently, ignore "QR code not found" which is not a real error.
       if (error.message.includes("QR code not found")) {
         return;
       }
@@ -81,7 +80,7 @@ export default function QRScannerPage() {
           onSuccess,
           onError
         );
-         setErrorMessage(null); // Clear any previous errors on successful start
+         setErrorMessage(null);
       } catch (err: any) {
         console.error("Failed to start scanner", err);
         let userFriendlyMessage = "Kamera başlatılırken bir hata oluştu. Lütfen başka bir uygulamanın kamerayı kullanmadığından emin olun.";
@@ -101,7 +100,8 @@ export default function QRScannerPage() {
         scannerRef.current.stop().catch(err => console.error("Failed to stop scanner on cleanup", err));
       }
     };
-  }, [router, translations]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="container py-8 md:py-12">
