@@ -41,15 +41,15 @@ export default function QRScannerPage() {
         const onSuccess = (decodedText: string, decodedResult: Html5QrcodeResult) => {
           console.log(`Scan result: ${decodedText}`, decodedResult);
           try {
-            const url = new URL(decodedText);
-            // Basic security check: ensure it's a relative path or same origin
-            if (url.origin === window.location.origin || decodedText.startsWith('/')) {
-                router.push(decodedText);
+            // Only allow relative paths within the same origin for security
+            const url = new URL(decodedText, window.location.origin);
+            if (url.origin === window.location.origin) {
+                router.push(url.pathname + url.search + url.hash);
             } else {
                 setErrorMessage("Geçersiz QR Kod. Lütfen sadece bu uygulamaya ait kodları tarayın.");
             }
           } catch(e) {
-            // If it's not a valid URL, check if it's a relative path
+            // If it's not a valid URL, check if it's a relative path starting with /
              if (decodedText.startsWith('/')) {
                 router.push(decodedText);
              } else {
@@ -62,9 +62,10 @@ export default function QRScannerPage() {
         };
 
         const onError = (error: Html5QrcodeError) => {
-          // Ignore "QR code not found" errors
-          if (!error.message.includes("QR code not found")) {
+          // Ignore "QR code not found" errors, which are frequent and normal
+          if (!error.message || !error.message.includes("QR code not found")) {
             console.warn(`QR error: ${error.message}`);
+             // Don't set a persistent error message for transient scan issues
           }
         };
 
@@ -74,13 +75,20 @@ export default function QRScannerPage() {
             fps: 10,
             qrbox: qrboxFunction,
             supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
+            disableFlip: false, // Keep this for better compatibility
           },
           onSuccess,
           onError
         );
       } catch (err: any) {
         console.error("Failed to start scanner", err);
-        setErrorMessage(err.message || "Kamera başlatılırken bir hata oluştu.");
+        let userFriendlyMessage = "Kamera başlatılırken bir hata oluştu. Lütfen başka bir uygulamanın kamerayı kullanmadığından emin olun.";
+        if (err.name === 'NotAllowedError') {
+            userFriendlyMessage = "Kamera erişimine izin vermeniz gerekiyor. Lütfen tarayıcı ayarlarınızı kontrol edin.";
+        } else if (err.name === 'NotReadableError') {
+            userFriendlyMessage = "Kamera şu anda kullanılamıyor. Başka bir uygulama veya sekme tarafından kullanılıyor olabilir veya donanımsal bir sorun olabilir.";
+        }
+        setErrorMessage(userFriendlyMessage);
       }
     };
     
@@ -92,7 +100,7 @@ export default function QRScannerPage() {
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router, toast, translations]);
+  }, [router, translations]);
 
   return (
     <div className="container py-8 md:py-12">
