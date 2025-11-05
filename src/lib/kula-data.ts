@@ -68,8 +68,11 @@ export async function getPoiById(id: string, lang: string = 'tr'): Promise<Point
 
 export async function getPoisByIds(ids: string[], lang: string = 'tr'): Promise<PointOfInterest[]> {
     await new Promise(resolve => setTimeout(resolve, DELAY));
-    const filteredPois = pois.filter(poi => ids.includes(poi.id));
-    return filteredPois.map(poi => translateItem(poi, lang));
+    // Create a map for quick lookup
+    const poiMap = new Map(pois.map(p => [p.id, p]));
+    // Map over the original IDs to preserve order
+    const orderedPois = ids.map(id => poiMap.get(id)).filter((p): p is PointOfInterest => !!p);
+    return orderedPois.map(poi => translateItem(poi, lang));
 }
 
 export async function getFeaturedRoute(lang: string = 'tr'): Promise<ThematicRoute | undefined> {
