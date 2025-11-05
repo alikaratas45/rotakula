@@ -1,4 +1,3 @@
-
 "use client"
 
 import Link from "next/link";
@@ -6,7 +5,7 @@ import { usePathname } from "next/navigation";
 import * as React from "react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
-import { Moon, Sun, Check, AudioWaveform } from "lucide-react";
+import { Moon, Sun, Check, AudioWaveform, QrCode } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -91,6 +90,7 @@ export function Header() {
         { href: "/accommodation", label: translations.nav.accommodation },
         { href: "/stories", label: translations.nav.stories },
         { href: "/my-routes", label: translations.nav.myRoutes },
+        { href: "/qr-scanner", label: translations.nav.qrScanner },
         { href: "/famous", label: translations.nav.about },
     ];
 
@@ -163,6 +163,12 @@ export function Header() {
                     </Link>
                     <div className="flex items-center gap-1">
                         <AudioGuideControl />
+                         <Button variant="outline" size="icon" asChild className="h-8 w-8">
+                            <Link href="/qr-scanner">
+                                <QrCode className="h-4 w-4" />
+                                <span className="sr-only">{translations.nav.qrScanner}</span>
+                            </Link>
+                        </Button>
                         <LanguageSelector isMobile={true} />
                         <VoiceSettings isMobile={true} />
                         <ThemeSwitcher isMobile={true} />
@@ -208,6 +214,12 @@ export function Header() {
                 {/* Desktop right side */}
                 <div className="hidden md:flex flex-1 items-center justify-end gap-2">
                     <AudioGuideControl />
+                    <Button variant="outline" size="sm" asChild className="h-9">
+                        <Link href="/qr-scanner">
+                            <QrCode className="h-4 w-4 mr-2" />
+                            {translations.nav.qrScanner}
+                        </Link>
+                    </Button>
                     <LanguageSelector />
                     <VoiceSettings />
                     <ThemeSwitcher />

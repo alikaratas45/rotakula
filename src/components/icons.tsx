@@ -1,5 +1,4 @@
-
-import { Bed, Play, Pause, type SVGProps } from "lucide-react";
+import { Bed, Play, Pause, type SVGProps, QrCode } from "lucide-react";
 
 export function HistoricHouseIcon(props: SVGProps<SVGSVGElement>) {
   return (
@@ -140,4 +139,10 @@ export function GermanFlagIcon(props: SVGProps<SVGSVGElement>) {
       <rect width="5" height="1" y="2" fill="#FFCE00"/>
     </svg>
   );
+}
+
+export function QrCodeIcon(props: SVGProps<SVGSVGElement>) {
+    return (
+        <QrCode {...props} />
+    );
 }
