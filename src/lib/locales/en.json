@@ -7,7 +7,8 @@
         "food": "Flavor Stops",
         "accommodation": "Accommodation",
         "nearby": "What's Around Me?",
-        "myRoutes": "My Routes"
+        "myRoutes": "My Routes",
+        "qrScanner": "Scan QR Code"
     },
     "header": {
         "menu": "Menu",
@@ -64,6 +65,9 @@
         "saveRoute": "Save Route",
         "saved": "Saved",
         "stops": "Stops"
+    },
+     "qrScanner": {
+        "description": "Instantly access detailed information about a place by scanning the QR codes at the information points in Kula."
     },
     "audioGuide": {
         "title": "Audio Guide",

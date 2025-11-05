@@ -7,7 +7,8 @@
         "food": "Arrêts Gourmands",
         "accommodation": "Hébergement",
         "nearby": "Qu'y a-t-il autour de moi ?",
-        "myRoutes": "Mes Itinéraires"
+        "myRoutes": "Mes Itinéraires",
+        "qrScanner": "Scanner QR Code"
     },
     "header": {
         "menu": "Menu",
@@ -64,6 +65,9 @@
         "saveRoute": "Enregistrer l'itinéraire",
         "saved": "Enregistré",
         "stops": "Arrêts"
+    },
+     "qrScanner": {
+        "description": "Accédez instantanément à des informations détaillées sur un lieu en scannant les codes QR aux points d'information de Kula."
     },
     "audioGuide": {
         "title": "Audio Guide",

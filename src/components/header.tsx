@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import * as React from "react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
-import { Moon, Sun, Check, AudioWaveform } from "lucide-react";
+import { Moon, Sun, Check, AudioWaveform, QrCode } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -91,6 +91,11 @@ export function Header() {
         { href: "/stories", label: translations.nav.stories },
         { href: "/my-routes", label: translations.nav.myRoutes },
         { href: "/famous", label: translations.nav.about },
+    ];
+    
+    const mobileNavLinks = [
+        ...navLinks,
+        { href: "/qr-scanner", label: translations.nav.qrScanner, icon: QrCode },
     ];
 
     const handleLinkClick = () => {
@@ -181,19 +186,20 @@ export function Header() {
                                         <span className="font-bold font-headline text-xl">RotaKula</span>
                                     </Link>
                                    <nav className="flex flex-col">
-                                       {navLinks.map((link, index) => (
+                                       {mobileNavLinks.map((link, index) => (
                                            <Link
                                                key={link.href}
                                                href={link.href}
                                                onClick={handleLinkClick}
                                                className={cn(
-                                                   "border-b py-4 text-lg font-bold uppercase tracking-wider",
+                                                   "border-b py-4 text-lg font-bold uppercase tracking-wider flex items-center gap-4",
                                                    (pathname.startsWith(link.href) && link.href !== "/") || pathname === link.href ? "text-primary" : "text-muted-foreground hover:text-primary",
                                                    isSheetOpen ? "animate-slide-in-from-left opacity-0" : "opacity-0"
                                                )}
                                                 style={{ animationDelay: `${150 + index * 100}ms` }}
                                            >
-                                               {link.label}
+                                               {link.icon && <link.icon className="h-5 w-5" />}
+                                               <span>{link.label}</span>
                                            </Link>
                                        ))}
                                    </nav>

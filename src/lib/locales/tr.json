@@ -7,7 +7,8 @@
         "food": "Lezzet Durakları",
         "accommodation": "Konaklama",
         "nearby": "Çevremde Ne Var?",
-        "myRoutes": "Rotalarım"
+        "myRoutes": "Rotalarım",
+        "qrScanner": "QR Kod Okut"
     },
     "header": {
         "menu": "Menü",
@@ -64,6 +65,9 @@
         "saveRoute": "Rotayı Kaydet",
         "saved": "Kaydedildi",
         "stops": "Duraklar"
+    },
+     "qrScanner": {
+        "description": "Kula'daki bilgilendirme noktalarında bulunan QR kodlarını tarayarak ilgili yer hakkında detaylı bilgiye anında ulaşın."
     },
     "audioGuide": {
         "title": "Sesli Rehber",
