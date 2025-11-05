@@ -67,7 +67,7 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
             setIsPaused(false);
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [poi, language, toast, translations]);
+    }, [poi, language, toast, translations, router, searchParams]);
 
 
     const handlePlayPause = useCallback(() => {
