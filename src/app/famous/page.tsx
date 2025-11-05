@@ -4,10 +4,10 @@
 import Image from 'next/image';
 import { useLanguage } from '@/context/language-context';
 import { getImageById } from '@/lib/placeholder-images';
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { PlayIcon, PauseIcon, Loader2 } from 'lucide-react';
+import { PlayIcon, PauseIcon } from 'lucide-react';
 
 export default function FamousPage() {
     const { language, translations } = useLanguage();
@@ -89,6 +89,7 @@ export default function FamousPage() {
              if (synth.speaking) {
                 synth.cancel();
             }
+            // If voices are not loaded yet, wait for them
             if (synth.getVoices().length === 0) {
                  synth.onvoiceschanged = startPlayback;
             } else {

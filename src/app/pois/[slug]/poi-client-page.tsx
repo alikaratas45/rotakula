@@ -52,7 +52,7 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
 
         const shouldAutoplay = searchParams.get('autoplay') === 'true';
         if (shouldAutoplay) {
-             const newPath = `/pois/${poi.slug}`;
+            const newPath = `/pois/${poi.slug}`;
             router.replace(newPath, { scroll: false });
             setTimeout(() => {
                 handlePlayPause();
@@ -73,7 +73,10 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
 
 
     const handlePlayPause = useCallback(() => {
-        if (!synthRef.current || !utteranceRef.current) {
+        const synth = synthRef.current;
+        const utterance = utteranceRef.current;
+
+        if (!synth || !utterance) {
             toast({
                 title: translations.toast.unsupportedTitle,
                 description: translations.toast.unsupportedDescription,
@@ -82,9 +85,6 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
             return;
         }
         
-        const synth = synthRef.current;
-        const utterance = utteranceRef.current;
-
         const startPlayback = () => {
             const voices = synth.getVoices();
             const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
@@ -106,6 +106,7 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
             if (synth.speaking) {
                 synth.cancel();
             }
+            // If voices are not loaded yet, wait for them
             if (synth.getVoices().length === 0) {
                  synth.onvoiceschanged = startPlayback;
             } else {
