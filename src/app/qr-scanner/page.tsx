@@ -33,16 +33,13 @@ export default function QRScannerPage() {
         return;
     }
 
-    // Initialize scanner only once
-    if (!scannerRef.current) {
-        scannerRef.current = new Html5Qrcode(scannerContainerId);
-    }
-    const scanner = scannerRef.current;
+    const scanner = new Html5Qrcode(scannerContainerId);
+    scannerRef.current = scanner;
 
 
     const onSuccess = (decodedText: string, decodedResult: Html5QrcodeResult) => {
-        if (scanner.isScanning) {
-            scanner.stop().then(() => {
+        if (scannerRef.current?.isScanning) {
+            scannerRef.current.stop().then(() => {
                 console.log(`Scan result: ${decodedText}`, decodedResult);
                 try {
                     // Only allow relative paths within the same origin for security
@@ -65,21 +62,15 @@ export default function QRScannerPage() {
     };
 
     const onError = (error: Html5QrcodeError) => {
-      // Ignore "QR code not found" errors, which are frequent and normal
-      if (!error.message || !error.message.includes("QR code not found")) {
-        console.warn(`QR error: ${error.message}`);
-         // Don't set a persistent error message for transient scan issues
+      // This is called frequently, ignore "QR code not found" which is not a real error.
+      if (error.message.includes("QR code not found")) {
+        return;
       }
+      console.warn(`QR error: ${error.message}`);
     };
 
     const startScanner = async () => {
       try {
-        const cameras = await Html5Qrcode.getCameras();
-        if (!cameras || cameras.length === 0) {
-          setErrorMessage("Bu cihazda kamera bulunamadı.");
-          return;
-        }
-
         await scanner.start(
           { facingMode: "environment" },
           {
@@ -110,8 +101,7 @@ export default function QRScannerPage() {
         scannerRef.current.stop().catch(err => console.error("Failed to stop scanner on cleanup", err));
       }
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [router, translations]);
 
   return (
     <div className="container py-8 md:py-12">
