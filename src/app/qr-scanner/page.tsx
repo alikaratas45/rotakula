@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -28,9 +29,48 @@ export default function QRScannerPage() {
 
   useEffect(() => {
     // Ensure this code runs only on the client
-    if (typeof window === "undefined" || scannerRef.current) {
+    if (typeof window === "undefined") {
         return;
     }
+
+    // Initialize scanner only once
+    if (!scannerRef.current) {
+        scannerRef.current = new Html5Qrcode(scannerContainerId);
+    }
+    const scanner = scannerRef.current;
+
+
+    const onSuccess = (decodedText: string, decodedResult: Html5QrcodeResult) => {
+        if (scanner.isScanning) {
+            scanner.stop().then(() => {
+                console.log(`Scan result: ${decodedText}`, decodedResult);
+                try {
+                    // Only allow relative paths within the same origin for security
+                    const url = new URL(decodedText, window.location.origin);
+                    if (url.origin === window.location.origin) {
+                        router.push(url.pathname + url.search + url.hash);
+                    } else {
+                        setErrorMessage("Geçersiz QR Kod. Lütfen sadece bu uygulamaya ait kodları tarayın.");
+                    }
+                } catch(e) {
+                    // If it's not a valid URL, check if it's a relative path starting with /
+                    if (decodedText.startsWith('/')) {
+                        router.push(decodedText);
+                    } else {
+                        setErrorMessage("Geçersiz QR Kod. Lütfen sadece bu uygulamaya ait kodları tarayın.");
+                    }
+                }
+            }).catch(err => console.error("Failed to stop scanner", err));
+        }
+    };
+
+    const onError = (error: Html5QrcodeError) => {
+      // Ignore "QR code not found" errors, which are frequent and normal
+      if (!error.message || !error.message.includes("QR code not found")) {
+        console.warn(`QR error: ${error.message}`);
+         // Don't set a persistent error message for transient scan issues
+      }
+    };
 
     const startScanner = async () => {
       try {
@@ -39,40 +79,6 @@ export default function QRScannerPage() {
           setErrorMessage("Bu cihazda kamera bulunamadı.");
           return;
         }
-
-        const scanner = new Html5Qrcode(scannerContainerId);
-        scannerRef.current = scanner;
-
-        const onSuccess = (decodedText: string, decodedResult: Html5QrcodeResult) => {
-          console.log(`Scan result: ${decodedText}`, decodedResult);
-          try {
-            // Only allow relative paths within the same origin for security
-            const url = new URL(decodedText, window.location.origin);
-            if (url.origin === window.location.origin) {
-                router.push(url.pathname + url.search + url.hash);
-            } else {
-                setErrorMessage("Geçersiz QR Kod. Lütfen sadece bu uygulamaya ait kodları tarayın.");
-            }
-          } catch(e) {
-            // If it's not a valid URL, check if it's a relative path starting with /
-             if (decodedText.startsWith('/')) {
-                router.push(decodedText);
-             } else {
-                setErrorMessage("Geçersiz QR Kod. Lütfen sadece bu uygulamaya ait kodları tarayın.");
-             }
-          }
-          if (scannerRef.current?.isScanning) {
-            scannerRef.current.stop().catch(err => console.error("Failed to stop scanner", err));
-          }
-        };
-
-        const onError = (error: Html5QrcodeError) => {
-          // Ignore "QR code not found" errors, which are frequent and normal
-          if (!error.message || !error.message.includes("QR code not found")) {
-            console.warn(`QR error: ${error.message}`);
-             // Don't set a persistent error message for transient scan issues
-          }
-        };
 
         await scanner.start(
           { facingMode: "environment" },
@@ -103,10 +109,9 @@ export default function QRScannerPage() {
       if (scannerRef.current && scannerRef.current.isScanning) {
         scannerRef.current.stop().catch(err => console.error("Failed to stop scanner on cleanup", err));
       }
-      scannerRef.current = null;
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [router]);
 
   return (
     <div className="container py-8 md:py-12">
