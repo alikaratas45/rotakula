@@ -17,6 +17,17 @@ import { APIProvider } from '@vis.gl/react-google-maps';
 import { useLanguage } from '@/context/language-context';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 function getCategoryIcon(category: PointOfInterest['category']) {
     switch (category) {
@@ -179,18 +190,32 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
                                             Kula'daki Lezzet Duraklarını Gör
                                         </Button>
                                     ) : (
-                                        <Button
-                                            onClick={handleStartRoute}
-                                            className="w-full"
-                                            disabled={isStartingRoute}
-                                        >
-                                            {isStartingRoute ? (
-                                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                            ) : (
-                                                route.slug === 'geopark-discovery-route' ? <Car className="mr-2 h-4 w-4" /> : <Footprints className="mr-2 h-4 w-4" />
-                                            )}
-                                            {isStartingRoute ? translations.nearby.gettingLocation : "Rotayı Haritada Başlat"}
-                                        </Button>
+                                        <AlertDialog>
+                                            <AlertDialogTrigger asChild>
+                                                <Button className="w-full" disabled={isStartingRoute}>
+                                                    {isStartingRoute ? (
+                                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                                    ) : (
+                                                        route.slug === 'geopark-discovery-route' ? <Car className="mr-2 h-4 w-4" /> : <Footprints className="mr-2 h-4 w-4" />
+                                                    )}
+                                                    {isStartingRoute ? translations.nearby.gettingLocation : "Rotayı Haritada Başlat"}
+                                                </Button>
+                                            </AlertDialogTrigger>
+                                            <AlertDialogContent>
+                                                <AlertDialogHeader>
+                                                <AlertDialogTitle>Harita Uygulamasına Yönlendiriliyorsunuz</AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    En iyi yol tarifi deneyimi için Google Haritalar uygulaması açılacaktır. Bu işlem sırasında sesli rehber duraklatılacaktır. Uygulamaya geri döndüğünüzde sesli rehberi yeniden başlatabilirsiniz.
+                                                </AlertDialogDescription>
+                                                </AlertDialogHeader>
+                                                <AlertDialogFooter>
+                                                <AlertDialogCancel>İptal</AlertDialogCancel>
+                                                <AlertDialogAction onClick={handleStartRoute}>
+                                                    Yine de Başlat
+                                                </AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
                                     )}
                                     <Separator />
                                     <Button
