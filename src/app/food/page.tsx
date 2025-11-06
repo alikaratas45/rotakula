@@ -49,7 +49,7 @@ export default function FoodPage() {
     }
     
     return (
-        <div className="container py-8 md:py-12">
+        <div className="container px-4 py-8 md:py-12">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
                 <h1 className="text-3xl md:text-4xl font-headline font-bold">{translations.food.title}</h1>
                  <Button variant="outline" onClick={openGoogleMapsSearch}>

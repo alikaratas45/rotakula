@@ -1,3 +1,4 @@
+
 "use client"
 
 import { getPoiBySlug } from '@/lib/kula-data';
@@ -28,7 +29,7 @@ export default function PoiDetailPage({ params }: { params: { slug: string } }) 
 
 
     if (loading) {
-      return <div className="container py-8">{translations.common.loading}...</div>
+      return <div className="container px-4 py-8">{translations.common.loading}...</div>
     }
 
     if (!poi) {

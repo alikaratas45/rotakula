@@ -37,7 +37,7 @@ export default function MyRoutesPage() {
     }
 
     return (
-        <div className="container py-8 md:py-12">
+        <div className="container px-4 py-8 md:py-12">
             <h1 className="text-3xl md:text-4xl font-headline font-bold mb-8">{translations.myRoutes.title}</h1>
             
             {userSavedRoutes.length > 0 ? (

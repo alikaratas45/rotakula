@@ -62,6 +62,7 @@ export default function QRScannerPage() {
     };
 
     const onError = (error: Html5QrcodeError) => {
+      // Don't log "QR code not found" errors, as they are very frequent.
       if (error.message.includes("QR code not found")) {
         return;
       }
@@ -69,8 +70,13 @@ export default function QRScannerPage() {
     };
 
     const startScanner = async () => {
+      // Check if scannerRef.current is available and not already scanning.
+      // This is an extra safeguard.
+      if (!scannerRef.current || scannerRef.current.isScanning) {
+          return;
+      }
       try {
-        await scanner.start(
+        await scannerRef.current.start(
           { facingMode: "environment" },
           {
             fps: 10,
@@ -88,6 +94,11 @@ export default function QRScannerPage() {
             userFriendlyMessage = "Kamera erişimine izin vermeniz gerekiyor. Lütfen tarayıcı ayarlarınızı kontrol edin.";
         } else if (err.name === 'NotReadableError') {
             userFriendlyMessage = "Kamera şu anda kullanılamıyor. Başka bir uygulama veya sekme tarafından kullanılıyor olabilir veya donanımsal bir sorun olabilir.";
+        } else if (err.message.includes("already under transition")) {
+            // This specific error can sometimes be ignored as the scanner might be self-correcting.
+            // If it persists, it indicates a bigger issue. For now, we don't show it to the user.
+            console.warn("Scanner transition error ignored.");
+            return;
         }
         setErrorMessage(userFriendlyMessage);
       }
@@ -104,7 +115,7 @@ export default function QRScannerPage() {
   }, []);
 
   return (
-    <div className="container py-8 md:py-12">
+    <div className="container px-4 py-8 md:py-12">
       <div className="max-w-xl mx-auto">
         <div className="flex items-center gap-4 mb-4">
             <QrCode className="h-8 w-8 text-primary" />

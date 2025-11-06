@@ -1,3 +1,4 @@
+
 "use client"
 
 import { getStoryBySlug } from '@/lib/kula-data';
@@ -29,7 +30,7 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
 
 
     if (loading) {
-      return <div className="container py-8">{translations.common.loading}...</div>;
+      return <div className="container px-4 py-8">{translations.common.loading}...</div>;
     }
 
     if (!story) {
@@ -54,14 +55,14 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
                     />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                <div className="relative z-10 container py-8">
+                <div className="relative z-10 container px-4 py-8">
                     <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight drop-shadow-lg">
                         {story.title}
                     </h1>
                 </div>
             </section>
             
-            <div className="container py-8 md:py-12">
+            <div className="container px-4 py-8 md:py-12">
                 <div className="max-w-3xl mx-auto">
                     <div className="flex items-center gap-6 text-sm text-muted-foreground mb-6">
                         <div className="flex items-center gap-2">

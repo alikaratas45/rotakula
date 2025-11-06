@@ -1,3 +1,4 @@
+
 "use client"
 
 import { getRouteBySlug, getPoisByIds } from '@/lib/kula-data';
@@ -31,7 +32,7 @@ export default function RoutePage({ params }: { params: { slug: string } }) {
     }, [slug, language]);
 
     if (loading) {
-        return <div className="container py-8">{translations.common.loading}...</div>;
+        return <div className="container px-4 py-8">{translations.common.loading}...</div>;
     }
 
     if (!route) {
@@ -54,7 +55,7 @@ export default function RoutePage({ params }: { params: { slug: string } }) {
                     />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                <div className="relative z-10 container py-8">
+                <div className="relative z-10 container px-4 py-8">
                     <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight drop-shadow-lg">
                         {route.title}
                     </h1>
