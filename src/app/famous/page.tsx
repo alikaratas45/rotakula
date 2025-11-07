@@ -29,7 +29,6 @@ export default function FamousPage() {
     useEffect(() => {
         // We only want this feature for Turkish language
         if (language !== 'tr') {
-            // If there's an active audio player, stop it.
             if (audioRef.current) {
                 audioRef.current.pause();
                 audioRef.current = null;
@@ -37,19 +36,16 @@ export default function FamousPage() {
             setIsPlaying(false);
             setCurrentTrackIndex(0);
             return;
-        };
+        }
 
         // Initialize the Audio object
         audioRef.current = new Audio(audioPlaylist[currentTrackIndex]);
-        
         const audio = audioRef.current;
 
         const handleTrackEnd = () => {
-            // Check if there is a next track
             if (currentTrackIndex < audioPlaylist.length - 1) {
                 setCurrentTrackIndex(prevIndex => prevIndex + 1);
             } else {
-                // End of playlist
                 setIsPlaying(false);
                 setCurrentTrackIndex(0);
             }
@@ -69,11 +65,14 @@ export default function FamousPage() {
 
         // Cleanup function
         return () => {
-            audio.pause();
-            audio.removeEventListener('ended', handleTrackEnd);
-            audio.removeEventListener('error', handleError);
+            if (audio) {
+                audio.pause();
+                audio.removeEventListener('ended', handleTrackEnd);
+                audio.removeEventListener('error', handleError);
+            }
             audioRef.current = null;
             setIsPlaying(false);
+            setCurrentTrackIndex(0);
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [language, translations.toast.audioErrorTitle]);
@@ -81,32 +80,42 @@ export default function FamousPage() {
 
     // This effect handles changing tracks
     useEffect(() => {
-        if (language !== 'tr' || !audioRef.current || !isPlaying) return;
+        if (language !== 'tr' || !audioRef.current) return;
 
-        audioRef.current.src = audioPlaylist[currentTrackIndex];
-        audioRef.current.play().catch(e => {
-            console.error("Audio play failed:", e);
-            setIsPlaying(false);
-        });
+        if (isPlaying) {
+             audioRef.current.src = audioPlaylist[currentTrackIndex];
+             audioRef.current.play().catch(e => {
+                console.error("Audio play failed:", e);
+                setIsPlaying(false); // Stop trying to play if it fails
+             });
+        }
         
     }, [currentTrackIndex, language, isPlaying]);
 
 
     const handlePlayPause = useCallback(() => {
-        if (language !== 'tr' || !audioRef.current) {
-            toast({
-                title: translations.toast.unsupportedTitle,
-                description: "Bu dil için sesli anlatım mevcut değil.",
-                variant: "destructive"
-            });
+        const audio = audioRef.current;
+        if (!audio) {
+            // This can happen if the language is not 'tr'
+            if (language === 'tr') {
+                toast({
+                    title: translations.toast.audioErrorTitle,
+                    description: "Ses oynatıcı başlatılamadı.",
+                    variant: "destructive"
+                });
+            }
             return;
         }
 
         if (isPlaying) {
-            audioRef.current.pause();
+            audio.pause();
             setIsPlaying(false);
         } else {
-            audioRef.current.play().then(() => {
+            // If we are at the end of the playlist, reset to the beginning
+            if (currentTrackIndex === 0 && audio.currentTime === 0) {
+                 audio.src = audioPlaylist[0];
+            }
+            audio.play().then(() => {
                 setIsPlaying(true);
             }).catch(e => {
                  toast({
@@ -114,9 +123,10 @@ export default function FamousPage() {
                     description: "Ses dosyası oynatılamadı.",
                     variant: "destructive"
                 });
+                 setIsPlaying(false);
             });
         }
-    }, [isPlaying, language, toast, translations]);
+    }, [isPlaying, language, toast, translations, currentTrackIndex]);
     
     return (
         <div>
