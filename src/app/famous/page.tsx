@@ -12,8 +12,8 @@ import { PlayIcon, PauseIcon } from 'lucide-react';
 // Define the playlist for the Turkish audio guide
 const audioPlaylist = [
     '/sesler/kulahakkinda1.mp3',
-    '/sesler/kulahakkinda2.mp3',
-    '/sesler/kulahakkinda3.mp3',
+    '/sesler/Kulahakkinda2.mp3',
+    '/sesler/Kulahakkinda3.mp3',
 ];
 
 export default function FamousPage() {
@@ -26,11 +26,9 @@ export default function FamousPage() {
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
     // This effect handles initializing and cleaning up the audio player.
-    // It also plays the next track when one ends.
     useEffect(() => {
         // We only want this feature for the Turkish language
         if (language !== 'tr') {
-            // If language is switched, stop and clear the audio player
             if (audioRef.current) {
                 audioRef.current.pause();
                 audioRef.current = null;
@@ -40,23 +38,13 @@ export default function FamousPage() {
             return;
         }
 
-        // Initialize Audio object if it doesn't exist
-        if (!audioRef.current) {
-             audioRef.current = new Audio(audioPlaylist[0]);
-        }
-        
-        const audio = audioRef.current;
-        
-        // Set the source based on the current track index
-        audio.src = audioPlaylist[currentTrackIndex];
+        const audio = new Audio(audioPlaylist[currentTrackIndex]);
+        audioRef.current = audio;
 
-        // Function to handle when a track ends
         const handleTrackEnd = () => {
             if (currentTrackIndex < audioPlaylist.length - 1) {
-                // Move to the next track
                 setCurrentTrackIndex(prevIndex => prevIndex + 1);
             } else {
-                // End of playlist
                 setIsPlaying(false);
                 setCurrentTrackIndex(0);
             }
@@ -65,46 +53,62 @@ export default function FamousPage() {
         const handleError = (e: ErrorEvent) => {
             toast({
                 title: translations.toast.audioErrorTitle,
-                description: `MP3 dosyası yüklenemedi: ${e.message}`,
+                description: `MP3 dosyası yüklenemedi: ${audio.src.split('/').pop()}`,
                 variant: "destructive"
             });
             setIsPlaying(false);
         }
 
-        // Add event listeners
         audio.addEventListener('ended', handleTrackEnd);
         audio.addEventListener('error', handleError);
 
-        // If isPlaying is true, play the new track
+        // Cleanup function to run when the component unmounts or dependencies change
+        return () => {
+            audio.pause();
+            audio.removeEventListener('ended', handleTrackEnd);
+            audio.removeEventListener('error', handleError);
+            audioRef.current = null;
+        };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [language, currentTrackIndex]);
+
+    const handlePlayPause = useCallback(() => {
+        if (language !== 'tr') return;
+
+        const audio = audioRef.current;
+        if (!audio) return;
+        
         if (isPlaying) {
-            audio.play().catch(e => {
+            audio.pause();
+        } else {
+             audio.play().catch(e => {
                 console.error("Audio play failed:", e);
-                setIsPlaying(false);
                 toast({
                     title: translations.toast.audioErrorTitle,
                     description: "Ses dosyası oynatılamadı.",
                     variant: "destructive"
                 });
-            });
+                // Ensure we reset the state on failure
+                setIsPlaying(false);
+             });
         }
-        
-        // Cleanup function to run when the component unmounts or dependencies change
-        return () => {
-            if (audio) {
-                audio.pause();
-                audio.removeEventListener('ended', handleTrackEnd);
-                audio.removeEventListener('error', handleError);
-                // When language changes, we want a fresh start
-                audioRef.current = null;
-            }
-        };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [language, currentTrackIndex, isPlaying]);
-
-
-    const handlePlayPause = useCallback(() => {
-        setIsPlaying(prevIsPlaying => !prevIsPlaying);
-    }, []);
+        setIsPlaying(prev => !prev);
+    }, [isPlaying, language, toast, translations]);
+    
+    // Effect to auto-play next track
+    useEffect(() => {
+        if (isPlaying && audioRef.current && audioRef.current.paused) {
+             audioRef.current.play().catch(e => {
+                console.error("Audio play failed on track change:", e);
+                toast({
+                    title: translations.toast.audioErrorTitle,
+                    description: "Sıradaki ses dosyası oynatılamadı.",
+                    variant: "destructive"
+                });
+                setIsPlaying(false);
+             });
+        }
+    }, [currentTrackIndex, isPlaying, toast, translations]);
     
     return (
         <div>
