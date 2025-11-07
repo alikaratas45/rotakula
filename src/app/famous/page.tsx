@@ -4,10 +4,17 @@
 import Image from 'next/image';
 import { useLanguage } from '@/context/language-context';
 import { getImageById } from '@/lib/placeholder-images';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { PlayIcon, PauseIcon } from 'lucide-react';
+
+// Define the playlist for the Turkish audio guide
+const audioPlaylist = [
+    '/sesler/kulahakkinda1.mp3',
+    '/sesler/kulahakkinda2.mp3',
+    '/sesler/kulahakkinda3.mp3',
+];
 
 export default function FamousPage() {
     const { language, translations } = useLanguage();
@@ -15,87 +22,101 @@ export default function FamousPage() {
     const { toast } = useToast();
     
     const [isPlaying, setIsPlaying] = useState(false);
-    const [isPaused, setIsPaused] = useState(false);
-    const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-    const synthRef = useRef<SpeechSynthesis | null>(null);
+    const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
 
-
+    // This effect initializes and cleans up the audio player
     useEffect(() => {
-        const synth = window.speechSynthesis;
-        synthRef.current = synth;
-        
-        const utterance = new SpeechSynthesisUtterance(translations.famous.historyContent);
-        utterance.lang = language;
-        
-        utterance.onend = () => {
+        // We only want this feature for Turkish language
+        if (language !== 'tr') {
+            // If there's an active audio player, stop it.
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current = null;
+            }
             setIsPlaying(false);
-            setIsPaused(false);
+            setCurrentTrackIndex(0);
+            return;
         };
-        utterance.onerror = (event) => {
-            // Don't show an error if the language was changed while speaking
-            if (event.error === 'interrupted') return;
+
+        // Initialize the Audio object
+        audioRef.current = new Audio(audioPlaylist[currentTrackIndex]);
+        
+        const audio = audioRef.current;
+
+        const handleTrackEnd = () => {
+            // Check if there is a next track
+            if (currentTrackIndex < audioPlaylist.length - 1) {
+                setCurrentTrackIndex(prevIndex => prevIndex + 1);
+            } else {
+                // End of playlist
+                setIsPlaying(false);
+                setCurrentTrackIndex(0);
+            }
+        };
+
+        const handleError = (e: ErrorEvent) => {
             toast({
                 title: translations.toast.audioErrorTitle,
-                description: `${translations.toast.audioErrorDescription} (${event.error})`,
+                description: `MP3 dosyası yüklenemedi: ${e.message}`,
                 variant: "destructive"
             });
             setIsPlaying(false);
-            setIsPaused(false);
-        };
-        utteranceRef.current = utterance;
-        
+        }
+
+        audio.addEventListener('ended', handleTrackEnd);
+        audio.addEventListener('error', handleError);
+
+        // Cleanup function
         return () => {
-            if (synthRef.current?.speaking) {
-                synthRef.current.cancel();
-            }
+            audio.pause();
+            audio.removeEventListener('ended', handleTrackEnd);
+            audio.removeEventListener('error', handleError);
+            audioRef.current = null;
             setIsPlaying(false);
-            setIsPaused(false);
         };
-    }, [language, translations.famous.historyContent, toast, translations.toast.audioErrorTitle, translations.toast.audioErrorDescription]);
-    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [language, translations.toast.audioErrorTitle]);
 
-    const handlePlayPause = () => {
-        const synth = synthRef.current;
-        const utterance = utteranceRef.current;
 
-        if (!synth || !utterance) {
+    // This effect handles changing tracks
+    useEffect(() => {
+        if (language !== 'tr' || !audioRef.current || !isPlaying) return;
+
+        audioRef.current.src = audioPlaylist[currentTrackIndex];
+        audioRef.current.play().catch(e => {
+            console.error("Audio play failed:", e);
+            setIsPlaying(false);
+        });
+        
+    }, [currentTrackIndex, language, isPlaying]);
+
+
+    const handlePlayPause = useCallback(() => {
+        if (language !== 'tr' || !audioRef.current) {
             toast({
                 title: translations.toast.unsupportedTitle,
-                description: translations.toast.unsupportedDescription,
+                description: "Bu dil için sesli anlatım mevcut değil.",
                 variant: "destructive"
             });
             return;
         }
-        
-        const startPlayback = () => {
-            const voices = synth.getVoices();
-            const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
-            if (voice) {
-                utterance.voice = voice;
-            }
-            synth.speak(utterance);
-            setIsPlaying(true);
-            setIsPaused(false);
-        }
 
-        if (synth.speaking && !synth.paused) {
-            synth.pause();
-            setIsPaused(true);
-        } else if (synth.speaking && synth.paused) {
-            synth.resume();
-            setIsPaused(false);
+        if (isPlaying) {
+            audioRef.current.pause();
+            setIsPlaying(false);
         } else {
-             if (synth.speaking) {
-                synth.cancel();
-            }
-            // If voices are not loaded yet, wait for them
-            if (synth.getVoices().length === 0) {
-                 synth.onvoiceschanged = startPlayback;
-            } else {
-                startPlayback();
-            }
+            audioRef.current.play().then(() => {
+                setIsPlaying(true);
+            }).catch(e => {
+                 toast({
+                    title: translations.toast.audioErrorTitle,
+                    description: "Ses dosyası oynatılamadı.",
+                    variant: "destructive"
+                });
+            });
         }
-    };
+    }, [isPlaying, language, toast, translations]);
     
     return (
         <div>
@@ -121,18 +142,20 @@ export default function FamousPage() {
                 <div className="max-w-4xl mx-auto">
                     <div className="flex items-center gap-4 mb-6">
                         <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
-                         <Button
-                            variant="outline"
-                            onClick={handlePlayPause}
-                            aria-label={isPlaying && !isPaused ? translations.pois.pauseNarration : translations.pois.listenNarration}
-                        >
-                            {isPlaying && !isPaused ? (
-                                <PauseIcon className="mr-2 h-4 w-4" />
-                            ) : (
-                                <PlayIcon className="mr-2 h-4 w-4" />
-                            )}
-                            {isPlaying && !isPaused ? translations.pois.pause : (isPaused ? translations.famous.continueNarration : translations.pois.listen)}
-                        </Button>
+                         {language === 'tr' && (
+                            <Button
+                                variant="outline"
+                                onClick={handlePlayPause}
+                                aria-label={isPlaying ? translations.pois.pauseNarration : translations.pois.listenNarration}
+                            >
+                                {isPlaying ? (
+                                    <PauseIcon className="mr-2 h-4 w-4" />
+                                ) : (
+                                    <PlayIcon className="mr-2 h-4 w-4" />
+                                )}
+                                {isPlaying ? translations.pois.pause : translations.pois.listen}
+                            </Button>
+                         )}
                     </div>
                     <div className="prose prose-lg max-w-none text-foreground/90">
                          {translations.famous.historyContent.split('\n').map((paragraph, index) => (
