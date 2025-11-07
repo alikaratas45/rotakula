@@ -16,8 +16,11 @@ export default function FamousPage() {
     const heroImage = getImageById('hero-home');
     const { toast } = useToast();
     
+    // State for MP3 player
     const [isPlaying, setIsPlaying] = useState(false);
-    const [isPaused, setIsPaused] = useState(false); // Only for TTS
+    // State for TTS player
+    const [isPaused, setIsPaused] = useState(false);
+    const [isSpeaking, setIsSpeaking] = useState(false);
 
     // Refs for both audio systems
     const audioRef = useRef<HTMLAudioElement | null>(null); // For MP3
@@ -26,12 +29,13 @@ export default function FamousPage() {
 
     const narrationText = translations.famous.historyContent;
 
+    // General cleanup effect for both audio systems
     useEffect(() => {
-        // Cleanup function that will run when language changes or component unmounts
         return () => {
             // Stop MP3 playback
             if (audioRef.current) {
                 audioRef.current.pause();
+                audioRef.current.src = '';
                 audioRef.current = null;
             }
             // Stop TTS playback
@@ -40,13 +44,14 @@ export default function FamousPage() {
             }
             setIsPlaying(false);
             setIsPaused(false);
+            setIsSpeaking(false);
         };
     }, [language]);
 
 
+    // Effect for setting up MP3 player (Turkish only)
     useEffect(() => {
         if (language === 'tr') {
-             // MP3 Setup for Turkish
             const audio = new Audio(audioFile);
             audioRef.current = audio;
 
@@ -58,55 +63,65 @@ export default function FamousPage() {
                     variant: "destructive"
                 });
                 setIsPlaying(false);
-            }
+            };
 
             audio.addEventListener('ended', handleTrackEnd);
             audio.addEventListener('error', handleError);
             
             return () => {
-                 if (audioRef.current) {
-                    audioRef.current.removeEventListener('ended', handleTrackEnd);
-                    audioRef.current.removeEventListener('error', handleError);
+                 if (audio) {
+                    audio.removeEventListener('ended', handleTrackEnd);
+                    audio.removeEventListener('error', handleError);
                 }
-            }
-
-        } else {
-            // TTS Setup for other languages
-            if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-                synthRef.current = window.speechSynthesis;
-                const utterance = new SpeechSynthesisUtterance(narrationText);
-                utterance.lang = language;
-                
-                utterance.onend = () => {
-                    setIsPlaying(false);
-                    setIsPaused(false);
-                };
-
-                utterance.onerror = (event) => {
-                    if (event.error === 'interrupted') return;
-                    toast({
-                        title: translations.toast.audioErrorTitle,
-                        description: `${translations.toast.audioErrorDescription} (${event.error})`,
-                        variant: "destructive"
-                    });
-                    setIsPlaying(false);
-                    setIsPaused(false);
-                };
-                utteranceRef.current = utterance;
-            }
+            };
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [language, toast, translations]);
+
+
+    // Effect for setting up TTS (Non-Turkish languages)
+    useEffect(() => {
+        if (language !== 'tr' && typeof window !== 'undefined' && 'speechSynthesis' in window) {
+            synthRef.current = window.speechSynthesis;
+            const utterance = new SpeechSynthesisUtterance(narrationText);
+            utterance.lang = language;
+            
+            utterance.onstart = () => {
+                setIsSpeaking(true);
+                setIsPaused(false);
+            };
+            utterance.onpause = () => {
+                setIsPaused(true);
+            };
+            utterance.onresume = () => {
+                setIsPaused(false);
+            };
+            utterance.onend = () => {
+                setIsSpeaking(false);
+                setIsPaused(false);
+            };
+            utterance.onerror = (event) => {
+                if (event.error === 'interrupted') return;
+                toast({
+                    title: translations.toast.audioErrorTitle,
+                    description: `${translations.toast.audioErrorDescription} (${event.error})`,
+                    variant: "destructive"
+                });
+                setIsSpeaking(false);
+                setIsPaused(false);
+            };
+            utteranceRef.current = utterance;
+        }
     }, [language, narrationText, toast, translations]);
 
 
     const handlePlayPause = useCallback(() => {
         if (language === 'tr') {
-            // MP3 Logic
             const audio = audioRef.current;
             if (!audio) return;
             
             if (isPlaying) {
                 audio.pause();
+                setIsPlaying(false);
             } else {
                  audio.play().catch(e => {
                     console.error("Audio play failed:", e);
@@ -117,8 +132,8 @@ export default function FamousPage() {
                     });
                     setIsPlaying(false);
                  });
+                 setIsPlaying(true);
             }
-            setIsPlaying(prev => !prev);
         } else {
             // TTS Logic
             const synth = synthRef.current;
@@ -140,16 +155,12 @@ export default function FamousPage() {
                     utterance.voice = voice;
                 }
                 synth.speak(utterance);
-                setIsPlaying(true);
-                setIsPaused(false);
             }
             
             if (synth.speaking && !synth.paused) {
                 synth.pause();
-                setIsPaused(true);
             } else if (synth.speaking && synth.paused) {
                 synth.resume();
-                setIsPaused(false);
             } else {
                 if (synth.speaking) synth.cancel();
                 if (synth.getVoices().length === 0) {
@@ -166,13 +177,13 @@ export default function FamousPage() {
         if (language === 'tr') {
             return isPlaying ? translations.pois.pause : translations.pois.listen;
         }
-        // TTS has an extra "paused" state
-        if (isPlaying && !isPaused) return translations.pois.pause;
-        if (isPaused) return translations.famous.continueNarration;
+        // TTS states
+        if (isSpeaking && !isPaused) return translations.pois.pause;
+        if (isSpeaking && isPaused) return translations.famous.continueNarration;
         return translations.pois.listen;
     };
     
-    const showPauseIcon = language === 'tr' ? isPlaying : (isPlaying && !isPaused);
+    const showPauseIcon = (language === 'tr' && isPlaying) || (language !== 'tr' && isSpeaking && !isPaused);
 
     return (
         <div>
