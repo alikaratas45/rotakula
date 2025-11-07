@@ -9,12 +9,8 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { PlayIcon, PauseIcon } from 'lucide-react';
 
-// Define the playlist for the Turkish audio guide
-const audioPlaylist = [
-    '/sesler/kulahakkinda1.mp3',
-    '/sesler/Kulahakkinda2.mp3',
-    '/sesler/Kulahakkinda3.mp3',
-];
+// Define the single audio file for the Turkish audio guide
+const audioFile = '/sesler/kulahakkinda.mp3';
 
 export default function FamousPage() {
     const { language, translations } = useLanguage();
@@ -22,7 +18,6 @@ export default function FamousPage() {
     const { toast } = useToast();
     
     const [isPlaying, setIsPlaying] = useState(false);
-    const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
     // This effect handles initializing and cleaning up the audio player.
@@ -34,20 +29,14 @@ export default function FamousPage() {
                 audioRef.current = null;
             }
             setIsPlaying(false);
-            setCurrentTrackIndex(0);
             return;
         }
 
-        const audio = new Audio(audioPlaylist[currentTrackIndex]);
+        const audio = new Audio(audioFile);
         audioRef.current = audio;
 
         const handleTrackEnd = () => {
-            if (currentTrackIndex < audioPlaylist.length - 1) {
-                setCurrentTrackIndex(prevIndex => prevIndex + 1);
-            } else {
-                setIsPlaying(false);
-                setCurrentTrackIndex(0);
-            }
+            setIsPlaying(false);
         };
 
         const handleError = (e: ErrorEvent) => {
@@ -64,13 +53,15 @@ export default function FamousPage() {
 
         // Cleanup function to run when the component unmounts or dependencies change
         return () => {
-            audio.pause();
-            audio.removeEventListener('ended', handleTrackEnd);
-            audio.removeEventListener('error', handleError);
-            audioRef.current = null;
+            if(audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current.removeEventListener('ended', handleTrackEnd);
+                audioRef.current.removeEventListener('error', handleError);
+                audioRef.current = null;
+            }
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [language, currentTrackIndex]);
+    }, [language]);
 
     const handlePlayPause = useCallback(() => {
         if (language !== 'tr') return;
@@ -94,21 +85,6 @@ export default function FamousPage() {
         }
         setIsPlaying(prev => !prev);
     }, [isPlaying, language, toast, translations]);
-    
-    // Effect to auto-play next track
-    useEffect(() => {
-        if (isPlaying && audioRef.current && audioRef.current.paused) {
-             audioRef.current.play().catch(e => {
-                console.error("Audio play failed on track change:", e);
-                toast({
-                    title: translations.toast.audioErrorTitle,
-                    description: "Sıradaki ses dosyası oynatılamadı.",
-                    variant: "destructive"
-                });
-                setIsPlaying(false);
-             });
-        }
-    }, [currentTrackIndex, isPlaying, toast, translations]);
     
     return (
         <div>
