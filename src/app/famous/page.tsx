@@ -25,10 +25,12 @@ export default function FamousPage() {
     const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
-    // This effect initializes and cleans up the audio player
+    // This effect handles initializing and cleaning up the audio player.
+    // It also plays the next track when one ends.
     useEffect(() => {
-        // We only want this feature for Turkish language
+        // We only want this feature for the Turkish language
         if (language !== 'tr') {
+            // If language is switched, stop and clear the audio player
             if (audioRef.current) {
                 audioRef.current.pause();
                 audioRef.current = null;
@@ -38,14 +40,23 @@ export default function FamousPage() {
             return;
         }
 
-        // Initialize the Audio object
-        audioRef.current = new Audio(audioPlaylist[currentTrackIndex]);
+        // Initialize Audio object if it doesn't exist
+        if (!audioRef.current) {
+             audioRef.current = new Audio(audioPlaylist[0]);
+        }
+        
         const audio = audioRef.current;
+        
+        // Set the source based on the current track index
+        audio.src = audioPlaylist[currentTrackIndex];
 
+        // Function to handle when a track ends
         const handleTrackEnd = () => {
             if (currentTrackIndex < audioPlaylist.length - 1) {
+                // Move to the next track
                 setCurrentTrackIndex(prevIndex => prevIndex + 1);
             } else {
+                // End of playlist
                 setIsPlaying(false);
                 setCurrentTrackIndex(0);
             }
@@ -60,73 +71,40 @@ export default function FamousPage() {
             setIsPlaying(false);
         }
 
+        // Add event listeners
         audio.addEventListener('ended', handleTrackEnd);
         audio.addEventListener('error', handleError);
 
-        // Cleanup function
+        // If isPlaying is true, play the new track
+        if (isPlaying) {
+            audio.play().catch(e => {
+                console.error("Audio play failed:", e);
+                setIsPlaying(false);
+                toast({
+                    title: translations.toast.audioErrorTitle,
+                    description: "Ses dosyası oynatılamadı.",
+                    variant: "destructive"
+                });
+            });
+        }
+        
+        // Cleanup function to run when the component unmounts or dependencies change
         return () => {
             if (audio) {
                 audio.pause();
                 audio.removeEventListener('ended', handleTrackEnd);
                 audio.removeEventListener('error', handleError);
+                // When language changes, we want a fresh start
+                audioRef.current = null;
             }
-            audioRef.current = null;
-            setIsPlaying(false);
-            setCurrentTrackIndex(0);
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [language, translations.toast.audioErrorTitle]);
-
-
-    // This effect handles changing tracks
-    useEffect(() => {
-        if (language !== 'tr' || !audioRef.current) return;
-
-        if (isPlaying) {
-             audioRef.current.src = audioPlaylist[currentTrackIndex];
-             audioRef.current.play().catch(e => {
-                console.error("Audio play failed:", e);
-                setIsPlaying(false); // Stop trying to play if it fails
-             });
-        }
-        
-    }, [currentTrackIndex, language, isPlaying]);
+    }, [language, currentTrackIndex, isPlaying]);
 
 
     const handlePlayPause = useCallback(() => {
-        const audio = audioRef.current;
-        if (!audio) {
-            // This can happen if the language is not 'tr'
-            if (language === 'tr') {
-                toast({
-                    title: translations.toast.audioErrorTitle,
-                    description: "Ses oynatıcı başlatılamadı.",
-                    variant: "destructive"
-                });
-            }
-            return;
-        }
-
-        if (isPlaying) {
-            audio.pause();
-            setIsPlaying(false);
-        } else {
-            // If we are at the end of the playlist, reset to the beginning
-            if (currentTrackIndex === 0 && audio.currentTime === 0) {
-                 audio.src = audioPlaylist[0];
-            }
-            audio.play().then(() => {
-                setIsPlaying(true);
-            }).catch(e => {
-                 toast({
-                    title: translations.toast.audioErrorTitle,
-                    description: "Ses dosyası oynatılamadı.",
-                    variant: "destructive"
-                });
-                 setIsPlaying(false);
-            });
-        }
-    }, [isPlaying, language, toast, translations, currentTrackIndex]);
+        setIsPlaying(prevIsPlaying => !prevIsPlaying);
+    }, []);
     
     return (
         <div>
