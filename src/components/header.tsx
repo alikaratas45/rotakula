@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AudioGuideControl } from "./audio-guide-control";
 import { useLanguage } from "@/context/language-context";
-import { TurkishFlagIcon, UKFlagIcon, FrenchFlagIcon, GermanFlagIcon } from "./icons";
+import { TurkishFlagIcon, UKFlagIcon, FrenchFlagIcon, GermanFlagIcon, CustomMenuIcon } from "./icons";
 
 
 function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
@@ -142,8 +142,9 @@ export function Header() {
                         <ThemeSwitcher isMobile={true} />
                         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                            <SheetTrigger asChild>
-                               <Button variant="ghost">
-                                   {translations.header.menu}
+                               <Button variant="ghost" size="icon" className="h-8 w-8">
+                                   <CustomMenuIcon className="h-6 w-6" />
+                                   <span className="sr-only">{translations.header.menu}</span>
                                </Button>
                            </SheetTrigger>
                            <SheetContent side="left" className="w-[80vw] bg-background/95 backdrop-blur-xl">
