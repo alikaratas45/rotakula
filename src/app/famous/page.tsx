@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from 'next/image';
@@ -9,82 +8,6 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { PlayIcon, PauseIcon } from 'lucide-react';
 
-const audioFile = '/sesler/kulahakkinda.mp3';
-
-// --- MP3 Player Component (for Turkish) ---
-function AudioPlayer() {
-    const { translations } = useLanguage();
-    const { toast } = useToast();
-    const audioRef = useRef<HTMLAudioElement | null>(null);
-    const [isPlaying, setIsPlaying] = useState(false);
-
-    useEffect(() => {
-        // Create audio instance on mount and cleanup on unmount
-        const audio = new Audio(audioFile);
-        audioRef.current = audio;
-
-        const handleEnded = () => setIsPlaying(false);
-        const handleError = () => {
-            toast({
-                title: translations.toast.audioErrorTitle,
-                description: `MP3 dosyası yüklenemedi: ${audioFile.split('/').pop()}`,
-                variant: "destructive"
-            });
-            setIsPlaying(false);
-        };
-        
-        audio.addEventListener('ended', handleEnded);
-        audio.addEventListener('error', handleError);
-
-        // Cleanup on unmount
-        return () => {
-            if (audio) {
-                audio.pause();
-                audio.removeEventListener('ended', handleEnded);
-                audio.removeEventListener('error', handleError);
-                audioRef.current = null;
-            }
-        };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    const handlePlayPause = () => {
-        const audio = audioRef.current;
-        if (!audio) return;
-
-        if (isPlaying) {
-            audio.pause();
-            setIsPlaying(false);
-        } else {
-            audio.play().catch(() => {
-                toast({
-                    title: translations.toast.audioErrorTitle,
-                    description: "Ses dosyası oynatılamadı.",
-                    variant: "destructive"
-                });
-                setIsPlaying(false);
-            });
-            setIsPlaying(true);
-        }
-    };
-    
-    return (
-        <div className="flex items-center gap-4 mb-6">
-            <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
-            <Button
-                variant="outline"
-                onClick={handlePlayPause}
-                aria-label={isPlaying ? translations.pois.pauseNarration : translations.pois.listenNarration}
-            >
-                {isPlaying ? <PauseIcon className="mr-2 h-4 w-4" /> : <PlayIcon className="mr-2 h-4 w-4" />}
-                {isPlaying ? translations.pois.pause : translations.pois.listen}
-            </Button>
-        </div>
-    );
-}
-
-
-// --- TTS Player Component (for other languages) ---
 function TTSPlayer({ text }: { text: string }) {
     const { language, translations } = useLanguage();
     const { toast } = useToast();
@@ -138,6 +61,8 @@ function TTSPlayer({ text }: { text: string }) {
         return () => {
             if (synthRef.current?.speaking) {
                 synthRef.current.cancel();
+                setIsSpeaking(false);
+                setIsPaused(false);
             }
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -147,7 +72,14 @@ function TTSPlayer({ text }: { text: string }) {
     const handlePlayPause = () => {
         const synth = synthRef.current;
         const utterance = utteranceRef.current;
-        if (!synth || !utterance) return;
+        if (!synth || !utterance) {
+            toast({
+                title: translations.toast.unsupportedTitle,
+                description: translations.toast.unsupportedDescription,
+                variant: "destructive"
+            });
+            return;
+        }
         
         if (synth.speaking) {
             // If speaking, check if paused or not
@@ -197,14 +129,13 @@ function TTSPlayer({ text }: { text: string }) {
     );
 }
 
-
 // --- Main Page Component ---
 export default function FamousPage() {
-    const { language, translations } = useLanguage();
+    const { translations } = useLanguage();
     const heroImage = getImageById('hero-home');
     const narrationText = translations.famous.historyContent;
 
-    const showButton = language === 'tr' || (typeof window !== 'undefined' && 'speechSynthesis' in window);
+    const showButton = typeof window !== 'undefined' && 'speechSynthesis' in window;
 
     return (
         <div>
@@ -230,7 +161,7 @@ export default function FamousPage() {
                 <div className="max-w-4xl mx-auto">
                     
                     {showButton && (
-                         language === 'tr' ? <AudioPlayer /> : <TTSPlayer text={narrationText} />
+                         <TTSPlayer text={narrationText} />
                     )}
                    
                     <div className="prose prose-lg max-w-none text-foreground/90">
