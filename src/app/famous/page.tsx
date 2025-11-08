@@ -4,139 +4,12 @@
 import Image from 'next/image';
 import { useLanguage } from '@/context/language-context';
 import { getImageById } from '@/lib/placeholder-images';
-import { useState, useEffect, useRef } from 'react';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
-import { PlayIcon, PauseIcon } from 'lucide-react';
-
-function TTSPlayer({ text }: { text: string }) {
-    const { language, translations } = useLanguage();
-    const { toast } = useToast();
-    const [isSpeaking, setIsSpeaking] = useState(false);
-    const [isPaused, setIsPaused] = useState(false);
-    
-    const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-    const synthRef = useRef<SpeechSynthesis | null>(null);
-
-     useEffect(() => {
-        // Initialize synth only once
-        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-            synthRef.current = window.speechSynthesis;
-        }
-
-        // Create a new utterance when text or language changes
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = language;
-        
-        utterance.onstart = () => {
-            setIsSpeaking(true);
-            setIsPaused(false);
-        };
-        utterance.onpause = () => {
-            setIsSpeaking(true);
-            setIsPaused(true);
-        };
-        utterance.onresume = () => {
-            setIsSpeaking(true);
-            setIsPaused(false);
-        };
-        utterance.onend = () => {
-            setIsSpeaking(false);
-            setIsPaused(false);
-        };
-        utterance.onerror = (event) => {
-            // Don't show an error if the speech was interrupted (e.g., by changing language)
-            if (event.error !== 'interrupted') {
-                toast({
-                    title: translations.toast.audioErrorTitle,
-                    description: `${translations.toast.audioErrorDescription} (${event.error})`,
-                    variant: "destructive"
-                });
-            }
-            setIsSpeaking(false);
-            setIsPaused(false);
-        };
-        utteranceRef.current = utterance;
-
-        // Cleanup: cancel any ongoing speech on unmount or when language/text changes
-        return () => {
-            if (synthRef.current?.speaking) {
-                synthRef.current.cancel();
-                setIsSpeaking(false);
-                setIsPaused(false);
-            }
-        };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [text, language]);
-
-
-    const handlePlayPause = () => {
-        const synth = synthRef.current;
-        const utterance = utteranceRef.current;
-        if (!synth || !utterance) {
-            toast({
-                title: translations.toast.unsupportedTitle,
-                description: translations.toast.unsupportedDescription,
-                variant: "destructive"
-            });
-            return;
-        }
-        
-        if (synth.speaking) {
-            // If speaking, check if paused or not
-            if (synth.paused) {
-                synth.resume(); // If paused, resume
-            } else {
-                synth.pause(); // If not paused, pause
-            }
-        } else {
-            // If not speaking, start speaking
-             const voices = synth.getVoices();
-             if (voices.length > 0) {
-                  // Voices are loaded, find the best one and speak
-                  const voice = voices.find(v => v.lang.startsWith(language));
-                  if (voice) utterance.voice = voice;
-                  synth.speak(utterance);
-             } else {
-                 // Voices not loaded yet, set an event listener
-                 synth.onvoiceschanged = () => {
-                      const availableVoices = synth.getVoices();
-                      const voice = availableVoices.find(v => v.lang.startsWith(language));
-                      if (voice) utterance.voice = voice;
-                      synth.speak(utterance);
-                 }
-             }
-        }
-    };
-    
-    const getButtonLabel = () => {
-        if (isSpeaking && !isPaused) return translations.pois.pause;
-        if (isSpeaking && isPaused) return translations.famous.continueNarration;
-        return translations.pois.listen;
-    };
-
-    return (
-        <div className="flex items-center gap-4 mb-6">
-            <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
-            <Button
-                variant="outline"
-                onClick={handlePlayPause}
-                aria-label={getButtonLabel()}
-            >
-                {(isSpeaking && !isPaused) ? <PauseIcon className="mr-2 h-4 w-4" /> : <PlayIcon className="mr-2 h-4 w-4" />}
-                {getButtonLabel()}
-            </Button>
-        </div>
-    );
-}
 
 // --- Main Page Component ---
 export default function FamousPage() {
     const { translations } = useLanguage();
     const heroImage = getImageById('hero-home');
     const narrationText = translations.famous.historyContent;
-
-    const showButton = typeof window !== 'undefined' && 'speechSynthesis' in window;
 
     return (
         <div>
@@ -160,10 +33,9 @@ export default function FamousPage() {
             </section>
             <div className="container px-4 py-8 md:py-12">
                 <div className="max-w-4xl mx-auto">
-                    
-                    {showButton && (
-                         <TTSPlayer text={narrationText} />
-                    )}
+                    <div className="flex items-center gap-4 mb-6">
+                        <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
+                    </div>
                    
                     <div className="prose prose-lg max-w-none text-foreground/90">
                          {narrationText.split('\n').map((paragraph, index) => (
