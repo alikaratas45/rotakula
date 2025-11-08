@@ -12,6 +12,7 @@ import { useLanguage } from '@/context/language-context';
 import { Button } from '@/components/ui/button';
 import { Utensils, Map, Pin, Heart, Info, BookOpen, QrCode } from 'lucide-react';
 import { BedIcon } from '@/components/icons';
+import { cn } from '@/lib/utils';
 
 
 const RouteCard = ({ route, delay }: { route: ThematicRoute, delay: number }) => {
@@ -112,9 +113,12 @@ export default function Home() {
                    style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <Button
-                    variant="outline"
+                    variant="secondary"
                     size="icon"
-                    className="h-16 w-16 rounded-full bg-background/50 backdrop-blur-sm group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 transform group-hover:scale-110"
+                    className={cn(
+                      "h-16 w-16 rounded-full group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 transform group-hover:scale-110",
+                      "bg-accent dark:bg-muted"
+                    )}
                     aria-label={item.label}
                   >
                     <item.icon className="h-7 w-7" />
