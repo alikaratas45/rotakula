@@ -4,129 +4,118 @@
 import Image from 'next/image';
 import { useLanguage } from '@/context/language-context';
 import { getImageById } from '@/lib/placeholder-images';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { PlayIcon, PauseIcon } from 'lucide-react';
 
-const audioFiles = ['/sesler/kulahakkinda.mp3'];
+const audioFile = '/sesler/kulahakkinda.mp3';
 
-// Component for MP3 Playback (Turkish)
-function AudioPlayer({ 
-    files, 
-    onPlaybackStateChange 
-}: { 
-    files: string[], 
-    onPlaybackStateChange: (isPlaying: boolean) => void 
-}) {
-    const { toast, dismiss } = useToast();
+// --- MP3 Player Component (for Turkish) ---
+function AudioPlayer() {
     const { translations } = useLanguage();
-    const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+    const { toast } = useToast();
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    const [isPlaying, setIsPlaying] = useState(false);
 
-    // This effect handles the setup and teardown of the audio element.
     useEffect(() => {
-        const audio = new Audio(files[currentTrackIndex]);
+        // Create audio instance on mount
+        const audio = new Audio(audioFile);
         audioRef.current = audio;
 
-        const handleTrackEnd = () => {
-            if (currentTrackIndex < files.length - 1) {
-                setCurrentTrackIndex(prev => prev + 1);
-            } else {
-                onPlaybackStateChange(false);
-                setCurrentTrackIndex(0); // Reset for next play
-            }
-        };
-
+        const handleEnded = () => setIsPlaying(false);
         const handleError = () => {
             toast({
                 title: translations.toast.audioErrorTitle,
-                description: `MP3 dosyası yüklenemedi: ${files[currentTrackIndex].split('/').pop()}`,
+                description: `MP3 dosyası yüklenemedi: ${audioFile.split('/').pop()}`,
                 variant: "destructive"
             });
-            onPlaybackStateChange(false);
+            setIsPlaying(false);
         };
-
-        audio.addEventListener('ended', handleTrackEnd);
+        
+        audio.addEventListener('ended', handleEnded);
         audio.addEventListener('error', handleError);
 
-        // Auto-play next track if it's not the first one
-        if (currentTrackIndex > 0) {
-            audio.play().catch(handleError);
-            onPlaybackStateChange(true);
-        }
-
-        // Cleanup function: essential to prevent memory leaks and errors
+        // Cleanup on unmount
         return () => {
-            dismiss();
             if (audio) {
                 audio.pause();
-                audio.removeEventListener('ended', handleTrackEnd);
+                audio.removeEventListener('ended', handleEnded);
                 audio.removeEventListener('error', handleError);
-                audio.src = ''; // Release memory
+                audioRef.current = null;
             }
-            audioRef.current = null;
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentTrackIndex, files]);
+    }, []);
 
-    // This effect exposes the play/pause handler to the parent via a global function.
-    // This is a workaround to control this component from the parent.
-    useEffect(() => {
-        const handlePlayPause = () => {
-            const audio = audioRef.current;
-            if (!audio) return;
+    const handlePlayPause = () => {
+        const audio = audioRef.current;
+        if (!audio) return;
 
-            if (audio.paused) {
-                audio.play().catch(e => {
-                    toast({
-                        title: translations.toast.audioErrorTitle,
-                        description: "Ses dosyası oynatılamadı.",
-                        variant: "destructive"
-                    });
-                    onPlaybackStateChange(false);
+        if (isPlaying) {
+            audio.pause();
+            setIsPlaying(false);
+        } else {
+            audio.play().catch(() => {
+                toast({
+                    title: translations.toast.audioErrorTitle,
+                    description: "Ses dosyası oynatılamadı.",
+                    variant: "destructive"
                 });
-                onPlaybackStateChange(true);
-            } else {
-                audio.pause();
-                onPlaybackStateChange(false);
-            }
-        };
-
-        (window as any).handleGlobalPlayPause = handlePlayPause;
-        return () => {
-            delete (window as any).handleGlobalPlayPause;
-        };
-    }, [onPlaybackStateChange, toast, translations]);
-
-    return null; // This component does not render any UI itself.
+                setIsPlaying(false);
+            });
+            setIsPlaying(true);
+        }
+    };
+    
+    return (
+        <div className="flex items-center gap-4 mb-6">
+            <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
+            <Button
+                variant="outline"
+                onClick={handlePlayPause}
+                aria-label={isPlaying ? translations.pois.pauseNarration : translations.pois.listenNarration}
+            >
+                {isPlaying ? <PauseIcon className="mr-2 h-4 w-4" /> : <PlayIcon className="mr-2 h-4 w-4" />}
+                {isPlaying ? translations.pois.pause : translations.pois.listen}
+            </Button>
+        </div>
+    );
 }
 
-// Component for Text-to-Speech (Other Languages)
-function TTSPlayer({ 
-    text, 
-    onPlaybackStateChange 
-}: { 
-    text: string, 
-    onPlaybackStateChange: (isPlaying: boolean, isPaused: boolean) => void 
-}) {
+
+// --- TTS Player Component (for other languages) ---
+function TTSPlayer({ text }: { text: string }) {
     const { language, translations } = useLanguage();
-    const { toast, dismiss } = useToast();
+    const { toast } = useToast();
+    const [isSpeaking, setIsSpeaking] = useState(false);
+    const [isPaused, setIsPaused] = useState(false);
+    
     const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
     const synthRef = useRef<SpeechSynthesis | null>(null);
 
-    // This effect sets up the SpeechSynthesis utterance and cleans up.
-    useEffect(() => {
+     useEffect(() => {
         synthRef.current = window.speechSynthesis;
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = language;
-
-        utterance.onstart = () => onPlaybackStateChange(true, false);
-        utterance.onpause = () => onPlaybackStateChange(true, true);
-        utterance.onresume = () => onPlaybackStateChange(true, false);
-        utterance.onend = () => onPlaybackStateChange(false, false);
+        
+        utterance.onstart = () => {
+            setIsSpeaking(true);
+            setIsPaused(false);
+        };
+        utterance.onpause = () => {
+            setIsSpeaking(true);
+            setIsPaused(true);
+        };
+        utterance.onresume = () => {
+            setIsSpeaking(true);
+            setIsPaused(false);
+        };
+        utterance.onend = () => {
+            setIsSpeaking(false);
+            setIsPaused(false);
+        };
         utterance.onerror = (event) => {
-            // Avoid showing an error if speech was interrupted (e.g., by language change)
             if (event.error !== 'interrupted') {
                 toast({
                     title: translations.toast.audioErrorTitle,
@@ -134,114 +123,82 @@ function TTSPlayer({
                     variant: "destructive"
                 });
             }
-            onPlaybackStateChange(false, false);
+            setIsSpeaking(false);
+            setIsPaused(false);
         };
         utteranceRef.current = utterance;
 
-        // Cleanup function: crucial to stop speech when the component unmounts
+        // Cleanup: cancel speech on unmount or language change
         return () => {
-            dismiss();
             if (synthRef.current?.speaking) {
                 synthRef.current.cancel();
             }
-            utteranceRef.current = null;
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [text, language]);
 
-    // This effect exposes the play/pause handler to the parent.
-    useEffect(() => {
-        const handlePlayPause = () => {
-            const synth = synthRef.current;
-            const utterance = utteranceRef.current;
-            if (!synth || !utterance) {
-                return;
-            }
 
-            if (synth.speaking) {
-                if (synth.paused) {
-                    synth.resume();
-                } else {
-                    synth.pause();
-                }
-            } else {
-                // If voices aren't loaded yet, the browser will load them.
-                // We set an onvoiceschanged event to handle this case.
-                const voices = synth.getVoices();
-                if (voices.length > 0) {
-                    const voice = voices.find(v => v.lang.startsWith(language));
-                    if (voice) utterance.voice = voice;
-                    synth.speak(utterance);
-                } else {
-                    synth.onvoiceschanged = () => {
-                        const availableVoices = synth.getVoices();
-                        const voice = availableVoices.find(v => v.lang.startsWith(language));
-                        if (voice) utterance.voice = voice;
-                        synth.speak(utterance);
-                    };
-                }
-            }
-        };
-
-        (window as any).handleGlobalPlayPause = handlePlayPause;
-        return () => {
-            delete (window as any).handleGlobalPlayPause;
-        };
-    }, [language, toast]);
-
-    return null; // This component also renders no UI.
-}
-
-
-export default function FamousPage() {
-    const { language, translations } = useLanguage();
-    const heroImage = getImageById('hero-home');
-    
-    // State to manage the UI of the play/pause button
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [isPaused, setIsPaused] = useState(false);
-
-    const narrationText = translations.famous.historyContent;
-
-    // This function calls the globally exposed play/pause handler.
     const handlePlayPause = () => {
-        if ((window as any).handleGlobalPlayPause) {
-            (window as any).handleGlobalPlayPause();
+        const synth = synthRef.current;
+        const utterance = utteranceRef.current;
+        if (!synth || !utterance) return;
+        
+        if (synth.speaking) {
+            if (synth.paused) {
+                synth.resume();
+            } else {
+                synth.pause();
+            }
+        } else {
+            const voices = synth.getVoices();
+            if (voices.length > 0) {
+                 const voice = voices.find(v => v.lang.startsWith(language));
+                 if (voice) utterance.voice = voice;
+                 synth.speak(utterance);
+            } else {
+                // If voices are not loaded, wait for them
+                synth.onvoiceschanged = () => {
+                     const availableVoices = synth.getVoices();
+                     const voice = availableVoices.find(v => v.lang.startsWith(language));
+                     if (voice) utterance.voice = voice;
+                     synth.speak(utterance);
+                }
+            }
         }
     };
     
-    // Determine if the button should be shown.
-    const showButton = language === 'tr' || (typeof window !== 'undefined' && 'speechSynthesis' in window);
-
     const getButtonLabel = () => {
-        if (isPlaying && !isPaused) return translations.pois.pause;
-        if (isPlaying && isPaused) return translations.famous.continueNarration;
+        if (isSpeaking && !isPaused) return translations.pois.pause;
+        if (isSpeaking && isPaused) return translations.famous.continueNarration;
         return translations.pois.listen;
     };
-    
-    const showPauseIcon = isPlaying && !isPaused;
+
+    return (
+        <div className="flex items-center gap-4 mb-6">
+            <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
+            <Button
+                variant="outline"
+                onClick={handlePlayPause}
+                aria-label={getButtonLabel()}
+            >
+                {(isSpeaking && !isPaused) ? <PauseIcon className="mr-2 h-4 w-4" /> : <PlayIcon className="mr-2 h-4 w-4" />}
+                {getButtonLabel()}
+            </Button>
+        </div>
+    );
+}
+
+
+// --- Main Page Component ---
+export default function FamousPage() {
+    const { language, translations } = useLanguage();
+    const heroImage = getImageById('hero-home');
+    const narrationText = translations.famous.historyContent;
+
+    const showButton = language === 'tr' || (typeof window !== 'undefined' && 'speechSynthesis' in window);
 
     return (
         <div>
-            {/* Conditionally render the correct audio player component based on language */}
-            {language === 'tr' ? (
-                <AudioPlayer 
-                    files={audioFiles} 
-                    onPlaybackStateChange={(playing) => { 
-                        setIsPlaying(playing);
-                        setIsPaused(false); // MP3 player doesn't have a 'paused' state in this logic
-                    }} 
-                />
-            ) : (
-                <TTSPlayer 
-                    text={narrationText} 
-                    onPlaybackStateChange={(playing, paused) => { 
-                        setIsPlaying(playing);
-                        setIsPaused(paused);
-                    }} 
-                />
-            )}
-
             <section className="relative h-[40vh] md:h-[50vh] w-full flex items-end text-white">
                 {heroImage && (
                     <Image
@@ -262,23 +219,11 @@ export default function FamousPage() {
             </section>
             <div className="container px-4 py-8 md:py-12">
                 <div className="max-w-4xl mx-auto">
-                    <div className="flex items-center gap-4 mb-6">
-                        <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
-                        {showButton && (
-                             <Button
-                                variant="outline"
-                                onClick={handlePlayPause}
-                                aria-label={showPauseIcon ? translations.pois.pauseNarration : translations.pois.listenNarration}
-                            >
-                                {showPauseIcon ? (
-                                    <PauseIcon className="mr-2 h-4 w-4" />
-                                ) : (
-                                    <PlayIcon className="mr-2 h-4 w-4" />
-                                )}
-                                {getButtonLabel()}
-                            </Button>
-                        )}
-                    </div>
+                    
+                    {showButton && (
+                         language === 'tr' ? <AudioPlayer /> : <TTSPlayer text={narrationText} />
+                    )}
+                   
                     <div className="prose prose-lg max-w-none text-foreground/90">
                          {narrationText.split('\n').map((paragraph, index) => (
                             <p key={index}>{paragraph}</p>
