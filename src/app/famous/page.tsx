@@ -24,57 +24,57 @@ export default function FamousPage() {
     const synthRef = useRef<SpeechSynthesis | null>(null);
     const { toast } = useToast();
 
-    // Setup effect to initialize refs and handle cleanup
+    // Effect to handle all audio setup and cleanup based on language
     useEffect(() => {
-        // This effect runs only once on the client to initialize refs
-        // and check for browser support.
-        synthRef.current = window.speechSynthesis;
-        setShowButton(!!synthRef.current);
-        
-        const audio = new Audio('/sesler/kulahakkinda.mp3');
-        audioRef.current = audio;
+        const synth = window.speechSynthesis;
+        synthRef.current = synth;
+        setShowButton(!!synth);
 
-        const handleAudioEnd = () => {
+        // Stop any currently playing audio
+        const stopAllAudio = () => {
+            if (audioRef.current && !audioRef.current.paused) {
+                audioRef.current.pause();
+            }
+            if (synth?.speaking) {
+                synth.cancel();
+            }
             setIsPlaying(false);
             setIsPaused(false);
         };
         
-        audio.addEventListener('ended', handleAudioEnd);
-
-        // Master cleanup function
-        return () => {
-            audio.removeEventListener('ended', handleAudioEnd);
-            if (synthRef.current?.speaking) {
-                synthRef.current.cancel();
-            }
-            if (!audio.paused) {
-                audio.pause();
-            }
-        };
-    }, []);
-
-    // Effect to handle language changes
-    useEffect(() => {
-        // When language changes, stop everything.
-        if (audioRef.current && !audioRef.current.paused) {
-            audioRef.current.pause();
-            audioRef.current.currentTime = 0;
-        }
-        if (synthRef.current?.speaking) {
-            synthRef.current.cancel();
-        }
-        setIsPlaying(false);
-        setIsPaused(false);
+        stopAllAudio();
         
-        // Prepare the utterance for the new language (if it's not Turkish)
-        if (language !== 'tr' && synthRef.current) {
-            const newUtterance = new SpeechSynthesisUtterance(narrationText);
-            newUtterance.lang = language;
-            newUtterance.onend = () => {
+        // --- Setup based on language ---
+        if (language === 'tr') {
+            const audio = new Audio('/sesler/kulahakkinda.mp3');
+            audioRef.current = audio;
+            utteranceRef.current = null; // Clear utterance ref
+
+            const handleAudioEnd = () => {
                 setIsPlaying(false);
                 setIsPaused(false);
             };
-            newUtterance.onerror = (event) => {
+            audio.addEventListener('ended', handleAudioEnd);
+
+            // Cleanup function for TR
+            return () => {
+                audio.removeEventListener('ended', handleAudioEnd);
+                if (!audio.paused) {
+                    audio.pause();
+                }
+            };
+        } else {
+            const newUtterance = new SpeechSynthesisUtterance(narrationText);
+            newUtterance.lang = language;
+            utteranceRef.current = newUtterance;
+            audioRef.current = null; // Clear audio ref
+
+            const handleTtsEnd = () => {
+                setIsPlaying(false);
+                setIsPaused(false);
+            };
+
+            const handleTtsError = (event: SpeechSynthesisErrorEvent) => {
                 if (event.error === 'interrupted') return; // Don't show error if we interrupted it ourselves
                  toast({
                     title: translations.toast.audioErrorTitle,
@@ -84,12 +84,23 @@ export default function FamousPage() {
                 setIsPlaying(false);
                 setIsPaused(false);
             };
-            utteranceRef.current = newUtterance;
-        } else {
-            utteranceRef.current = null;
+
+            newUtterance.onend = handleTtsEnd;
+            newUtterance.onerror = handleTtsError;
+            
+            // Cleanup function for other languages
+            return () => {
+                if (synth?.speaking) {
+                    synth.cancel();
+                }
+                // Explicitly remove listeners to be safe
+                newUtterance.onend = null;
+                newUtterance.onerror = null;
+            };
         }
 
-    }, [language, narrationText, toast, translations]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [language, narrationText, translations]);
 
 
     const handlePlayPause = () => {
@@ -102,7 +113,7 @@ export default function FamousPage() {
                 audio.pause();
                 setIsPaused(true);
             } else {
-                audio.play();
+                audio.play().catch(e => console.error("Audio play failed:", e));
                 setIsPlaying(true);
                 setIsPaused(false);
             }
@@ -127,6 +138,7 @@ export default function FamousPage() {
             } else if (synth.speaking && synth.paused) { // Is paused, so resume
                 synth.resume();
                 setIsPaused(false);
+                setIsPlaying(true);
             } else { // Not speaking, so start
                 if (synth.speaking) { // Cancel any previous speech
                     synth.cancel();
@@ -143,6 +155,7 @@ export default function FamousPage() {
                     setIsPaused(false);
                 };
 
+                // Voices might load asynchronously.
                 if (synth.getVoices().length === 0) {
                     synth.onvoiceschanged = startPlayback;
                 } else {
