@@ -58,7 +58,9 @@ export function AudioGuideControl() {
             setPois(allPois);
         }
         fetchPois();
-        synthRef.current = window.speechSynthesis;
+        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+            synthRef.current = window.speechSynthesis;
+        }
     }, [language]);
     
      const stopLocationTracking = useCallback(() => {
