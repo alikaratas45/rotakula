@@ -19,7 +19,7 @@ function AudioPlayer() {
     const [isPlaying, setIsPlaying] = useState(false);
 
     useEffect(() => {
-        // Create audio instance on mount
+        // Create audio instance on mount and cleanup on unmount
         const audio = new Audio(audioFile);
         audioRef.current = audio;
 
@@ -95,7 +95,12 @@ function TTSPlayer({ text }: { text: string }) {
     const synthRef = useRef<SpeechSynthesis | null>(null);
 
      useEffect(() => {
-        synthRef.current = window.speechSynthesis;
+        // Initialize synth only once
+        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+            synthRef.current = window.speechSynthesis;
+        }
+
+        // Create a new utterance when text or language changes
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = language;
         
@@ -116,6 +121,7 @@ function TTSPlayer({ text }: { text: string }) {
             setIsPaused(false);
         };
         utterance.onerror = (event) => {
+            // Don't show an error if the speech was interrupted (e.g., by changing language)
             if (event.error !== 'interrupted') {
                 toast({
                     title: translations.toast.audioErrorTitle,
@@ -128,7 +134,7 @@ function TTSPlayer({ text }: { text: string }) {
         };
         utteranceRef.current = utterance;
 
-        // Cleanup: cancel speech on unmount or language change
+        // Cleanup: cancel any ongoing speech on unmount or when language/text changes
         return () => {
             if (synthRef.current?.speaking) {
                 synthRef.current.cancel();
@@ -144,26 +150,29 @@ function TTSPlayer({ text }: { text: string }) {
         if (!synth || !utterance) return;
         
         if (synth.speaking) {
+            // If speaking, check if paused or not
             if (synth.paused) {
-                synth.resume();
+                synth.resume(); // If paused, resume
             } else {
-                synth.pause();
+                synth.pause(); // If not paused, pause
             }
         } else {
-            const voices = synth.getVoices();
-            if (voices.length > 0) {
-                 const voice = voices.find(v => v.lang.startsWith(language));
-                 if (voice) utterance.voice = voice;
-                 synth.speak(utterance);
-            } else {
-                // If voices are not loaded, wait for them
-                synth.onvoiceschanged = () => {
-                     const availableVoices = synth.getVoices();
-                     const voice = availableVoices.find(v => v.lang.startsWith(language));
-                     if (voice) utterance.voice = voice;
-                     synth.speak(utterance);
-                }
-            }
+            // If not speaking, start speaking
+             const voices = synth.getVoices();
+             if (voices.length > 0) {
+                  // Voices are loaded, find the best one and speak
+                  const voice = voices.find(v => v.lang.startsWith(language));
+                  if (voice) utterance.voice = voice;
+                  synth.speak(utterance);
+             } else {
+                 // Voices not loaded yet, set an event listener
+                 synth.onvoiceschanged = () => {
+                      const availableVoices = synth.getVoices();
+                      const voice = availableVoices.find(v => v.lang.startsWith(language));
+                      if (voice) utterance.voice = voice;
+                      synth.speak(utterance);
+                 }
+             }
         }
     };
     
