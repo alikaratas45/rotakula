@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from 'next/image';
@@ -29,6 +28,7 @@ export default function FamousPage() {
             synthRef.current = window.speechSynthesis;
         }
 
+        // Cleanup function to cancel speech when component unmounts or language changes
         return () => {
             if (synthRef.current?.speaking) {
                 synthRef.current.cancel();
@@ -40,17 +40,20 @@ export default function FamousPage() {
         const synth = synthRef.current;
         if (!synth || !narrationText) return;
 
+        // If speaking, cancel the previous utterance before creating a new one
         if (synth.speaking) {
             synth.cancel();
         }
 
         const newUtterance = new SpeechSynthesisUtterance(narrationText);
         newUtterance.lang = language;
+        
         newUtterance.onend = () => {
             setIsPlaying(false);
             setIsPaused(false);
         };
         newUtterance.onerror = (event) => {
+            // Ignore interruption errors, which can happen during navigation or language change
             if (event.error === 'interrupted') return;
             toast({
                 title: translations.toast.audioErrorTitle,
@@ -62,6 +65,7 @@ export default function FamousPage() {
         };
         utteranceRef.current = newUtterance;
         
+        // Reset playback state
         setIsPlaying(false);
         setIsPaused(false);
 
@@ -88,13 +92,15 @@ export default function FamousPage() {
             synth.resume();
             setIsPaused(false);
         } else { // Not speaking, so start
+            // If there's a leftover speaking state, cancel it before starting new
             if (synth.speaking) {
                 synth.cancel();
             }
             
             const startPlayback = () => {
                 const voices = synth.getVoices();
-                const voice = voices.find(v => v.lang.startsWith(language));
+                // Prefer a default voice for the language, but fall back to any voice for that language
+                const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
                 if (voice) {
                     utterance.voice = voice;
                 }
@@ -103,6 +109,7 @@ export default function FamousPage() {
                 setIsPaused(false);
             };
 
+            // Voices are loaded asynchronously. If they are not ready, wait for the `voiceschanged` event.
             if (synth.getVoices().length === 0) {
                 synth.onvoiceschanged = startPlayback;
             } else {
@@ -117,6 +124,7 @@ export default function FamousPage() {
         return translations.pois.pause;
     };
     
+    // Only show the button on the client-side if the browser supports speech synthesis
     const showButton = isClient && typeof window !== 'undefined' && 'speechSynthesis' in window;
 
 
@@ -161,7 +169,7 @@ export default function FamousPage() {
                     </div>
                    
                     <div className="prose prose-lg max-w-none text-foreground/90">
-                         {narrationText.split('\n').map((paragraph, index) => (
+                         {narrationText.split('\n\n').map((paragraph, index) => (
                             <p key={index}>{paragraph}</p>
                         ))}
                     </div>
