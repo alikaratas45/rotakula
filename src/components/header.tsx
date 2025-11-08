@@ -1,3 +1,4 @@
+
 "use client"
 
 import Link from "next/link";
@@ -10,25 +11,14 @@ import { Moon, Sun, Check, AudioWaveform, QrCode } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetTitle,
-  VisuallyHidden,
-} from "@/components/ui/sheet";
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { AudioGuideControl } from "./audio-guide-control";
 import { useLanguage } from "@/context/language-context";
-import { TurkishFlagIcon, UKFlagIcon, FrenchFlagIcon, GermanFlagIcon, CustomMenuIcon } from "./icons";
+import { TurkishFlagIcon, UKFlagIcon, FrenchFlagIcon, GermanFlagIcon } from "./icons";
 
 
 function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
@@ -50,7 +40,6 @@ function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
 
 export function Header() {
     const pathname = usePathname();
-    const [isSheetOpen, setIsSheetOpen] = React.useState(false);
     const { language, setLanguage, translations } = useLanguage();
 
     const navLinks = [
@@ -64,15 +53,6 @@ export function Header() {
         { href: "/famous", label: translations.nav.about },
     ];
     
-    const mobileNavLinks = [
-        ...navLinks,
-        { href: "/qr-scanner", label: translations.nav.qrScanner, icon: QrCode },
-    ];
-
-    const handleLinkClick = () => {
-        setIsSheetOpen(false);
-    };
-
     const languageOptions = {
         tr: { name: 'Türkçe', Icon: TurkishFlagIcon },
         en: { name: 'English', Icon: UKFlagIcon },
@@ -140,43 +120,6 @@ export function Header() {
                         <AudioGuideControl />
                         <LanguageSelector isMobile={true} />
                         <ThemeSwitcher isMobile={true} />
-                        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-                           <SheetTrigger asChild>
-                               <Button variant="ghost" size="icon" className="h-8 w-8">
-                                   <CustomMenuIcon className="h-6 w-6" />
-                                   <span className="sr-only">{translations.header.menu}</span>
-                               </Button>
-                           </SheetTrigger>
-                           <SheetContent side="left" className="w-[80vw] bg-background/95 backdrop-blur-xl">
-                                <VisuallyHidden>
-                                    <SheetTitle>{translations.header.menu}</SheetTitle>
-                                </VisuallyHidden>
-                                <div className="p-6 pt-8">
-                                     <Link href="/" onClick={handleLinkClick} className="flex items-center space-x-2 mb-4">
-                                        <Image src="/logo.png" alt="RotaKula Logo" width={32} height={32} />
-                                        <span className="font-bold font-headline text-xl">RotaKula</span>
-                                    </Link>
-                                   <nav className="flex flex-col">
-                                       {mobileNavLinks.map((link, index) => (
-                                           <Link
-                                               key={link.href}
-                                               href={link.href}
-                                               onClick={handleLinkClick}
-                                               className={cn(
-                                                   "border-b py-4 text-lg font-bold uppercase tracking-wider flex items-center gap-4",
-                                                   (pathname.startsWith(link.href) && link.href !== "/") || pathname === link.href ? "text-primary" : "text-muted-foreground hover:text-primary",
-                                                   isSheetOpen ? "animate-slide-in-from-left opacity-0" : "opacity-0"
-                                               )}
-                                                style={{ animationDelay: `${150 + index * 100}ms` }}
-                                           >
-                                               {link.icon && <link.icon className="h-5 w-5" />}
-                                               <span>{link.label}</span>
-                                           </Link>
-                                       ))}
-                                   </nav>
-                               </div>
-                           </SheetContent>
-                       </Sheet>
                     </div>
                 </div>
 
