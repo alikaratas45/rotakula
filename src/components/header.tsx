@@ -101,7 +101,7 @@ export function Header() {
                                 href={link.href}
                                 className={cn(
                                     "font-bold uppercase tracking-wider transition-colors hover:text-primary",
-                                    (pathname.startsWith(link.href) && link.href !== "/") || pathname === link.href ? "text-primary" : "text-foreground/60"
+                                    pathname === link.href ? "text-primary" : "text-foreground/60"
                                 )}
                             >
                                 {link.label}
