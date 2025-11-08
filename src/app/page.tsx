@@ -9,6 +9,10 @@ import Link from 'next/link';
 import { getImageById } from '@/lib/placeholder-images';
 import { useEffect, useState, useMemo } from 'react';
 import { useLanguage } from '@/context/language-context';
+import { Button } from '@/components/ui/button';
+import { Utensils, Map, Pin, Heart, Info, BookOpen, QrCode } from 'lucide-react';
+import { BedIcon } from '@/components/icons';
+
 
 const RouteCard = ({ route, delay }: { route: ThematicRoute, delay: number }) => {
   const image = getImageById(route.imageId);
@@ -61,6 +65,17 @@ export default function Home() {
   }, [allRoutes]);
   
   const heroImage = getImageById('hero-home');
+  
+  const iconNavItems = [
+    { href: "/food", label: translations.nav.food, icon: Utensils },
+    { href: "/pois", label: translations.nav.places, icon: Map },
+    { href: "/nearby", label: translations.nav.nearby, icon: Pin },
+    { href: "/accommodation", label: translations.nav.accommodation, icon: BedIcon },
+    { href: "/stories", label: translations.nav.stories, icon: BookOpen },
+    { href: "/my-routes", label: translations.nav.myRoutes, icon: Heart },
+    { href: "/famous", label: translations.nav.about, icon: Info },
+    { href: "/qr-scanner", label: translations.nav.qrScanner, icon: QrCode },
+  ];
 
   return (
     <div className="flex flex-col">
@@ -84,6 +99,33 @@ export default function Home() {
             {translations.home.heroSubtitle}
           </p>
         </div>
+      </section>
+
+      <section className="py-16 px-4 md:px-8 bg-background -mt-16 relative z-20">
+         <div className="max-w-5xl mx-auto">
+            <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
+              {iconNavItems.map((item, index) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="flex flex-col items-center gap-2 group animate-fade-in-up"
+                   style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-16 w-16 rounded-full bg-background/50 backdrop-blur-sm group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 transform group-hover:scale-110"
+                    aria-label={item.label}
+                  >
+                    <item.icon className="h-7 w-7" />
+                  </Button>
+                  <span className="text-center text-xs font-semibold text-muted-foreground group-hover:text-primary transition-colors">
+                    {item.label}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
       </section>
 
       <section className="py-16 px-4 md:px-8 bg-background">
