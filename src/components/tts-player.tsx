@@ -27,14 +27,21 @@ export function TTSPlayer({ textToRead }: TTSPlayerProps) {
             synthRef.current = window.speechSynthesis;
             setIsAvailable(true);
         }
+
+        // Cleanup function to cancel speech when the component unmounts
+        return () => {
+            if (synthRef.current?.speaking) {
+                synthRef.current.cancel();
+            }
+        };
     }, []);
 
     useEffect(() => {
-        // This effect creates and cleans up the utterance when the text or language changes.
+        // This effect creates/updates the utterance when the text or language changes.
         const synth = synthRef.current;
         if (!synth || !isAvailable) return;
 
-        // Cancel any previous speech
+        // If currently speaking, cancel it before creating a new one
         if (synth.speaking) {
             synth.cancel();
         }
@@ -48,6 +55,7 @@ export function TTSPlayer({ textToRead }: TTSPlayerProps) {
         };
 
         newUtterance.onerror = (event) => {
+             // Don't show an error if the language was changed while speaking
             if (event.error === 'interrupted') return;
             toast({
                 title: translations.toast.audioErrorTitle,
@@ -59,15 +67,10 @@ export function TTSPlayer({ textToRead }: TTSPlayerProps) {
         };
 
         utteranceRef.current = newUtterance;
+
+        // Reset playback state when text/language changes
         setIsPlaying(false);
         setIsPaused(false);
-
-        // Cleanup: cancel speech when component unmounts or dependencies change
-        return () => {
-            if (synth.speaking) {
-                synth.cancel();
-            }
-        };
 
     }, [textToRead, language, isAvailable, toast, translations]);
 
@@ -91,14 +94,15 @@ export function TTSPlayer({ textToRead }: TTSPlayerProps) {
         } else if (synth.speaking && synth.paused) { // Is paused, so resume
             synth.resume();
             setIsPaused(false);
-            setIsPlaying(true);
         } else { // Not speaking, so start
+            // If there's any lingering speech, cancel it before starting new.
             if (synth.speaking) {
                 synth.cancel();
             }
             
             const startPlayback = () => {
                 const voices = synth.getVoices();
+                // Find a voice that matches the current language
                 const voice = voices.find(v => v.lang.startsWith(language));
                 if (voice) {
                     utterance.voice = voice;
@@ -108,7 +112,7 @@ export function TTSPlayer({ textToRead }: TTSPlayerProps) {
                 setIsPaused(false);
             };
 
-            // Voices might load asynchronously.
+            // Voices might load asynchronously. If they are not ready, wait for the onvoiceschanged event.
             if (synth.getVoices().length === 0) {
                 synth.onvoiceschanged = startPlayback;
             } else {
@@ -142,4 +146,3 @@ export function TTSPlayer({ textToRead }: TTSPlayerProps) {
         </Button>
     );
 }
-

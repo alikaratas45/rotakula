@@ -6,22 +6,16 @@ import { useLanguage } from '@/context/language-context';
 import { getImageById } from '@/lib/placeholder-images';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
-import { Loader2 } from 'lucide-react';
-
-const AudioPlayer = dynamic(() => import('@/components/audio-player').then(mod => mod.AudioPlayer), {
-    ssr: false,
-    loading: () => <div className="h-10"></div>
-});
 
 const TTSPlayer = dynamic(() => import('@/components/tts-player').then(mod => mod.TTSPlayer), {
     ssr: false,
-    loading: () => <div className="h-10"></div>
+    loading: () => <div className="h-10 w-28 bg-muted rounded-md animate-pulse"></div>
 });
 
 
 // --- Main Page Component ---
 export default function FamousPage() {
-    const { language, translations } = useLanguage();
+    const { translations } = useLanguage();
     const heroImage = getImageById('hero-home');
     const narrationText = translations.famous.historyContent;
 
@@ -50,11 +44,7 @@ export default function FamousPage() {
                     <div className="flex items-center gap-4 mb-6">
                         <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
                          <Suspense fallback={<div className="h-10 w-28 bg-muted rounded-md animate-pulse"></div>}>
-                            {language === 'tr' ? (
-                                <AudioPlayer />
-                            ) : (
-                                <TTSPlayer textToRead={narrationText} />
-                            )}
+                            <TTSPlayer textToRead={narrationText} />
                         </Suspense>
                     </div>
                    
