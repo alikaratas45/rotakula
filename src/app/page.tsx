@@ -102,7 +102,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-16 px-4 md:px-8 bg-background -mt-16 relative z-20">
+      <section className="py-12 px-4 md:px-8 bg-background relative z-20">
          <div className="max-w-5xl mx-auto">
             <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
               {iconNavItems.map((item, index) => (
