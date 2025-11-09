@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from 'next/image';
@@ -9,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { PlayIcon, PauseIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
-// --- Main Page Component ---
 export default function FamousPage() {
     const { language, translations } = useLanguage();
     const { toast } = useToast();
@@ -21,7 +19,6 @@ export default function FamousPage() {
     
     const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
     const synthRef = useRef<SpeechSynthesis | null>(null);
-    
 
     useEffect(() => {
         const synth = window.speechSynthesis;
@@ -35,7 +32,6 @@ export default function FamousPage() {
             setIsPaused(false);
         };
         utterance.onerror = (event) => {
-             // Don't show an error if the language was changed while speaking
             if (event.error === 'interrupted') return;
             toast({
                 title: translations.toast.audioErrorTitle,
@@ -47,6 +43,7 @@ export default function FamousPage() {
         };
         utteranceRef.current = utterance;
 
+        // Cleanup function: This is crucial to stop any ongoing speech when the component unmounts or dependencies change.
         return () => {
              if (synthRef.current?.speaking) {
                 synthRef.current.cancel();
@@ -84,6 +81,7 @@ export default function FamousPage() {
         if (synth.speaking && !synth.paused) {
             synth.pause();
             setIsPaused(true);
+            setIsPlaying(true);
         } else if (synth.speaking && synth.paused) {
             synth.resume();
             setIsPaused(false);
@@ -91,14 +89,14 @@ export default function FamousPage() {
             if (synth.speaking) {
                 synth.cancel();
             }
-            // If voices are not loaded yet, wait for them
+            // If voices are not loaded yet, wait for them. This is a common cause for "synthesis-failed".
             if (synth.getVoices().length === 0) {
                  synth.onvoiceschanged = startPlayback;
             } else {
                 startPlayback();
             }
         }
-    }, [toast, translations, language]);
+    }, [language, toast, translations]);
 
 
     return (
