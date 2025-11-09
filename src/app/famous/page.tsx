@@ -55,7 +55,7 @@ export default function FamousPage() {
             setIsPaused(false);
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [narrationText, language]);
+    }, [narrationText, language, toast, translations]);
 
 
     const handlePlayPause = useCallback(() => {
