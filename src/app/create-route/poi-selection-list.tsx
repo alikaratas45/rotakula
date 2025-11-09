@@ -150,7 +150,7 @@ export default function PoiSelectionList({
             {selectionCount > 0 && (
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
-                         <Button className={cn("fixed bottom-20 right-4 h-14 w-14 rounded-full shadow-lg z-10 lg:hidden", isStartingRoute && "animate-pulse")}>
+                         <Button className={cn("absolute bottom-20 right-4 h-14 w-14 rounded-full shadow-lg z-10 lg:hidden", isStartingRoute && "animate-pulse")}>
                             {isStartingRoute ? <Loader2 className="h-6 w-6 animate-spin" /> : <Map className="h-6 w-6" />}
                         </Button>
                     </AlertDialogTrigger>

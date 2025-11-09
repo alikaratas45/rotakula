@@ -42,7 +42,7 @@ export default function CreateRoutePage() {
     
     return (
         <DndProvider backend={HTML5Backend}>
-            <div className="relative flex h-[calc(100vh-4rem)] flex-col lg:flex-row">
+            <div className="flex h-[calc(100vh-4rem)] flex-col lg:flex-row">
                  <div className="w-full lg:w-2/3 h-1/2 lg:h-full">
                     <RouteMap pois={selectedPois} />
                 </div>
@@ -53,7 +53,7 @@ export default function CreateRoutePage() {
                             setSelectedPois={setSelectedPois}
                         />
                     </div>
-                     <div className="block lg:hidden h-full">
+                     <div className="block lg:hidden h-full relative">
                         <PoiSelectionList 
                             allPois={allPois}
                             selectedPois={selectedPois}
