@@ -1,4 +1,4 @@
-import { Bed, Play, Pause, type SVGProps } from "lucide-react";
+import { Bed, Play, Pause, List, type SVGProps } from "lucide-react";
 
 export function HistoricHouseIcon(props: SVGProps<SVGSVGElement>) {
   return (

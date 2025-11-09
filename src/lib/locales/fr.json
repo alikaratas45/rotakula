@@ -2,6 +2,7 @@
 {
     "nav": {
         "thematicRoutes": "Itinéraires Thématiques",
+        "createRoute": "Créer un Itinéraire",
         "stories": "Histoires",
         "places": "Sites et Nature",
         "food": "Manger et Boire",
@@ -88,6 +89,23 @@
         "availableVoices": "Voix disponibles",
         "proximityPrompt": "Vous êtes arrivé à {poiName}. Voulez-vous que je raconte ?"
     },
+     "createRoute": {
+        "title": "Créez votre propre itinéraire",
+        "selectPois": "Sélectionnez les lieux à visiter",
+        "selectDescription": "Vous pouvez sélectionner jusqu'à {count} lieux à voir sur la carte et créer un itinéraire.",
+        "selectionCount": "Nombre de lieux sélectionnés",
+        "selectedPois": "Lieux sélectionnés",
+        "dragAndDrop": "Glissez-déposez pour changer l'ordre.",
+        "noPoisSelected": "Vous n'avez encore sélectionné aucun lieu. Commencez par sélectionner des lieux sur la carte ou dans la liste.",
+        "createRoute": "Créer un itinéraire",
+        "clearSelection": "Effacer la sélection",
+        "minPoisError": "Vous devez sélectionner au moins 2 lieux pour créer un itinéraire.",
+        "chooseTravelMode": "Choisissez le mode de transport",
+        "travelModeDescription": "Souhaitez-vous parcourir cet itinéraire à pied ou en voiture ? Google Maps générera les itinéraires en conséquence.",
+        "walking": "À pied",
+        "driving": "En voiture",
+        "viewSelected": "Voir la sélection"
+    },
     "map": {
         "yourLocation": "Votre Emplacement",
         "loading": "Chargement de la carte...",
@@ -117,7 +135,8 @@
     "common": {
         "loading": "Chargement",
         "map": "Carte",
-        "moreInfo": "Plus d'Infos"
+        "moreInfo": "Plus d'Infos",
+        "cancel": "Annuler"
     },
     "category": {
         "geopark": "Géoparc",

@@ -44,6 +44,7 @@ export function Header() {
 
     const navLinks = [
         { href: "/", label: translations.nav.thematicRoutes },
+        { href: "/create-route", label: translations.nav.createRoute },
         { href: "/food", label: translations.nav.food },
         { href: "/pois", label: translations.nav.places },
         { href: "/nearby", label: translations.nav.nearby },

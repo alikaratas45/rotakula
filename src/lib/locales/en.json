@@ -2,6 +2,7 @@
 {
     "nav": {
         "thematicRoutes": "Thematic Routes",
+        "createRoute": "Create Route",
         "stories": "Stories",
         "places": "Sights & Nature",
         "food": "Food & Drink",
@@ -88,6 +89,23 @@
         "availableVoices": "Available Voices",
         "proximityPrompt": "You have arrived at {poiName}. Would you like me to narrate?"
     },
+     "createRoute": {
+        "title": "Create Your Own Route",
+        "selectPois": "Select Places to Visit",
+        "selectDescription": "You can select up to {count} places to see on the map and create a route.",
+        "selectionCount": "Selected Places Count",
+        "selectedPois": "Selected Places",
+        "dragAndDrop": "Drag and drop to change the order.",
+        "noPoisSelected": "You haven't selected any places yet. Start by selecting places from the map or list.",
+        "createRoute": "Create Route",
+        "clearSelection": "Clear Selection",
+        "minPoisError": "You must select at least 2 places to create a route.",
+        "chooseTravelMode": "Choose Travel Mode",
+        "travelModeDescription": "Would you like to travel this route by walking or driving? Google Maps will generate directions accordingly.",
+        "walking": "Walking",
+        "driving": "Driving",
+        "viewSelected": "View Selected"
+    },
     "map": {
         "yourLocation": "Your Location",
         "loading": "Map is Loading...",
@@ -117,7 +135,8 @@
     "common": {
         "loading": "Loading",
         "map": "Map",
-        "moreInfo": "More Info"
+        "moreInfo": "More Info",
+        "cancel": "Cancel"
     },
     "category": {
         "geopark": "Geopark",

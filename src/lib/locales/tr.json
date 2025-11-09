@@ -2,6 +2,7 @@
 {
     "nav": {
         "thematicRoutes": "Tematik Rotalar",
+        "createRoute": "Rota Oluştur",
         "stories": "Hikayeler",
         "places": "Tarihi ve Doğal Güzellikler",
         "food": "Yeme / İçme",
@@ -88,6 +89,23 @@
         "availableVoices": "Kullanılabilir Sesler",
         "proximityPrompt": "{poiName} konumuna geldiniz. Anlatmamı ister misiniz?"
     },
+    "createRoute": {
+        "title": "Kendi Rotanı Oluştur",
+        "selectPois": "Gezilecek Yerleri Seç",
+        "selectDescription": "Haritada görmek ve rota oluşturmak için en fazla {count} yer seçebilirsiniz.",
+        "selectionCount": "Seçilen Yer Sayısı",
+        "selectedPois": "Seçilen Yerler",
+        "dragAndDrop": "Sıralamayı değiştirmek için sürükleyip bırakın.",
+        "noPoisSelected": "Henüz hiç yer seçmediniz. Başlamak için haritadan veya listeden yerleri seçin.",
+        "createRoute": "Rota Oluştur",
+        "clearSelection": "Seçimi Temizle",
+        "minPoisError": "Rota oluşturmak için en az 2 yer seçmelisiniz.",
+        "chooseTravelMode": "Ulaşım Yöntemi Seçin",
+        "travelModeDescription": "Bu rota için yürüyerek mi yoksa araçla mı seyahat etmek istersiniz? Google Haritalar buna göre yol tarifi oluşturacaktır.",
+        "walking": "Yürüyerek",
+        "driving": "Araçla",
+        "viewSelected": "Seçilenleri Görüntüle"
+    },
     "map": {
         "yourLocation": "Sizin Konumunuz",
         "loading": "Harita Yükleniyor...",
@@ -117,7 +135,8 @@
     "common": {
         "loading": "Yükleniyor",
         "map": "Harita",
-        "moreInfo": "Daha Fazla Bilgi"
+        "moreInfo": "Daha Fazla Bilgi",
+        "cancel": "İptal"
     },
     "category": {
         "geopark": "Jeopark",

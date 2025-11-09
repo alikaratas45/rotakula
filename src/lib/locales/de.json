@@ -2,6 +2,7 @@
 {
     "nav": {
         "thematicRoutes": "Thematische Routen",
+        "createRoute": "Route Erstellen",
         "stories": "Geschichten",
         "places": "Sehenswürdigkeiten & Natur",
         "food": "Essen & Trinken",
@@ -88,6 +89,23 @@
         "availableVoices": "Verfügbare Stimmen",
         "proximityPrompt": "Sie sind in {poiName} angekommen. Soll ich erzählen?"
     },
+    "createRoute": {
+        "title": "Erstellen Sie Ihre eigene Route",
+        "selectPois": "Wählen Sie Orte zum Besuchen aus",
+        "selectDescription": "Sie können bis zu {count} Orte auswählen, um sie auf der Karte anzuzeigen und eine Route zu erstellen.",
+        "selectionCount": "Anzahl der ausgewählten Orte",
+        "selectedPois": "Ausgewählte Orte",
+        "dragAndDrop": "Ziehen und ablegen, um die Reihenfolge zu ändern.",
+        "noPoisSelected": "Sie haben noch keine Orte ausgewählt. Beginnen Sie, indem Sie Orte auf der Karte oder aus der Liste auswählen.",
+        "createRoute": "Route erstellen",
+        "clearSelection": "Auswahl löschen",
+        "minPoisError": "Sie müssen mindestens 2 Orte auswählen, um eine Route zu erstellen.",
+        "chooseTravelMode": "Wählen Sie die Fortbewegungsart",
+        "travelModeDescription": "Möchten Sie diese Route zu Fuß oder mit dem Auto zurücklegen? Google Maps generiert die Wegbeschreibung entsprechend.",
+        "walking": "Zu Fuß",
+        "driving": "Mit dem Auto",
+        "viewSelected": "Auswahl anzeigen"
+    },
     "map": {
         "yourLocation": "Ihr Standort",
         "loading": "Karte wird geladen...",
@@ -117,7 +135,8 @@
     "common": {
         "loading": "Wird Geladen",
         "map": "Karte",
-        "moreInfo": "Mehr Infos"
+        "moreInfo": "Mehr Infos",
+        "cancel": "Abbrechen"
     },
     "category": {
         "geopark": "Geopark",
