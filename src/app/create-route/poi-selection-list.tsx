@@ -1,3 +1,4 @@
+
 "use client"
 
 import type { PointOfInterest } from "@/lib/types";
@@ -5,12 +6,15 @@ import { getImageById } from "@/lib/placeholder-images";
 import Image from "next/image";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Info } from "lucide-react";
+import { Loader2, Info, Map, Footprints, Car } from "lucide-react";
 import { useLanguage } from "@/context/language-context";
 import Link from "next/link";
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import SelectedPoisSidebar from "./selected-pois-sidebar";
 import { Button } from "@/components/ui/button";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { useState } from 'react';
+import { useToast } from "@/hooks/use-toast";
 
 export default function PoiSelectionList({
     allPois,
@@ -26,9 +30,61 @@ export default function PoiSelectionList({
     loading: boolean
 }) {
     const { translations } = useLanguage();
+    const { toast } = useToast();
     const selectionCount = selectedPois.length;
+    const [isStartingRoute, setIsStartingRoute] = useState(false);
+
 
     const isPoiSelected = (poiId: string) => selectedPois.some(p => p.id === poiId);
+    
+    const handleCreateRoute = (travelMode: 'driving' | 'walking') => {
+        if (!navigator.geolocation) {
+            toast({
+                title: translations.toast.locationErrorTitle,
+                description: translations.map.locationError,
+                variant: 'destructive',
+            });
+            return;
+        }
+        if (selectedPois.length < 2) {
+             toast({
+                title: translations.toast.errorTitle,
+                description: translations.createRoute.minPoisError,
+                variant: 'destructive',
+            });
+            return;
+        }
+
+        setIsStartingRoute(true);
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                const origin = `${latitude},${longitude}`;
+                
+                const destination = `${selectedPois[selectedPois.length - 1].latitude},${selectedPois[selectedPois.length - 1].longitude}`;
+
+                const waypoints = selectedPois
+                    .slice(0, selectedPois.length - 1)
+                    .map(p => `${p.latitude},${p.longitude}`)
+                    .join('|');
+
+                const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&waypoints=${waypoints}&travelmode=${travelMode}`;
+
+                window.open(googleMapsUrl, '_blank');
+                setIsStartingRoute(false);
+            },
+            (error) => {
+                toast({
+                    title: translations.toast.locationErrorTitle,
+                    description: translations.nearby.locationError,
+                    variant: 'destructive',
+                });
+                setIsStartingRoute(false);
+            },
+            { enableHighAccuracy: true }
+        );
+    }
 
     return (
         <div className="flex flex-col h-full bg-card border-l">
@@ -90,10 +146,10 @@ export default function PoiSelectionList({
                 </ScrollArea>
             )}
 
-            <div className="p-4 border-t lg:hidden">
+            <div className="p-4 border-t lg:hidden flex gap-2">
                  <Drawer>
                     <DrawerTrigger asChild>
-                        <Button className="w-full" disabled={selectionCount === 0}>
+                        <Button className="w-full" variant="outline" disabled={selectionCount === 0}>
                            {translations.createRoute.viewSelected} ({selectionCount})
                         </Button>
                     </DrawerTrigger>
@@ -101,6 +157,35 @@ export default function PoiSelectionList({
                         <SelectedPoisSidebar selectedPois={selectedPois} setSelectedPois={() => {}} isDrawer />
                     </DrawerContent>
                 </Drawer>
+                 {selectionCount > 0 && (
+                     <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                             <Button className="w-full" disabled={isStartingRoute}>
+                                {isStartingRoute ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Map className="mr-2 h-4 w-4" />}
+                                {translations.createRoute.createRoute}
+                            </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>{translations.createRoute.chooseTravelMode}</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    {translations.createRoute.travelModeDescription}
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter className="sm:justify-center gap-2">
+                                 <AlertDialogAction onClick={() => handleCreateRoute('walking')}>
+                                    <Footprints className="mr-2 h-4 w-4" />
+                                    {translations.createRoute.walking}
+                                </AlertDialogAction>
+                                <AlertDialogAction onClick={() => handleCreateRoute('driving')}>
+                                    <Car className="mr-2 h-4 w-4" />
+                                    {translations.createRoute.driving}
+                                </AlertDialogAction>
+                                <AlertDialogCancel>{translations.common.cancel}</AlertDialogCancel>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+                )}
             </div>
         </div>
     )
