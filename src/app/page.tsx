@@ -10,7 +10,7 @@ import { getImageById } from '@/lib/placeholder-images';
 import { useEffect, useState, useMemo } from 'react';
 import { useLanguage } from '@/context/language-context';
 import { Button } from '@/components/ui/button';
-import { Utensils, Map, Pin, Heart, Info, BookOpen, QrCode } from 'lucide-react';
+import { Utensils, Map, Pin, Route, Info, BookOpen, QrCode } from 'lucide-react';
 import { BedIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
 
@@ -70,6 +70,7 @@ export default function Home() {
   const iconNavItems = [
     { href: "/food", label: translations.nav.food, icon: Utensils },
     { href: "/pois", label: translations.nav.places, icon: Map },
+    { href: "/create-route", label: translations.nav.createRoute, icon: Route },
     { href: "/nearby", label: translations.nav.nearby, icon: Pin },
     { href: "/accommodation", label: translations.nav.accommodation, icon: BedIcon },
     { href: "/stories", label: translations.nav.stories, icon: BookOpen },
