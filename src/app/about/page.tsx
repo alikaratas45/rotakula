@@ -14,7 +14,9 @@ export default function AboutPage() {
     const { toast } = useToast();
     const heroImage = getImageById('hero-home');
 
-    const narrationText = translations.about.content;
+    const narrationText = Array.isArray(translations.about.content)
+        ? translations.about.content.join(' ')
+        : translations.about.content;
 
     const [isPlaying, setIsPlaying] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
@@ -23,6 +25,8 @@ export default function AboutPage() {
     const synthRef = useRef<SpeechSynthesis | null>(null);
 
     useEffect(() => {
+        if (!narrationText) return;
+
         const synth = window.speechSynthesis;
         synthRef.current = synth;
 
@@ -117,6 +121,10 @@ export default function AboutPage() {
         }
     }, [language, toast, translations]);
 
+    const contentParagraphs = Array.isArray(translations.about.content)
+        ? translations.about.content
+        : (translations.about.content || "").split('\n\n');
+
     return (
         <div>
             <section className="relative h-[40vh] md:h-[50vh] w-full flex items-end text-white">
@@ -141,22 +149,24 @@ export default function AboutPage() {
                 <div className="max-w-3xl mx-auto">
                     <div className="flex items-center gap-4 mb-6">
                         <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
-                        <Button
-                            variant="outline"
-                            onClick={handlePlayPause}
-                            aria-label={isPlaying && !isPaused ? translations.pois.pauseNarration : translations.pois.listenNarration}
-                        >
-                            {isPlaying && !isPaused ? (
-                                <PauseIcon className="mr-2 h-4 w-4" />
-                            ) : (
-                                <PlayIcon className="mr-2 h-4 w-4" />
-                            )}
-                            {isPlaying && !isPaused ? translations.pois.pause : (isPaused ? translations.famous.continueNarration : translations.pois.listen)}
-                        </Button>
+                        {narrationText && (
+                            <Button
+                                variant="outline"
+                                onClick={handlePlayPause}
+                                aria-label={isPlaying && !isPaused ? translations.pois.pauseNarration : translations.pois.listenNarration}
+                            >
+                                {isPlaying && !isPaused ? (
+                                    <PauseIcon className="mr-2 h-4 w-4" />
+                                ) : (
+                                    <PlayIcon className="mr-2 h-4 w-4" />
+                                )}
+                                {isPlaying && !isPaused ? translations.pois.pause : (isPaused ? translations.famous.continueNarration : translations.pois.listen)}
+                            </Button>
+                        )}
                     </div>
                     
                     <div className="prose prose-lg max-w-none text-foreground/90">
-                        {narrationText.split('\n\n').map((paragraph, index) => (
+                        {contentParagraphs.map((paragraph, index) => (
                             <p key={index}>{paragraph}</p>
                         ))}
                     </div>
