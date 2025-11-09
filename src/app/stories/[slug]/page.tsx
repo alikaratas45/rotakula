@@ -3,18 +3,27 @@
 
 import { getStoryBySlug } from '@/lib/kula-data';
 import Image from 'next/image';
-import { Calendar, User } from 'lucide-react';
+import { Calendar, User, PlayIcon, PauseIcon } from 'lucide-react';
 import { useLanguage } from '@/context/language-context';
-import { useEffect, useState, use } from 'react';
+import { useEffect, useState, use, useRef, useCallback } from 'react';
 import type { Story } from '@/lib/types';
 import { notFound } from 'next/navigation';
 import { getImageById } from '@/lib/placeholder-images';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 export default function StoryPage({ params }: { params: { slug: string } }) {
     const slug = use(params).slug;
     const { language, translations } = useLanguage();
+    const { toast } = useToast();
     const [story, setStory] = useState<Story | null>(null);
     const [loading, setLoading] = useState(true);
+
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [isPaused, setIsPaused] = useState(false);
+    
+    const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+    const synthRef = useRef<SpeechSynthesis | null>(null);
 
     useEffect(() => {
       async function fetchData() {
@@ -28,6 +37,102 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
       fetchData();
     }, [slug, language]);
 
+    const narrationText = story?.content || '';
+
+    useEffect(() => {
+        const synth = window.speechSynthesis;
+        synthRef.current = synth;
+
+        const utterance = new SpeechSynthesisUtterance(narrationText);
+        utteranceRef.current = utterance;
+
+        const handleVoicesChanged = () => {
+            if (utteranceRef.current) {
+                updateUtterance(utteranceRef.current);
+            }
+        };
+
+        const updateUtterance = (utterance: SpeechSynthesisUtterance) => {
+            const voices = synth.getVoices();
+            const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
+            if (voice) {
+                utterance.voice = voice;
+            }
+            utterance.lang = language;
+            utterance.text = narrationText;
+
+            utterance.onend = () => {
+                setIsPlaying(false);
+                setIsPaused(false);
+            };
+            utterance.onerror = (event) => {
+                if (event.error !== 'interrupted') {
+                     toast({
+                        title: translations.toast.audioErrorTitle,
+                        description: `${translations.toast.audioErrorDescription} (${event.error})`,
+                        variant: "destructive"
+                    });
+                }
+                setIsPlaying(false);
+                setIsPaused(false);
+            };
+        };
+        
+        if (synth.getVoices().length === 0) {
+            synth.addEventListener('voiceschanged', handleVoicesChanged);
+        } else {
+            handleVoicesChanged();
+        }
+
+        return () => {
+            synth.removeEventListener('voiceschanged', handleVoicesChanged);
+            if (synth.speaking) {
+                synth.cancel();
+            }
+        };
+    }, [narrationText, language, toast, translations]);
+
+
+    const handlePlayPause = useCallback(() => {
+        const synth = synthRef.current;
+        const utterance = utteranceRef.current;
+
+        if (!synth || !utterance) {
+            toast({
+                title: translations.toast.unsupportedTitle,
+                description: translations.toast.unsupportedDescription,
+                variant: "destructive"
+            });
+            return;
+        }
+
+        const startPlayback = () => {
+            const voices = synth.getVoices();
+            const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
+            if (voice) {
+                utterance.voice = voice;
+            }
+            synth.speak(utterance);
+            setIsPlaying(true);
+            setIsPaused(false);
+        }
+
+        if (synth.speaking) {
+            if (synth.paused) {
+                synth.resume();
+                setIsPaused(false);
+            } else {
+                synth.pause();
+                setIsPaused(true);
+            }
+        } else {
+             if (synth.getVoices().length === 0) {
+                synth.onvoiceschanged = startPlayback;
+            } else {
+                startPlayback();
+            }
+        }
+    }, [language, toast, translations]);
 
     if (loading) {
       return <div className="container px-4 py-8">{translations.common.loading}...</div>;
@@ -74,6 +179,23 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
                             <time dateTime={story.date}>{displayDate}</time>
                         </div>
                     </div>
+
+                    <div className="flex items-center gap-4 mb-6">
+                        <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
+                         <Button
+                            variant="outline"
+                            onClick={handlePlayPause}
+                            aria-label={isPlaying && !isPaused ? translations.pois.pauseNarration : translations.pois.listenNarration}
+                        >
+                            {isPlaying && !isPaused ? (
+                                <PauseIcon className="mr-2 h-4 w-4" />
+                            ) : (
+                                <PlayIcon className="mr-2 h-4 w-4" />
+                            )}
+                            {isPlaying && !isPaused ? translations.pois.pause : (isPaused ? translations.famous.continueNarration : translations.pois.listen)}
+                        </Button>
+                    </div>
+
                     <div className="prose prose-lg max-w-none text-foreground/90">
                          {story.content.split('\n\n').map((paragraph, index) => (
                             <p key={index}>{paragraph}</p>
