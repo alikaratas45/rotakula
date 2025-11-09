@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from 'next/image';
@@ -17,41 +18,63 @@ export default function FamousPage() {
     const [isPlaying, setIsPlaying] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
     
-    const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
     const synthRef = useRef<SpeechSynthesis | null>(null);
+    const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
+    // This effect runs only once to initialize the speech synthesis and utterance
     useEffect(() => {
         const synth = window.speechSynthesis;
         synthRef.current = synth;
         
         const utterance = new SpeechSynthesisUtterance(narrationText);
-        utterance.lang = language;
-        
-        utterance.onend = () => {
-            setIsPlaying(false);
-            setIsPaused(false);
-        };
-        utterance.onerror = (event) => {
-            if (event.error === 'interrupted') return;
-            toast({
-                title: translations.toast.audioErrorTitle,
-                description: `${translations.toast.audioErrorDescription} (${event.error})`,
-                variant: "destructive"
-            });
-            setIsPlaying(false);
-            setIsPaused(false);
-        };
         utteranceRef.current = utterance;
 
-        // Cleanup function: This is crucial to stop any ongoing speech when the component unmounts or dependencies change.
-        return () => {
-             if (synthRef.current?.speaking) {
-                synthRef.current.cancel();
+        const onEnd = () => {
+            setIsPlaying(false);
+            setIsPaused(false);
+        };
+
+        const onError = (event: SpeechSynthesisErrorEvent) => {
+            if (event.error !== 'interrupted') {
+                toast({
+                    title: translations.toast.audioErrorTitle,
+                    description: `${translations.toast.audioErrorDescription} (${event.error})`,
+                    variant: "destructive"
+                });
             }
             setIsPlaying(false);
             setIsPaused(false);
         };
-    }, [narrationText, language, toast, translations]);
+
+        utterance.onend = onEnd;
+        utterance.onerror = onError;
+
+        // Cleanup function to run when the component unmounts
+        return () => {
+            if (synth.speaking) {
+                synth.cancel();
+            }
+            // Remove listeners to prevent memory leaks
+            utterance.removeEventListener('end', onEnd);
+            utterance.removeEventListener('error', onError);
+        };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // Empty dependency array ensures this runs only once on mount.
+
+    // This effect handles changes in language or narration text
+    useEffect(() => {
+        const synth = synthRef.current;
+        const utterance = utteranceRef.current;
+
+        if (synth && utterance) {
+            // Stop any ongoing speech before changing language or text
+            if (synth.speaking) {
+                synth.cancel();
+            }
+            utterance.lang = language;
+            utterance.text = narrationText;
+        }
+    }, [narrationText, language]);
 
 
     const handlePlayPause = useCallback(() => {
@@ -66,32 +89,30 @@ export default function FamousPage() {
             });
             return;
         }
-        
-        const startPlayback = () => {
-            const voices = synth.getVoices();
-            const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
-            if (voice) {
-                utterance.voice = voice;
-            }
-            synth.speak(utterance);
-            setIsPlaying(true);
-            setIsPaused(false);
-        }
 
-        if (synth.speaking && !synth.paused) {
-            synth.pause();
-            setIsPaused(true);
-            setIsPlaying(true);
-        } else if (synth.speaking && synth.paused) {
-            synth.resume();
-            setIsPaused(false);
-        } else {
-            if (synth.speaking) {
-                synth.cancel();
+        if (synth.speaking) {
+            if (synth.paused) {
+                synth.resume();
+                setIsPaused(false);
+            } else {
+                synth.pause();
+                setIsPaused(true);
             }
-            // If voices are not loaded yet, wait for them. This is a common cause for "synthesis-failed".
+        } else {
+            const startPlayback = () => {
+                const voices = synth.getVoices();
+                const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
+                if (voice) {
+                    utterance.voice = voice;
+                }
+                synth.speak(utterance);
+                setIsPlaying(true);
+                setIsPaused(false);
+            };
+
+            // Voices may not be loaded initially. Wait for them.
             if (synth.getVoices().length === 0) {
-                 synth.onvoiceschanged = startPlayback;
+                synth.onvoiceschanged = startPlayback;
             } else {
                 startPlayback();
             }
