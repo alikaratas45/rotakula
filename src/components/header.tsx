@@ -50,6 +50,7 @@ export function Header() {
         { href: "/accommodation", label: translations.nav.accommodation },
         { href: "/stories", label: translations.nav.stories },
         { href: "/my-routes", label: translations.nav.myRoutes },
+        { href: "/about", label: translations.nav.about },
     ];
     
     const languageOptions = {
@@ -100,7 +101,7 @@ export function Header() {
                                 href={link.href}
                                 className={cn(
                                     "font-bold uppercase tracking-wider transition-colors hover:text-primary",
-                                    pathname === link.href ? "text-primary" : "text-foreground/60"
+                                    (pathname === link.href) ? "text-primary" : "text-foreground/60"
                                 )}
                             >
                                 {link.label}

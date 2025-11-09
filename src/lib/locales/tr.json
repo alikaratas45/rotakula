@@ -8,7 +8,8 @@
         "accommodation": "Konaklama",
         "nearby": "Çevremde Ne Var?",
         "myRoutes": "Rotalarım",
-        "qrScanner": "QR Kod Okut"
+        "qrScanner": "QR Kod Okut",
+        "about": "Kula Hakkında"
     },
     "header": {
         "menu": "Menü",
@@ -124,5 +125,14 @@
         "food": "Lezzet",
         "nature": "Doğa",
         "accommodation": "Konaklama"
+    },
+    "about": {
+        "title": "Kula Hakkında",
+        "content": "Yakup Bey’e vermiştir. Yakup Bey, 1428’de Edirne’ye gelerek beyliğini Sultan II. Murad’a vasiyet etmiş ve 1429’da vefat etmiştir.\n\nOsmanlı döneminde Kula, Kütahya Sancağı’na bağlı bir kaza merkezi olarak yönetilmiştir. 1852 yılında ise İzmir Valisi’nin önerisiyle, Kula kazası Saruhan Sancağı’na bağlanmıştır.\n\nBirinci Dünya Savaşı sonrasında imzalanan Mondros Ateşkes Antlaşması (30 Ekim 1918) ile Osmanlı toprakları işgale uğradı. 15 Mayıs 1919’da Yunanlılar, İtilaf Devletlerinin desteğiyle İzmir’e asker çıkardı. 28 Haziran 1920’de Kula’yı işgal ettiler. Ancak 30 Ağustos 1922’deki Başkomutanlık Meydan Muharebesi’nin kazanılmasının ardından, Yunan kuvvetleri geri çekildi. 4 Eylül 1922’de Kolordu Komutanı Fahrettin Altay komutasındaki süvari birlikleri Kula’ya girerek şehri kurtardı.\n\nBugün Kula, tarihi boyunca taşıdığı tüm izleri hâlâ koruyan bir kenttir. Geçmişten günümüze açılan bir kapı niteliğindedir."
+    },
+    "famous": {
+        "title": "Kula Hakkında",
+        "narrationTitle": "Kula'nın Tarihi ve Önemi",
+        "continueNarration": "Devam Et"
     }
 }

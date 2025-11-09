@@ -8,7 +8,8 @@
         "accommodation": "Hébergement",
         "nearby": "Qu'y a-t-il autour de moi ?",
         "myRoutes": "Mes Itinéraires",
-        "qrScanner": "Scanner QR Code"
+        "qrScanner": "Scanner QR Code",
+        "about": "À propos de Kula"
     },
     "header": {
         "menu": "Menu",
@@ -124,5 +125,14 @@
         "food": "Saveur",
         "nature": "Nature",
         "accommodation": "Hébergement"
+    },
+    "about": {
+        "title": "À propos de Kula",
+        "content": "Il l'a donné à Yakup Bey. Yakup Bey est venu à Edirne en 1428, a légué sa principauté au sultan Murad II et est décédé en 1429.\n\nPendant la période ottomane, Kula était administrée comme un centre de district rattaché au sandjak de Kütahya. En 1852, sur la recommandation du gouverneur d'İzmir, le district de Kula a été rattaché au sandjak de Saruhan.\n\nAprès la Première Guerre mondiale, les territoires ottomans ont été occupés avec la signature de l'armistice de Moudros (30 octobre 1918). Le 15 mai 1919, les Grecs ont débarqué des troupes à İzmir avec le soutien des puissances alliées. Ils ont occupé Kula le 28 juin 1920. Cependant, après la victoire de la bataille du Commandant en chef le 30 août 1922, les forces grecques se sont retirées. Le 4 septembre 1922, des unités de cavalerie sous le commandement du commandant de corps Fahrettin Altay sont entrées dans Kula et ont libéré la ville.\n\nAujourd'hui, Kula est une ville qui conserve encore toutes les traces qu'elle a portées tout au long de son histoire. Elle sert de porte d'entrée du passé au présent."
+    },
+    "famous": {
+        "title": "À propos de Kula",
+        "narrationTitle": "L'Histoire et l'Importance de Kula",
+        "continueNarration": "Continuer"
     }
 }

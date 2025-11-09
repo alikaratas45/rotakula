@@ -2,7 +2,7 @@
 "use client";
 
 export default function FamousPage() {
-    // This page is intentionally left blank as per the user's request.
+    // This page is intentionally left blank.
     return (
         <div>
         </div>
