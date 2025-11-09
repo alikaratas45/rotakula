@@ -50,7 +50,6 @@ export function Header() {
         { href: "/nearby", label: translations.nav.nearby },
         { href: "/accommodation", label: translations.nav.accommodation },
         { href: "/stories", label: translations.nav.stories },
-        { href: "/my-routes", label: translations.nav.myRoutes },
         { href: "/about", label: translations.nav.about },
     ];
     
