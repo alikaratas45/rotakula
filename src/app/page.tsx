@@ -68,14 +68,14 @@ export default function Home() {
   const heroImage = getImageById('hero-home');
   
   const iconNavItems = [
-    { href: "/pois", label: translations.nav.places, icon: Map },
-    { href: "/nearby", label: translations.nav.nearby, icon: Pin },
-    { href: "/create-route", label: translations.nav.createRoute, icon: Route },
-    { href: "/stories", label: translations.nav.stories, icon: BookOpen },
-    { href: "/about", label: translations.nav.about, icon: Info },
-    { href: "/food", label: translations.nav.food, icon: Utensils },
-    { href: "/accommodation", label: translations.nav.accommodation, icon: BedIcon },
-    { href: "/qr-scanner", label: translations.nav.qrScanner, icon: QrCode },
+    { href: "/pois", label: translations.nav.places, icon: Map, colorClass: "bg-blue-200 dark:bg-blue-900" },
+    { href: "/nearby", label: translations.nav.nearby, icon: Pin, colorClass: "bg-red-200 dark:bg-red-900" },
+    { href: "/create-route", label: translations.nav.createRoute, icon: Route, colorClass: "bg-green-200 dark:bg-green-900" },
+    { href: "/stories", label: translations.nav.stories, icon: BookOpen, colorClass: "bg-yellow-200 dark:bg-yellow-900" },
+    { href: "/about", label: translations.nav.about, icon: Info, colorClass: "bg-purple-200 dark:bg-purple-900" },
+    { href: "/food", label: translations.nav.food, icon: Utensils, colorClass: "bg-orange-200 dark:bg-orange-900" },
+    { href: "/accommodation", label: translations.nav.accommodation, icon: BedIcon, colorClass: "bg-teal-200 dark:bg-teal-900" },
+    { href: "/qr-scanner", label: translations.nav.qrScanner, icon: QrCode, colorClass: "bg-indigo-200 dark:bg-indigo-900" },
   ];
 
   return (
@@ -117,7 +117,7 @@ export default function Home() {
                     size="icon"
                     className={cn(
                       "h-16 w-16 rounded-full group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 transform group-hover:scale-110",
-                      "bg-accent dark:bg-muted"
+                      item.colorClass
                     )}
                     aria-label={item.label}
                   >
