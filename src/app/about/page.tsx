@@ -6,10 +6,13 @@ import { BookOpen, PauseIcon, PlayIcon } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import Image from 'next/image';
+import { getImageById } from '@/lib/placeholder-images';
 
 export default function AboutPage() {
     const { language, translations } = useLanguage();
     const { toast } = useToast();
+    const heroImage = getImageById('hero-home');
 
     const narrationText = translations.about.content;
 
@@ -23,12 +26,13 @@ export default function AboutPage() {
         const synth = window.speechSynthesis;
         synthRef.current = synth;
 
+        const utterance = new SpeechSynthesisUtterance(narrationText);
+        utteranceRef.current = utterance;
+
         const handleVoicesChanged = () => {
-            if (!utteranceRef.current) {
-                const newUtterance = new SpeechSynthesisUtterance(narrationText);
-                utteranceRef.current = newUtterance;
+            if (utteranceRef.current) {
+                updateUtterance(utteranceRef.current);
             }
-            updateUtterance(utteranceRef.current);
         };
 
         const updateUtterance = (utterance: SpeechSynthesisUtterance) => {
@@ -56,7 +60,7 @@ export default function AboutPage() {
                 setIsPaused(false);
             };
         };
-
+        
         if (synth.getVoices().length === 0) {
             synth.addEventListener('voiceschanged', handleVoicesChanged);
         } else {
@@ -85,6 +89,17 @@ export default function AboutPage() {
             return;
         }
 
+        const startPlayback = () => {
+            const voices = synth.getVoices();
+            const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
+            if (voice) {
+                utterance.voice = voice;
+            }
+            synth.speak(utterance);
+            setIsPlaying(true);
+            setIsPaused(false);
+        }
+
         if (synth.speaking) {
             if (synth.paused) {
                 synth.resume();
@@ -94,42 +109,57 @@ export default function AboutPage() {
                 setIsPaused(true);
             }
         } else {
-            synth.speak(utterance);
-            setIsPlaying(true);
-            setIsPaused(false);
+             if (synth.getVoices().length === 0) {
+                synth.onvoiceschanged = startPlayback;
+            } else {
+                startPlayback();
+            }
         }
-    }, [toast, translations]);
+    }, [language, toast, translations]);
 
     return (
-        <div className="container px-4 py-8 md:py-12">
-            <div className="max-w-3xl mx-auto">
-                 <div className="flex items-center gap-4 mb-6">
-                    <BookOpen className="h-8 w-8 text-primary" />
-                    <div>
-                        <h1 className="text-3xl md:text-4xl font-headline font-bold">{translations.about.title}</h1>
+        <div>
+            <section className="relative h-[40vh] md:h-[50vh] w-full flex items-end text-white">
+                {heroImage && (
+                    <Image
+                        src={heroImage.imageUrl}
+                        alt={heroImage.description}
+                        fill
+                        priority
+                        className="object-cover"
+                        data-ai-hint={heroImage.imageHint}
+                    />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                <div className="relative z-10 container px-4 py-8">
+                    <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight drop-shadow-lg">
+                        {translations.about.title}
+                    </h1>
+                </div>
+            </section>
+            <div className="container px-4 py-8 md:py-12">
+                <div className="max-w-3xl mx-auto">
+                    <div className="flex items-center gap-4 mb-6">
+                        <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
+                        <Button
+                            variant="outline"
+                            onClick={handlePlayPause}
+                            aria-label={isPlaying && !isPaused ? translations.pois.pauseNarration : translations.pois.listenNarration}
+                        >
+                            {isPlaying && !isPaused ? (
+                                <PauseIcon className="mr-2 h-4 w-4" />
+                            ) : (
+                                <PlayIcon className="mr-2 h-4 w-4" />
+                            )}
+                            {isPlaying && !isPaused ? translations.pois.pause : (isPaused ? translations.famous.continueNarration : translations.pois.listen)}
+                        </Button>
                     </div>
-                </div>
-
-                <div className="flex items-center gap-4 mb-6">
-                    <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
-                    <Button
-                        variant="outline"
-                        onClick={handlePlayPause}
-                        aria-label={isPlaying && !isPaused ? translations.pois.pauseNarration : translations.pois.listenNarration}
-                    >
-                        {isPlaying && !isPaused ? (
-                            <PauseIcon className="mr-2 h-4 w-4" />
-                        ) : (
-                            <PlayIcon className="mr-2 h-4 w-4" />
-                        )}
-                        {isPlaying && !isPaused ? translations.pois.pause : (isPaused ? translations.famous.continueNarration : translations.pois.listen)}
-                    </Button>
-                </div>
-                
-                <div className="prose prose-lg max-w-none text-foreground/90">
-                    {narrationText.split('\n\n').map((paragraph, index) => (
-                        <p key={index}>{paragraph}</p>
-                    ))}
+                    
+                    <div className="prose prose-lg max-w-none text-foreground/90">
+                        {narrationText.split('\n\n').map((paragraph, index) => (
+                            <p key={index}>{paragraph}</p>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
