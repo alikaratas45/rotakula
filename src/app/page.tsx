@@ -123,7 +123,7 @@ export default function Home() {
                   >
                     <item.icon className="h-7 w-7" />
                   </Button>
-                  <span className="text-center text-sm font-semibold text-muted-foreground group-hover:text-primary transition-colors">
+                  <span className="text-center text-sm font-semibold text-muted-foreground dark:text-white group-hover:text-primary transition-colors">
                     {item.label}
                   </span>
                 </Link>
