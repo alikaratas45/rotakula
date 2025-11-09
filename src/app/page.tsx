@@ -74,7 +74,7 @@ export default function Home() {
     { href: "/accommodation", label: translations.nav.accommodation, icon: BedIcon },
     { href: "/stories", label: translations.nav.stories, icon: BookOpen },
     { href: "/my-routes", label: translations.nav.myRoutes, icon: Heart },
-    { href: "/famous", label: translations.nav.about, icon: Info },
+    { href: "/about", label: translations.nav.about, icon: Info },
     { href: "/qr-scanner", label: translations.nav.qrScanner, icon: QrCode },
   ];
 
