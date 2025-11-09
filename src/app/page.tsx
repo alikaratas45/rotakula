@@ -68,13 +68,13 @@ export default function Home() {
   const heroImage = getImageById('hero-home');
   
   const iconNavItems = [
-    { href: "/food", label: translations.nav.food, icon: Utensils },
     { href: "/pois", label: translations.nav.places, icon: Map },
-    { href: "/create-route", label: translations.nav.createRoute, icon: Route },
     { href: "/nearby", label: translations.nav.nearby, icon: Pin },
-    { href: "/accommodation", label: translations.nav.accommodation, icon: BedIcon },
+    { href: "/create-route", label: translations.nav.createRoute, icon: Route },
     { href: "/stories", label: translations.nav.stories, icon: BookOpen },
     { href: "/about", label: translations.nav.about, icon: Info },
+    { href: "/food", label: translations.nav.food, icon: Utensils },
+    { href: "/accommodation", label: translations.nav.accommodation, icon: BedIcon },
     { href: "/qr-scanner", label: translations.nav.qrScanner, icon: QrCode },
   ];
 

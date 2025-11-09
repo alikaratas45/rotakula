@@ -43,14 +43,14 @@ export function Header() {
     const { language, setLanguage, translations } = useLanguage();
 
     const navLinks = [
-        { href: "/", label: translations.nav.thematicRoutes },
-        { href: "/create-route", label: translations.nav.createRoute },
-        { href: "/food", label: translations.nav.food },
         { href: "/pois", label: translations.nav.places },
         { href: "/nearby", label: translations.nav.nearby },
-        { href: "/accommodation", label: translations.nav.accommodation },
+        { href: "/create-route", label: translations.nav.createRoute },
         { href: "/stories", label: translations.nav.stories },
         { href: "/about", label: translations.nav.about },
+        { href: "/food", label: translations.nav.food },
+        { href: "/accommodation", label: translations.nav.accommodation },
+        { href: "/qr-scanner", label: translations.nav.qrScanner },
     ];
     
     const languageOptions = {
