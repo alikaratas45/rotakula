@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
 export default function PoiSelectionList({
     allPois,
@@ -146,6 +147,35 @@ export default function PoiSelectionList({
                 </ScrollArea>
             )}
 
+            {selectionCount > 0 && (
+                <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                         <Button className={cn("fixed bottom-20 right-4 h-14 w-14 rounded-full shadow-lg z-10 lg:hidden", isStartingRoute && "animate-pulse")}>
+                            {isStartingRoute ? <Loader2 className="h-6 w-6 animate-spin" /> : <Map className="h-6 w-6" />}
+                        </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>{translations.createRoute.chooseTravelMode}</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                {translations.createRoute.travelModeDescription}
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter className="sm:justify-center gap-2">
+                                <AlertDialogAction onClick={() => handleCreateRoute('walking')}>
+                                <Footprints className="mr-2 h-4 w-4" />
+                                {translations.createRoute.walking}
+                            </AlertDialogAction>
+                            <AlertDialogAction onClick={() => handleCreateRoute('driving')}>
+                                <Car className="mr-2 h-4 w-4" />
+                                {translations.createRoute.driving}
+                            </AlertDialogAction>
+                            <AlertDialogCancel>{translations.common.cancel}</AlertDialogCancel>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+            )}
+
             <div className="p-4 border-t lg:hidden flex gap-2">
                  <Drawer>
                     <DrawerTrigger asChild>
@@ -157,35 +187,6 @@ export default function PoiSelectionList({
                         <SelectedPoisSidebar selectedPois={selectedPois} setSelectedPois={() => {}} isDrawer />
                     </DrawerContent>
                 </Drawer>
-                 {selectionCount > 0 && (
-                     <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                             <Button className="w-full" disabled={isStartingRoute}>
-                                {isStartingRoute ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Map className="mr-2 h-4 w-4" />}
-                                {translations.createRoute.createRoute}
-                            </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>{translations.createRoute.chooseTravelMode}</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    {translations.createRoute.travelModeDescription}
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter className="sm:justify-center gap-2">
-                                 <AlertDialogAction onClick={() => handleCreateRoute('walking')}>
-                                    <Footprints className="mr-2 h-4 w-4" />
-                                    {translations.createRoute.walking}
-                                </AlertDialogAction>
-                                <AlertDialogAction onClick={() => handleCreateRoute('driving')}>
-                                    <Car className="mr-2 h-4 w-4" />
-                                    {translations.createRoute.driving}
-                                </AlertDialogAction>
-                                <AlertDialogCancel>{translations.common.cancel}</AlertDialogCancel>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
-                )}
             </div>
         </div>
     )
