@@ -54,7 +54,6 @@ export default function FamousPage() {
             setIsPlaying(false);
             setIsPaused(false);
         };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [narrationText, language, toast, translations]);
 
 
