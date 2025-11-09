@@ -104,7 +104,8 @@
         "travelModeDescription": "Would you like to travel this route by walking or driving? Google Maps will generate directions accordingly.",
         "walking": "Walking",
         "driving": "Driving",
-        "viewSelected": "View Selected"
+        "viewSelected": "View Selected",
+        "viewOnMap": "View on Map"
     },
     "map": {
         "yourLocation": "Your Location",

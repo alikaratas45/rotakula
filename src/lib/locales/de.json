@@ -104,7 +104,8 @@
         "travelModeDescription": "Möchten Sie diese Route zu Fuß oder mit dem Auto zurücklegen? Google Maps generiert die Wegbeschreibung entsprechend.",
         "walking": "Zu Fuß",
         "driving": "Mit dem Auto",
-        "viewSelected": "Auswahl anzeigen"
+        "viewSelected": "Auswahl anzeigen",
+        "viewOnMap": "Auf der Karte anzeigen"
     },
     "map": {
         "yourLocation": "Ihr Standort",

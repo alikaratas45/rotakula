@@ -104,7 +104,8 @@
         "travelModeDescription": "Bu rota için yürüyerek mi yoksa araçla mı seyahat etmek istersiniz? Google Haritalar buna göre yol tarifi oluşturacaktır.",
         "walking": "Yürüyerek",
         "driving": "Araçla",
-        "viewSelected": "Seçilenleri Görüntüle"
+        "viewSelected": "Seçilenleri Görüntüle",
+        "viewOnMap": "Haritada Görüntüle"
     },
     "map": {
         "yourLocation": "Sizin Konumunuz",

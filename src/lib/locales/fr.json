@@ -104,7 +104,8 @@
         "travelModeDescription": "Souhaitez-vous parcourir cet itinéraire à pied ou en voiture ? Google Maps générera les itinéraires en conséquence.",
         "walking": "À pied",
         "driving": "En voiture",
-        "viewSelected": "Voir la sélection"
+        "viewSelected": "Voir la sélection",
+        "viewOnMap": "Voir sur la Carte"
     },
     "map": {
         "yourLocation": "Votre Emplacement",

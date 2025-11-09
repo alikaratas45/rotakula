@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -42,18 +43,13 @@ export default function CreateRoutePage() {
     
     return (
         <DndProvider backend={HTML5Backend}>
-            <div className="flex h-[calc(100vh-4rem)] flex-col lg:flex-row">
-                 <div className="w-full lg:w-2/3 h-1/2 lg:h-full">
-                    <RouteMap pois={selectedPois} />
-                </div>
-                <div className="flex w-full flex-col lg:w-1/3 h-1/2 lg:h-full">
-                    <div className="hidden lg:block h-full">
-                         <SelectedPoisSidebar 
-                            selectedPois={selectedPois} 
-                            setSelectedPois={setSelectedPois}
-                        />
+            <div className="h-[calc(100vh-4rem)]">
+                {/* Desktop View */}
+                <div className="hidden lg:flex h-full">
+                    <div className="w-2/3 h-full">
+                        <RouteMap pois={selectedPois} />
                     </div>
-                     <div className="block lg:hidden h-full relative">
+                    <div className="w-1/3 h-full">
                         <PoiSelectionList 
                             allPois={allPois}
                             selectedPois={selectedPois}
@@ -62,6 +58,17 @@ export default function CreateRoutePage() {
                             loading={loading}
                         />
                     </div>
+                </div>
+                
+                {/* Mobile View */}
+                <div className="block lg:hidden h-full">
+                     <PoiSelectionList 
+                        allPois={allPois}
+                        selectedPois={selectedPois}
+                        onPoiSelect={handlePoiSelect}
+                        maxSelection={MAX_SELECTION}
+                        loading={loading}
+                    />
                 </div>
             </div>
         </DndProvider>

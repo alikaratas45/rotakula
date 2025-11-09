@@ -6,16 +6,16 @@ import { getImageById } from "@/lib/placeholder-images";
 import Image from "next/image";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Info, Map, Footprints, Car } from "lucide-react";
+import { Loader2, Info, Map, Footprints, Car, Eye } from "lucide-react";
 import { useLanguage } from "@/context/language-context";
 import Link from "next/link";
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
-import SelectedPoisSidebar from "./selected-pois-sidebar";
 import { Button } from "@/components/ui/button";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { RouteMap } from "./route-map";
 
 export default function PoiSelectionList({
     allPois,
@@ -88,7 +88,7 @@ export default function PoiSelectionList({
     }
 
     return (
-        <div className="flex flex-col h-full bg-card border-l">
+        <div className="flex flex-col h-full bg-card border-l relative">
             <div className="p-4 border-b">
                 <h2 className="text-xl font-bold font-headline">{translations.createRoute.selectPois}</h2>
                 <p className="text-sm text-muted-foreground">
@@ -146,7 +146,27 @@ export default function PoiSelectionList({
                     </div>
                 </ScrollArea>
             )}
-
+            
+            {/* Action buttons for mobile */}
+            <div className="p-4 border-t lg:hidden flex gap-2">
+                 <Drawer>
+                    <DrawerTrigger asChild>
+                        <Button className="w-full" variant="outline" disabled={selectionCount === 0}>
+                           <Eye className="mr-2 h-4 w-4" />
+                           {translations.createRoute.viewOnMap} ({selectionCount})
+                        </Button>
+                    </DrawerTrigger>
+                    <DrawerContent className="h-[90vh]">
+                        <DrawerHeader>
+                            <DrawerTitle>{translations.route.mapTitle}</DrawerTitle>
+                        </DrawerHeader>
+                        <div className="p-4 flex-grow">
+                            <RouteMap pois={selectedPois} />
+                        </div>
+                    </DrawerContent>
+                </Drawer>
+            </div>
+            
             {selectionCount > 0 && (
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
@@ -176,18 +196,6 @@ export default function PoiSelectionList({
                 </AlertDialog>
             )}
 
-            <div className="p-4 border-t lg:hidden flex gap-2">
-                 <Drawer>
-                    <DrawerTrigger asChild>
-                        <Button className="w-full" variant="outline" disabled={selectionCount === 0}>
-                           {translations.createRoute.viewSelected} ({selectionCount})
-                        </Button>
-                    </DrawerTrigger>
-                    <DrawerContent className="h-[80vh]">
-                        <SelectedPoisSidebar selectedPois={selectedPois} setSelectedPois={() => {}} isDrawer />
-                    </DrawerContent>
-                </Drawer>
-            </div>
         </div>
     )
 }
