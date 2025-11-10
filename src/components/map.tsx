@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Map, AdvancedMarker, useMap, InfoWindow } from "@vis.gl/react-google-maps";
+import { Map, AdvancedMarker, useMap } from "@vis.gl/react-google-maps";
 import { PointOfInterest } from "@/lib/types";
 import { useCallback, useEffect, useState } from "react";
 import { Loader2, Star, Navigation, X } from "lucide-react";
@@ -10,6 +10,8 @@ import { getImageById } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/context/language-context";
 import { useRouter } from "next/navigation";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
+import { cn } from "@/lib/utils";
 
 // --- User Location Marker ---
 function UserLocationMarker() {
@@ -66,15 +68,15 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
   const { translations } = useLanguage();
   const [markersLoaded, setMarkersLoaded] = useState(false);
   const [userPosition, setUserPosition] = useState<{ lat: number; lng: number } | null>(null);
-  const [selectedPoiId, setSelectedPoiId] = useState<string | null>(null);
+  const [selectedPoi, setSelectedPoi] = useState<PointOfInterest | null>(null);
 
 
-  const handleMarkerClick = (poiId: string) => {
-    setSelectedPoiId(poiId);
+  const handleMarkerClick = (poi: PointOfInterest) => {
+    setSelectedPoi(poi);
   };
   
   const handleInfoWindowClose = () => {
-    setSelectedPoiId(null);
+    setSelectedPoi(null);
   }
 
   const handleGetDirections = (poi: PointOfInterest) => {
@@ -138,7 +140,6 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
     ? { lat: pois[0].latitude, lng: pois[0].longitude }
     : { lat: 38.547, lng: 28.52 };
     
-  const selectedPoi = selectedPoiId ? pois.find(p => p.id === selectedPoiId) : null;
   const poiImage = selectedPoi ? getImageById(selectedPoi.imageId) : null;
 
 
@@ -162,20 +163,24 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
       >
         {userPosition && <UserLocationMarker />}
         {pois.map((poi) => (
-          <PoiMarker key={poi.id} poi={poi} onClick={() => handleMarkerClick(poi.id)} />
+          <PoiMarker key={poi.id} poi={poi} onClick={() => handleMarkerClick(poi)} />
         ))}
+      </Map>
+
         {selectedPoi && (
-            <InfoWindow
-                position={{ lat: selectedPoi.latitude, lng: selectedPoi.longitude }}
-                onCloseClick={handleInfoWindowClose}
-                 headerContent={
-                    <h3 className="font-bold font-headline text-md p-2">{selectedPoi.name}</h3>
-                }
-            >
-                <div className="w-72 h-64 p-1 flex flex-col gap-2">
+            <div className="absolute inset-0 z-20 bg-background/90 backdrop-blur-sm p-4 flex items-center justify-center animate-in fade-in">
+                <Card className="w-full max-w-sm overflow-hidden">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="absolute top-2 right-2 z-10 h-8 w-8 rounded-full bg-black/20 hover:bg-black/40 text-white hover:text-white"
+                        onClick={handleInfoWindowClose}
+                    >
+                        <X className="h-5 w-5" />
+                    </Button>
                     {poiImage && (
-                        <div className="relative h-32 w-full rounded-md overflow-hidden flex-shrink-0">
-                            <Image
+                        <div className="relative h-40 w-full">
+                             <Image
                                 src={poiImage.imageUrl}
                                 alt={poiImage.description}
                                 fill
@@ -183,22 +188,24 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
                             />
                         </div>
                     )}
-                    <div className="flex flex-col gap-2 p-1 flex-grow">
-                        <p className="text-sm text-foreground/80 line-clamp-3 flex-shrink">{selectedPoi.description}</p>
-                        <div className="flex flex-col sm:flex-row gap-2 mt-auto">
-                            <Button size="sm" variant="outline" onClick={() => handleGetDirections(selectedPoi)}>
-                                <Navigation className="mr-2 h-4 w-4"/>
-                                {translations.map.getDirections}
-                            </Button>
-                            <Button size="sm" variant="secondary" onClick={() => router.push(`/pois/${selectedPoi.slug}`)}>
-                                {translations.common.moreInfo}
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-            </InfoWindow>
+                    <CardHeader>
+                        <CardTitle>{selectedPoi.name}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-sm text-muted-foreground line-clamp-3">{selectedPoi.description}</p>
+                    </CardContent>
+                    <CardFooter className="flex-col sm:flex-row gap-2">
+                        <Button className="w-full" variant="outline" onClick={() => handleGetDirections(selectedPoi)}>
+                            <Navigation className="mr-2 h-4 w-4"/>
+                            {translations.map.getDirections}
+                        </Button>
+                        <Button className="w-full" variant="secondary" onClick={() => router.push(`/pois/${selectedPoi.slug}`)}>
+                            {translations.common.moreInfo}
+                        </Button>
+                    </CardFooter>
+                </Card>
+            </div>
         )}
-      </Map>
     </div>
   );
 }
@@ -218,7 +225,7 @@ export const NearbySearch = () => {
     const map = useMap();
     const { translations } = useLanguage();
     const [places, setPlaces] = useState<google.maps.places.PlaceResult[]>([]);
-    const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>(null);
+    const [selectedPlace, setSelectedPlace] = useState<google.maps.places.PlaceResult | null>(null);
     const [userPosition, setUserPosition] = useState<{ lat: number; lng: number } | null>(null);
     const [error, setError] = useState<string | null>(null);
 
@@ -257,16 +264,15 @@ export const NearbySearch = () => {
         });
     }, [map, userPosition, translations]);
     
-    const selectedPlace = selectedPlaceId ? places.find(p => p.place_id === selectedPlaceId) : null;
     
-    const handleMarkerClick = (placeId: string) => {
-        if (placeId === selectedPlaceId) {
-            setSelectedPlaceId(null);
-        } else {
-            setSelectedPlaceId(placeId);
-        }
+    const handleMarkerClick = (place: google.maps.places.PlaceResult) => {
+       setSelectedPlace(place);
     }
     
+    const handleInfoWindowClose = () => {
+       setSelectedPlace(null);
+    }
+
     const handleGetDirectionsToPlace = (place: google.maps.places.PlaceResult) => {
         if (!place.geometry?.location) return;
         const lat = place.geometry.location.lat();
@@ -303,35 +309,55 @@ export const NearbySearch = () => {
                 gestureHandling={"greedy"}
                 disableDefaultUI={true}
                 mapId="rotakula-nearby-map"
-                onClick={() => setSelectedPlaceId(null)}
+                onClick={() => setSelectedPlace(null)}
             >
                 {userPosition && <UserLocationMarker />}
                 {places.map((place) => 
-                    place.place_id && <PlaceMarker key={place.place_id} place={place} onClick={() => handleMarkerClick(place.place_id!)} />
+                    place.place_id && <PlaceMarker key={place.place_id} place={place} onClick={() => handleMarkerClick(place)} />
                 )}
-
-                {selectedPlace && (
-                    <InfoWindow
-                        onCloseClick={() => setSelectedPlaceId(null)}
-                        position={selectedPlace.geometry?.location}
-                    >
-                        <div className="max-w-sm p-1 flex flex-col gap-2">
-                            <h3 className="font-bold font-headline text-md">{selectedPlace.name}</h3>
-                             {selectedPlace.rating && (
-                                <div className="flex items-center gap-1 text-sm text-yellow-600">
+            </Map>
+             {selectedPlace && (
+                <div className="absolute inset-0 z-20 bg-background/90 backdrop-blur-sm p-4 flex items-center justify-center animate-in fade-in">
+                    <Card className="w-full max-w-sm overflow-hidden">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="absolute top-2 right-2 z-10 h-8 w-8 rounded-full bg-black/20 hover:bg-black/40 text-white hover:text-white"
+                            onClick={handleInfoWindowClose}
+                        >
+                            <X className="h-5 w-5" />
+                        </Button>
+                        {selectedPlace.photos?.[0] && (
+                            <div className="relative h-40 w-full">
+                                <Image
+                                    src={selectedPlace.photos[0].getUrl({maxWidth: 400, maxHeight: 400})}
+                                    alt={selectedPlace.name || 'Restaurant image'}
+                                    fill
+                                    className="object-cover"
+                                />
+                            </div>
+                        )}
+                        <CardHeader>
+                            <CardTitle>{selectedPlace.name}</CardTitle>
+                            {selectedPlace.rating && (
+                                <CardDescription className="flex items-center gap-1 text-sm text-yellow-600">
                                     <Star className="w-4 h-4 fill-current" /> 
                                     <span>{selectedPlace.rating} ({selectedPlace.user_ratings_total} {translations.map.reviews})</span>
-                                </div>
+                                </CardDescription>
                             )}
-                            <p className="text-sm text-foreground/80 line-clamp-2">{selectedPlace.vicinity}</p>
-                            <Button size="sm" variant="outline" onClick={() => handleGetDirectionsToPlace(selectedPlace)}>
+                        </CardHeader>
+                        <CardContent>
+                             <p className="text-sm text-muted-foreground line-clamp-2">{selectedPlace.vicinity}</p>
+                        </CardContent>
+                        <CardFooter>
+                            <Button className="w-full" variant="outline" onClick={() => handleGetDirectionsToPlace(selectedPlace)}>
                                 <Navigation className="mr-2 h-4 w-4"/>
                                 {translations.map.getDirections}
                             </Button>
-                        </div>
-                    </InfoWindow>
-                )}
-            </Map>
+                        </CardFooter>
+                    </Card>
+                </div>
+            )}
         </div>
     );
 };
@@ -340,3 +366,4 @@ export const NearbySearch = () => {
     
 
     
+
