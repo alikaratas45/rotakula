@@ -184,7 +184,7 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
                         </div>
                     )}
                     <div className="flex flex-col gap-2 p-1">
-                        <p className="text-sm text-foreground/80 line-clamp-3">{selectedPoi.description}</p>
+                        <p className="text-sm text-foreground/80 line-clamp-2">{selectedPoi.description}</p>
                         <div className="flex flex-col sm:flex-row gap-2 mt-2">
                             <Button size="sm" variant="outline" onClick={() => handleGetDirections(selectedPoi)}>
                                 <Navigation className="mr-2 h-4 w-4"/>
@@ -323,7 +323,7 @@ export const NearbySearch = () => {
                                     <span>{selectedPlace.rating} ({selectedPlace.user_ratings_total} {translations.map.reviews})</span>
                                 </div>
                             )}
-                            <p className="text-sm text-foreground/80">{selectedPlace.vicinity}</p>
+                            <p className="text-sm text-foreground/80 line-clamp-2">{selectedPlace.vicinity}</p>
                             <Button size="sm" variant="outline" onClick={() => handleGetDirectionsToPlace(selectedPlace)}>
                                 <Navigation className="mr-2 h-4 w-4"/>
                                 {translations.map.getDirections}
@@ -336,5 +336,7 @@ export const NearbySearch = () => {
     );
 };
 
+
+    
 
     
