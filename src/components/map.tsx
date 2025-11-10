@@ -144,7 +144,7 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
 
 
   return (
-    <div className="h-96 w-full rounded-lg overflow-hidden relative">
+    <div className="h-80 w-full rounded-lg overflow-hidden relative">
       {!markersLoaded && (
         <div className="absolute inset-0 bg-muted/50 flex items-center justify-center z-10">
             <div className="flex items-center gap-2 text-muted-foreground">
@@ -283,7 +283,7 @@ export const NearbySearch = () => {
     
     if (error && places.length === 0) {
         return (
-            <div className="h-96 flex items-center justify-center text-red-600 bg-red-50 border border-red-200 rounded-lg">
+            <div className="h-80 flex items-center justify-center text-red-600 bg-red-50 border border-red-200 rounded-lg">
                 <p>{error}</p>
             </div>
         );
@@ -291,7 +291,7 @@ export const NearbySearch = () => {
 
     if (!userPosition && !error) {
          return (
-            <div className="h-96 flex items-center justify-center bg-muted/50 rounded-lg">
+            <div className="h-80 flex items-center justify-center bg-muted/50 rounded-lg">
                 <div className="flex items-center gap-2 text-muted-foreground">
                     <Loader2 className="w-5 h-5 animate-spin" />
                     <span>{translations.map.loading}</span>
@@ -302,7 +302,7 @@ export const NearbySearch = () => {
     
 
     return (
-        <div className="h-96 w-full rounded-lg overflow-hidden relative">
+        <div className="h-80 w-full rounded-lg overflow-hidden relative">
             <Map
                 center={userPosition || { lat: 38.547, lng: 28.52 }}
                 zoom={14}
@@ -366,4 +366,5 @@ export const NearbySearch = () => {
     
 
     
+
 
