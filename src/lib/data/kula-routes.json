@@ -26,7 +26,7 @@
       "description": "Kula merkezindeki tarihi yapıları, camileri ve konakları adım adım keşfedin.",
       "longDescription": "Kula'nın dar sokaklarında kaybolun, asırlık konakların hikayelerini dinleyin ve geleneksel el sanatlarını yaşatan zanaatkarlarla tanışın. Bu yürüyüş rotası, Kula'nın zengin kültürel mirasını size hissettirecek.",
       "imageId": "route-history",
-      "poiIds": ["poi-6", "poi-20", "poi-32", "poi-29", "poi-21", "poi-4", "poi-22", "poi-23", "poi-24", "poi-25", "poi-28"],
+      "poiIds": ["poi-6", "poi-20", "poi-29", "poi-21", "poi-4", "poi-22", "poi-23", "poi-24", "poi-25", "poi-28", "poi-32"],
       "title_en": "Historic Kula Walking Tour",
       "description_en": "Explore the historic buildings, mosques, and mansions in the center of Kula step by step.",
       "longDescription_en": "Get lost in the narrow streets of Kula, listen to the stories of centuries-old mansions, and meet the artisans who keep traditional crafts alive. This walking route will make you feel the rich cultural heritage of Kula.",
