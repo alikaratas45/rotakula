@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -104,7 +104,7 @@ function FeedbackItem({ feedback }: { feedback: Feedback }) {
   );
 }
 
-function FeedbackList({ isLimited }: { isLimited?: boolean }) {
+function FeedbackList({ isLimited, onDataLoad }: { isLimited?: boolean, onDataLoad: (count: number) => void }) {
   const firestore = useFirestore();
   const feedbackColRef = useMemoFirebase(
     () => collection(firestore, 'feedback'),
@@ -119,6 +119,12 @@ function FeedbackList({ isLimited }: { isLimited?: boolean }) {
     [feedbackColRef, isLimited]
   );
   const { data: feedback, isLoading } = useCollection<Feedback>(feedbackQuery);
+
+  useEffect(() => {
+    if (feedback) {
+      onDataLoad(feedback.length);
+    }
+  }, [feedback, onDataLoad]);
 
   if (isLoading) {
     return (
@@ -136,13 +142,6 @@ function FeedbackList({ isLimited }: { isLimited?: boolean }) {
         <p className="text-center text-muted-foreground">
           Henüz yorum yapılmamış. İlk yorumu siz yapın!
         </p>
-      )}
-       {isLimited && (
-        <div className="text-center pt-4">
-          <Button asChild>
-            <Link href="/feedback">Tüm Yorumları Gör</Link>
-          </Button>
-        </div>
       )}
     </div>
   );
@@ -185,7 +184,7 @@ function FeedbackForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>İstek ve Yorumlarınız</CardTitle>
+        <CardTitle>Site Hakkında Görüşleriniz</CardTitle>
         <CardDescription>
           Uygulama hakkındaki düşüncelerinizi bizimle paylaşın.
         </CardDescription>
@@ -241,10 +240,33 @@ function FeedbackForm() {
 }
 
 export function FeedbackSection({ isLimited = false }: { isLimited?: boolean }) {
-  return (
-    <div className="space-y-8">
-      {!isLimited && <FeedbackForm />}
-      <FeedbackList isLimited={isLimited} />
-    </div>
-  );
+    const [totalFeedback, setTotalFeedback] = useState(0);
+
+    const handleDataLoad = (count: number) => {
+        setTotalFeedback(count);
+    };
+
+    return (
+        <div className="space-y-8">
+            {!isLimited && <FeedbackForm />}
+            {isLimited && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Site Hakkında Görüşleriniz</CardTitle>
+                  <CardDescription>
+                    Uygulama hakkındaki düşüncelerinizi bizimle paylaşın.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            )}
+            <FeedbackList isLimited={isLimited} onDataLoad={handleDataLoad} />
+             {isLimited && totalFeedback > 5 && (
+                <div className="text-center pt-4">
+                <Button asChild>
+                    <Link href="/feedback">Tüm Yorumları Gör</Link>
+                </Button>
+                </div>
+            )}
+        </div>
+    );
 }
