@@ -1,8 +1,8 @@
 rules_version = '2';
 
-// NOTE: Replace 'YOUR_ADMIN_UID' with your actual Firebase User ID after you log in for the first time.
+// NOTE: This file is automatically updated with the admin user's UID.
 function isAdmin() {
-  return request.auth.uid == 'YOUR_ADMIN_UID';
+  return request.auth.uid == 'UXt4xEAkIwUSAQXvaM4pngZCBtI3';
 }
 
 service cloud.firestore {

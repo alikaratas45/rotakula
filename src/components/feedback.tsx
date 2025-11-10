@@ -58,8 +58,8 @@ type Feedback = FeedbackFormValues & {
   };
 };
 
-// NOTE: Replace 'YOUR_ADMIN_UID' with your actual Firebase User ID after you log in for the first time.
-const ADMIN_UID = 'YOUR_ADMIN_UID';
+// Admin UID is set here.
+const ADMIN_UID = 'UXt4xEAkIwUSAQXvaM4pngZCBtI3';
 
 function FeedbackItem({ feedback }: { feedback: Feedback }) {
   const firestore = useFirestore();
