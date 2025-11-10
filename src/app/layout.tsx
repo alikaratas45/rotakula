@@ -1,13 +1,10 @@
-
 import './globals.css';
 import { cn } from '@/lib/utils';
-import { Toaster } from '@/components/ui/toaster';
-import { Header } from '@/components/header';
-import { Footer } from '@/components/footer';
 import { type PropsWithChildren } from 'react';
 import { LanguageProvider } from '@/context/language-context';
 import { ThemeProvider } from 'next-themes';
 import { Providers } from './providers';
+
 
 export const metadata = {
   title: 'RotaKula - Kula Gezi Rehberi',
@@ -29,7 +26,16 @@ export default function RootLayout({
         <meta name="theme-color" content="#4E342E" />
       </head>
       <body className={cn('font-body antialiased min-h-screen flex flex-col')}>
-        <Providers>{children}</Providers>
+         <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <LanguageProvider>
+            <Providers>{children}</Providers>
+          </LanguageProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

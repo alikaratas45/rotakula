@@ -1,14 +1,11 @@
-
 "use client"
 
+import { type PropsWithChildren, useState, useEffect } from 'react';
 import { Toaster } from '@/components/ui/toaster';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
-import { type PropsWithChildren, useState, useEffect } from 'react';
-import { LanguageProvider } from '@/context/language-context';
-import { ThemeProvider } from 'next-themes';
-import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 function SplashScreen() {
     return (
@@ -21,15 +18,15 @@ function SplashScreen() {
     )
 }
 
-
-function AppBody({ children }: PropsWithChildren) {
+export function Providers({ children }: PropsWithChildren) {
   const [loading, setLoading] = useState(true);
   const [animationClass, setAnimationClass] = useState('');
 
   useEffect(() => {
     const timer = setTimeout(() => {
         setAnimationClass('animate-fade-out');
-        setTimeout(() => setLoading(false), 500); // Wait for fade out to complete
+        // Wait for fade out to complete before removing the splash screen
+        setTimeout(() => setLoading(false), 500); 
     }, 2000); 
 
     return () => clearTimeout(timer);
@@ -50,20 +47,5 @@ function AppBody({ children }: PropsWithChildren) {
       <Footer />
       <Toaster />
     </>
-  );
-}
-
-export function Providers({ children }: PropsWithChildren) {
-  return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="light"
-      enableSystem
-      disableTransitionOnChange
-    >
-      <LanguageProvider>
-        <AppBody>{children}</AppBody>
-      </LanguageProvider>
-    </ThemeProvider>
   );
 }
