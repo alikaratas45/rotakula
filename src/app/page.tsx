@@ -162,7 +162,7 @@ export default function Home() {
 
       <section className="py-16 px-4 md:px-8 bg-background">
         <div className="max-w-4xl mx-auto">
-          <FeedbackSection />
+          <FeedbackSection isLimited={true} />
         </div>
       </section>
 

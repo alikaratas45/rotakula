@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import Link from 'next/link';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -11,6 +12,7 @@ import {
   orderBy,
   serverTimestamp,
   doc,
+  limit,
 } from 'firebase/firestore';
 import {
   useFirestore,
@@ -102,18 +104,19 @@ function FeedbackItem({ feedback }: { feedback: Feedback }) {
   );
 }
 
-function FeedbackList() {
+function FeedbackList({ isLimited }: { isLimited?: boolean }) {
   const firestore = useFirestore();
   const feedbackColRef = useMemoFirebase(
     () => collection(firestore, 'feedback'),
     [firestore]
   );
   const feedbackQuery = useMemoFirebase(
-    () =>
-      feedbackColRef
-        ? query(feedbackColRef, orderBy('createdAt', 'desc'))
-        : null,
-    [feedbackColRef]
+    () => {
+        if (!feedbackColRef) return null;
+        const baseQuery = query(feedbackColRef, orderBy('createdAt', 'desc'));
+        return isLimited ? query(baseQuery, limit(5)) : baseQuery;
+    },
+    [feedbackColRef, isLimited]
   );
   const { data: feedback, isLoading } = useCollection<Feedback>(feedbackQuery);
 
@@ -133,6 +136,13 @@ function FeedbackList() {
         <p className="text-center text-muted-foreground">
           Henüz yorum yapılmamış. İlk yorumu siz yapın!
         </p>
+      )}
+       {isLimited && (
+        <div className="text-center pt-4">
+          <Button asChild>
+            <Link href="/feedback">Tüm Yorumları Gör</Link>
+          </Button>
+        </div>
       )}
     </div>
   );
@@ -230,11 +240,11 @@ function FeedbackForm() {
   );
 }
 
-export function FeedbackSection() {
+export function FeedbackSection({ isLimited = false }: { isLimited?: boolean }) {
   return (
     <div className="space-y-8">
-      <FeedbackForm />
-      <FeedbackList />
+      {!isLimited && <FeedbackForm />}
+      <FeedbackList isLimited={isLimited} />
     </div>
   );
 }
