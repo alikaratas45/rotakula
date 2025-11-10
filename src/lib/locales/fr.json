@@ -147,6 +147,9 @@
     },
     "about": {
         "title": "À propos de Kula",
+        "population": "POPULATION",
+        "neighborhoods": "QUARTIERS",
+        "registeredBuildings": "BÂTIMENTS CLASSÉS",
         "content": [
             "Dans l'Antiquité, la région volcanique de Kula et ses environs était appelée Katakekaumene, ce qui signifie « le pays brûlé ». Ce nom décrit l'aspect de la région, couverte de lave noire. Les écrivains antiques tels que Strabon, Vitruve, Étienne de Byzance et Eustathe ont mentionné cette région dans leurs œuvres. Cependant, le seul écrivain à décrire Katakekaumene en détail est Strabon.",
             "Strabon précise que la longueur de la région est d'environ 9 kilomètres et sa largeur de 7 kilomètres. Selon lui, c'est une terre aride couverte de roches noires et de cendres, impropre à toute culture sauf la viticulture. Strabon affirme que cet aspect est le résultat de « la sortie du feu souterrain à la surface ». Il explique également que les collines s'élevant à côté de chacune des trois fosses, appelées « soufflets », ont été formées par des matières chaudes jaillissant du sous-sol.",

@@ -2,12 +2,13 @@
 "use client";
 
 import { useLanguage } from '@/context/language-context';
-import { BookOpen, PauseIcon, PlayIcon } from 'lucide-react';
+import { BookOpen, PauseIcon, PlayIcon, Users, Home, Landmark } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import Image from 'next/image';
 import { getImageById } from '@/lib/placeholder-images';
+import { Card, CardContent } from '@/components/ui/card';
 
 export default function AboutPage() {
     const { language, translations } = useLanguage();
@@ -138,6 +139,12 @@ export default function AboutPage() {
         ? translations.about.content
         : (translations.about.content || "").split('\n\n');
 
+    const stats = [
+        { icon: Users, value: "42.952", label: translations.about.population },
+        { icon: Home, value: "60", label: translations.about.neighborhoods },
+        { icon: Landmark, value: "1150", label: translations.about.registeredBuildings },
+    ];
+
     return (
         <div>
             <section className="relative h-[40vh] md:h-[50vh] w-full flex items-end text-white">
@@ -158,6 +165,24 @@ export default function AboutPage() {
                     </h1>
                 </div>
             </section>
+
+             <section className="py-8 bg-muted/50">
+                <div className="container px-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                        {stats.map((stat, index) => (
+                            <Card key={index} className="bg-transparent border-0 shadow-none">
+                                <CardContent className="flex flex-col items-center justify-center p-4 text-center">
+                                    <stat.icon className="h-10 w-10 text-primary mb-3" strokeWidth={1.5} />
+                                    <p className="text-3xl font-bold font-headline">{stat.value}</p>
+                                    <p className="text-sm font-semibold text-muted-foreground">{stat.label}</p>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+
             <div className="container px-4 py-8 md:py-12">
                 <div className="max-w-3xl mx-auto">
                     <div className="flex items-center gap-4 mb-6">

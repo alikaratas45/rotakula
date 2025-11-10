@@ -147,6 +147,9 @@
     },
     "about": {
         "title": "About Kula",
+        "population": "POPULATION",
+        "neighborhoods": "NEIGHBORHOODS",
+        "registeredBuildings": "REGISTERED BUILDINGS",
         "content": [
             "In ancient times, the volcanic region in and around Kula was called Katakekaumene, meaning 'the burnt land.' This name describes the area's appearance, covered with black lava. Ancient writers such as Strabo, Vitruvius, Stephanus of Byzantium, and Eustathius mentioned this region in their works. However, the only writer to describe Katakekaumene in detail is Strabo.",
             "Strabo specifies the length of the region as approximately 9 kilometers and its width as 7 kilometers. According to him, it is a barren land covered with black rocks and ash, unsuitable for anything but viticulture. Strabo states that this appearance was formed as a result of 'fire from underground coming to the surface.' He also explains that the hills rising next to each of the three pits, called 'bellows,' were formed by hot materials erupting from underground.",
