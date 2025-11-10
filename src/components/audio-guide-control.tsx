@@ -110,9 +110,12 @@ export function AudioGuideControl() {
         );
     };
 
-    const handlePlayAudioForPoi = useCallback((poi: PointOfInterest) => {
+    const handlePlayAudioForPoi = useCallback((poi: PointOfInterest, toastId?: string) => {
+        if (toastId) {
+            dismiss(toastId);
+        }
         router.push(`/pois/${poi.slug}?autoplay=true`);
-    }, [router]);
+    }, [router, dismiss]);
     
     const playProximityAlert = useCallback((poiName: string) => {
         const synth = synthRef.current;
@@ -157,12 +160,12 @@ export function AudioGuideControl() {
                 
                 playProximityAlert(poi.name);
                 
-                toast({
+                const { id: toastId } = toast({
                     title: `${translations.audioGuide.nearby}: ${poi.name}`,
                     description: translations.audioGuide.nearbyDescription,
                     duration: 15000, 
                     action: (
-                        <Button onClick={() => handlePlayAudioForPoi(poi)}>
+                        <Button onClick={() => handlePlayAudioForPoi(poi, toastId)}>
                            <PlayIcon className="mr-2 h-4 w-4" /> {translations.pois.listen}
                         </Button>
                     )
