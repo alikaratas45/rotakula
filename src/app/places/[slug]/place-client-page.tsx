@@ -63,9 +63,9 @@ export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
         };
 
         if (synth.speaking) {
-            if (synth.paused) {
+            if (isPaused) {
                 // The 'resume' function is unreliable. We cancel and restart.
-                synth.cancel();
+                synth.cancel(); // safety cancel
                 startPlayback();
             } else {
                 synth.pause();
@@ -84,7 +84,7 @@ export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
                 startPlayback();
             }
         }
-    }, [poi.longDescription, language, toast, translations]);
+    }, [poi.longDescription, language, toast, translations, isPaused]);
     
     
     useEffect(() => {

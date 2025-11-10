@@ -133,9 +133,9 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
         }
 
         if (synth.speaking) {
-            if (synth.paused) {
+            if (isPaused) {
                  // The 'resume' function is unreliable. We cancel and restart.
-                synth.cancel();
+                synth.cancel(); // safety cancel
                 startPlayback();
             } else {
                 synth.pause();
@@ -148,7 +148,7 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
                 startPlayback();
             }
         }
-    }, [language, narrationText, toast, translations]);
+    }, [language, narrationText, toast, translations, isPaused]);
 
     if (loading) {
       return <div className="container px-4 py-8">{translations.common.loading}...</div>;

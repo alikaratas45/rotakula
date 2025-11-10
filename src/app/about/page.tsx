@@ -119,9 +119,9 @@ export default function AboutPage() {
         }
 
         if (synth.speaking) {
-            if (synth.paused) {
+            if (isPaused) {
                  // The 'resume' function is unreliable. We cancel and restart.
-                synth.cancel();
+                synth.cancel(); // safety cancel
                 startPlayback();
             } else {
                 synth.pause();
@@ -134,7 +134,7 @@ export default function AboutPage() {
                 startPlayback();
             }
         }
-    }, [language, narrationText, toast, translations]);
+    }, [language, narrationText, toast, translations, isPaused]);
 
     const contentParagraphs = Array.isArray(translations.about.content)
         ? translations.about.content
