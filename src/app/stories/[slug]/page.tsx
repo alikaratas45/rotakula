@@ -1,5 +1,5 @@
 
-"use-client"
+"use client"
 
 import { getStoryBySlug } from '@/lib/kula-data';
 import Image from 'next/image';
