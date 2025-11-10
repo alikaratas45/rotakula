@@ -60,7 +60,19 @@ export default function PoiSelectionList({
                         const isDisabled = !isSelected && selectionCount >= maxSelection;
 
                         return (
-                            <Card key={poi.id} className={cn("flex flex-col overflow-hidden transition-all", isDisabled ? "opacity-50" : "cursor-pointer", isSelected ? "ring-2 ring-primary" : "")}>
+                            <Card 
+                                key={poi.id} 
+                                className={cn(
+                                    "flex flex-col overflow-hidden transition-all", 
+                                    isDisabled ? "opacity-50" : "cursor-pointer", 
+                                    isSelected ? "ring-2 ring-primary" : ""
+                                )}
+                                onClick={() => {
+                                    if (!isDisabled) {
+                                        onPoiSelect(poi, !isSelected);
+                                    }
+                                }}
+                            >
                                 <div className="relative">
                                     <div className="relative h-40 w-full">
                                         {image && (
@@ -73,11 +85,15 @@ export default function PoiSelectionList({
                                             />
                                         )}
                                     </div>
-                                    <div className="absolute top-2 right-2">
+                                    <div className="absolute top-2 right-2" onClick={(e) => e.stopPropagation()}>
                                          <Checkbox
                                             id={`poi-${poi.id}`}
                                             checked={isSelected}
-                                            onCheckedChange={(checked) => onPoiSelect(poi, !!checked)}
+                                            onCheckedChange={(checked) => {
+                                                if (!isDisabled) {
+                                                    onPoiSelect(poi, !!checked)
+                                                }
+                                            }}
                                             disabled={isDisabled}
                                             aria-label={`Select ${poi.name}`}
                                             className="h-6 w-6 bg-background/50 border-white/80 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
