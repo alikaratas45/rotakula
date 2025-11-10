@@ -194,7 +194,7 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
                     <CardContent>
                         <p className="text-sm text-muted-foreground line-clamp-3">{selectedPoi.description}</p>
                     </CardContent>
-                    <CardFooter className="flex-col sm:flex-row gap-2">
+                    <CardFooter className="flex gap-2">
                         <Button className="w-full" variant="outline" onClick={() => handleGetDirections(selectedPoi)}>
                             <Navigation className="mr-2 h-4 w-4"/>
                             {translations.map.getDirections}
@@ -349,7 +349,7 @@ export const NearbySearch = () => {
                         <CardContent>
                              <p className="text-sm text-muted-foreground line-clamp-2">{selectedPlace.vicinity}</p>
                         </CardContent>
-                        <CardFooter>
+                        <CardFooter className="flex gap-2">
                             <Button className="w-full" variant="outline" onClick={() => handleGetDirectionsToPlace(selectedPlace)}>
                                 <Navigation className="mr-2 h-4 w-4"/>
                                 {translations.map.getDirections}
@@ -368,3 +368,6 @@ export const NearbySearch = () => {
     
 
 
+
+
+    
