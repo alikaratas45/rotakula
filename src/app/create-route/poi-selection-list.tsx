@@ -60,7 +60,7 @@ export default function PoiSelectionList({
                         const isDisabled = !isSelected && selectionCount >= maxSelection;
 
                         return (
-                            <Card key={poi.id} className={cn("overflow-hidden transition-all", isDisabled ? "opacity-50" : "cursor-pointer", isSelected ? "ring-2 ring-primary" : "")}>
+                            <Card key={poi.id} className={cn("flex flex-col overflow-hidden transition-all", isDisabled ? "opacity-50" : "cursor-pointer", isSelected ? "ring-2 ring-primary" : "")}>
                                 <div className="relative">
                                     <div className="relative h-40 w-full">
                                         {image && (
@@ -84,9 +84,10 @@ export default function PoiSelectionList({
                                         />
                                     </div>
                                 </div>
-                                <CardHeader>
-                                    <CardTitle className="text-md font-semibold">{poi.name}</CardTitle>
-                                </CardHeader>
+                                <CardContent className="p-4 flex-grow flex flex-col">
+                                    <h3 className="text-md font-semibold font-headline">{poi.name}</h3>
+                                    <p className="mt-1 text-sm text-muted-foreground line-clamp-2 flex-grow">{poi.description}</p>
+                                </CardContent>
                             </Card>
                         )
                     })}
