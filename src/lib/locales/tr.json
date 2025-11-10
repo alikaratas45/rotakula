@@ -1,6 +1,7 @@
 
 {
     "nav": {
+        "home": "Ana Sayfa",
         "thematicRoutes": "Tematik Rotalar",
         "createRoute": "Rota Oluştur",
         "stories": "Hikayeler",

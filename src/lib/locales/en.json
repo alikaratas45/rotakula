@@ -1,6 +1,7 @@
 
 {
     "nav": {
+        "home": "Home",
         "thematicRoutes": "Thematic Routes",
         "createRoute": "Create Route",
         "stories": "Stories",

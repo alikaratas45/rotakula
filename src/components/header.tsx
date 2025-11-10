@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import * as React from "react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
-import { Moon, Sun, Check, AudioWaveform, QrCode } from "lucide-react";
+import { Moon, Sun, Home } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -94,6 +94,11 @@ export function Header() {
                         <span className="font-bold font-headline text-lg">RotaKula</span>
                     </Link>
                     <div className="flex items-center gap-1">
+                        <Button asChild variant="outline" size="icon" className="h-8 w-8">
+                            <Link href="/">
+                                <Home className="h-4 w-4" />
+                            </Link>
+                        </Button>
                         <AudioGuideControl />
                         <LanguageSelector isMobile={true} />
                         <ThemeSwitcher isMobile={true} />
@@ -103,6 +108,12 @@ export function Header() {
 
                 {/* Desktop right side */}
                 <div className="hidden md:flex items-center justify-end gap-2">
+                    <Button asChild variant="outline" size="sm" className="h-9">
+                         <Link href="/">
+                            <Home className="mr-2 h-4 w-4" />
+                            {translations.nav.home}
+                        </Link>
+                    </Button>
                     <AudioGuideControl />
                     <LanguageSelector />
                     <ThemeSwitcher />

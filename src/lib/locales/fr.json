@@ -1,6 +1,7 @@
 
 {
     "nav": {
+        "home": "Accueil",
         "thematicRoutes": "Itinéraires Thématiques",
         "createRoute": "Créer un Itinéraire",
         "stories": "Histoires",
