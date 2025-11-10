@@ -25,7 +25,7 @@ export default function AboutPage() {
     const synthRef = useRef<SpeechSynthesis | null>(null);
 
     useEffect(() => {
-        if (!narrationText) return;
+        if (!narrationText || typeof window === 'undefined' || !('speechSynthesis' in window)) return;
 
         const synth = window.speechSynthesis;
         synthRef.current = synth;
@@ -33,46 +33,47 @@ export default function AboutPage() {
         const utterance = new SpeechSynthesisUtterance(narrationText);
         utteranceRef.current = utterance;
 
-        const handleVoicesChanged = () => {
-            if (utteranceRef.current) {
-                updateUtterance(utteranceRef.current);
-            }
+        const onEnd = () => {
+            setIsPlaying(false);
+            setIsPaused(false);
         };
-
-        const updateUtterance = (utterance: SpeechSynthesisUtterance) => {
-            const voices = synth.getVoices();
-            const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
-            if (voice) {
-                utterance.voice = voice;
+        const onError = (event: SpeechSynthesisErrorEvent) => {
+            if (event.error !== 'interrupted') {
+                 toast({
+                    title: translations.toast.audioErrorTitle,
+                    description: `${translations.toast.audioErrorDescription} (${event.error})`,
+                    variant: "destructive"
+                });
             }
-            utterance.lang = language;
-            utterance.text = narrationText;
-
-            utterance.onend = () => {
-                setIsPlaying(false);
-                setIsPaused(false);
-            };
-            utterance.onerror = (event) => {
-                if (event.error !== 'interrupted') {
-                     toast({
-                        title: translations.toast.audioErrorTitle,
-                        description: `${translations.toast.audioErrorDescription} (${event.error})`,
-                        variant: "destructive"
-                    });
-                }
-                setIsPlaying(false);
-                setIsPaused(false);
-            };
+            setIsPlaying(false);
+            setIsPaused(false);
         };
         
+        utterance.addEventListener('end', onEnd);
+        utterance.addEventListener('error', onError);
+
+        const updateVoice = () => {
+            const voices = synth.getVoices();
+            const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
+            if (voice && utteranceRef.current) {
+                utteranceRef.current.voice = voice;
+            }
+             if (utteranceRef.current) {
+                utteranceRef.current.lang = language;
+                utteranceRef.current.text = narrationText;
+            }
+        };
+
         if (synth.getVoices().length === 0) {
-            synth.addEventListener('voiceschanged', handleVoicesChanged);
+            synth.addEventListener('voiceschanged', updateVoice);
         } else {
-            handleVoicesChanged();
+            updateVoice();
         }
 
         return () => {
-            synth.removeEventListener('voiceschanged', handleVoicesChanged);
+            utterance.removeEventListener('end', onEnd);
+            utterance.removeEventListener('error', onError);
+            synth.removeEventListener('voiceschanged', updateVoice);
             if (synth.speaking) {
                 synth.cancel();
             }
@@ -82,9 +83,7 @@ export default function AboutPage() {
 
     const handlePlayPause = useCallback(() => {
         const synth = synthRef.current;
-        const utterance = utteranceRef.current;
-
-        if (!synth || !utterance) {
+        if (!synth || !utteranceRef.current) {
             toast({
                 title: translations.toast.unsupportedTitle,
                 description: translations.toast.unsupportedDescription,
@@ -93,15 +92,26 @@ export default function AboutPage() {
             return;
         }
 
+        const utterance = utteranceRef.current;
+
         const startPlayback = () => {
+            if (synth.speaking) {
+                synth.cancel(); // Cancel any previous speech
+            }
+            // Re-check and set voice right before speaking
             const voices = synth.getVoices();
             const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
             if (voice) {
                 utterance.voice = voice;
             }
-            synth.speak(utterance);
-            setIsPlaying(true);
-            setIsPaused(false);
+            utterance.lang = language;
+            utterance.text = narrationText; // Ensure text is current
+            
+            setTimeout(() => { // Small delay can help
+                synth.speak(utterance);
+                setIsPlaying(true);
+                setIsPaused(false);
+            }, 100);
         }
 
         if (synth.speaking) {
@@ -119,7 +129,7 @@ export default function AboutPage() {
                 startPlayback();
             }
         }
-    }, [language, toast, translations]);
+    }, [language, narrationText, toast, translations]);
 
     const contentParagraphs = Array.isArray(translations.about.content)
         ? translations.about.content

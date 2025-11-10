@@ -27,55 +27,9 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
     const synthRef = useRef<SpeechSynthesis | null>(null);
     const { toast } = useToast();
 
-    useEffect(() => {
-        const synth = window.speechSynthesis;
-        synthRef.current = synth;
-        
-        const utterance = new SpeechSynthesisUtterance(poi.longDescription);
-        utterance.lang = language;
-        
-        utterance.onend = () => {
-            setIsPlaying(false);
-            setIsPaused(false);
-        };
-        utterance.onerror = (event) => {
-             // Don't show an error if the language was changed while speaking
-            if (event.error === 'interrupted') return;
-            toast({
-                title: translations.toast.audioErrorTitle,
-                description: `${translations.toast.audioErrorDescription} (${event.error})`,
-                variant: "destructive"
-            });
-            setIsPlaying(false);
-            setIsPaused(false);
-        };
-        utteranceRef.current = utterance;
-
-        const shouldAutoplay = searchParams.get('autoplay') === 'true';
-        if (shouldAutoplay) {
-            const newPath = `/pois/${poi.slug}`;
-            router.replace(newPath, { scroll: false });
-            setTimeout(() => {
-                handlePlayPause();
-            }, 500);
-        }
-
-        return () => {
-             if (synthRef.current?.speaking) {
-                synthRef.current.cancel();
-            }
-            setIsPlaying(false);
-            setIsPaused(false);
-        };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [poi.longDescription, language]);
-
-
     const handlePlayPause = useCallback(() => {
         const synth = synthRef.current;
-        const utterance = utteranceRef.current;
-
-        if (!synth || !utterance) {
+        if (!synth || !utteranceRef.current) {
             toast({
                 title: translations.toast.unsupportedTitle,
                 description: translations.toast.unsupportedDescription,
@@ -84,35 +38,116 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
             return;
         }
         
+        const utterance = utteranceRef.current;
+
         const startPlayback = () => {
+            if (synth.speaking) {
+                synth.cancel(); // Cancel any previous speech
+            }
+            
+            // Re-check voices right before speaking
             const voices = synth.getVoices();
             const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
             if (voice) {
                 utterance.voice = voice;
             }
-            synth.speak(utterance);
-            setIsPlaying(true);
-            setIsPaused(false);
-        }
 
-        if (synth.speaking && !synth.paused) {
-            synth.pause();
-            setIsPaused(true);
-        } else if (synth.speaking && synth.paused) {
-            synth.resume();
-            setIsPaused(false);
-        } else {
-            if (synth.speaking) {
-                synth.cancel();
+            utterance.lang = language;
+            utterance.text = poi.longDescription;
+            
+            setTimeout(() => {
+                synth.speak(utterance);
+                setIsPlaying(true);
+                setIsPaused(false);
+            }, 100); // A small delay can help in some browsers
+        };
+
+        if (synth.speaking) {
+            if (synth.paused) {
+                synth.resume();
+                setIsPaused(false);
+            } else {
+                synth.pause();
+                setIsPaused(true);
             }
-            // If voices are not loaded yet, wait for them
+        } else {
+            // If voices are not loaded yet, wait for them.
             if (synth.getVoices().length === 0) {
-                 synth.onvoiceschanged = startPlayback;
+                 synth.onvoiceschanged = () => {
+                    // Need to re-check inside the event listener scope
+                    if (synth.getVoices().length > 0) {
+                        startPlayback();
+                    }
+                 };
             } else {
                 startPlayback();
             }
         }
-    }, [toast, translations, language]);
+    }, [poi.longDescription, language, toast, translations]);
+    
+    
+    useEffect(() => {
+        if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+            return;
+        }
+
+        const synth = window.speechSynthesis;
+        synthRef.current = synth;
+
+        const utterance = new SpeechSynthesisUtterance();
+        utteranceRef.current = utterance;
+
+        const onEnd = () => {
+            setIsPlaying(false);
+            setIsPaused(false);
+        };
+
+        const onError = (event: SpeechSynthesisErrorEvent) => {
+            if (event.error !== 'interrupted') {
+                toast({
+                    title: translations.toast.audioErrorTitle,
+                    description: `${translations.toast.audioErrorDescription} (${event.error})`,
+                    variant: "destructive"
+                });
+            }
+            setIsPlaying(false);
+            setIsPaused(false);
+        };
+        
+        utterance.addEventListener('end', onEnd);
+        utterance.addEventListener('error', onError);
+
+        const shouldAutoplay = searchParams.get('autoplay') === 'true';
+
+        const setupAndPlay = () => {
+             if (shouldAutoplay) {
+                const newPath = `/pois/${poi.slug}`;
+                router.replace(newPath, { scroll: false });
+                setTimeout(() => {
+                    handlePlayPause();
+                }, 500); 
+            }
+        }
+
+        if (synth.getVoices().length === 0) {
+            synth.addEventListener('voiceschanged', setupAndPlay);
+        } else {
+            setupAndPlay();
+        }
+
+        return () => {
+             if (synthRef.current?.speaking) {
+                synthRef.current.cancel();
+            }
+            utterance.removeEventListener('end', onEnd);
+            utterance.removeEventListener('error', onError);
+            synth.removeEventListener('voiceschanged', setupAndPlay);
+            setIsPlaying(false);
+            setIsPaused(false);
+        };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [poi.slug, language]);
+
 
     return (
         <APIProvider apiKey={apiKey}>
