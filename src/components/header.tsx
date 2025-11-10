@@ -50,8 +50,11 @@ function AdminAuth() {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
-    } catch (error) {
-      console.error("Error during sign-in:", error);
+    } catch (error: any) {
+      // Ignore the error if the user cancels the popup
+      if (error.code !== 'auth/cancelled-popup-request') {
+        console.error("Error during sign-in:", error);
+      }
     }
   };
 
