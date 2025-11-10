@@ -21,6 +21,7 @@ import { AudioGuideControl } from "./audio-guide-control";
 import { useLanguage } from "@/context/language-context";
 import { TurkishFlagIcon, UKFlagIcon, FrenchFlagIcon, GermanFlagIcon } from "./icons";
 import { useAuth, useUser } from "@/firebase";
+import { useToast } from "@/hooks/use-toast";
 
 
 function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
@@ -45,6 +46,7 @@ function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
 function AdminAuth() {
   const auth = useAuth();
   const { user } = useUser();
+  const { toast } = useToast();
 
   const handleSignIn = async () => {
     if (!auth) return;
@@ -64,12 +66,26 @@ function AdminAuth() {
     }
   };
 
+  const showMyId = () => {
+    if (user) {
+      toast({
+        title: "Yönetici UID'niz:",
+        description: user.uid,
+      });
+    }
+  }
+
   if (user) {
     return (
-      <Button variant="outline" size="sm" className="h-9" onClick={handleSignOut}>
-        <LogOut className="mr-2 h-4 w-4" />
-        Admin Çıkış
-      </Button>
+      <div className="flex gap-2">
+        <Button variant="outline" size="sm" className="h-9" onClick={showMyId}>
+          UID'mi Göster
+        </Button>
+        <Button variant="outline" size="sm" className="h-9" onClick={handleSignOut}>
+          <LogOut className="mr-2 h-4 w-4" />
+          Admin Çıkış
+        </Button>
+      </div>
     );
   }
 
