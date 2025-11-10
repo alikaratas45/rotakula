@@ -1,8 +1,9 @@
+
 "use client"
 
 import { useLanguage } from "@/context/language-context";
 import { Button } from "@/components/ui/button";
-import { Car, Footprints, Loader2, Map, Trash2, GripVertical } from "lucide-react";
+import { Car, Footprints, Loader2, Map, Trash2 } from "lucide-react";
 import type { PointOfInterest } from "@/lib/types";
 import Image from "next/image";
 import { getImageById } from "@/lib/placeholder-images";
@@ -21,13 +22,11 @@ import {
 } from "@/components/ui/alert-dialog"
 import { useState }from 'react';
 
-// Draggable Item Component
-function DraggablePoiItem({ poi, index, movePoi }: { poi: PointOfInterest, index: number, movePoi: (dragIndex: number, hoverIndex: number) => void }) {
+function PoiItem({ poi }: { poi: PointOfInterest }) {
     const image = getImageById(poi.imageId);
 
     return (
         <div className="flex items-center gap-3 rounded-lg border bg-background p-2">
-            <GripVertical className="h-5 w-5 text-muted-foreground cursor-grab" />
             <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-md">
                 {image && <Image src={image.imageUrl} alt={image.description} fill className="object-cover" />}
             </div>
@@ -107,8 +106,8 @@ export default function SelectedPoisSidebar({ selectedPois, setSelectedPois, isD
                     </div>
                 ) : (
                     <div className="space-y-2 p-4">
-                        {selectedPois.map((poi, index) => (
-                           <DraggablePoiItem key={poi.id} index={index} poi={poi} movePoi={() => {}} />
+                        {selectedPois.map((poi) => (
+                           <PoiItem key={poi.id} poi={poi} />
                         ))}
                     </div>
                 )}

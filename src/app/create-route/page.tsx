@@ -5,8 +5,6 @@ import { useEffect, useState } from 'react';
 import { getPois } from '@/lib/kula-data';
 import type { PointOfInterest } from '@/lib/types';
 import { useLanguage } from '@/context/language-context';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import PoiSelectionList from './poi-selection-list';
 import SelectedPoisSidebar from './selected-pois-sidebar';
 import { RouteMap } from './route-map';
@@ -42,29 +40,10 @@ export default function CreateRoutePage() {
     };
     
     return (
-        <DndProvider backend={HTML5Backend}>
-            <div className="h-[calc(100vh-4rem)]">
-                {/* Desktop View */}
-                <div className="hidden lg:grid grid-cols-3 h-full">
-                    <div className="col-span-1 h-full">
-                         <PoiSelectionList 
-                            allPois={allPois}
-                            selectedPois={selectedPois}
-                            onPoiSelect={handlePoiSelect}
-                            maxSelection={MAX_SELECTION}
-                            loading={loading}
-                        />
-                    </div>
-                    <div className="col-span-2 h-full relative">
-                        <RouteMap pois={selectedPois} />
-                         <div className="absolute top-4 right-4 w-80 h-[calc(100%-2rem)] z-10">
-                            <SelectedPoisSidebar selectedPois={selectedPois} setSelectedPois={setSelectedPois} />
-                        </div>
-                    </div>
-                </div>
-                
-                {/* Mobile View */}
-                 <div className="lg:hidden h-full relative">
+        <div className="h-[calc(100vh-4rem)]">
+            {/* Desktop View */}
+            <div className="hidden lg:grid grid-cols-3 h-full">
+                <div className="col-span-1 h-full">
                      <PoiSelectionList 
                         allPois={allPois}
                         selectedPois={selectedPois}
@@ -73,7 +52,24 @@ export default function CreateRoutePage() {
                         loading={loading}
                     />
                 </div>
+                <div className="col-span-2 h-full relative">
+                    <RouteMap pois={selectedPois} />
+                     <div className="absolute top-4 right-4 w-80 h-[calc(100%-2rem)] z-10">
+                        <SelectedPoisSidebar selectedPois={selectedPois} setSelectedPois={setSelectedPois} />
+                    </div>
+                </div>
             </div>
-        </DndProvider>
+            
+            {/* Mobile View */}
+             <div className="lg:hidden h-full relative">
+                 <PoiSelectionList 
+                    allPois={allPois}
+                    selectedPois={selectedPois}
+                    onPoiSelect={handlePoiSelect}
+                    maxSelection={MAX_SELECTION}
+                    loading={loading}
+                />
+            </div>
+        </div>
     );
 }
