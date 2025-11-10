@@ -172,7 +172,7 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
                     <h3 className="font-bold font-headline text-md p-2">{selectedPoi.name}</h3>
                 }
             >
-                <div className="p-1 max-w-xs flex flex-col gap-2">
+                <div className="p-1 max-w-sm flex flex-col gap-2">
                     {poiImage && (
                         <div className="relative h-32 w-full rounded-md overflow-hidden">
                             <Image
@@ -315,7 +315,7 @@ export const NearbySearch = () => {
                         onCloseClick={() => setSelectedPlaceId(null)}
                         position={selectedPlace.geometry?.location}
                     >
-                        <div className="w-64 p-1 flex flex-col gap-2">
+                        <div className="max-w-sm p-1 flex flex-col gap-2">
                             <h3 className="font-bold font-headline text-md">{selectedPlace.name}</h3>
                              {selectedPlace.rating && (
                                 <div className="flex items-center gap-1 text-sm text-yellow-600">
