@@ -41,17 +41,6 @@ function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
 export function Header() {
     const pathname = usePathname();
     const { language, setLanguage, translations } = useLanguage();
-
-    const navLinks = [
-        { href: "/pois", label: translations.nav.places },
-        { href: "/nearby", label: translations.nav.nearby },
-        { href: "/create-route", label: translations.nav.createRoute },
-        { href: "/stories", label: translations.nav.stories },
-        { href: "/about", label: translations.nav.about },
-        { href: "/food", label: translations.nav.food },
-        { href: "/accommodation", label: translations.nav.accommodation },
-        { href: "/qr-scanner", label: translations.nav.qrScanner },
-    ];
     
     const languageOptions = {
         tr: { name: 'Türkçe', Icon: TurkishFlagIcon },
@@ -87,27 +76,13 @@ export function Header() {
         <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container flex h-16 items-center">
                 {/* Desktop Header */}
-                <div className="hidden md:flex mr-6">
+                <div className="hidden md:flex flex-1 items-center">
                     <Link href="/" className="flex items-center space-x-2">
                         <Image src="/logo.png" alt="RotaKula Logo" width={28} height={28} />
                         <span className="hidden font-bold sm:inline-block font-headline text-lg">
                             RotaKula
                         </span>
                     </Link>
-                    <nav className="flex items-center space-x-6 text-sm font-medium ml-6">
-                        {navLinks.map((link) => (
-                             <Link
-                                key={link.href}
-                                href={link.href}
-                                className={cn(
-                                    "font-bold uppercase tracking-wider transition-colors hover:text-primary",
-                                    (pathname === link.href) ? "text-primary" : "text-foreground/60"
-                                )}
-                            >
-                                {link.label}
-                            </Link>
-                        ))}
-                    </nav>
                 </div>
                 
                 {/* Mobile Header */}
@@ -125,7 +100,7 @@ export function Header() {
 
 
                 {/* Desktop right side */}
-                <div className="hidden md:flex flex-1 items-center justify-end gap-2">
+                <div className="hidden md:flex items-center justify-end gap-2">
                     <AudioGuideControl />
                     <LanguageSelector />
                     <ThemeSwitcher />
