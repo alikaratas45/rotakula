@@ -16,6 +16,7 @@ import { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { RouteMap } from "./route-map";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function PoiSelectionList({
     allPois,
@@ -31,66 +32,14 @@ export default function PoiSelectionList({
     loading: boolean
 }) {
     const { translations } = useLanguage();
-    const { toast } = useToast();
     const selectionCount = selectedPois.length;
-    const [isStartingRoute, setIsStartingRoute] = useState(false);
-
 
     const isPoiSelected = (poiId: string) => selectedPois.some(p => p.id === poiId);
     
-    const handleCreateRoute = (travelMode: 'driving' | 'walking') => {
-        if (!navigator.geolocation) {
-            toast({
-                title: translations.toast.locationErrorTitle,
-                description: translations.map.locationError,
-                variant: 'destructive',
-            });
-            return;
-        }
-        if (selectedPois.length < 2) {
-             toast({
-                title: translations.toast.errorTitle,
-                description: translations.createRoute.minPoisError,
-                variant: 'destructive',
-            });
-            return;
-        }
-
-        setIsStartingRoute(true);
-
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const { latitude, longitude } = position.coords;
-                const origin = `${latitude},${longitude}`;
-                
-                const destination = `${selectedPois[selectedPois.length - 1].latitude},${selectedPois[selectedPois.length - 1].longitude}`;
-
-                const waypoints = selectedPois
-                    .slice(0, selectedPois.length - 1)
-                    .map(p => `${p.latitude},${p.longitude}`)
-                    .join('|');
-
-                const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&waypoints=${waypoints}&travelmode=${travelMode}`;
-
-                window.open(googleMapsUrl, '_blank');
-                setIsStartingRoute(false);
-            },
-            (error) => {
-                toast({
-                    title: translations.toast.locationErrorTitle,
-                    description: translations.nearby.locationError,
-                    variant: 'destructive',
-                });
-                setIsStartingRoute(false);
-            },
-            { enableHighAccuracy: true }
-        );
-    }
-
     return (
-        <div className="flex flex-col h-full bg-card border-l relative">
-            <div className="p-4 border-b">
-                <h2 className="text-xl font-bold font-headline">{translations.createRoute.selectPois}</h2>
+        <div className="flex flex-col h-full">
+            <div className="mb-6">
+                <h2 className="text-2xl font-bold font-headline">{translations.createRoute.selectPois}</h2>
                 <p className="text-sm text-muted-foreground">
                     {translations.createRoute.selectDescription.replace('{count}', maxSelection.toString())}
                 </p>
@@ -100,102 +49,49 @@ export default function PoiSelectionList({
             </div>
 
             {loading ? (
-                 <div className="flex-grow flex items-center justify-center">
+                 <div className="flex-grow flex items-center justify-center h-64">
                     <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
                 </div>
             ) : (
-                <ScrollArea className="flex-grow">
-                    <div className="space-y-2 p-4">
-                        {allPois.map(poi => {
-                            const image = getImageById(poi.imageId);
-                            const isSelected = isPoiSelected(poi.id);
-                            const isDisabled = !isSelected && selectionCount >= maxSelection;
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {allPois.map(poi => {
+                        const image = getImageById(poi.imageId);
+                        const isSelected = isPoiSelected(poi.id);
+                        const isDisabled = !isSelected && selectionCount >= maxSelection;
 
-                            return (
-                                <div key={poi.id} className={`flex items-center gap-4 rounded-lg border p-3 transition-colors ${isDisabled ? 'opacity-50' : ''} ${isSelected ? 'bg-accent' : ''}`}>
-                                    <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-md">
+                        return (
+                            <Card key={poi.id} className={cn("overflow-hidden transition-all", isDisabled ? "opacity-50" : "cursor-pointer", isSelected ? "ring-2 ring-primary" : "")}>
+                                <div className="relative">
+                                    <div className="relative h-40 w-full">
                                         {image && (
                                             <Image
                                                 src={image.imageUrl}
                                                 alt={image.description}
                                                 fill
                                                 className="object-cover"
-                                                sizes="64px"
+                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                             />
                                         )}
                                     </div>
-                                    <div className="flex-grow">
-                                        <label htmlFor={`poi-${poi.id}`} className="font-semibold cursor-pointer">{poi.name}</label>
-                                        <p className="text-xs text-muted-foreground line-clamp-2">{poi.description}</p>
-                                    </div>
-                                     <div className="flex items-center gap-2">
-                                        <Link href={`/pois/${poi.slug}`} target="_blank" passHref>
-                                            <Info className="h-5 w-5 text-muted-foreground hover:text-primary"/>
-                                        </Link>
-                                        <Checkbox
+                                    <div className="absolute top-2 right-2">
+                                         <Checkbox
                                             id={`poi-${poi.id}`}
                                             checked={isSelected}
                                             onCheckedChange={(checked) => onPoiSelect(poi, !!checked)}
                                             disabled={isDisabled}
                                             aria-label={`Select ${poi.name}`}
+                                            className="h-6 w-6 bg-background/50 border-white/80 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
                                         />
                                     </div>
                                 </div>
-                            )
-                        })}
-                    </div>
-                </ScrollArea>
+                                <CardHeader>
+                                    <CardTitle className="text-md font-semibold">{poi.name}</CardTitle>
+                                </CardHeader>
+                            </Card>
+                        )
+                    })}
+                </div>
             )}
-            
-            {/* Action buttons for mobile */}
-            <div className="p-4 border-t lg:hidden flex gap-2">
-                 <Drawer>
-                    <DrawerTrigger asChild>
-                        <Button className="w-full" variant="outline" disabled={selectionCount === 0}>
-                           <Eye className="mr-2 h-4 w-4" />
-                           {translations.createRoute.viewOnMap} ({selectionCount})
-                        </Button>
-                    </DrawerTrigger>
-                    <DrawerContent className="h-[90vh]">
-                        <DrawerHeader>
-                            <DrawerTitle>{translations.route.mapTitle}</DrawerTitle>
-                        </DrawerHeader>
-                        <div className="p-4 flex-grow">
-                            <RouteMap pois={selectedPois} />
-                        </div>
-                    </DrawerContent>
-                </Drawer>
-            </div>
-            
-            {selectionCount > 0 && (
-                <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                         <Button className={cn("absolute bottom-20 right-4 h-14 w-14 rounded-full shadow-lg z-10 lg:hidden", isStartingRoute && "animate-pulse")}>
-                            {isStartingRoute ? <Loader2 className="h-6 w-6 animate-spin" /> : <Map className="h-6 w-6" />}
-                        </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>{translations.createRoute.chooseTravelMode}</AlertDialogTitle>
-                            <AlertDialogDescription>
-                                {translations.createRoute.travelModeDescription}
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter className="sm:justify-center gap-2">
-                                <AlertDialogAction onClick={() => handleCreateRoute('walking')}>
-                                <Footprints className="mr-2 h-4 w-4" />
-                                {translations.createRoute.walking}
-                            </AlertDialogAction>
-                            <AlertDialogAction onClick={() => handleCreateRoute('driving')}>
-                                <Car className="mr-2 h-4 w-4" />
-                                {translations.createRoute.driving}
-                            </AlertDialogAction>
-                            <AlertDialogCancel>{translations.common.cancel}</AlertDialogCancel>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
-            )}
-
         </div>
     )
 }

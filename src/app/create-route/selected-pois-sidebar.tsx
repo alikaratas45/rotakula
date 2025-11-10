@@ -26,7 +26,7 @@ function PoiItem({ poi }: { poi: PointOfInterest }) {
     const image = getImageById(poi.imageId);
 
     return (
-        <div className="flex items-center gap-3 rounded-lg border bg-background p-2">
+        <div className="flex items-center gap-3 rounded-lg border bg-background p-2 w-64 flex-shrink-0">
             <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-md">
                 {image && <Image src={image.imageUrl} alt={image.description} fill className="object-cover" />}
             </div>
@@ -93,28 +93,29 @@ export default function SelectedPoisSidebar({ selectedPois, setSelectedPois, isD
 
 
     return (
-        <div className="flex h-full flex-col bg-card border-l">
-            <div className="p-4 border-b">
-                <h2 className="text-xl font-bold font-headline">{translations.createRoute.selectedPois}</h2>
-                 <p className="text-sm text-muted-foreground">{translations.createRoute.dragAndDrop}</p>
-            </div>
-
-            <ScrollArea className="flex-grow">
+        <div className="flex flex-col md:flex-row h-full w-full gap-4 items-center">
+            <div className="flex-grow w-full">
+                <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-lg font-bold font-headline">{translations.createRoute.selectedPois} ({selectedPois.length})</h3>
+                    <p className="text-xs text-muted-foreground hidden md:block">{translations.createRoute.dragAndDrop}</p>
+                </div>
                  {selectedPois.length === 0 ? (
-                    <div className="flex h-full items-center justify-center p-8 text-center">
+                    <div className="flex h-full items-center justify-center p-4 text-center border rounded-lg">
                         <p className="text-muted-foreground">{translations.createRoute.noPoisSelected}</p>
                     </div>
                 ) : (
-                    <div className="space-y-2 p-4">
-                        {selectedPois.map((poi) => (
-                           <PoiItem key={poi.id} poi={poi} />
-                        ))}
-                    </div>
+                    <ScrollArea className="w-full">
+                        <div className="flex gap-2 pb-4">
+                            {selectedPois.map((poi) => (
+                               <PoiItem key={poi.id} poi={poi} />
+                            ))}
+                        </div>
+                    </ScrollArea>
                 )}
-            </ScrollArea>
+            </div>
             
              {selectedPois.length > 0 && (
-                <div className="p-4 border-t space-y-2">
+                <div className="flex-shrink-0 flex md:flex-col gap-2 w-full md:w-auto">
                      <AlertDialog>
                         <AlertDialogTrigger asChild>
                             <Button className="w-full" disabled={isStartingRoute}>

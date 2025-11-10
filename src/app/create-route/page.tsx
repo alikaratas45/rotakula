@@ -40,37 +40,31 @@ export default function CreateRoutePage() {
     };
     
     return (
-        <div className="h-[calc(100vh-4rem)]">
-            {/* Desktop View */}
-            <div className="hidden lg:grid grid-cols-3 xl:grid-cols-4 h-full">
-                 <div className="col-span-2 xl:col-span-3 h-full">
+        <div className="container mx-auto px-4 py-8">
+            <div className="flex flex-col gap-8">
+                {/* POI Selection List */}
+                <div>
+                     <PoiSelectionList 
+                        allPois={allPois}
+                        selectedPois={selectedPois}
+                        onPoiSelect={handlePoiSelect}
+                        maxSelection={MAX_SELECTION}
+                        loading={loading}
+                    />
+                </div>
+                
+                {/* Selected POIs */}
+                {selectedPois.length > 0 && (
+                    <div className="sticky top-16 z-10 bg-background/80 backdrop-blur-sm -mx-4 px-4 py-4 border-y">
+                        <SelectedPoisSidebar selectedPois={selectedPois} setSelectedPois={setSelectedPois} isDrawer />
+                    </div>
+                )}
+                
+                {/* Map */}
+                <div>
+                     <h2 className="text-2xl font-headline font-bold mb-4">{translations.route.mapTitle}</h2>
                     <RouteMap pois={selectedPois} />
                 </div>
-                <div className="col-span-1 flex flex-col h-full bg-card border-l">
-                    <div className="flex-1 min-h-0">
-                        <PoiSelectionList 
-                            allPois={allPois}
-                            selectedPois={selectedPois}
-                            onPoiSelect={handlePoiSelect}
-                            maxSelection={MAX_SELECTION}
-                            loading={loading}
-                        />
-                    </div>
-                    <div className="flex-shrink-0 h-1/3 border-t">
-                        <SelectedPoisSidebar selectedPois={selectedPois} setSelectedPois={setSelectedPois} />
-                    </div>
-                </div>
-            </div>
-            
-            {/* Mobile View */}
-             <div className="lg:hidden h-full relative">
-                 <PoiSelectionList 
-                    allPois={allPois}
-                    selectedPois={selectedPois}
-                    onPoiSelect={handlePoiSelect}
-                    maxSelection={MAX_SELECTION}
-                    loading={loading}
-                />
             </div>
         </div>
     );
