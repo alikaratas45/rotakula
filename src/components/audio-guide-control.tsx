@@ -114,7 +114,7 @@ export function AudioGuideControl() {
         if (toastId) {
             dismiss(toastId);
         }
-        router.push(`/pois/${poi.slug}?autoplay=true`);
+        router.push(`/places/${poi.slug}?autoplay=true`);
     }, [router, dismiss]);
     
     const playProximityAlert = useCallback((poiName: string) => {

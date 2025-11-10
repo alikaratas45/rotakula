@@ -152,7 +152,7 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
                                                     <p className="text-foreground/80 mb-4">{poi.description}</p>
                                                      <div className="flex items-center gap-2">
                                                         <Button asChild variant="secondary" size="sm">
-                                                            <Link href={`/pois/${poi.slug}`}>
+                                                            <Link href={`/places/${poi.slug}`}>
                                                                 <Info className="mr-2 h-4 w-4" />
                                                                 {translations.common.moreInfo}
                                                             </Link>

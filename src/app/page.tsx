@@ -68,7 +68,7 @@ export default function Home() {
   const heroImage = getImageById('hero-home');
   
   const iconNavItems = [
-    { href: "/pois", label: translations.nav.places, icon: Landmark, colorClass: "bg-blue-200 dark:bg-blue-900" },
+    { href: "/places", label: translations.nav.places, icon: Landmark, colorClass: "bg-blue-200 dark:bg-blue-900" },
     { href: "/nearby", label: translations.nav.nearby, icon: Pin, colorClass: "bg-red-200 dark:bg-red-900" },
     { href: "/create-route", label: translations.nav.createRoute, icon: Route, colorClass: "bg-green-200 dark:bg-green-900" },
     { href: "/stories", label: translations.nav.stories, icon: BookOpen, colorClass: "bg-yellow-200 dark:bg-yellow-900" },

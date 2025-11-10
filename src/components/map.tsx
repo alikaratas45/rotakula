@@ -199,7 +199,7 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
                             <Navigation className="mr-2 h-4 w-4"/>
                             {translations.map.getDirections}
                         </Button>
-                        <Button className="w-full" variant="secondary" onClick={() => router.push(`/pois/${selectedPoi.slug}`)}>
+                        <Button className="w-full" variant="secondary" onClick={() => router.push(`/places/${selectedPoi.slug}`)}>
                             {translations.common.moreInfo}
                         </Button>
                     </CardFooter>
