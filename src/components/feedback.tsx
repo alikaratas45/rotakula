@@ -105,7 +105,7 @@ function FeedbackItem({ feedback }: { feedback: Feedback }) {
   );
 }
 
-function FeedbackList({ isLimited, onDataLoad }: { isLimited?: boolean, onDataLoad?: (count: number) => void }) {
+function FeedbackList({ isLimited }: { isLimited?: boolean }) {
   const firestore = useFirestore();
 
   const feedbackQuery = useMemoFirebase(
@@ -118,13 +118,6 @@ function FeedbackList({ isLimited, onDataLoad }: { isLimited?: boolean, onDataLo
   );
 
   const { data: feedback, isLoading } = useCollection<Feedback>(feedbackQuery);
-  
-  useEffect(() => {
-    if (!isLimited && feedback && onDataLoad) {
-        onDataLoad(feedback.length);
-    }
-  }, [feedback, isLimited, onDataLoad]);
-
 
   if (isLoading) {
     return (
@@ -254,17 +247,7 @@ export function FeedbackSection({ isLimited = false }: { isLimited?: boolean }) 
 
     return (
         <div className="space-y-8">
-            {!isLimited && <FeedbackForm />}
-            {isLimited && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Site Hakkında Görüşleriniz</CardTitle>
-                  <CardDescription>
-                    Uygulama hakkındaki düşüncelerinizi bizimle paylaşın.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-            )}
+            <FeedbackForm />
             <FeedbackList isLimited={isLimited} />
              {isLimited && totalFeedback > 5 && (
                 <div className="flex justify-center pt-4">
