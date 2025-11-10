@@ -64,8 +64,9 @@ export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
 
         if (synth.speaking) {
             if (synth.paused) {
-                synth.resume();
-                setIsPaused(false);
+                // The 'resume' function is unreliable. We cancel and restart.
+                synth.cancel();
+                startPlayback();
             } else {
                 synth.pause();
                 setIsPaused(true);

@@ -134,8 +134,9 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
 
         if (synth.speaking) {
             if (synth.paused) {
-                synth.resume();
-                setIsPaused(false);
+                 // The 'resume' function is unreliable. We cancel and restart.
+                synth.cancel();
+                startPlayback();
             } else {
                 synth.pause();
                 setIsPaused(true);
