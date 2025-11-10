@@ -42,19 +42,21 @@ export default function CreateRoutePage() {
     return (
         <div className="h-[calc(100vh-4rem)]">
             {/* Desktop View */}
-            <div className="hidden lg:grid grid-cols-3 h-full">
-                <div className="col-span-1 h-full">
-                     <PoiSelectionList 
-                        allPois={allPois}
-                        selectedPois={selectedPois}
-                        onPoiSelect={handlePoiSelect}
-                        maxSelection={MAX_SELECTION}
-                        loading={loading}
-                    />
-                </div>
-                <div className="col-span-2 h-full relative">
+            <div className="hidden lg:grid grid-cols-3 xl:grid-cols-4 h-full">
+                 <div className="col-span-2 xl:col-span-3 h-full">
                     <RouteMap pois={selectedPois} />
-                     <div className="absolute top-4 right-4 w-80 h-[calc(100%-2rem)] z-10">
+                </div>
+                <div className="col-span-1 flex flex-col h-full bg-card border-l">
+                    <div className="flex-1 min-h-0">
+                        <PoiSelectionList 
+                            allPois={allPois}
+                            selectedPois={selectedPois}
+                            onPoiSelect={handlePoiSelect}
+                            maxSelection={MAX_SELECTION}
+                            loading={loading}
+                        />
+                    </div>
+                    <div className="flex-shrink-0 h-1/3 border-t">
                         <SelectedPoisSidebar selectedPois={selectedPois} setSelectedPois={setSelectedPois} />
                     </div>
                 </div>
