@@ -23,14 +23,14 @@
     }
   },
   "auth": {
-    "providers": ["anonymous"]
+    "providers": ["anonymous", "google.com"]
   },
   "firestore": {
     "/feedback/{feedbackId}": {
       "schema": {
         "$ref": "#/entities/Feedback"
       },
-      "description": "Stores user feedback and suggestions. Publicly readable and writable."
+      "description": "Stores user feedback and suggestions. Publicly readable and writable, but only deletable by an admin."
     }
   }
 }

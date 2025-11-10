@@ -10,12 +10,15 @@ import {
   query,
   orderBy,
   serverTimestamp,
+  doc,
 } from 'firebase/firestore';
 import {
   useFirestore,
   useCollection,
   useMemoFirebase,
   addDocumentNonBlocking,
+  deleteDocumentNonBlocking,
+  useUser,
 } from '@/firebase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -36,7 +39,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Trash2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { tr } from 'date-fns/locale';
 
@@ -55,7 +58,12 @@ type Feedback = FeedbackFormValues & {
   };
 };
 
+// NOTE: Replace 'YOUR_ADMIN_UID' with your actual Firebase User ID after you log in for the first time.
+const ADMIN_UID = 'YOUR_ADMIN_UID';
+
 function FeedbackItem({ feedback }: { feedback: Feedback }) {
+  const firestore = useFirestore();
+  const { user } = useUser();
   const displayDate = useMemo(() => {
     if (!feedback.createdAt?.seconds) {
       return 'biraz önce';
@@ -64,12 +72,27 @@ function FeedbackItem({ feedback }: { feedback: Feedback }) {
     return formatDistanceToNow(date, { addSuffix: true, locale: tr });
   }, [feedback.createdAt]);
 
+  const handleDelete = () => {
+    if (!firestore) return;
+    const docRef = doc(firestore, 'feedback', feedback.id);
+    deleteDocumentNonBlocking(docRef);
+  };
+  
+  const isAdmin = user && user.uid === ADMIN_UID;
+
   return (
     <Card>
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg">{feedback.name}</CardTitle>
-          <CardDescription>{displayDate}</CardDescription>
+          <div className="flex items-center gap-4">
+            <CardDescription>{displayDate}</CardDescription>
+            {isAdmin && (
+              <Button variant="ghost" size="icon" onClick={handleDelete} className="h-8 w-8">
+                <Trash2 className="h-4 w-4 text-destructive" />
+              </Button>
+            )}
+          </div>
         </div>
       </CardHeader>
       <CardContent>

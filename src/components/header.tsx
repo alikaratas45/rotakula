@@ -6,7 +6,8 @@ import { usePathname } from "next/navigation";
 import * as React from "react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
-import { Moon, Sun, Home } from "lucide-react";
+import { Moon, Sun, Home, LogIn, LogOut } from "lucide-react";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,7 @@ import {
 import { AudioGuideControl } from "./audio-guide-control";
 import { useLanguage } from "@/context/language-context";
 import { TurkishFlagIcon, UKFlagIcon, FrenchFlagIcon, GermanFlagIcon } from "./icons";
+import { useAuth, useUser } from "@/firebase";
 
 
 function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
@@ -38,6 +40,44 @@ function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
             <span className="sr-only">{translations.header.toggleTheme}</span>
         </Button>
     )
+}
+
+function AdminAuth() {
+  const auth = useAuth();
+  const { user } = useUser();
+
+  const handleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (error) {
+      console.error("Error during sign-in:", error);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await auth.signOut();
+    } catch (error) {
+      console.error("Error during sign-out:", error);
+    }
+  };
+
+  if (user) {
+    return (
+      <Button variant="outline" size="sm" className="h-9" onClick={handleSignOut}>
+        <LogOut className="mr-2 h-4 w-4" />
+        Admin Çıkış
+      </Button>
+    );
+  }
+
+  return (
+    <Button variant="outline" size="sm" className="h-9" onClick={handleSignIn}>
+      <LogIn className="mr-2 h-4 w-4" />
+      Admin Girişi
+    </Button>
+  );
 }
 
 export function Header() {
@@ -108,6 +148,7 @@ export function Header() {
 
                 {/* Desktop right side */}
                 <div className="hidden md:flex items-center justify-end gap-2">
+                    <AdminAuth />
                     <Button asChild variant="outline" size="sm" className="h-9">
                          <Link href="/">
                             <Home className="mr-2 h-4 w-4" />

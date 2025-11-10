@@ -1,10 +1,17 @@
 rules_version = '2';
 
+// NOTE: Replace 'YOUR_ADMIN_UID' with your actual Firebase User ID after you log in for the first time.
+function isAdmin() {
+  return request.auth.uid == 'YOUR_ADMIN_UID';
+}
+
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow public read and write access to the feedback collection
+    // Allow public read and create access to the feedback collection
     match /feedback/{feedbackId} {
       allow read, create: if true;
+      // Allow delete only for the admin user
+      allow delete: if isAdmin();
     }
   }
 }
