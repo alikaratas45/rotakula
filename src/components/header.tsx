@@ -7,7 +7,7 @@ import * as React from "react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { Moon, Sun, Home, LogIn, LogOut } from "lucide-react";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { signInAnonymously } from "firebase/auth";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -47,18 +47,16 @@ function AdminAuth() {
   const { user } = useUser();
 
   const handleSignIn = async () => {
-    const provider = new GoogleAuthProvider();
+    if (!auth) return;
     try {
-      await signInWithPopup(auth, provider);
+      await signInAnonymously(auth);
     } catch (error: any) {
-      // Ignore the error if the user cancels the popup
-      if (error.code !== 'auth/cancelled-popup-request') {
-        console.error("Error during sign-in:", error);
-      }
+      console.error("Error during anonymous sign-in:", error);
     }
   };
 
   const handleSignOut = async () => {
+    if (!auth) return;
     try {
       await auth.signOut();
     } catch (error) {
