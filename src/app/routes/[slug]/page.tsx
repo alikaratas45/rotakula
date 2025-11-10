@@ -8,10 +8,11 @@ import Image from 'next/image';
 import RouteDetailsClient from './route-details-client';
 import type { ThematicRoute, PointOfInterest } from '@/lib/types';
 import { useLanguage } from '@/context/language-context';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import { Loader2 } from 'lucide-react';
 
 export default function RoutePage({ params }: { params: { slug: string } }) {
+    const { slug } = use(params);
     const { language } = useLanguage();
     const [route, setRoute] = useState<ThematicRoute | null>(null);
     const [pois, setPois] = useState<PointOfInterest[]>([]);
@@ -20,7 +21,7 @@ export default function RoutePage({ params }: { params: { slug: string } }) {
     useEffect(() => {
         async function fetchRouteData() {
             setLoading(true);
-            const routeData = await getRouteBySlug(params.slug, language);
+            const routeData = await getRouteBySlug(slug, language);
             if (routeData) {
                 setRoute(routeData);
                 const poisData = await getPoisByIds(routeData.poiIds, language);
@@ -29,7 +30,7 @@ export default function RoutePage({ params }: { params: { slug: string } }) {
             setLoading(false);
         }
         fetchRouteData();
-    }, [params.slug, language]);
+    }, [slug, language]);
 
     const heroImage = route ? getImageById(route.imageId) : null;
     

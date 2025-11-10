@@ -1,5 +1,5 @@
 
-"use client"
+"use-client"
 
 import { getStoryBySlug } from '@/lib/kula-data';
 import Image from 'next/image';
@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 
 export default function StoryPage({ params }: { params: { slug: string } }) {
-    const slug = use(params).slug;
+    const { slug } = use(params);
     const { language, translations } = useLanguage();
     const { toast } = useToast();
     const [story, setStory] = useState<Story | null>(null);

@@ -5,11 +5,12 @@ import { getPoiBySlug } from '@/lib/kula-data';
 import { notFound } from 'next/navigation';
 import PoiClientPage from './poi-client-page';
 import { useLanguage } from '@/context/language-context';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import type { PointOfInterest } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
 
 export default function PoiDetailPage({ params }: { params: { slug: string } }) {
+    const { slug } = use(params);
     const { language } = useLanguage();
     const [poi, setPoi] = useState<PointOfInterest | null>(null);
     const [loading, setLoading] = useState(true);
@@ -17,14 +18,14 @@ export default function PoiDetailPage({ params }: { params: { slug: string } }) 
     useEffect(() => {
         async function fetchPoi() {
             setLoading(true);
-            const poiData = await getPoiBySlug(params.slug, language);
+            const poiData = await getPoiBySlug(slug, language);
             if (poiData) {
                 setPoi(poiData);
             }
             setLoading(false);
         }
         fetchPoi();
-    }, [params.slug, language]);
+    }, [slug, language]);
 
     if (loading) {
         return (
