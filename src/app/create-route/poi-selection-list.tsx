@@ -33,6 +33,7 @@ export default function PoiSelectionList({
 }) {
     const { translations } = useLanguage();
     const selectionCount = selectedPois.length;
+    const [expandedPoiId, setExpandedPoiId] = useState<string | null>(null);
 
     const isPoiSelected = (poiId: string) => selectedPois.some(p => p.id === poiId);
     
@@ -58,6 +59,7 @@ export default function PoiSelectionList({
                         const image = getImageById(poi.imageId);
                         const isSelected = isPoiSelected(poi.id);
                         const isDisabled = !isSelected && selectionCount >= maxSelection;
+                        const isExpanded = expandedPoiId === poi.id;
 
                         return (
                             <Card 
@@ -100,9 +102,18 @@ export default function PoiSelectionList({
                                         />
                                     </div>
                                 </div>
-                                <CardContent className="p-4 flex-grow flex flex-col">
+                                <CardContent 
+                                    className="p-4 flex-grow flex flex-col"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setExpandedPoiId(isExpanded ? null : poi.id);
+                                    }}
+                                >
                                     <h3 className="text-md font-semibold font-headline">{poi.name}</h3>
-                                    <p className="mt-1 text-sm text-muted-foreground line-clamp-2 flex-grow">{poi.description}</p>
+                                    <p className={cn(
+                                        "mt-1 text-sm text-muted-foreground flex-grow",
+                                        !isExpanded && "line-clamp-2"
+                                    )}>{poi.description}</p>
                                 </CardContent>
                             </Card>
                         )
