@@ -68,7 +68,6 @@ export default function Home() {
   const heroImage = getImageById('hero-home');
   
   const iconNavItems = [
-    { href: "/pois", label: translations.nav.places, icon: Landmark, colorClass: "bg-blue-200 dark:bg-blue-900" },
     { href: "/nearby", label: translations.nav.nearby, icon: Pin, colorClass: "bg-red-200 dark:bg-red-900" },
     { href: "/create-route", label: translations.nav.createRoute, icon: Route, colorClass: "bg-green-200 dark:bg-green-900" },
     { href: "/stories", label: translations.nav.stories, icon: BookOpen, colorClass: "bg-yellow-200 dark:bg-yellow-900" },
@@ -105,12 +104,32 @@ export default function Home() {
       <section className="py-12 px-4 md:px-8 bg-background relative z-20">
          <div className="max-w-5xl mx-auto">
             <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
+               <Link
+                  href="/pois"
+                  className="flex flex-col items-center gap-2 group animate-fade-in-up"
+                   style={{ animationDelay: `0ms` }}
+                >
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    className={cn(
+                      "h-16 w-16 rounded-full group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 transform group-hover:scale-110",
+                      "bg-blue-200 dark:bg-blue-900"
+                    )}
+                    aria-label={translations.nav.places}
+                  >
+                    <Landmark className="h-7 w-7" />
+                  </Button>
+                  <span className="text-center text-sm font-semibold text-muted-foreground dark:text-white group-hover:text-primary transition-colors">
+                    {translations.nav.places}
+                  </span>
+                </Link>
               {iconNavItems.map((item, index) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   className="flex flex-col items-center gap-2 group animate-fade-in-up"
-                   style={{ animationDelay: `${index * 100}ms` }}
+                   style={{ animationDelay: `${(index + 1) * 100}ms` }}
                 >
                   <Button
                     variant="secondary"
