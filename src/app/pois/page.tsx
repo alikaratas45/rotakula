@@ -41,8 +41,7 @@ export default function PoisPage() {
             try {
                 setIsLoading(true);
                 const allPois = await getPois(language);
-                const filteredPois = allPois.filter(poi => poi.category !== 'food' && poi.category !== 'accommodation');
-                setPois(filteredPois);
+                setPois(allPois);
             } catch (error) {
                 console.error("Failed to fetch POIs", error);
             } finally {
