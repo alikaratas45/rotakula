@@ -122,7 +122,6 @@
         "unsupportedDescription": "Ihr Browser unterstützt die Audio-Erzählfunktion nicht.",
         "audioErrorTitle": "Audio-Fehler",
         "audioErrorDescription": "Während der Audiowiedergabe ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.",
-        "audioErrorApi": "Audiodaten konnten nicht vom Server abgerufen werden.",
         "audioGuideUnsupported": "Ihr Browser unterstützt die für den Audioguide erforderlichen Standort- oder Sprachsynthesedienste nicht.",
         "locationErrorTitle": "Standortfehler",
         "locationErrorDescription": "Auf Ihren Standort kann nicht zugegriffen werden. Bitte überprüfen Sie Ihre Browsereinstellungen.",

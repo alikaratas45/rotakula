@@ -122,7 +122,6 @@
         "unsupportedDescription": "Votre navigateur ne prend pas en charge la fonction de narration audio.",
         "audioErrorTitle": "Erreur Audio",
         "audioErrorDescription": "Une erreur s'est produite lors de la narration audio. Veuillez réessayer plus tard.",
-        "audioErrorApi": "Échec de la récupération des données audio du serveur.",
         "audioGuideUnsupported": "Votre navigateur ne prend pas en charge les services de localisation ou de synthèse vocale nécessaires pour la fonction d'audio guide.",
         "locationErrorTitle": "Erreur de Localisation",
         "locationErrorDescription": "Impossible d'accéder à votre emplacement. Veuillez vérifier les paramètres de votre navigateur.",

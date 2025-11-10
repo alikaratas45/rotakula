@@ -122,7 +122,6 @@
         "unsupportedDescription": "Your browser does not support the audio narration feature.",
         "audioErrorTitle": "Audio Error",
         "audioErrorDescription": "An error occurred during audio narration. Please try again later.",
-        "audioErrorApi": "Failed to get audio data from the server.",
         "audioGuideUnsupported": "Your browser does not support the necessary location or speech synthesis services for the audio guide feature.",
         "locationErrorTitle": "Location Error",
         "locationErrorDescription": "Cannot access your location. Please check your browser settings.",

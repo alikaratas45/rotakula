@@ -122,7 +122,6 @@
         "unsupportedDescription": "Tarayıcınız sesli anlatım özelliğini desteklemiyor.",
         "audioErrorTitle": "Ses Hatası",
         "audioErrorDescription": "Sesli anlatım sırasında bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
-        "audioErrorApi": "Sunucudan ses verisi alınamadı.",
         "audioGuideUnsupported": "Tarayıcınız sesli rehber özelliği için gerekli olan konum veya ses sentezleme servislerini desteklemiyor.",
         "locationErrorTitle": "Konum Hatası",
         "locationErrorDescription": "Konumunuza erişilemiyor. Lütfen tarayıcı ayarlarınızı kontrol edin.",
@@ -176,5 +175,3 @@
         "continueNarration": "Devam Et"
     }
 }
-
-    
