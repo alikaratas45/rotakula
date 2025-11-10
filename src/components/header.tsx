@@ -43,7 +43,7 @@ function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
     )
 }
 
-function AdminAuth() {
+function AdminAuth({ isMobile = false }: { isMobile?: boolean }) {
   const auth = useAuth();
   const { user } = useUser();
   const { toast } = useToast();
@@ -68,7 +68,7 @@ function AdminAuth() {
 
   if (user) {
     return (
-      <Button variant="outline" size="sm" className="h-9" onClick={handleSignOut}>
+      <Button variant="outline" size="sm" className={cn("h-9", isMobile && "w-full justify-start")} onClick={handleSignOut}>
         <LogOut className="mr-2 h-4 w-4" />
         Admin Çıkış
       </Button>
@@ -76,7 +76,7 @@ function AdminAuth() {
   }
 
   return (
-    <Button variant="outline" size="sm" className="h-9" onClick={handleSignIn}>
+    <Button variant="outline" size="sm" className={cn("h-9", isMobile && "w-full justify-start")} onClick={handleSignIn}>
       <LogIn className="mr-2 h-4 w-4" />
       Admin Girişi
     </Button>
