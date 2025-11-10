@@ -1,44 +1,19 @@
 
-"use client"
-
 import { getRouteBySlug, getPoisByIds } from '@/lib/kula-data';
 import { notFound } from 'next/navigation';
 import { getImageById } from '@/lib/placeholder-images';
 import Image from 'next/image';
 import RouteDetailsClient from './route-details-client';
-import { useLanguage } from '@/context/language-context';
-import { useEffect, useState, use } from 'react';
 import type { ThematicRoute, PointOfInterest } from '@/lib/types';
 
-export default function RoutePage({ params }: { params: { slug: string } }) {
-    const slug = use(params).slug;
-    const { language, translations } = useLanguage();
-    const [route, setRoute] = useState<ThematicRoute | null>(null);
-    const [pois, setPois] = useState<PointOfInterest[]>([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        async function fetchData() {
-            setLoading(true);
-            const routeData = await getRouteBySlug(slug, language);
-            if (routeData) {
-                const poisData = await getPoisByIds(routeData.poiIds, language);
-                setRoute(routeData);
-                setPois(poisData);
-            }
-            setLoading(false);
-        }
-        fetchData();
-    }, [slug, language]);
-
-    if (loading) {
-        return <div className="container px-4 py-8">{translations.common.loading}...</div>;
-    }
+export default async function RoutePage({ params }: { params: { slug: string } }) {
+    const route = await getRouteBySlug(params.slug, 'tr');
 
     if (!route) {
         notFound();
     }
 
+    const pois = await getPoisByIds(route.poiIds, 'tr');
     const heroImage = getImageById(route.imageId);
 
     return (
