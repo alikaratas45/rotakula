@@ -13,6 +13,7 @@ import {
   serverTimestamp,
   doc,
   limit,
+  getCountFromServer
 } from 'firebase/firestore';
 import {
   useFirestore,
@@ -106,10 +107,13 @@ function FeedbackItem({ feedback }: { feedback: Feedback }) {
 
 function FeedbackList({ isLimited, onDataLoad }: { isLimited?: boolean, onDataLoad: (count: number) => void }) {
   const firestore = useFirestore();
+
   const feedbackColRef = useMemoFirebase(
     () => collection(firestore, 'feedback'),
     [firestore]
   );
+  
+  // Query for fetching the actual documents, limited or not
   const feedbackQuery = useMemoFirebase(
     () => {
         if (!feedbackColRef) return null;
@@ -118,13 +122,20 @@ function FeedbackList({ isLimited, onDataLoad }: { isLimited?: boolean, onDataLo
     },
     [feedbackColRef, isLimited]
   );
+
   const { data: feedback, isLoading } = useCollection<Feedback>(feedbackQuery);
 
   useEffect(() => {
-    if (feedback) {
-      onDataLoad(feedback.length);
+    if (isLimited && feedbackColRef) {
+        // If it's the limited view (homepage), we need a separate count query
+        getCountFromServer(feedbackColRef).then(snapshot => {
+            onDataLoad(snapshot.data().count);
+        });
+    } else if (feedback) {
+        // For the full feedback page, the count is just the length of the data
+        onDataLoad(feedback.length);
     }
-  }, [feedback, onDataLoad]);
+  }, [feedback, feedbackColRef, isLimited, onDataLoad]);
 
   if (isLoading) {
     return (
