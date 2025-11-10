@@ -24,25 +24,54 @@ export default function AboutPage() {
     
     const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
     const synthRef = useRef<SpeechSynthesis | null>(null);
+    const [remainingText, setRemainingText] = useState(narrationText);
+    const charIndexRef = useRef(0);
 
     useEffect(() => {
-        if (!narrationText || typeof window === 'undefined' || !('speechSynthesis' in window)) return;
-
-        const synth = window.speechSynthesis;
-        synthRef.current = synth;
-
-        const utterance = new SpeechSynthesisUtterance(narrationText);
-        utteranceRef.current = utterance;
-
-        const onEnd = () => {
-            setIsPlaying(false);
-            setIsPaused(false);
-            if (synthRef.current) {
+        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+            synthRef.current = window.speechSynthesis;
+        }
+        setRemainingText(narrationText);
+        charIndexRef.current = 0;
+        // Clean up on narration text change
+        return () => {
+            if (synthRef.current?.speaking) {
                 synthRef.current.cancel();
             }
         };
-        const onError = (event: SpeechSynthesisErrorEvent) => {
-            if (event.error !== 'interrupted') {
+    }, [narrationText]);
+    
+    const startPlayback = (textToSpeak: string) => {
+        const synth = synthRef.current;
+        if (!synth || !textToSpeak) return;
+
+        if (synth.speaking) {
+            synth.cancel();
+        }
+
+        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        utteranceRef.current = utterance;
+        
+        const voices = synth.getVoices();
+        const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
+        if (voice) {
+            utterance.voice = voice;
+        }
+        utterance.lang = language;
+
+        utterance.onboundary = (event) => {
+            charIndexRef.current = event.charIndex;
+        };
+
+        utterance.onend = () => {
+            setIsPlaying(false);
+            setIsPaused(false);
+            charIndexRef.current = 0;
+            setRemainingText(narrationText); // Reset for next play
+        };
+
+        utterance.onerror = (event) => {
+             if (event.error !== 'interrupted') {
                  toast({
                     title: translations.toast.audioErrorTitle,
                     description: `${translations.toast.audioErrorDescription} (${event.error})`,
@@ -51,43 +80,20 @@ export default function AboutPage() {
             }
             setIsPlaying(false);
             setIsPaused(false);
+            charIndexRef.current = 0;
+            setRemainingText(narrationText); // Reset on error
         };
         
-        utterance.addEventListener('end', onEnd);
-        utterance.addEventListener('error', onError);
-
-        const updateVoice = () => {
-            const voices = synth.getVoices();
-            const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
-            if (voice && utteranceRef.current) {
-                utteranceRef.current.voice = voice;
-            }
-             if (utteranceRef.current) {
-                utteranceRef.current.lang = language;
-                utteranceRef.current.text = narrationText;
-            }
-        };
-
-        if (synth.getVoices().length === 0) {
-            synth.addEventListener('voiceschanged', updateVoice);
-        } else {
-            updateVoice();
-        }
-
-        return () => {
-            utterance.removeEventListener('end', onEnd);
-            utterance.removeEventListener('error', onError);
-            synth.removeEventListener('voiceschanged', updateVoice);
-            if (synth.speaking) {
-                synth.cancel();
-            }
-        };
-    }, [narrationText, language, toast, translations]);
-
+        setTimeout(() => {
+            synth.speak(utterance);
+            setIsPlaying(true);
+            setIsPaused(false);
+        }, 100);
+    };
 
     const handlePlayPause = useCallback(() => {
         const synth = synthRef.current;
-        if (!synth || !utteranceRef.current) {
+        if (!synth) {
             toast({
                 title: translations.toast.unsupportedTitle,
                 description: translations.toast.unsupportedDescription,
@@ -96,45 +102,36 @@ export default function AboutPage() {
             return;
         }
 
-        const utterance = utteranceRef.current;
-
-        const startPlayback = () => {
-            if (synth.speaking) {
-                synth.cancel(); // Cancel any previous speech
-            }
-            // Re-check and set voice right before speaking
-            const voices = synth.getVoices();
-            const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
-            if (voice) {
-                utterance.voice = voice;
-            }
-            utterance.lang = language;
-            utterance.text = narrationText; // Ensure text is current
+        if (synth.speaking && !isPaused) { // Is playing, so pause it
+            const fullText = narrationText;
+            const spokenText = fullText.substring(0, charIndexRef.current);
+            const remaining = fullText.substring(charIndexRef.current);
+            setRemainingText(remaining);
             
-            setTimeout(() => { // Small delay can help
-                synth.speak(utterance);
-                setIsPlaying(true);
-                setIsPaused(false);
-            }, 100);
-        }
+            synth.cancel(); // Use cancel instead of pause
+            setIsPaused(true);
+            setIsPlaying(false);
 
-        if (synth.speaking) {
-            if (isPaused) {
-                 // The 'resume' function is unreliable. We cancel and restart.
-                synth.cancel(); // safety cancel
-                startPlayback();
-            } else {
-                synth.pause();
-                setIsPaused(true);
-            }
-        } else {
+        } else { // Is paused or not started, so play
              if (synth.getVoices().length === 0) {
-                synth.onvoiceschanged = startPlayback;
+                 synth.onvoiceschanged = () => startPlayback(remainingText);
             } else {
-                startPlayback();
+                startPlayback(remainingText);
             }
         }
-    }, [language, narrationText, toast, translations, isPaused]);
+    }, [isPaused, remainingText, narrationText, toast, translations]);
+
+
+     useEffect(() => {
+        // Cleanup function to cancel speech synthesis when the component unmounts
+        // or when dependencies change, which triggers a re-run of this effect.
+        return () => {
+            if (synthRef.current?.speaking) {
+                synthRef.current.cancel();
+            }
+        };
+    }, [language]);
+
 
     const contentParagraphs = Array.isArray(translations.about.content)
         ? translations.about.content
@@ -192,14 +189,14 @@ export default function AboutPage() {
                             <Button
                                 variant="outline"
                                 onClick={handlePlayPause}
-                                aria-label={isPlaying && !isPaused ? translations.pois.pauseNarration : translations.pois.listenNarration}
+                                aria-label={isPlaying ? translations.pois.pauseNarration : translations.pois.listenNarration}
                             >
-                                {isPlaying && !isPaused ? (
+                                {isPlaying ? (
                                     <PauseIcon className="mr-2 h-4 w-4" />
                                 ) : (
                                     <PlayIcon className="mr-2 h-4 w-4" />
                                 )}
-                                {isPlaying && !isPaused ? translations.pois.pause : (isPaused ? translations.famous.continueNarration : translations.pois.listen)}
+                                {isPlaying ? translations.pois.pause : (isPaused ? translations.famous.continueNarration : translations.pois.listen)}
                             </Button>
                         )}
                     </div>
