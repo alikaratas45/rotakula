@@ -14,7 +14,11 @@
     },
     "header": {
         "menu": "Menu",
-        "menuDescription": "You can use the links below to navigate within the application."
+        "menuDescription": "You can use the links below to navigate within the application.",
+        "toggleTheme": "Toggle theme"
+    },
+    "footer": {
+        "copyright": "All rights reserved."
     },
     "home": {
         "heroTitle": "Discover the Hidden Treasures of Kula",
@@ -64,8 +68,6 @@
         "mapTitle": "Route Map",
         "whatsOnThisRoute": "What's on This Route?",
         "routeInfo": "Route Information",
-        "saveRoute": "Save Route",
-        "saved": "Saved",
         "stops": "Stops"
     },
      "qrScanner": {

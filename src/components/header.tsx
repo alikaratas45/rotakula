@@ -23,6 +23,7 @@ import { TurkishFlagIcon, UKFlagIcon, FrenchFlagIcon, GermanFlagIcon } from "./i
 
 function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
     const { setTheme, theme } = useTheme();
+    const { translations } = useLanguage();
     
     return (
          <Button
@@ -30,10 +31,11 @@ function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
             size={isMobile ? "icon" : "icon"}
             onClick={() => setTheme(theme === "light" ? "dark" : "light")}
             className={cn("h-8 w-8", !isMobile && "h-9 w-9")}
+            aria-label={translations.header.toggleTheme}
         >
             <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
             <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-            <span className="sr-only">Toggle theme</span>
+            <span className="sr-only">{translations.header.toggleTheme}</span>
         </Button>
     )
 }

@@ -14,7 +14,11 @@
     },
     "header": {
         "menu": "Menü",
-        "menuDescription": "Uygulama içinde gezinmek için aşağıdaki bağlantıları kullanabilirsiniz."
+        "menuDescription": "Uygulama içinde gezinmek için aşağıdaki bağlantıları kullanabilirsiniz.",
+        "toggleTheme": "Temayı değiştir"
+    },
+    "footer": {
+        "copyright": "Tüm hakları saklıdır."
     },
     "home": {
         "heroTitle": "Kula'nın Saklı Hazinelerini Keşfedin",
@@ -64,8 +68,6 @@
         "mapTitle": "Rota Haritası",
         "whatsOnThisRoute": "Bu Rotada Neler Var?",
         "routeInfo": "Rota Bilgileri",
-        "saveRoute": "Rotayı Kaydet",
-        "saved": "Kaydedildi",
         "stops": "Duraklar"
     },
      "qrScanner": {

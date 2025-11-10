@@ -14,7 +14,11 @@
     },
     "header": {
         "menu": "Menü",
-        "menuDescription": "Sie können die folgenden Links verwenden, um innerhalb der Anwendung zu navigieren."
+        "menuDescription": "Sie können die folgenden Links verwenden, um innerhalb der Anwendung zu navigieren.",
+        "toggleTheme": "Thema wechseln"
+    },
+    "footer": {
+        "copyright": "Alle Rechte vorbehalten."
     },
     "home": {
         "heroTitle": "Entdecken Sie die verborgenen Schätze von Kula",
@@ -64,8 +68,6 @@
         "mapTitle": "Routenkarte",
         "whatsOnThisRoute": "Was gibt es auf dieser Route?",
         "routeInfo": "Routeninformationen",
-        "saveRoute": "Route Speichern",
-        "saved": "Gespeichert",
         "stops": "Stopps"
     },
      "qrScanner": {

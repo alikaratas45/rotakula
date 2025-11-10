@@ -14,7 +14,11 @@
     },
     "header": {
         "menu": "Menu",
-        "menuDescription": "Vous pouvez utiliser les liens ci-dessous pour naviguer dans l'application."
+        "menuDescription": "Vous pouvez utiliser les liens ci-dessous pour naviguer dans l'application.",
+        "toggleTheme": "Changer de thème"
+    },
+    "footer": {
+        "copyright": "Tous droits réservés."
     },
     "home": {
         "heroTitle": "Découvrez les trésors cachés de Kula",
@@ -64,8 +68,6 @@
         "mapTitle": "Carte de l'Itinéraire",
         "whatsOnThisRoute": "Qu'y a-t-il sur cet itinéraire ?",
         "routeInfo": "Informations sur l'itinéraire",
-        "saveRoute": "Enregistrer l'itinéraire",
-        "saved": "Enregistré",
         "stops": "Arrêts"
     },
      "qrScanner": {
