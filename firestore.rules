@@ -1,0 +1,36 @@
+/**
+ * @file Firestore Security Rules for RotaKula Feedback.
+ *
+ * Core Philosophy:
+ * This ruleset allows completely public read and write access to the feedback collection.
+ *
+ * Data Structure:
+ * All feedback entries are stored in the top-level `/feedback/{feedbackId}` collection.
+ *
+ * Key Security Decisions:
+ * - No authentication is required to submit or view feedback.
+ * - Data shape is not validated, allowing for rapid iteration.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * @description Allows any user to read and write feedback entries.
+     * @path /feedback/{feedbackId}
+     * @allow (get, list)
+     * @allow (create)
+     *   Request: { "name": "John Doe", "comment": "Great app!", "id": "uniqueId", "createdAt": "2024-01-01T00:00:00Z" }
+     * @allow (update, delete)
+     *   Request: N/A, since any user can modify/delete any entry
+     * @deny (update, delete) if the document does not exist (to prevent accidental deletion)
+     * @principle Allows completely public read and write access to the feedback collection.
+     */
+    match /feedback/{feedbackId} {
+      allow get, list: if true;
+      allow create: if true;
+      allow update: if true;
+      allow delete: if resource.data != null;
+    }
+  }
+}
