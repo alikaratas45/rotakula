@@ -36,6 +36,9 @@ export default function AboutPage() {
         const onEnd = () => {
             setIsPlaying(false);
             setIsPaused(false);
+            if (synthRef.current) {
+                synthRef.current.cancel();
+            }
         };
         const onError = (event: SpeechSynthesisErrorEvent) => {
             if (event.error !== 'interrupted') {

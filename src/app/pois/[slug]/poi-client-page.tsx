@@ -100,6 +100,9 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
         const onEnd = () => {
             setIsPlaying(false);
             setIsPaused(false);
+            if (synthRef.current) {
+                synthRef.current.cancel();
+            }
         };
 
         const onError = (event: SpeechSynthesisErrorEvent) => {
