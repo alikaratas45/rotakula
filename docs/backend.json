@@ -1,62 +1,36 @@
 {
   "entities": {
     "Feedback": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Feedback",
       "type": "object",
-      "description": "Represents user feedback and suggestions for the RotaKula application.",
+      "description": "Represents user feedback and suggestions.",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the feedback entry."
-        },
         "name": {
           "type": "string",
           "description": "The name of the user providing the feedback."
         },
-        "comment": {
+        "message": {
           "type": "string",
           "description": "The feedback or suggestion provided by the user."
         },
         "createdAt": {
           "type": "string",
-          "description": "The timestamp indicating when the feedback was submitted.",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "The timestamp indicating when the feedback was submitted."
         }
       },
-      "required": [
-        "id",
-        "name",
-        "comment",
-        "createdAt"
-      ]
+      "required": ["name", "message", "createdAt"]
     }
   },
   "auth": {
-    "providers": [
-      "password",
-      "anonymous"
-    ]
+    "providers": ["anonymous"]
   },
   "firestore": {
-    "structure": [
-      {
-        "path": "/feedback/{feedbackId}",
-        "definition": {
-          "entityName": "Feedback",
-          "schema": {
-            "$ref": "#/backend/entities/Feedback"
-          },
-          "description": "Stores user feedback and suggestions for the RotaKula application. No authorization requirements.",
-          "params": [
-            {
-              "name": "feedbackId",
-              "description": "The unique identifier for each feedback entry."
-            }
-          ]
-        }
-      }
-    ],
-    "reasoning": "The data structure is designed to support a simple feedback submission platform for the RotaKula application.  Since users are not authenticated, and all feedback is public, a single collection `feedback` is used to store all feedback entries. This simplifies data management and retrieval. This structure achieves Authorization Independence since no user authentication is needed. It supports the required QAPs since there is no authorization involved at all: any user can read or create a new entry."
+    "/feedback/{feedbackId}": {
+      "schema": {
+        "$ref": "#/entities/Feedback"
+      },
+      "description": "Stores user feedback and suggestions. Publicly readable and writable."
+    }
   }
 }

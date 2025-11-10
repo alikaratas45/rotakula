@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Utensils, Map, Pin, Route, Info, BookOpen, QrCode, Landmark } from 'lucide-react';
 import { BedIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
+import { FeedbackSection } from '@/components/feedback';
 
 
 const RouteCard = ({ route, delay }: { route: ThematicRoute, delay: number }) => {
@@ -156,6 +157,12 @@ export default function Home() {
               allowFullScreen>
             </iframe>
           </div>
+        </div>
+      </section>
+
+      <section className="py-16 px-4 md:px-8 bg-background">
+        <div className="max-w-4xl mx-auto">
+          <FeedbackSection />
         </div>
       </section>
 

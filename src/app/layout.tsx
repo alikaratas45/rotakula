@@ -4,6 +4,7 @@ import { type PropsWithChildren } from 'react';
 import { LanguageProvider } from '@/context/language-context';
 import { ThemeProvider } from 'next-themes';
 import { Providers } from './providers';
+import { FirebaseClientProvider } from '@/firebase';
 
 
 export const metadata = {
@@ -33,7 +34,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <LanguageProvider>
-            <Providers>{children}</Providers>
+            <FirebaseClientProvider>
+              <Providers>{children}</Providers>
+            </FirebaseClientProvider>
           </LanguageProvider>
         </ThemeProvider>
       </body>
