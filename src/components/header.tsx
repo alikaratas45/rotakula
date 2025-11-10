@@ -66,26 +66,12 @@ function AdminAuth() {
     }
   };
 
-  const showMyId = () => {
-    if (user) {
-      toast({
-        title: "Yönetici UID'niz:",
-        description: user.uid,
-      });
-    }
-  }
-
   if (user) {
     return (
-      <div className="flex gap-2">
-        <Button variant="outline" size="sm" className="h-9" onClick={showMyId}>
-          UID'mi Göster
-        </Button>
-        <Button variant="outline" size="sm" className="h-9" onClick={handleSignOut}>
-          <LogOut className="mr-2 h-4 w-4" />
-          Admin Çıkış
-        </Button>
-      </div>
+      <Button variant="outline" size="sm" className="h-9" onClick={handleSignOut}>
+        <LogOut className="mr-2 h-4 w-4" />
+        Admin Çıkış
+      </Button>
     );
   }
 
@@ -100,7 +86,28 @@ function AdminAuth() {
 export function Header() {
     const pathname = usePathname();
     const { language, setLanguage, translations } = useLanguage();
-    
+    const [adminClickCount, setAdminClickCount] = React.useState(0);
+    const [showAdmin, setShowAdmin] = React.useState(false);
+    const adminClickTimer = React.useRef<NodeJS.Timeout | null>(null);
+
+    const handleLogoClick = () => {
+        if (adminClickTimer.current) {
+            clearTimeout(adminClickTimer.current);
+        }
+
+        const newClickCount = adminClickCount + 1;
+        setAdminClickCount(newClickCount);
+
+        if (newClickCount >= 5) {
+            setShowAdmin(prev => !prev);
+            setAdminClickCount(0);
+        }
+
+        adminClickTimer.current = setTimeout(() => {
+            setAdminClickCount(0);
+        }, 1500);
+    };
+
     const languageOptions = {
         tr: { name: 'Türkçe', Icon: TurkishFlagIcon },
         en: { name: 'English', Icon: UKFlagIcon },
@@ -136,20 +143,24 @@ export function Header() {
             <div className="container flex h-16 items-center">
                 {/* Desktop Header */}
                 <div className="hidden md:flex flex-1 items-center">
-                    <Link href="/" className="flex items-center space-x-2">
-                        <Image src="/logo.png?v=2" alt="RotaKula Logo" width={28} height={28} />
-                        <span className="hidden font-bold sm:inline-block font-headline text-lg">
-                            RotaKula
-                        </span>
-                    </Link>
+                    <div onClick={handleLogoClick} className="cursor-pointer">
+                        <Link href="/" className="flex items-center space-x-2">
+                            <Image src="/logo.png?v=2" alt="RotaKula Logo" width={28} height={28} />
+                            <span className="hidden font-bold sm:inline-block font-headline text-lg">
+                                RotaKula
+                            </span>
+                        </Link>
+                    </div>
                 </div>
                 
                 {/* Mobile Header */}
                 <div className="flex flex-1 items-center justify-between md:hidden">
-                    <Link href="/" className="flex items-center space-x-2">
-                        <Image src="/logo.png?v=2" alt="RotaKula Logo" width={28} height={28} />
-                        <span className="font-bold font-headline text-lg">RotaKula</span>
-                    </Link>
+                     <div onClick={handleLogoClick} className="cursor-pointer">
+                        <Link href="/" className="flex items-center space-x-2">
+                            <Image src="/logo.png?v=2" alt="RotaKula Logo" width={28} height={28} />
+                            <span className="font-bold font-headline text-lg">RotaKula</span>
+                        </Link>
+                    </div>
                     <div className="flex items-center gap-1">
                         <Button asChild variant="outline" size="icon" className="h-8 w-8">
                             <Link href="/">
@@ -165,7 +176,7 @@ export function Header() {
 
                 {/* Desktop right side */}
                 <div className="hidden md:flex items-center justify-end gap-2">
-                    <AdminAuth />
+                    {showAdmin && <AdminAuth />}
                     <Button asChild variant="outline" size="sm" className="h-9">
                          <Link href="/">
                             <Home className="mr-2 h-4 w-4" />
