@@ -14,7 +14,7 @@ function SplashScreen() {
     return (
         <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background text-foreground">
             <div className="flex flex-col items-center gap-4 perspective-1000">
-                 <Image src="/belediye.png" alt="Kula Belediyesi Logo" width={400} height={400} className="h-96 w-96 mb-4 animate-spin-slow preserve-3d" />
+                 <Image src="/logo.png" alt="Kula Belediyesi Logo" width={400} height={400} className="h-96 w-96 mb-4 animate-spin-slow preserve-3d" />
                  <p className="text-2xl text-foreground text-center">Kula'nın dijital rehberine hoş geldiniz.</p>
             </div>
         </div>

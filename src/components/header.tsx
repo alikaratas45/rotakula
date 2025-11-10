@@ -78,7 +78,7 @@ export function Header() {
                 {/* Desktop Header */}
                 <div className="hidden md:flex flex-1 items-center">
                     <Link href="/" className="flex items-center space-x-2">
-                        <Image src="/belediye.png" alt="RotaKula Logo" width={28} height={28} />
+                        <Image src="/logo.png" alt="RotaKula Logo" width={28} height={28} />
                         <span className="hidden font-bold sm:inline-block font-headline text-lg">
                             RotaKula
                         </span>
@@ -88,7 +88,7 @@ export function Header() {
                 {/* Mobile Header */}
                 <div className="flex flex-1 items-center justify-between md:hidden">
                     <Link href="/" className="flex items-center space-x-2">
-                        <Image src="/belediye.png" alt="RotaKula Logo" width={28} height={28} />
+                        <Image src="/logo.png" alt="RotaKula Logo" width={28} height={28} />
                         <span className="font-bold font-headline text-lg">RotaKula</span>
                     </Link>
                     <div className="flex items-center gap-1">
