@@ -5,18 +5,10 @@ import type { PointOfInterest } from "@/lib/types";
 import { getImageById } from "@/lib/placeholder-images";
 import Image from "next/image";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Info, Map, Footprints, Car, Eye } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useLanguage } from "@/context/language-context";
-import Link from "next/link";
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { useState } from 'react';
-import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-import { RouteMap } from "./route-map";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function PoiSelectionList({
     allPois,
@@ -33,7 +25,6 @@ export default function PoiSelectionList({
 }) {
     const { translations } = useLanguage();
     const selectionCount = selectedPois.length;
-    const [expandedPoiId, setExpandedPoiId] = useState<string | null>(null);
 
     const isPoiSelected = (poiId: string) => selectedPois.some(p => p.id === poiId);
     
@@ -59,7 +50,6 @@ export default function PoiSelectionList({
                         const image = getImageById(poi.imageId);
                         const isSelected = isPoiSelected(poi.id);
                         const isDisabled = !isSelected && selectionCount >= maxSelection;
-                        const isExpanded = expandedPoiId === poi.id;
 
                         return (
                             <Card 
@@ -102,18 +92,9 @@ export default function PoiSelectionList({
                                         />
                                     </div>
                                 </div>
-                                <CardContent 
-                                    className="p-4 flex-grow flex flex-col"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        setExpandedPoiId(isExpanded ? null : poi.id);
-                                    }}
-                                >
+                                <CardContent className="p-4 flex-grow flex flex-col">
                                     <h3 className="text-md font-semibold font-headline">{poi.name}</h3>
-                                    <p className={cn(
-                                        "mt-1 text-sm text-muted-foreground flex-grow",
-                                        !isExpanded && "line-clamp-2"
-                                    )}>{poi.description}</p>
+                                    <p className="mt-1 text-sm text-muted-foreground flex-grow">{poi.description}</p>
                                 </CardContent>
                             </Card>
                         )
