@@ -23,6 +23,7 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
     const [isPaused, setIsPaused] = useState(false);
     
     const synthRef = useRef<SpeechSynthesis | null>(null);
+    const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
     const [narrationText, setNarrationText] = useState('');
     const [remainingText, setRemainingText] = useState('');
     const charIndexRef = useRef(0);
@@ -71,6 +72,7 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
         }
 
         const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        utteranceRef.current = utterance;
         
         const voices = synth.getVoices();
         const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
@@ -123,12 +125,13 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
         }
 
         if (synth.speaking && !isPaused) { // Is playing, so pause it
-            const fullText = narrationText;
+            // Calculate remaining text based on the original full text
+            const fullText = utteranceRef.current?.text || narrationText;
             const spokenTextLength = charIndexRef.current;
             const remaining = fullText.substring(spokenTextLength);
-            setRemainingText(remaining);
             
-            synth.cancel(); 
+            synth.cancel(); // Use cancel() which is more reliable
+            setRemainingText(remaining);
             setIsPaused(true);
             setIsPlaying(false);
 

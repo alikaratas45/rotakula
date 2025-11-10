@@ -103,12 +103,13 @@ export default function AboutPage() {
         }
 
         if (synth.speaking && !isPaused) { // Is playing, so pause it
-            const fullText = narrationText;
-            const spokenText = fullText.substring(0, charIndexRef.current);
-            const remaining = fullText.substring(charIndexRef.current);
-            setRemainingText(remaining);
+            // Calculate remaining text based on the original full text
+            const fullText = utteranceRef.current?.text || narrationText;
+            const spokenTextLength = charIndexRef.current;
+            const remaining = fullText.substring(spokenTextLength);
             
-            synth.cancel(); // Use cancel instead of pause
+            synth.cancel(); // Use cancel() which is more reliable
+            setRemainingText(remaining);
             setIsPaused(true);
             setIsPlaying(false);
 
