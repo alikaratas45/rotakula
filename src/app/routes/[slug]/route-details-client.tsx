@@ -2,11 +2,10 @@
 "use client"
 
 import type { ThematicRoute, PointOfInterest } from '@/lib/types';
-import { useSavedRoutes } from '@/hooks/use-saved-routes';
 import { getImageById } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Heart, MapPin, Mountain, Info, Footprints, Loader2, Car, UtensilsCrossed, Navigation } from 'lucide-react';
+import { MapPin, Mountain, Info, Footprints, Loader2, Car, UtensilsCrossed, Navigation } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FoodIcon, HistoricHouseIcon } from '@/components/icons';
@@ -44,11 +43,9 @@ function getCategoryIcon(category: PointOfInterest['category']) {
 }
 
 export default function RouteDetailsClient({ route, pois }: { route: ThematicRoute; pois: PointOfInterest[] }) {
-    const { isLoaded, isRouteSaved, toggleSaveRoute } = useSavedRoutes();
     const { translations } = useLanguage();
     const { toast } = useToast();
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
-    const isSaved = isRouteSaved(route.slug);
     const [isStartingRoute, setIsStartingRoute] = useState(false);
 
     const isFlavorTour = route.slug === 'kula-flavor-tour';
@@ -217,16 +214,6 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
                                             </AlertDialogContent>
                                         </AlertDialog>
                                     )}
-                                    <Separator />
-                                    <Button
-                                        onClick={() => isLoaded && toggleSaveRoute(route.slug)}
-                                        variant={isSaved ? "secondary" : "default"}
-                                        className="w-full"
-                                        disabled={!isLoaded}
-                                    >
-                                        <Heart className={cn("mr-2 h-4 w-4", isSaved && "fill-current text-red-500")} />
-                                        {isSaved ? translations.route.saved : translations.route.saveRoute}
-                                    </Button>
                                     <Separator />
                                     <div className="space-y-2">
                                          <h4 className="font-semibold">{translations.route.stops}</h4>
