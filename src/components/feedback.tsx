@@ -272,10 +272,10 @@ export function FeedbackSection({ isLimited = false }: { isLimited?: boolean }) 
             )}
             <FeedbackList isLimited={isLimited} onDataLoad={handleDataLoad} />
              {isLimited && totalFeedback > 5 && (
-                <div className="text-center pt-4">
-                <Button asChild>
-                    <Link href="/feedback">Tüm Yorumları Gör</Link>
-                </Button>
+                <div className="flex justify-center pt-4">
+                  <Button asChild>
+                      <Link href="/feedback">Tüm Yorumları Gör</Link>
+                  </Button>
                 </div>
             )}
         </div>
