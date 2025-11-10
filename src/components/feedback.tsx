@@ -63,6 +63,7 @@ type Feedback = FeedbackFormValues & {
 
 // Admin UID is set here.
 const ADMIN_UID = 'UXt4xEAkIwUSAQXvaM4pngZCBtI3';
+const PINNED_FEEDBACK_ID = 'z4H1pYyRT9h9Qv5s2j6S'; // ID of the comment to pin
 
 function FeedbackItem({ feedback }: { feedback: Feedback }) {
   const firestore = useFirestore();
@@ -111,13 +112,25 @@ function FeedbackList({ isLimited }: { isLimited?: boolean }) {
   const feedbackQuery = useMemoFirebase(
     () => {
       if (!firestore) return null;
-      const baseQuery = query(collection(firestore, 'feedback'), orderBy('createdAt', 'desc'));
-      return isLimited ? query(baseQuery, limit(5)) : baseQuery;
+      // Fetch all comments and sort by date for pinning logic
+      return query(collection(firestore, 'feedback'), orderBy('createdAt', 'desc'));
     },
-    [firestore, isLimited]
+    [firestore]
   );
 
   const { data: feedback, isLoading } = useCollection<Feedback>(feedbackQuery);
+
+  const processedFeedback = useMemo(() => {
+    if (!feedback) return [];
+    
+    const pinned = feedback.find(item => item.id === PINNED_FEEDBACK_ID);
+    const others = feedback.filter(item => item.id !== PINNED_FEEDBACK_ID);
+    
+    const sortedList = pinned ? [pinned, ...others] : others;
+    
+    return isLimited ? sortedList.slice(0, 5) : sortedList;
+
+  }, [feedback, isLimited]);
 
   if (isLoading) {
     return (
@@ -129,8 +142,8 @@ function FeedbackList({ isLimited }: { isLimited?: boolean }) {
 
   return (
     <div className="space-y-4">
-      {feedback && feedback.length > 0 ? (
-        feedback.map((item) => <FeedbackItem key={item.id} feedback={item} />)
+      {processedFeedback && processedFeedback.length > 0 ? (
+        processedFeedback.map((item) => <FeedbackItem key={item.id} feedback={item} />)
       ) : (
         <p className="text-center text-muted-foreground">
           Henüz yorum yapılmamış. İlk yorumu siz yapın!
@@ -237,13 +250,13 @@ export function FeedbackSection({ isLimited = false }: { isLimited?: boolean }) 
     const [totalFeedback, setTotalFeedback] = useState(0);
 
     useEffect(() => {
-        if (isLimited && firestore) {
+        if (firestore) {
             const feedbackColRef = collection(firestore, 'feedback');
             getCountFromServer(feedbackColRef).then(snapshot => {
                 setTotalFeedback(snapshot.data().count);
             });
         }
-    }, [isLimited, firestore]);
+    }, [firestore]);
 
     return (
         <div className="space-y-8">
