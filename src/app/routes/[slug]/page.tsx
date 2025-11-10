@@ -1,20 +1,49 @@
 
+"use client"
+
 import { getRouteBySlug, getPoisByIds } from '@/lib/kula-data';
 import { notFound } from 'next/navigation';
 import { getImageById } from '@/lib/placeholder-images';
 import Image from 'next/image';
 import RouteDetailsClient from './route-details-client';
 import type { ThematicRoute, PointOfInterest } from '@/lib/types';
+import { useLanguage } from '@/context/language-context';
+import { useEffect, useState } from 'react';
+import { Loader2 } from 'lucide-react';
 
-export default async function RoutePage({ params }: { params: { slug: string } }) {
-    const route = await getRouteBySlug(params.slug, 'tr');
+export default function RoutePage({ params }: { params: { slug: string } }) {
+    const { language } = useLanguage();
+    const [route, setRoute] = useState<ThematicRoute | null>(null);
+    const [pois, setPois] = useState<PointOfInterest[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchRouteData() {
+            setLoading(true);
+            const routeData = await getRouteBySlug(params.slug, language);
+            if (routeData) {
+                setRoute(routeData);
+                const poisData = await getPoisByIds(routeData.poiIds, language);
+                setPois(poisData);
+            }
+            setLoading(false);
+        }
+        fetchRouteData();
+    }, [params.slug, language]);
+
+    const heroImage = route ? getImageById(route.imageId) : null;
+    
+    if (loading) {
+        return (
+             <div className="flex justify-center items-center h-screen">
+                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>
+        );
+    }
 
     if (!route) {
         notFound();
     }
-
-    const pois = await getPoisByIds(route.poiIds, 'tr');
-    const heroImage = getImageById(route.imageId);
 
     return (
         <div>

@@ -1,14 +1,38 @@
 
+"use client"
+
 import { getPoiBySlug } from '@/lib/kula-data';
 import { notFound } from 'next/navigation';
 import PoiClientPage from './poi-client-page';
-import { getPois } from '@/lib/kula-data';
-import { LanguageProvider, useLanguage } from '@/context/language-context';
+import { useLanguage } from '@/context/language-context';
+import { useEffect, useState } from 'react';
+import type { PointOfInterest } from '@/lib/types';
+import { Loader2 } from 'lucide-react';
 
-// This is a server component
-export default async function PoiDetailPage({ params }: { params: { slug: string } }) {
-    // Forcing turkish language for now as we don't have language context on server
-    const poi = await getPoiBySlug(params.slug, 'tr');
+export default function PoiDetailPage({ params }: { params: { slug: string } }) {
+    const { language } = useLanguage();
+    const [poi, setPoi] = useState<PointOfInterest | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchPoi() {
+            setLoading(true);
+            const poiData = await getPoiBySlug(params.slug, language);
+            if (poiData) {
+                setPoi(poiData);
+            }
+            setLoading(false);
+        }
+        fetchPoi();
+    }, [params.slug, language]);
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>
+        );
+    }
 
     if (!poi) {
         notFound();
