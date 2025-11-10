@@ -233,6 +233,12 @@
       "description": "Kurşunlu Camii yanındaki tarihi Çukur Çeşme",
       "imageUrl": "/cukur.jpg",
       "imageHint": "historic fountain"
+    },
+    {
+      "id": "poi-suleyman-sah",
+      "description": "Süleyman Şah Türbesi",
+      "imageUrl": "/suleyman.jpg",
+      "imageHint": "historic tomb"
     }
   ]
 }
