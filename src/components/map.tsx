@@ -172,9 +172,9 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
                     <h3 className="font-bold font-headline text-md p-2">{selectedPoi.name}</h3>
                 }
             >
-                <div className="p-1 max-w-sm flex flex-col gap-2">
+                <div className="w-72 h-64 p-1 flex flex-col gap-2">
                     {poiImage && (
-                        <div className="relative h-32 w-full rounded-md overflow-hidden">
+                        <div className="relative h-32 w-full rounded-md overflow-hidden flex-shrink-0">
                             <Image
                                 src={poiImage.imageUrl}
                                 alt={poiImage.description}
@@ -183,9 +183,9 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
                             />
                         </div>
                     )}
-                    <div className="flex flex-col gap-2 p-1">
-                        <p className="text-sm text-foreground/80 line-clamp-2">{selectedPoi.description}</p>
-                        <div className="flex flex-col sm:flex-row gap-2 mt-2">
+                    <div className="flex flex-col gap-2 p-1 flex-grow">
+                        <p className="text-sm text-foreground/80 line-clamp-3 flex-shrink">{selectedPoi.description}</p>
+                        <div className="flex flex-col sm:flex-row gap-2 mt-auto">
                             <Button size="sm" variant="outline" onClick={() => handleGetDirections(selectedPoi)}>
                                 <Navigation className="mr-2 h-4 w-4"/>
                                 {translations.map.getDirections}
