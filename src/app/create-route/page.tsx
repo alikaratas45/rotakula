@@ -45,12 +45,9 @@ export default function CreateRoutePage() {
         <DndProvider backend={HTML5Backend}>
             <div className="h-[calc(100vh-4rem)]">
                 {/* Desktop View */}
-                <div className="hidden lg:flex h-full">
-                    <div className="w-2/3 h-full">
-                        <RouteMap pois={selectedPois} />
-                    </div>
-                    <div className="w-1/3 h-full">
-                        <PoiSelectionList 
+                <div className="hidden lg:grid grid-cols-3 h-full">
+                    <div className="col-span-1 h-full">
+                         <PoiSelectionList 
                             allPois={allPois}
                             selectedPois={selectedPois}
                             onPoiSelect={handlePoiSelect}
@@ -58,10 +55,16 @@ export default function CreateRoutePage() {
                             loading={loading}
                         />
                     </div>
+                    <div className="col-span-2 h-full relative">
+                        <RouteMap pois={selectedPois} />
+                         <div className="absolute top-4 right-4 w-80 h-[calc(100%-2rem)] z-10">
+                            <SelectedPoisSidebar selectedPois={selectedPois} setSelectedPois={setSelectedPois} />
+                        </div>
+                    </div>
                 </div>
                 
                 {/* Mobile View */}
-                <div className="block lg:hidden h-full">
+                 <div className="lg:hidden h-full relative">
                      <PoiSelectionList 
                         allPois={allPois}
                         selectedPois={selectedPois}
