@@ -16,7 +16,7 @@ import { APIProvider } from '@vis.gl/react-google-maps';
 import { useLanguage } from '@/context/language-context';
 import { haversineDistance } from '@/lib/utils';
 
-const NEARBY_RADIUS_KM = 20;
+const NEARBY_RADIUS_KM = 10;
 
 type PoiWithDistance = PointOfInterest & { distance: number };
 

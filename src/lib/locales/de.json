@@ -54,10 +54,10 @@
     },
     "nearby": {
         "title": "Was ist in meiner Nähe?",
-        "description": "Orte im Umkreis von 20 km von Ihrem aktuellen Standort sind unten aufgeführt.",
+        "description": "Orte im Umkreis von 10 km von Ihrem aktuellen Standort sind unten aufgeführt.",
         "gettingLocation": "Ihr Standort wird abgerufen...",
         "locationError": "Ihr Standort konnte nicht abgerufen werden. Bitte überprüfen Sie die Standorteinstellungen Ihres Browsers.",
-        "noPoisFound": "Keine Sehenswürdigkeiten im Umkreis von 20 km von Ihrem Standort gefunden.",
+        "noPoisFound": "Keine Sehenswürdigkeiten im Umkreis von 10 km von Ihrem Standort gefunden.",
         "distance": "Entfernung"
     },
     "route": {
