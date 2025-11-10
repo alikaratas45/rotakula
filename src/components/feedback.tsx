@@ -105,37 +105,26 @@ function FeedbackItem({ feedback }: { feedback: Feedback }) {
   );
 }
 
-function FeedbackList({ isLimited, onDataLoad }: { isLimited?: boolean, onDataLoad: (count: number) => void }) {
+function FeedbackList({ isLimited, onDataLoad }: { isLimited?: boolean, onDataLoad?: (count: number) => void }) {
   const firestore = useFirestore();
 
-  const feedbackColRef = useMemoFirebase(
-    () => collection(firestore, 'feedback'),
-    [firestore]
-  );
-  
-  // Query for fetching the actual documents, limited or not
   const feedbackQuery = useMemoFirebase(
     () => {
-        if (!feedbackColRef) return null;
-        const baseQuery = query(feedbackColRef, orderBy('createdAt', 'desc'));
-        return isLimited ? query(baseQuery, limit(5)) : baseQuery;
+      if (!firestore) return null;
+      const baseQuery = query(collection(firestore, 'feedback'), orderBy('createdAt', 'desc'));
+      return isLimited ? query(baseQuery, limit(5)) : baseQuery;
     },
-    [feedbackColRef, isLimited]
+    [firestore, isLimited]
   );
 
   const { data: feedback, isLoading } = useCollection<Feedback>(feedbackQuery);
-
+  
   useEffect(() => {
-    if (isLimited && feedbackColRef) {
-        // If it's the limited view (homepage), we need a separate count query
-        getCountFromServer(feedbackColRef).then(snapshot => {
-            onDataLoad(snapshot.data().count);
-        });
-    } else if (feedback) {
-        // For the full feedback page, the count is just the length of the data
+    if (!isLimited && feedback && onDataLoad) {
         onDataLoad(feedback.length);
     }
-  }, [feedback, feedbackColRef, isLimited, onDataLoad]);
+  }, [feedback, isLimited, onDataLoad]);
+
 
   if (isLoading) {
     return (
@@ -251,11 +240,17 @@ function FeedbackForm() {
 }
 
 export function FeedbackSection({ isLimited = false }: { isLimited?: boolean }) {
+    const firestore = useFirestore();
     const [totalFeedback, setTotalFeedback] = useState(0);
 
-    const handleDataLoad = (count: number) => {
-        setTotalFeedback(count);
-    };
+    useEffect(() => {
+        if (isLimited && firestore) {
+            const feedbackColRef = collection(firestore, 'feedback');
+            getCountFromServer(feedbackColRef).then(snapshot => {
+                setTotalFeedback(snapshot.data().count);
+            });
+        }
+    }, [isLimited, firestore]);
 
     return (
         <div className="space-y-8">
@@ -270,7 +265,7 @@ export function FeedbackSection({ isLimited = false }: { isLimited?: boolean }) 
                 </CardHeader>
               </Card>
             )}
-            <FeedbackList isLimited={isLimited} onDataLoad={handleDataLoad} />
+            <FeedbackList isLimited={isLimited} />
              {isLimited && totalFeedback > 5 && (
                 <div className="flex justify-center pt-4">
                   <Button asChild>
