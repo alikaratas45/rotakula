@@ -60,10 +60,8 @@ export default function Home() {
     fetchData();
   }, [language]);
 
-  const sortedRoutes = useMemo(() => {
-    const flavorTour = allRoutes.find(route => route.slug === 'kula-flavor-tour');
-    const otherRoutes = allRoutes.filter(route => route.slug !== 'kula-flavor-tour');
-    return flavorTour ? [...otherRoutes, flavorTour] : otherRoutes;
+  const displayedRoutes = useMemo(() => {
+    return allRoutes.filter(route => route.slug !== 'kula-flavor-tour');
   }, [allRoutes]);
   
   const heroImage = getImageById('hero-home');
@@ -137,7 +135,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <h2 className="text-4xl font-headline font-bold text-center mb-12 animate-fade-in-up">{translations.home.thematicRoutes}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {sortedRoutes.map((route, index) => (
+            {displayedRoutes.map((route, index) => (
               <RouteCard key={route.id} route={route} delay={index * 150} />
             ))}
           </div>
