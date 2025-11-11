@@ -156,8 +156,8 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
       <Map
         defaultCenter={center}
         defaultZoom={11}
-        gestureHandling={"greedy"}
-        disableDefaultUI={true}
+        gestureHandling={"cooperative"}
+        disableDefaultUI={false}
         zoomControl={true}
         mapId="rotakula-map"
         onClick={handleInfoWindowClose}
@@ -307,8 +307,8 @@ export const NearbySearch = () => {
             <Map
                 center={userPosition || { lat: 38.547, lng: 28.52 }}
                 zoom={14}
-                gestureHandling={"greedy"}
-                disableDefaultUI={true}
+                gestureHandling={"cooperative"}
+                disableDefaultUI={false}
                 zoomControl={true}
                 mapId="rotakula-nearby-map"
                 onClick={() => setSelectedPlace(null)}
