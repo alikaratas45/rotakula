@@ -229,9 +229,9 @@ export const NearbySearch = () => {
     const [userPosition, setUserPosition] = useState<{ lat: number; lng: number } | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    // Use Kula center as the location for nearby search
+    // Use Kula Municipality as the location for nearby search
     useEffect(() => {
-        setUserPosition({ lat: 38.547, lng: 28.52 });
+        setUserPosition({ lat: 38.544928799703115, lng: 28.644873680043112 });
     }, []);
 
     // Perform nearby search
@@ -369,5 +369,7 @@ export const NearbySearch = () => {
 
 
 
+
+    
 
     
