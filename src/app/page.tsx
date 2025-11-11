@@ -131,8 +131,8 @@ export default function Home() {
           </div>
       </section>
 
-      <section className="py-16 px-4 md:px-8 bg-background">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-16 bg-background">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
           <h2 className="text-4xl font-headline font-bold text-center mb-12 animate-fade-in-up">{translations.home.thematicRoutes}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {displayedRoutes.map((route, index) => (
@@ -142,11 +142,11 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-16 px-4 md:px-8 bg-background">
-        <div className="max-w-4xl mx-auto">
+      <section className="py-16 bg-background">
+        <div className="w-full">
           <div className="aspect-w-16 aspect-h-9 w-full">
             <iframe 
-              className="w-full h-full rounded-lg shadow-xl"
+              className="w-full h-full"
               src="https://www.youtube.com/embed/_ARn-XIt0RE?si=37dKY5kQwhbA26hf&vq=hd1080" 
               title="YouTube video player" 
               frameBorder="0" 
