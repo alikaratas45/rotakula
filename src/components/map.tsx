@@ -158,6 +158,7 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
         defaultZoom={11}
         gestureHandling={"greedy"}
         disableDefaultUI={true}
+        zoomControl={true}
         mapId="rotakula-map"
         onClick={handleInfoWindowClose}
       >
@@ -238,18 +239,18 @@ export const NearbySearch = () => {
     useEffect(() => {
         if (!map || !userPosition) return;
 
-        const placesService = new google.maps.places.PlacesService(map);
-        const request: google.maps.places.PlaceSearchRequest = {
+        const request: google.maps.places.TextSearchRequest = {
+            query: "Kula'daki restoran, lokanta veya kafeler",
             location: userPosition,
-            radius: 5000, // 5km radius
-            keyword: 'restaurant | lokanta | cafe',
+            radius: 20000, // 20km radius to cover the whole town
         };
 
-        placesService.nearbySearch(request, (results, status) => {
+        const placesService = new google.maps.places.PlacesService(map);
+        
+        placesService.textSearch(request, (results, status) => {
             if (status === google.maps.places.PlacesServiceStatus.OK && results) {
                 setPlaces(results);
                 const bounds = new google.maps.LatLngBounds();
-                bounds.extend(userPosition);
                 results.forEach(place => {
                     if (place.geometry?.location) {
                         bounds.extend(place.geometry.location);
@@ -308,6 +309,7 @@ export const NearbySearch = () => {
                 zoom={14}
                 gestureHandling={"greedy"}
                 disableDefaultUI={true}
+                zoomControl={true}
                 mapId="rotakula-nearby-map"
                 onClick={() => setSelectedPlace(null)}
             >
