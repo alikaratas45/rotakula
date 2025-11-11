@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { FoodIcon, HistoricHouseIcon } from '@/components/icons';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import EmbeddedMap from '@/components/map';
+import EmbeddedMap, { NearbySearch } from '@/components/map';
 import { APIProvider } from '@vis.gl/react-google-maps';
 import { useLanguage } from '@/context/language-context';
 import { useState } from 'react';
@@ -119,56 +119,63 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
                         )}
                         
                         <h2 className="text-2xl font-headline font-bold mb-6">{translations.route.whatsOnThisRoute}</h2>
-                        <div className="space-y-6">
-                            {pois.map((poi, index) => {
-                                const image = getImageById(poi.imageId);
-                                return (
-                                    <Card key={poi.id} className="overflow-hidden">
-                                        <div className="flex flex-col md:flex-row">
-                                            <div className="md:w-1/3 relative h-48 md:h-auto">
-                                                {image && (
-                                                    <Image 
-                                                        src={image.imageUrl} 
-                                                        alt={image.description} 
-                                                        fill 
-                                                        className="object-cover"
-                                                        data-ai-hint={image.imageHint}
-                                                    />
-                                                )}
+
+                        {isFlavorTour ? (
+                            <div className="mb-8">
+                                <NearbySearch />
+                            </div>
+                        ) : (
+                            <div className="space-y-6">
+                                {pois.map((poi, index) => {
+                                    const image = getImageById(poi.imageId);
+                                    return (
+                                        <Card key={poi.id} className="overflow-hidden">
+                                            <div className="flex flex-col md:flex-row">
+                                                <div className="md:w-1/3 relative h-48 md:h-auto">
+                                                    {image && (
+                                                        <Image 
+                                                            src={image.imageUrl} 
+                                                            alt={image.description} 
+                                                            fill 
+                                                            className="object-cover"
+                                                            data-ai-hint={image.imageHint}
+                                                        />
+                                                    )}
+                                                </div>
+                                                <div className="md:w-2/3">
+                                                    <CardHeader className="flex flex-row items-start gap-4">
+                                                        <div className="flex-shrink-0 bg-accent rounded-full p-3">
+                                                            {getCategoryIcon(poi.category)}
+                                                        </div>
+                                                        <div>
+                                                            <CardTitle className="font-headline text-xl">{index + 1}. {poi.name}</CardTitle>
+                                                            <CardDescription className="capitalize">
+                                                                {translations.category[poi.category as keyof typeof translations.category] || poi.category}
+                                                            </CardDescription>
+                                                        </div>
+                                                    </CardHeader>
+                                                    <CardContent>
+                                                        <p className="text-foreground/80 mb-4">{poi.description}</p>
+                                                         <div className="flex items-center gap-2">
+                                                            <Button asChild variant="secondary" size="sm">
+                                                                <Link href={`/places/${poi.slug}`}>
+                                                                    <Info className="mr-2 h-4 w-4" />
+                                                                    {translations.common.moreInfo}
+                                                                </Link>
+                                                            </Button>
+                                                            <Button variant="outline" size="sm" onClick={() => handleGetDirections(poi)}>
+                                                                <Navigation className="mr-2 h-4 w-4" />
+                                                                {translations.map.getDirections}
+                                                            </Button>
+                                                        </div>
+                                                    </CardContent>
+                                                </div>
                                             </div>
-                                            <div className="md:w-2/3">
-                                                <CardHeader className="flex flex-row items-start gap-4">
-                                                    <div className="flex-shrink-0 bg-accent rounded-full p-3">
-                                                        {getCategoryIcon(poi.category)}
-                                                    </div>
-                                                    <div>
-                                                        <CardTitle className="font-headline text-xl">{index + 1}. {poi.name}</CardTitle>
-                                                        <CardDescription className="capitalize">
-                                                            {translations.category[poi.category as keyof typeof translations.category] || poi.category}
-                                                        </CardDescription>
-                                                    </div>
-                                                </CardHeader>
-                                                <CardContent>
-                                                    <p className="text-foreground/80 mb-4">{poi.description}</p>
-                                                     <div className="flex items-center gap-2">
-                                                        <Button asChild variant="secondary" size="sm">
-                                                            <Link href={`/places/${poi.slug}`}>
-                                                                <Info className="mr-2 h-4 w-4" />
-                                                                {translations.common.moreInfo}
-                                                            </Link>
-                                                        </Button>
-                                                        <Button variant="outline" size="sm" onClick={() => handleGetDirections(poi)}>
-                                                            <Navigation className="mr-2 h-4 w-4" />
-                                                            {translations.map.getDirections}
-                                                        </Button>
-                                                    </div>
-                                                </CardContent>
-                                            </div>
-                                        </div>
-                                    </Card>
-                                );
-                            })}
-                        </div>
+                                        </Card>
+                                    );
+                                })}
+                            </div>
+                        )}
                     </div>
 
                     <aside className="lg:col-span-1">
@@ -184,7 +191,7 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
                                             className="w-full"
                                         >
                                             <UtensilsCrossed className="mr-2 h-4 w-4" />
-                                            Kula'daki Lezzet Duraklarını Gör
+                                            {translations.food.nearbyRestaurants}
                                         </Button>
                                     ) : (
                                         <AlertDialog>
@@ -214,13 +221,17 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
                                             </AlertDialogContent>
                                         </AlertDialog>
                                     )}
-                                    <Separator />
-                                    <div className="space-y-2">
-                                         <h4 className="font-semibold">{translations.route.stops}</h4>
-                                         <ul className="list-disc list-inside text-muted-foreground text-sm space-y-1">
-                                             {pois.map(poi => <li key={poi.id}>{poi.name}</li>)}
-                                         </ul>
-                                    </div>
+                                    {!isFlavorTour && (
+                                        <>
+                                            <Separator />
+                                            <div className="space-y-2">
+                                                 <h4 className="font-semibold">{translations.route.stops}</h4>
+                                                 <ul className="list-disc list-inside text-muted-foreground text-sm space-y-1">
+                                                     {pois.map(poi => <li key={poi.id}>{poi.name}</li>)}
+                                                 </ul>
+                                            </div>
+                                        </>
+                                    )}
                                 </CardContent>
                             </Card>
                         </div>
