@@ -142,8 +142,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-16 bg-background">
-        <div className="w-full">
+      <section className="py-16 bg-background px-4 md:px-8">
+        <div className="max-w-4xl mx-auto">
           <div className="aspect-w-16 aspect-h-9 w-full">
             <iframe 
               className="w-full h-full"
