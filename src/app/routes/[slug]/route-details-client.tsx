@@ -105,7 +105,7 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
     };
     
     return (
-        <APIProvider apiKey={apiKey}>
+        <APIProvider apiKey={apiKey} libraries={['places']}>
             <div className="container px-4 py-8 md:py-12">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
                     <div className="lg:col-span-2">
