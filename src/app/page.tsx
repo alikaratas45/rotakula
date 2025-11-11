@@ -115,12 +115,12 @@ export default function Home() {
                     variant="secondary"
                     size="icon"
                     className={cn(
-                      "h-16 w-16 rounded-full group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 transform group-hover:scale-110",
+                      "h-16 w-16 md:h-20 md:w-20 rounded-full group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 transform group-hover:scale-110",
                       item.colorClass
                     )}
                     aria-label={item.label}
                   >
-                    <item.icon className="h-7 w-7" />
+                    <item.icon className="h-7 w-7 md:h-8 md:w-8" />
                   </Button>
                   <span className="text-center text-sm font-semibold text-muted-foreground dark:text-white group-hover:text-primary transition-colors">
                     {item.label}
