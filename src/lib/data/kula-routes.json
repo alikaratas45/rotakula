@@ -44,7 +44,7 @@
       "description": "Kula'nın eşsiz ve otantik tatlarını deneyimleyeceğiniz bir gastronomi macerası.",
       "longDescription": "Odun köftesinden meşhur güvecine, şekerli pideden yöresel otlara kadar Kula mutfağının en özel lezzetlerini tadın. Bu rota, damak zevkine düşkün gezginler için Kula'nın en iyi lezzet duraklarını bir araya getiriyor.",
       "imageId": "route-food",
-      "poiIds": ["poi-8"],
+      "poiIds": [],
       "title_en": "Kula Flavor Tour",
       "description_en": "A gastronomic adventure where you will experience the unique and authentic tastes of Kula.",
       "longDescription_en": "Taste the most special flavors of Kula cuisine, from wood-fired meatballs to the famous güveç, from sweet pide to local herbs. This route brings together the best flavor stops in Kula for gourmet travelers.",
