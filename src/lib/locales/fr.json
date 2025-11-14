@@ -185,6 +185,7 @@
         "title": "Bienvenue à RotaKula !",
         "description": "Découvrez l'application avec une visite d'introduction rapide que nous avons préparée pour vous.",
         "skip": "Passer la Visite",
+        "howToUse": "Comment l'utiliser ?",
         "narration": [
             "Bonjour et bienvenue à RotaKula, le guide de voyage numérique de Kula. Dans cette courte visite, je vais vous montrer comment utiliser l'application le plus efficacement possible.",
             "En ce moment, vous voyez l'un des itinéraires thématiques qui reflètent la riche histoire et la culture de Kula. En suivant ces itinéraires, vous pouvez découvrir les différents visages de la ville.",

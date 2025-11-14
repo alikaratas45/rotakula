@@ -18,9 +18,8 @@ const TourSteps = [
 ];
 
 export default function IntroTour() {
-  const { language, translations } = useLanguage();
+  const { language, translations, isTourActive, setIsTourActive } = useLanguage();
   const router = useRouter();
-  const [isActive, setIsActive] = useState(false);
   const synthRef = useRef<SpeechSynthesis | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
@@ -30,26 +29,29 @@ export default function IntroTour() {
       synthRef.current = window.speechSynthesis;
       const tourCompleted = sessionStorage.getItem(TOUR_SESSION_KEY);
       if (!tourCompleted) {
-        // Start the tour after a short delay to let the page settle
-        setTimeout(() => setIsActive(true), 1000);
+        setTimeout(() => setIsTourActive(true), 1000);
         sessionStorage.setItem(TOUR_SESSION_KEY, 'true');
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const stopTour = useCallback(() => {
-    setIsActive(false);
+    setIsTourActive(false);
     if (synthRef.current?.speaking) {
       synthRef.current.cancel();
     }
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-    router.push('/');
-  }, [router]);
+    // Only navigate to home if not already there, to avoid unnecessary re-renders
+    if (window.location.pathname !== '/') {
+        router.push('/');
+    }
+  }, [router, setIsTourActive]);
 
   useEffect(() => {
-    if (isActive) {
+    if (isTourActive) {
       const narrationText = translations.tour.narration.join(' ');
       const utterance = new SpeechSynthesisUtterance(narrationText);
       utteranceRef.current = utterance;
@@ -80,7 +82,7 @@ export default function IntroTour() {
           router.push(step.path);
           if (index === TourSteps.length - 1) {
             // End of tour
-            setTimeout(() => setIsActive(false), 2000);
+            setTimeout(() => setIsTourActive(false), 2000);
           }
         }, cumulativeDelay);
       });
@@ -88,7 +90,7 @@ export default function IntroTour() {
       utterance.onend = () => {
         // Ensure tour stops if narration finishes early
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        setIsActive(false);
+        setIsTourActive(false);
         router.push('/');
       };
 
@@ -102,9 +104,9 @@ export default function IntroTour() {
         synthRef.current.cancel();
       }
     };
-  }, [isActive, language, translations.tour.narration, router]);
+  }, [isTourActive, language, translations.tour.narration, router, setIsTourActive]);
 
-  if (!isActive) {
+  if (!isTourActive) {
     return null;
   }
 

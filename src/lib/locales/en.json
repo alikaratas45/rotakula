@@ -185,6 +185,7 @@
         "title": "Welcome to RotaKula!",
         "description": "Discover the application with a quick introductory tour we've prepared for you.",
         "skip": "Skip Tour",
+        "howToUse": "How to Use?",
         "narration": [
             "Hello, and welcome to RotaKula, Kula's digital travel guide. In this short tour, I will show you how to use the application most effectively.",
             "Right now, you are seeing one of the thematic routes that reflect Kula's rich history and culture. By following these routes, you can discover the different faces of the city.",

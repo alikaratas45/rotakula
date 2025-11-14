@@ -10,7 +10,7 @@ import { getImageById } from '@/lib/placeholder-images';
 import { useEffect, useState, useMemo } from 'react';
 import { useLanguage } from '@/context/language-context';
 import { Button } from '@/components/ui/button';
-import { Utensils, Map, Pin, Route, Info, BookOpen, QrCode, Landmark } from 'lucide-react';
+import { Utensils, Map, Pin, Route, Info, BookOpen, QrCode, Landmark, HelpCircle } from 'lucide-react';
 import { BedIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { FeedbackSection } from '@/components/feedback';
@@ -49,7 +49,7 @@ const RouteCard = ({ route, delay }: { route: ThematicRoute, delay: number }) =>
 };
 
 export default function Home() {
-  const { language, translations } = useLanguage();
+  const { language, translations, setIsTourActive } = useLanguage();
   const [allRoutes, setAllRoutes] = useState<ThematicRoute[]>([]);
   
   useEffect(() => {
@@ -98,6 +98,12 @@ export default function Home() {
           <p className="mt-6 text-lg md:text-xl max-w-3xl mx-auto drop-shadow-md animate-fade-in text-black dark:text-white" style={{animationDelay: '600ms'}}>
             {translations.home.heroSubtitle}
           </p>
+           <div className="mt-8 flex justify-center animate-fade-in" style={{animationDelay: '900ms'}}>
+            <Button size="lg" onClick={() => setIsTourActive(true)}>
+              <HelpCircle className="mr-2 h-5 w-5" />
+              {translations.tour.howToUse}
+            </Button>
+          </div>
         </div>
       </section>
 

@@ -13,6 +13,8 @@ interface LanguageContextType {
   language: Language;
   setLanguage: (language: Language) => void;
   translations: typeof tr;
+  isTourActive: boolean;
+  setIsTourActive: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const translations = { tr, en, fr, de };
@@ -21,6 +23,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<Language>('tr');
+  const [isTourActive, setIsTourActive] = useState(false);
 
   useEffect(() => {
     const storedLang = localStorage.getItem('rota-kula-language') as Language;
@@ -51,6 +54,8 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     language, 
     setLanguage: handleSetLanguage, 
     translations: currentTranslations,
+    isTourActive,
+    setIsTourActive,
   };
 
   return (
