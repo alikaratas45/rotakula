@@ -250,10 +250,22 @@ export const NearbySearch = () => {
         placesService.textSearch(request, (results, status) => {
             if (status === google.maps.places.PlacesServiceStatus.OK && results) {
                 setPlaces(results);
+                
+                const bounds = new google.maps.LatLngBounds();
+                results.forEach(place => {
+                    if (place.geometry?.location) {
+                        bounds.extend(place.geometry.location);
+                    }
+                });
+                map.fitBounds(bounds);
             } else if (status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
                 setError(translations.map.noRestaurantsFound);
+                 map.setCenter(userPosition);
+                 map.setZoom(13);
             } else {
                  setError(translations.map.searchError);
+                 map.setCenter(userPosition);
+                 map.setZoom(13);
             }
         });
     }, [map, userPosition, translations]);
@@ -372,3 +384,4 @@ export const NearbySearch = () => {
     
 
     
+
