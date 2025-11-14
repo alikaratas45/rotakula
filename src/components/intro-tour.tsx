@@ -28,9 +28,13 @@ export default function IntroTour() {
     if (typeof window !== 'undefined') {
       synthRef.current = window.speechSynthesis;
       const tourCompleted = sessionStorage.getItem(TOUR_SESSION_KEY);
-      if (!tourCompleted) {
-        setTimeout(() => setIsTourActive(true), 1000);
-        sessionStorage.setItem(TOUR_SESSION_KEY, 'true');
+      // This logic to auto-start the tour is kept for first-time visitors
+      // but the component visibility is now controlled by `isTourActive`
+      if (!isTourActive && !tourCompleted) {
+        setTimeout(() => {
+            setIsTourActive(true);
+            sessionStorage.setItem(TOUR_SESSION_KEY, 'true');
+        }, 3000); // Increased delay after splash screen
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -91,7 +95,9 @@ export default function IntroTour() {
         // Ensure tour stops if narration finishes early
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
         setIsTourActive(false);
-        router.push('/');
+        if (window.location.pathname !== '/') {
+            router.push('/');
+        }
       };
 
     }
