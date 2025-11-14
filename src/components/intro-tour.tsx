@@ -1,0 +1,125 @@
+
+"use client";
+
+import { useEffect, useState, useRef, useCallback } from 'react';
+import { useLanguage } from '@/context/language-context';
+import { useRouter } from 'next/navigation';
+import { Button } from './ui/button';
+import { X } from 'lucide-react';
+
+const TOUR_SESSION_KEY = 'rota-kula-tour-completed';
+
+const TourSteps = [
+  { path: '/routes/historic-kula-walking-tour', delay: 7000 },
+  { path: '/create-route', delay: 7000 },
+  { path: '/stories', delay: 6000 },
+  { path: '/nearby', delay: 6000 },
+  { path: '/', delay: 5000 },
+];
+
+export default function IntroTour() {
+  const { language, translations } = useLanguage();
+  const router = useRouter();
+  const [isActive, setIsActive] = useState(false);
+  const synthRef = useRef<SpeechSynthesis | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      synthRef.current = window.speechSynthesis;
+      const tourCompleted = sessionStorage.getItem(TOUR_SESSION_KEY);
+      if (!tourCompleted) {
+        // Start the tour after a short delay to let the page settle
+        setTimeout(() => setIsActive(true), 1000);
+        sessionStorage.setItem(TOUR_SESSION_KEY, 'true');
+      }
+    }
+  }, []);
+
+  const stopTour = useCallback(() => {
+    setIsActive(false);
+    if (synthRef.current?.speaking) {
+      synthRef.current.cancel();
+    }
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    router.push('/');
+  }, [router]);
+
+  useEffect(() => {
+    if (isActive) {
+      const narrationText = translations.tour.narration.join(' ');
+      const utterance = new SpeechSynthesisUtterance(narrationText);
+      utteranceRef.current = utterance;
+      
+      utterance.lang = language;
+      const voices = synthRef.current?.getVoices();
+      if (voices) {
+        const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
+        if (voice) utterance.voice = voice;
+      }
+      
+      const startPlayback = () => {
+          if (synthRef.current) {
+            synthRef.current.speak(utterance);
+          }
+      }
+
+      if (synthRef.current && synthRef.current.getVoices().length > 0) {
+          startPlayback();
+      } else if (synthRef.current) {
+          synthRef.current.onvoiceschanged = startPlayback;
+      }
+
+      let cumulativeDelay = 0;
+      TourSteps.forEach((step, index) => {
+        cumulativeDelay += step.delay;
+        timeoutRef.current = setTimeout(() => {
+          router.push(step.path);
+          if (index === TourSteps.length - 1) {
+            // End of tour
+            setTimeout(() => setIsActive(false), 2000);
+          }
+        }, cumulativeDelay);
+      });
+
+      utterance.onend = () => {
+        // Ensure tour stops if narration finishes early
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        setIsActive(false);
+        router.push('/');
+      };
+
+    }
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      if (synthRef.current?.speaking) {
+        synthRef.current.cancel();
+      }
+    };
+  }, [isActive, language, translations.tour.narration, router]);
+
+  if (!isActive) {
+    return null;
+  }
+
+  return (
+    <div className="fixed inset-0 z-[200] bg-black/50 backdrop-blur-sm pointer-events-none">
+      <div className="absolute bottom-10 right-10 pointer-events-auto">
+        <Button onClick={stopTour} variant="destructive" size="lg">
+          <X className="mr-2 h-5 w-5" />
+          {translations.tour.skip}
+        </Button>
+      </div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-background/80 p-6 rounded-lg shadow-2xl max-w-md text-center">
+        <h2 className="text-2xl font-bold font-headline mb-2">{translations.tour.title}</h2>
+        <p className="text-muted-foreground">{translations.tour.description}</p>
+      </div>
+    </div>
+  );
+}

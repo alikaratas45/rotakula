@@ -1,3 +1,4 @@
+
 "use client"
 
 import { type PropsWithChildren, useState, useEffect } from 'react';
@@ -6,6 +7,7 @@ import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import IntroTour from '@/components/intro-tour';
 
 function SplashScreen() {
     return (
@@ -42,6 +44,7 @@ export function Providers({ children }: PropsWithChildren) {
 
   return (
     <>
+      <IntroTour />
       <Header />
       <main className="flex-grow">{children}</main>
       <Footer />
