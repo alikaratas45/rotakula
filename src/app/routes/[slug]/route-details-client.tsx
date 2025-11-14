@@ -109,7 +109,11 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
             <div className="container px-4 py-8 md:py-12">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
                     <div className="lg:col-span-2">
-                        <p className="text-lg text-foreground/80 mb-8">{route.longDescription}</p>
+                        <div className="text-lg text-foreground/80 mb-8 prose prose-lg max-w-none">
+                            {route.longDescription.split('\n').map((paragraph, index) => (
+                                <p key={index}>{paragraph}</p>
+                            ))}
+                        </div>
 
                         {!isFlavorTour && pois.length > 0 && (
                             <div className="mb-8">
