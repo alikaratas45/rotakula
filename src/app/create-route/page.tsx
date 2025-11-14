@@ -42,7 +42,7 @@ export default function CreateRoutePage() {
             setLoading(true);
             const pois = await getPois(language);
             
-            const filteredPois = pois.filter(p => p.category !== 'accommodation');
+            const filteredPois = pois.filter(p => p.category !== 'accommodation' && p.id !== 'poi-31');
 
             const sortedPois = filteredPois.sort((a, b) => {
                 const aIndex = customPoiOrder.indexOf(a.id);
