@@ -23,6 +23,7 @@ export default function IntroTour() {
   const synthRef = useRef<SpeechSynthesis | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const [showWelcomeBox, setShowWelcomeBox] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -56,6 +57,11 @@ export default function IntroTour() {
 
   useEffect(() => {
     if (isTourActive) {
+      setShowWelcomeBox(true);
+      const welcomeTimer = setTimeout(() => {
+        setShowWelcomeBox(false);
+      }, 2000);
+
       const narrationText = translations.tour.narration.join(' ');
       const utterance = new SpeechSynthesisUtterance(narrationText);
       utteranceRef.current = utterance;
@@ -100,6 +106,10 @@ export default function IntroTour() {
         }
       };
 
+      return () => {
+        clearTimeout(welcomeTimer);
+      };
+
     }
 
     return () => {
@@ -124,10 +134,12 @@ export default function IntroTour() {
           {translations.tour.skip}
         </Button>
       </div>
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-background/80 p-6 rounded-lg shadow-2xl max-w-md text-center">
-        <h2 className="text-2xl font-bold font-headline mb-2">{translations.tour.title}</h2>
-        <p className="text-muted-foreground">{translations.tour.description}</p>
-      </div>
+      {showWelcomeBox && (
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-background/80 p-6 rounded-lg shadow-2xl max-w-md text-center animate-fade-in">
+            <h2 className="text-2xl font-bold font-headline mb-2">{translations.tour.title}</h2>
+            <p className="text-muted-foreground">{translations.tour.description}</p>
+        </div>
+      )}
     </div>
   );
 }
