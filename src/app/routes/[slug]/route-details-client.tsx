@@ -134,9 +134,7 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
                         <h2 className="text-2xl font-headline font-bold mb-6">{translations.route.whatsOnThisRoute}</h2>
 
                         {isFlavorTour ? (
-                            <div className="mb-8">
-                                <NearbySearch />
-                            </div>
+                           null
                         ) : (
                             <div className="space-y-6">
                                 {pois.map((poi, index) => {
@@ -254,4 +252,3 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
         </APIProvider>
     );
 }
-
