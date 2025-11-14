@@ -110,9 +110,15 @@ export default function RouteDetailsClient({ route, pois }: { route: ThematicRou
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
                     <div className="lg:col-span-2">
                         <div className="text-lg text-foreground/80 mb-8 prose prose-lg max-w-none">
-                            {route.longDescription.split('\n').map((paragraph, index) => (
-                                <p key={index}>{paragraph}</p>
-                            ))}
+                            {route.longDescription.split('\n').map((paragraph, index) => {
+                                const isTitle = paragraph.endsWith(':');
+                                if (paragraph.trim() === '') return null; // Ignore empty lines
+                                return (
+                                     <p key={index}>
+                                        {isTitle ? <strong>{paragraph}</strong> : paragraph}
+                                    </p>
+                                )
+                            })}
                         </div>
 
                         {!isFlavorTour && pois.length > 0 && (
