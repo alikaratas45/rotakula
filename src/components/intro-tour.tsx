@@ -8,12 +8,12 @@ import { Button } from './ui/button';
 import { X } from 'lucide-react';
 
 const TourSteps = [
-  { path: '/routes/historic-kula-walking-tour', delay: 10000 },
-  { path: '/create-route', delay: 10000 },
-  { path: '/stories', delay: 8000 },
-  { path: '/nearby', delay: 8000 },
-  { path: '/', delay: 8000 }, // Go to home for audio guide narration
-  { path: '/', delay: 10000 }, // Final delay before ending on home
+  { path: '/routes/historic-kula-walking-tour', delay: 12000 },
+  { path: '/create-route', delay: 12000 },
+  { path: '/stories', delay: 10000 },
+  { path: '/nearby', delay: 10000 },
+  { path: '/', delay: 10000 }, // Go to home for audio guide narration
+  { path: '/', delay: 12000 }, // Final delay before ending on home
 ];
 
 export default function IntroTour() {
@@ -32,7 +32,6 @@ export default function IntroTour() {
 
   const stopTour = useCallback(() => {
     setIsTourActive(false);
-    setShowWelcomeBox(false);
     if (synthRef.current?.speaking) {
       synthRef.current.cancel();
     }
