@@ -49,7 +49,6 @@ export function AudioGuideControl() {
     const watchIdRef = useRef<number | null>(null);
     const synthRef = useRef<SpeechSynthesis | null>(null);
     const { toast, dismiss } = useToast();
-    const isInitialMount = useRef(true);
     
     const status = isAudioGuideActive ? 'listening' : 'idle';
 
@@ -183,29 +182,31 @@ export function AudioGuideControl() {
 
 
     const toggleGuide = () => {
-       setIsAudioGuideActive(!isAudioGuideActive);
+       setIsAudioGuideActive(prev => !prev);
     };
 
     useEffect(() => {
-        if (isInitialMount.current) {
-            isInitialMount.current = false;
-            return;
-        }
-
-        if (isAudioGuideActive) {
-            startLocationTracking();
-             toast({
-                title: translations.audioGuide.started,
-                description: translations.audioGuide.startedDescription,
-                duration: 5000,
-            });
-        } else {
-            stopLocationTracking();
-            toast({
-                title: translations.audioGuide.stopped,
-                duration: 3000,
-            });
-        }
+        const wasActive = isAudioGuideActive;
+        return () => {
+            // This is a cleanup function that runs when the component unmounts
+            // or when isAudioGuideActive changes.
+            if (wasActive && !isAudioGuideActive) {
+                // If the state changed from active to inactive
+                stopLocationTracking();
+                toast({
+                    title: translations.audioGuide.stopped,
+                    duration: 3000,
+                });
+            } else if (!wasActive && isAudioGuideActive) {
+                // If the state changed from inactive to active
+                startLocationTracking();
+                toast({
+                    title: translations.audioGuide.started,
+                    description: translations.audioGuide.startedDescription,
+                    duration: 5000,
+                });
+            }
+        };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAudioGuideActive]);
 
