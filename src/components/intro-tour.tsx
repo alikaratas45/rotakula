@@ -1,23 +1,23 @@
 
 "use client";
 
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import { useLanguage } from '@/context/language-context';
 import { useRouter } from 'next/navigation';
 import { Button } from './ui/button';
 import { X } from 'lucide-react';
 
 const TourSteps = [
-  { path: '/routes/historic-kula-walking-tour', delay: 12000 },
-  { path: '/create-route', delay: 12000 },
-  { path: '/stories', delay: 10000 },
-  { path: '/nearby', delay: 10000 },
-  { path: '/', delay: 10000 }, // Go to home for audio guide narration
-  { path: '/', delay: 12000 }, // Final delay before ending on home
+  { path: '/routes/historic-kula-walking-tour', delay: 10000 },
+  { path: '/create-route', delay: 10000 },
+  { path: '/stories', delay: 8000 },
+  { path: '/nearby', delay: 8000 },
+  { path: '/', action: 'startAudioGuide', delay: 8000 },
+  { path: '/', action: 'stopAudioGuide', delay: 4000 },
 ];
 
 export default function IntroTour() {
-  const { language, translations, isTourActive, setIsTourActive } = useLanguage();
+  const { language, translations, isTourActive, setIsTourActive, setIsAudioGuideActive } = useLanguage();
   const router = useRouter();
   const synthRef = useRef<SpeechSynthesis | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -30,19 +30,19 @@ export default function IntroTour() {
     }
   }, []);
 
-  const stopTour = useCallback(() => {
+  const stopTour = useCallback((navigateToHome = true) => {
     setIsTourActive(false);
+    setIsAudioGuideActive(false); 
     if (synthRef.current?.speaking) {
       synthRef.current.cancel();
     }
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
-    // Only navigate to home if not already there, to avoid unnecessary re-renders
-    if (window.location.pathname !== '/') {
+    if (navigateToHome && window.location.pathname !== '/') {
         router.push('/');
     }
-  }, [router, setIsTourActive]);
+  }, [router, setIsTourActive, setIsAudioGuideActive]);
 
   useEffect(() => {
     if (!isTourActive) {
@@ -82,18 +82,25 @@ export default function IntroTour() {
     TourSteps.forEach((step) => {
       cumulativeDelay += step.delay;
       timeoutRef.current = setTimeout(() => {
-        // Ensure tour is still active before navigating
-        if(document.hidden) return; // Don't navigate if tab is not active
-        // A check to see if the tour was cancelled
+        if(document.hidden) return;
         const activeCheck = (document.getElementById('tour-skip-button')?.dataset.active === 'true');
-        if(activeCheck) router.push(step.path);
+        if(!activeCheck) return;
+
+        if (step.action === 'startAudioGuide') {
+            setIsAudioGuideActive(true);
+        } else if (step.action === 'stopAudioGuide') {
+            setIsAudioGuideActive(false);
+        }
+
+        if (router && step.path) {
+          router.push(step.path);
+        }
 
       }, cumulativeDelay);
     });
 
     utterance.onend = () => {
-      // When narration finishes, stop the tour
-      stopTour();
+      stopTour(false); 
     };
     
     return () => {
@@ -104,9 +111,10 @@ export default function IntroTour() {
         synthRef.current.cancel();
       }
       clearTimeout(welcomeTimeout);
+      setIsAudioGuideActive(false);
     }
 
-  }, [isTourActive, language, translations.tour.narration, router, stopTour]);
+  }, [isTourActive, language, translations.tour.narration, router, stopTour, setIsAudioGuideActive]);
 
 
   if (!isTourActive) {
@@ -116,7 +124,7 @@ export default function IntroTour() {
   return (
     <div className="fixed inset-0 z-[200] pointer-events-none">
       <div className="absolute bottom-10 right-10 pointer-events-auto">
-        <Button onClick={stopTour} variant="destructive" size="lg" id="tour-skip-button" data-active={isTourActive}>
+        <Button onClick={() => stopTour()} variant="destructive" size="lg" id="tour-skip-button" data-active={isTourActive}>
           <X className="mr-2 h-5 w-5" />
           {translations.tour.skip}
         </Button>

@@ -15,8 +15,6 @@ import { PlayIcon } from 'lucide-react';
 const PROXIMITY_THRESHOLD_CENTER = 10; // meters for city center
 const PROXIMITY_THRESHOLD_OUTSIDE = 50; // meters for geopark/villages
 
-type GuideStatus = 'idle' | 'listening';
-
 // Helper to check if a POI is likely outside the dense city center
 const isPoiOutsideCenter = (poi: PointOfInterest): boolean => {
     // Geopark and Nature are always considered outside
@@ -41,16 +39,17 @@ const isPoiOutsideCenter = (poi: PointOfInterest): boolean => {
 }
 
 export function AudioGuideControl() {
-    const { language, translations } = useLanguage();
+    const { language, translations, isAudioGuideActive, setIsAudioGuideActive } = useLanguage();
     const router = useRouter();
 
-    const [status, setStatus] = useState<GuideStatus>('idle');
     const [pois, setPois] = useState<PointOfInterest[]>([]);
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
     const [triggeredPois, setTriggeredPois] = useState<Set<string>>(new Set());
     const watchIdRef = useRef<number | null>(null);
     const synthRef = useRef<SpeechSynthesis | null>(null);
     const { toast, dismiss } = useToast();
+    
+    const status = isAudioGuideActive ? 'listening' : 'idle';
 
     useEffect(() => {
         async function fetchPois() {
@@ -73,7 +72,6 @@ export function AudioGuideControl() {
         }
         setUserLocation(null);
         setTriggeredPois(new Set());
-        setStatus('idle');
         dismiss();
     }, [dismiss]);
 
@@ -84,7 +82,7 @@ export function AudioGuideControl() {
                 description: translations.toast.audioGuideUnsupported,
                 variant: "destructive"
             });
-            setStatus('idle');
+            setIsAudioGuideActive(false);
             return;
         }
 
@@ -104,7 +102,7 @@ export function AudioGuideControl() {
                     description: translations.toast.locationErrorDescription,
                     variant: "destructive"
                 });
-                stopLocationTracking();
+                setIsAudioGuideActive(false);
             },
             { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
         );
@@ -177,8 +175,11 @@ export function AudioGuideControl() {
 
 
     const toggleGuide = () => {
-        if (status === 'idle') {
-            setStatus('listening');
+       setIsAudioGuideActive(!isAudioGuideActive);
+    };
+
+    useEffect(() => {
+        if (isAudioGuideActive) {
             startLocationTracking();
              toast({
                 title: translations.audioGuide.started,
@@ -192,7 +193,8 @@ export function AudioGuideControl() {
                 duration: 3000,
             });
         }
-    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isAudioGuideActive]);
 
     return (
         <div className="flex items-center gap-1">
