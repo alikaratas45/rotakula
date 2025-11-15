@@ -8,11 +8,11 @@ import { Button } from './ui/button';
 import { X } from 'lucide-react';
 
 const TourSteps = [
-  { path: '/routes/historic-kula-walking-tour', delay: 16000 },
-  { path: '/create-route', delay: 16000 },
-  { path: '/stories', delay: 14000 },
-  { path: '/nearby', delay: 14000 },
-  { path: '/', delay: 12000 },
+  { path: '/routes/historic-kula-walking-tour', delay: 14000 },
+  { path: '/create-route', delay: 14000 },
+  { path: '/stories', delay: 12000 },
+  { path: '/nearby', delay: 12000 },
+  { path: '/', delay: 10000 },
 ];
 
 export default function IntroTour() {
@@ -31,7 +31,6 @@ export default function IntroTour() {
 
   const stopTour = useCallback(() => {
     setIsTourActive(false);
-    setShowWelcomeBox(false); // Make sure welcome box is hidden when tour stops
     if (synthRef.current?.speaking) {
       synthRef.current.cancel();
     }
@@ -50,10 +49,10 @@ export default function IntroTour() {
     }
     
     setShowWelcomeBox(true);
-
     const welcomeTimeout = setTimeout(() => {
       setShowWelcomeBox(false);
     }, 2000);
+
 
     const narrationText = translations.tour.narration.join(' ');
     const utterance = new SpeechSynthesisUtterance(narrationText);
@@ -92,13 +91,13 @@ export default function IntroTour() {
     };
     
     return () => {
-      clearTimeout(welcomeTimeout);
        if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
       if (synthRef.current?.speaking) {
         synthRef.current.cancel();
       }
+      clearTimeout(welcomeTimeout);
     }
 
   }, [isTourActive, language, translations.tour.narration, router, stopTour]);
