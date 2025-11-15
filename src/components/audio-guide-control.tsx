@@ -45,6 +45,7 @@ export function AudioGuideControl() {
     const [pois, setPois] = useState<PointOfInterest[]>([]);
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
     const [triggeredPois, setTriggeredPois] = useState<Set<string>>(new Set());
+    const [isNarrating, setIsNarrating] = useState(false);
     const watchIdRef = useRef<number | null>(null);
     const synthRef = useRef<SpeechSynthesis | null>(null);
     const { toast, dismiss } = useToast();
@@ -67,13 +68,14 @@ export function AudioGuideControl() {
             navigator.geolocation.clearWatch(watchIdRef.current);
             watchIdRef.current = null;
         }
-        if (synthRef.current && synthRef.current.speaking) {
+        if (isNarrating && synthRef.current && synthRef.current.speaking) {
             synthRef.current.cancel();
+            setIsNarrating(false);
         }
         setUserLocation(null);
         setTriggeredPois(new Set());
         dismiss();
-    }, [dismiss]);
+    }, [dismiss, isNarrating]);
 
     const startLocationTracking = () => {
         if (!('geolocation' in navigator) || !('speechSynthesis' in window)) {
@@ -130,6 +132,11 @@ export function AudioGuideControl() {
         if (voice) {
             utterance.voice = voice;
         }
+
+        utterance.onstart = () => setIsNarrating(true);
+        utterance.onend = () => setIsNarrating(false);
+        utterance.onerror = () => setIsNarrating(false);
+
         synth.speak(utterance);
     }, [language, translations]);
 
