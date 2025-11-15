@@ -28,17 +28,7 @@ export default function IntroTour() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       synthRef.current = window.speechSynthesis;
-      const tourCompleted = sessionStorage.getItem(TOUR_SESSION_KEY);
-      // This logic to auto-start the tour is kept for first-time visitors
-      // but the component visibility is now controlled by `isTourActive`
-      if (!isTourActive && !tourCompleted) {
-        setTimeout(() => {
-            setIsTourActive(true);
-            sessionStorage.setItem(TOUR_SESSION_KEY, 'true');
-        }, 3000); // Increased delay after splash screen
-      }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const stopTour = useCallback(() => {
@@ -58,9 +48,6 @@ export default function IntroTour() {
   useEffect(() => {
     if (isTourActive) {
       setShowWelcomeBox(true);
-      const welcomeTimer = setTimeout(() => {
-        setShowWelcomeBox(false);
-      }, 2000);
 
       const narrationText = translations.tour.narration.join(' ');
       const utterance = new SpeechSynthesisUtterance(narrationText);
@@ -86,33 +73,24 @@ export default function IntroTour() {
       }
 
       let cumulativeDelay = 0;
-      TourSteps.forEach((step, index) => {
+      TourSteps.forEach((step) => {
         cumulativeDelay += step.delay;
         timeoutRef.current = setTimeout(() => {
           router.push(step.path);
-          if (index === TourSteps.length - 1) {
-            // End of tour
-            setTimeout(() => setIsTourActive(false), 2000);
-          }
         }, cumulativeDelay);
       });
 
       utterance.onend = () => {
-        // Ensure tour stops if narration finishes early
-        if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        setIsTourActive(false);
-        if (window.location.pathname !== '/') {
-            router.push('/');
-        }
+        // When narration finishes, stop the tour
+        stopTour();
       };
 
-      return () => {
-        clearTimeout(welcomeTimer);
-      };
-
+    } else {
+      setShowWelcomeBox(false);
     }
 
     return () => {
+      // General cleanup
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -120,14 +98,14 @@ export default function IntroTour() {
         synthRef.current.cancel();
       }
     };
-  }, [isTourActive, language, translations.tour.narration, router, setIsTourActive]);
+  }, [isTourActive, language, translations.tour.narration, router, stopTour]);
 
   if (!isTourActive) {
     return null;
   }
 
   return (
-    <div className="fixed inset-0 z-[200] bg-black/50 backdrop-blur-sm pointer-events-none">
+    <div className="fixed inset-0 z-[200] bg-black/50 pointer-events-none">
       <div className="absolute bottom-10 right-10 pointer-events-auto">
         <Button onClick={stopTour} variant="destructive" size="lg">
           <X className="mr-2 h-5 w-5" />
