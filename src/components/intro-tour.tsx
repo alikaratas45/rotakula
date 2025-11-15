@@ -8,11 +8,11 @@ import { Button } from './ui/button';
 import { X } from 'lucide-react';
 
 const TourSteps = [
-  { path: '/routes/historic-kula-walking-tour', delay: 18000 },
-  { path: '/create-route', delay: 18000 },
-  { path: '/stories', delay: 16000 },
-  { path: '/nearby', delay: 16000 },
-  { path: '/', delay: 14000 },
+  { path: '/routes/historic-kula-walking-tour', delay: 16000 },
+  { path: '/create-route', delay: 16000 },
+  { path: '/stories', delay: 14000 },
+  { path: '/nearby', delay: 14000 },
+  { path: '/', delay: 12000 },
 ];
 
 export default function IntroTour() {
@@ -82,7 +82,7 @@ export default function IntroTour() {
     TourSteps.forEach((step) => {
       cumulativeDelay += step.delay;
       timeoutRef.current = setTimeout(() => {
-        router.push(step.path);
+        if(isTourActive) router.push(step.path);
       }, cumulativeDelay);
     });
 
