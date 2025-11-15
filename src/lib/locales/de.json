@@ -66,7 +66,7 @@
         "distance": "Entfernung"
     },
     "route": {
-        "mapTitle": "Routenkarte",
+        "mapTitle": "Routenkartde",
         "whatsOnThisRoute": "Was gibt es auf dieser Route?",
         "routeInfo": "Routeninformationen",
         "stops": "Stopps"
@@ -192,6 +192,7 @@
             "Wenn Sie Ihr eigenes Abenteuer gestalten möchten, können Sie Ihren persönlichen Reiseplan erstellen, indem Sie auf der Seite 'Route erstellen' die Orte auswählen, die Sie interessieren.",
             "Nicht nur die Orte, auch die Geschichten von Kula sind faszinierend. Im Bereich 'Geschichten' können Sie die Legenden und Lebenserfahrungen dieser Länder lesen.",
             "Für sofortige Entdeckungen können Sie mit der Funktion 'Was ist um mich herum?' die nahegelegenen historischen und natürlichen Schönheiten sofort auf der Karte sehen.",
+            "Außerdem können Sie durch Aktivieren der Funktion 'Audioguide' auf der Hauptseite automatische Audioerzählungen anhören, wenn Sie sich den von Ihnen besuchten Orten nähern.",
             "Wenn Sie bereit sind zu erkunden, endet unsere Tour hier. Ich wünsche Ihnen angenehme Reisen mit RotaKula!"
         ]
     }

@@ -8,11 +8,12 @@ import { Button } from './ui/button';
 import { X } from 'lucide-react';
 
 const TourSteps = [
-  { path: '/routes/historic-kula-walking-tour', delay: 14000 },
-  { path: '/create-route', delay: 14000 },
-  { path: '/stories', delay: 12000 },
-  { path: '/nearby', delay: 12000 },
-  { path: '/', delay: 10000 },
+  { path: '/routes/historic-kula-walking-tour', delay: 10000 },
+  { path: '/create-route', delay: 10000 },
+  { path: '/stories', delay: 8000 },
+  { path: '/nearby', delay: 8000 },
+  { path: '/', delay: 8000 }, // Go to home for audio guide narration
+  { path: '/', delay: 10000 }, // Final delay before ending on home
 ];
 
 export default function IntroTour() {
@@ -31,6 +32,7 @@ export default function IntroTour() {
 
   const stopTour = useCallback(() => {
     setIsTourActive(false);
+    setShowWelcomeBox(false);
     if (synthRef.current?.speaking) {
       synthRef.current.cancel();
     }
@@ -81,7 +83,12 @@ export default function IntroTour() {
     TourSteps.forEach((step) => {
       cumulativeDelay += step.delay;
       timeoutRef.current = setTimeout(() => {
-        if(isTourActive) router.push(step.path);
+        // Ensure tour is still active before navigating
+        if(document.hidden) return; // Don't navigate if tab is not active
+        // A check to see if the tour was cancelled
+        const activeCheck = (document.getElementById('tour-skip-button')?.dataset.active === 'true');
+        if(activeCheck) router.push(step.path);
+
       }, cumulativeDelay);
     });
 
@@ -110,7 +117,7 @@ export default function IntroTour() {
   return (
     <div className="fixed inset-0 z-[200] pointer-events-none">
       <div className="absolute bottom-10 right-10 pointer-events-auto">
-        <Button onClick={stopTour} variant="destructive" size="lg">
+        <Button onClick={stopTour} variant="destructive" size="lg" id="tour-skip-button" data-active={isTourActive}>
           <X className="mr-2 h-5 w-5" />
           {translations.tour.skip}
         </Button>
