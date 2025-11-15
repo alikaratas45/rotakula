@@ -49,6 +49,7 @@ export function AudioGuideControl() {
     const watchIdRef = useRef<number | null>(null);
     const synthRef = useRef<SpeechSynthesis | null>(null);
     const { toast, dismiss } = useToast();
+    const isInitialMount = useRef(true);
     
     const status = isAudioGuideActive ? 'listening' : 'idle';
 
@@ -186,6 +187,11 @@ export function AudioGuideControl() {
     };
 
     useEffect(() => {
+        if (isInitialMount.current) {
+            isInitialMount.current = false;
+            return;
+        }
+
         if (isAudioGuideActive) {
             startLocationTracking();
              toast({
