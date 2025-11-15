@@ -10,11 +10,11 @@ import { X } from 'lucide-react';
 const TOUR_SESSION_KEY = 'rota-kula-tour-completed';
 
 const TourSteps = [
-  { path: '/routes/historic-kula-walking-tour', delay: 7000 },
-  { path: '/create-route', delay: 7000 },
-  { path: '/stories', delay: 6000 },
-  { path: '/nearby', delay: 6000 },
-  { path: '/', delay: 5000 },
+  { path: '/routes/historic-kula-walking-tour', delay: 9000 },
+  { path: '/create-route', delay: 9000 },
+  { path: '/stories', delay: 8000 },
+  { path: '/nearby', delay: 8000 },
+  { path: '/', delay: 7000 },
 ];
 
 export default function IntroTour() {
@@ -48,6 +48,10 @@ export default function IntroTour() {
   useEffect(() => {
     if (isTourActive) {
       setShowWelcomeBox(true);
+
+      const welcomeTimeout = setTimeout(() => {
+        setShowWelcomeBox(false);
+      }, 2000);
 
       const narrationText = translations.tour.narration.join(' ');
       const utterance = new SpeechSynthesisUtterance(narrationText);
@@ -84,13 +88,18 @@ export default function IntroTour() {
         // When narration finishes, stop the tour
         stopTour();
       };
+      
+      return () => {
+        clearTimeout(welcomeTimeout);
+      }
 
-    } else {
-      setShowWelcomeBox(false);
     }
+  }, [isTourActive, language, translations.tour.narration, router, stopTour]);
 
+
+  useEffect(() => {
+    // General cleanup for when component unmounts or tour is stopped
     return () => {
-      // General cleanup
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -98,14 +107,14 @@ export default function IntroTour() {
         synthRef.current.cancel();
       }
     };
-  }, [isTourActive, language, translations.tour.narration, router, stopTour]);
+  }, [isTourActive]);
 
   if (!isTourActive) {
     return null;
   }
 
   return (
-    <div className="fixed inset-0 z-[200] bg-black/50 pointer-events-none">
+    <div className="fixed inset-0 z-[200] pointer-events-none">
       <div className="absolute bottom-10 right-10 pointer-events-auto">
         <Button onClick={stopTour} variant="destructive" size="lg">
           <X className="mr-2 h-5 w-5" />

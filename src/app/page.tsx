@@ -98,18 +98,12 @@ export default function Home() {
           <p className="mt-6 text-lg md:text-xl max-w-3xl mx-auto drop-shadow-md animate-fade-in text-black dark:text-white" style={{animationDelay: '600ms'}}>
             {translations.home.heroSubtitle}
           </p>
-           <div className="mt-8 flex justify-center animate-fade-in" style={{animationDelay: '900ms'}}>
-            <Button size="lg" onClick={() => setIsTourActive(true)}>
-              <HelpCircle className="mr-2 h-5 w-5" />
-              {translations.tour.howToUse}
-            </Button>
-          </div>
         </div>
       </section>
 
       <section className="py-12 px-4 md:px-8 bg-background relative z-20">
-         <div className="max-w-5xl mx-auto">
-            <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
+         <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-4 md:grid-cols-5 lg:grid-cols-9 gap-4">
               {iconNavItems.map((item, index) => (
                 <Link
                   key={item.href}
@@ -133,6 +127,23 @@ export default function Home() {
                   </span>
                 </Link>
               ))}
+               <div className="flex flex-col items-center gap-2 group animate-fade-in-up" style={{ animationDelay: `${iconNavItems.length * 100}ms` }}>
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    className={cn(
+                      "h-16 w-16 md:h-20 md:w-20 rounded-full group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 transform group-hover:scale-110",
+                      "bg-gray-200 dark:bg-gray-800"
+                    )}
+                    aria-label={translations.tour.howToUse}
+                    onClick={() => setIsTourActive(true)}
+                  >
+                    <HelpCircle className="h-7 w-7 md:h-8 md:w-8" />
+                  </Button>
+                  <span className="text-center text-sm font-semibold text-muted-foreground dark:text-white group-hover:text-primary transition-colors">
+                    {translations.tour.howToUse}
+                  </span>
+                </div>
             </div>
           </div>
       </section>
