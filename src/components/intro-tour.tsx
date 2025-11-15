@@ -7,14 +7,12 @@ import { useRouter } from 'next/navigation';
 import { Button } from './ui/button';
 import { X } from 'lucide-react';
 
-const TOUR_SESSION_KEY = 'rota-kula-tour-completed';
-
 const TourSteps = [
-  { path: '/routes/historic-kula-walking-tour', delay: 9000 },
-  { path: '/create-route', delay: 9000 },
-  { path: '/stories', delay: 8000 },
-  { path: '/nearby', delay: 8000 },
-  { path: '/', delay: 7000 },
+  { path: '/routes/historic-kula-walking-tour', delay: 18000 },
+  { path: '/create-route', delay: 18000 },
+  { path: '/stories', delay: 16000 },
+  { path: '/nearby', delay: 16000 },
+  { path: '/', delay: 14000 },
 ];
 
 export default function IntroTour() {
@@ -33,6 +31,7 @@ export default function IntroTour() {
 
   const stopTour = useCallback(() => {
     setIsTourActive(false);
+    setShowWelcomeBox(false); // Make sure welcome box is hidden when tour stops
     if (synthRef.current?.speaking) {
       synthRef.current.cancel();
     }
@@ -46,68 +45,64 @@ export default function IntroTour() {
   }, [router, setIsTourActive]);
 
   useEffect(() => {
-    if (isTourActive) {
-      setShowWelcomeBox(true);
-
-      const welcomeTimeout = setTimeout(() => {
-        setShowWelcomeBox(false);
-      }, 2000);
-
-      const narrationText = translations.tour.narration.join(' ');
-      const utterance = new SpeechSynthesisUtterance(narrationText);
-      utteranceRef.current = utterance;
-      
-      utterance.lang = language;
-      const voices = synthRef.current?.getVoices();
-      if (voices) {
-        const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
-        if (voice) utterance.voice = voice;
-      }
-      
-      const startPlayback = () => {
-          if (synthRef.current) {
-            synthRef.current.speak(utterance);
-          }
-      }
-
-      if (synthRef.current && synthRef.current.getVoices().length > 0) {
-          startPlayback();
-      } else if (synthRef.current) {
-          synthRef.current.onvoiceschanged = startPlayback;
-      }
-
-      let cumulativeDelay = 0;
-      TourSteps.forEach((step) => {
-        cumulativeDelay += step.delay;
-        timeoutRef.current = setTimeout(() => {
-          router.push(step.path);
-        }, cumulativeDelay);
-      });
-
-      utterance.onend = () => {
-        // When narration finishes, stop the tour
-        stopTour();
-      };
-      
-      return () => {
-        clearTimeout(welcomeTimeout);
-      }
-
+    if (!isTourActive) {
+      return;
     }
-  }, [isTourActive, language, translations.tour.narration, router, stopTour]);
+    
+    setShowWelcomeBox(true);
 
+    const welcomeTimeout = setTimeout(() => {
+      setShowWelcomeBox(false);
+    }, 2000);
 
-  useEffect(() => {
-    // General cleanup for when component unmounts or tour is stopped
+    const narrationText = translations.tour.narration.join(' ');
+    const utterance = new SpeechSynthesisUtterance(narrationText);
+    utteranceRef.current = utterance;
+    
+    utterance.lang = language;
+    const voices = synthRef.current?.getVoices();
+    if (voices) {
+      const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
+      if (voice) utterance.voice = voice;
+    }
+    
+    const startPlayback = () => {
+        if (synthRef.current) {
+          synthRef.current.speak(utterance);
+        }
+    }
+
+    if (synthRef.current && synthRef.current.getVoices().length > 0) {
+        startPlayback();
+    } else if (synthRef.current) {
+        synthRef.current.onvoiceschanged = startPlayback;
+    }
+
+    let cumulativeDelay = 0;
+    TourSteps.forEach((step) => {
+      cumulativeDelay += step.delay;
+      timeoutRef.current = setTimeout(() => {
+        router.push(step.path);
+      }, cumulativeDelay);
+    });
+
+    utterance.onend = () => {
+      // When narration finishes, stop the tour
+      stopTour();
+    };
+    
     return () => {
-      if (timeoutRef.current) {
+      clearTimeout(welcomeTimeout);
+       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
       if (synthRef.current?.speaking) {
         synthRef.current.cancel();
       }
-    };
-  }, [isTourActive]);
+    }
+
+  }, [isTourActive, language, translations.tour.narration, router, stopTour]);
+
 
   if (!isTourActive) {
     return null;
