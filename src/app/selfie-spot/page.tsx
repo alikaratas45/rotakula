@@ -28,44 +28,45 @@ export default function SelfieSpotPage() {
 
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const streamRef = useRef<MediaStream | null>(null);
+
+     const startCameraStream = useCallback(async () => {
+        if (!navigator.mediaDevices?.getUserMedia) {
+            setHasCameraPermission(false);
+            toast({
+                title: translations.toast.unsupportedTitle,
+                description: translations.selfieSpot.cameraUnsupported,
+                variant: 'destructive',
+            });
+            return;
+        }
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+            streamRef.current = stream;
+            if (videoRef.current) {
+                videoRef.current.srcObject = stream;
+            }
+            setHasCameraPermission(true);
+        } catch (error) {
+            console.error('Error accessing camera:', error);
+            setHasCameraPermission(false);
+            toast({
+                variant: 'destructive',
+                title: translations.selfieSpot.cameraAccessDeniedTitle,
+                description: translations.selfieSpot.cameraAccessDenied,
+            });
+        }
+    }, [toast, translations]);
 
     useEffect(() => {
-        const getCameraPermission = async () => {
-            if (!navigator.mediaDevices?.getUserMedia) {
-                setHasCameraPermission(false);
-                toast({
-                    title: translations.toast.unsupportedTitle,
-                    description: translations.selfieSpot.cameraUnsupported,
-                    variant: 'destructive',
-                });
-                return;
-            }
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
-                if (videoRef.current) {
-                    videoRef.current.srcObject = stream;
-                }
-                setHasCameraPermission(true);
-            } catch (error) {
-                console.error('Error accessing camera:', error);
-                setHasCameraPermission(false);
-                toast({
-                    variant: 'destructive',
-                    title: translations.selfieSpot.cameraAccessDeniedTitle,
-                    description: translations.selfieSpot.cameraAccessDenied,
-                });
-            }
-        };
-
-        getCameraPermission();
+        startCameraStream();
 
         return () => {
-            if (videoRef.current && videoRef.current.srcObject) {
-                const stream = videoRef.current.srcObject as MediaStream;
-                stream.getTracks().forEach(track => track.stop());
+            if (streamRef.current) {
+                streamRef.current.getTracks().forEach(track => track.stop());
             }
         };
-    }, [toast, translations]);
+    }, [startCameraStream]);
 
     const takeSelfie = useCallback(() => {
         if (!videoRef.current || !canvasRef.current) return;
@@ -84,14 +85,11 @@ export default function SelfieSpotPage() {
         canvas.width = videoWidth;
         canvas.height = videoHeight;
         
-        // Flip the context horizontally to get a mirror image
         ctx.translate(videoWidth, 0);
         ctx.scale(-1, 1);
 
-        // Draw video frame
         ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
         
-        // Flip back to draw the filter correctly
         ctx.setTransform(1, 0, 0, 1, 0, 0);
 
         const filterImg = new window.Image();
@@ -102,6 +100,10 @@ export default function SelfieSpotPage() {
             ctx.drawImage(filterImg, 0, 0, videoWidth, videoHeight);
             setSelfie(canvas.toDataURL('image/png'));
             setIsProcessing(false);
+            
+            if (streamRef.current) {
+                streamRef.current.getTracks().forEach(track => track.stop());
+            }
         };
         
         filterImg.onerror = () => {
@@ -125,6 +127,7 @@ export default function SelfieSpotPage() {
 
     const retakeSelfie = () => {
         setSelfie(null);
+        startCameraStream();
     };
 
     return (
