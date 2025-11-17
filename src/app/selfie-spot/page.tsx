@@ -5,7 +5,7 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/context/language-context';
-import { Camera, Download, Loader2, RefreshCw, Sparkles, Smile, ShieldAlert } from 'lucide-react';
+import { Camera, Download, Loader2, RefreshCw, Sparkles, Smile, ShieldAlert, SwitchCamera, Save } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -25,12 +25,23 @@ export default function SelfieSpotPage() {
     const [selfie, setSelfie] = useState<string | null>(null);
     const [selectedFilter, setSelectedFilter] = useState<string>(filters[0].src);
     const [isProcessing, setIsProcessing] = useState(false);
+    const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
+    const [isPreview, setIsPreview] = useState(false);
 
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const streamRef = useRef<MediaStream | null>(null);
 
-     const startCameraStream = useCallback(async () => {
+     const stopCameraStream = useCallback(() => {
+        if (streamRef.current) {
+            streamRef.current.getTracks().forEach(track => track.stop());
+            streamRef.current = null;
+        }
+    }, []);
+
+     const startCameraStream = useCallback(async (mode: 'user' | 'environment') => {
+        stopCameraStream();
+
         if (!navigator.mediaDevices?.getUserMedia) {
             setHasCameraPermission(false);
             toast({
@@ -41,7 +52,7 @@ export default function SelfieSpotPage() {
             return;
         }
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: mode } });
             streamRef.current = stream;
             if (videoRef.current) {
                 videoRef.current.srcObject = stream;
@@ -50,23 +61,29 @@ export default function SelfieSpotPage() {
         } catch (error) {
             console.error('Error accessing camera:', error);
             setHasCameraPermission(false);
-            toast({
-                variant: 'destructive',
-                title: translations.selfieSpot.cameraAccessDeniedTitle,
-                description: translations.selfieSpot.cameraAccessDenied,
-            });
+            if (mode === 'environment' && (error as Error).name === 'OverconstrainedError') {
+                 toast({
+                    variant: 'destructive',
+                    title: "Arka Kamera Bulunamadı",
+                    description: "Cihazınızda arka kamera bulunmuyor veya erişilemiyor. Ön kameraya geçiliyor.",
+                });
+                setFacingMode('user'); // Fallback to user camera
+            } else {
+                toast({
+                    variant: 'destructive',
+                    title: translations.selfieSpot.cameraAccessDeniedTitle,
+                    description: translations.selfieSpot.cameraAccessDenied,
+                });
+            }
         }
-    }, [toast, translations]);
+    }, [toast, translations, stopCameraStream]);
 
     useEffect(() => {
-        startCameraStream();
-
+        startCameraStream(facingMode);
         return () => {
-            if (streamRef.current) {
-                streamRef.current.getTracks().forEach(track => track.stop());
-            }
+            stopCameraStream();
         };
-    }, [startCameraStream]);
+    }, [facingMode, startCameraStream, stopCameraStream]);
 
     const takeSelfie = useCallback(() => {
         if (!videoRef.current || !canvasRef.current) return;
@@ -85,8 +102,10 @@ export default function SelfieSpotPage() {
         canvas.width = videoWidth;
         canvas.height = videoHeight;
         
-        ctx.translate(videoWidth, 0);
-        ctx.scale(-1, 1);
+        if (facingMode === 'user') {
+            ctx.translate(videoWidth, 0);
+            ctx.scale(-1, 1);
+        }
 
         ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
         
@@ -100,22 +119,20 @@ export default function SelfieSpotPage() {
             ctx.drawImage(filterImg, 0, 0, videoWidth, videoHeight);
             setSelfie(canvas.toDataURL('image/png'));
             setIsProcessing(false);
-            
-            if (streamRef.current) {
-                streamRef.current.getTracks().forEach(track => track.stop());
-            }
+            stopCameraStream();
+            setIsPreview(true);
         };
         
         filterImg.onerror = () => {
             toast({
                 title: translations.toast.errorTitle,
-                description: translations.digitalMemory.toastErrorDescription,
+                description: "Çerçeve yüklenirken bir hata oluştu.",
                 variant: 'destructive',
             });
             setIsProcessing(false);
         };
 
-    }, [selectedFilter, toast, translations]);
+    }, [selectedFilter, toast, facingMode, stopCameraStream]);
     
     const downloadSelfie = () => {
         if (!selfie) return;
@@ -127,7 +144,12 @@ export default function SelfieSpotPage() {
 
     const retakeSelfie = () => {
         setSelfie(null);
-        startCameraStream();
+        setIsPreview(false);
+        startCameraStream(facingMode);
+    };
+
+    const toggleFacingMode = () => {
+        setFacingMode(prev => prev === 'user' ? 'environment' : 'user');
     };
 
     return (
@@ -143,7 +165,7 @@ export default function SelfieSpotPage() {
                         <Image src={selfie} alt={translations.selfieSpot.selfieAlt} layout="fill" objectFit="contain" />
                     ) : (
                         <>
-                            <video ref={videoRef} className="w-full h-full object-cover" autoPlay muted playsInline style={{ transform: 'scaleX(-1)' }} />
+                            <video ref={videoRef} className="w-full h-full object-cover" autoPlay muted playsInline style={facingMode === 'user' ? { transform: 'scaleX(-1)' } : {}} />
                             {selectedFilter && (
                                 <div className="absolute inset-0 pointer-events-none">
                                     <Image src={selectedFilter} alt="Filter preview" layout="fill" objectFit="contain" />
@@ -162,48 +184,55 @@ export default function SelfieSpotPage() {
                     )}
                 </div>
 
-                {selfie ? (
-                    <div className="grid grid-cols-2 gap-4">
-                        <Button size="lg" onClick={retakeSelfie}>
-                            <RefreshCw className="mr-2 h-4 w-4" />
-                            {translations.selfieSpot.retake}
-                        </Button>
-                        <Button size="lg" onClick={downloadSelfie}>
-                            <Download className="mr-2 h-4 w-4" />
-                            {translations.digitalMemory.downloadButton}
-                        </Button>
-                    </div>
-                ) : (
-                    hasCameraPermission && (
-                        <div className="space-y-6">
-                            <Button size="lg" className="w-full" onClick={takeSelfie} disabled={isProcessing}>
-                                {isProcessing ? (
-                                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                                ) : (
-                                    <Camera className="mr-2 h-5 w-5" />
-                                )}
-                                {translations.selfieSpot.takeSelfie}
-                            </Button>
-                            <div>
-                                <h3 className="text-lg font-semibold text-center mb-4">{translations.selfieSpot.chooseFilter}</h3>
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                    {filters.map((f) => (
-                                        <button
-                                            key={f.src}
-                                            onClick={() => setSelectedFilter(f.src)}
-                                            className={cn(
-                                                "border-2 p-1 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-primary",
-                                                selectedFilter === f.src ? "border-primary" : "border-transparent hover:border-primary/50"
-                                            )}
-                                        >
-                                            <Image src={f.src} alt={f.name} width={150} height={150} className="w-full h-auto aspect-square object-contain rounded-md bg-muted" />
-                                            <p className="text-xs font-semibold mt-1 text-center">{f.name}</p>
-                                        </button>
-                                    ))}
-                                </div>
+                {hasCameraPermission && (
+                    <div className="space-y-6">
+                        {isPreview ? (
+                            <div className="grid grid-cols-2 gap-4">
+                                <Button size="lg" onClick={retakeSelfie}>
+                                    <RefreshCw className="mr-2 h-4 w-4" />
+                                    {translations.selfieSpot.retake}
+                                </Button>
+                                <Button size="lg" onClick={downloadSelfie}>
+                                    <Save className="mr-2 h-4 w-4" />
+                                    {translations.digitalMemory.downloadButton}
+                                </Button>
                             </div>
-                        </div>
-                    )
+                        ) : (
+                            <>
+                                <div className="flex items-center gap-4">
+                                    <Button size="lg" className="flex-grow" onClick={takeSelfie} disabled={isProcessing}>
+                                        {isProcessing ? (
+                                            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                        ) : (
+                                            <Camera className="mr-2 h-5 w-5" />
+                                        )}
+                                        {translations.selfieSpot.takeSelfie}
+                                    </Button>
+                                    <Button size="lg" variant="outline" onClick={toggleFacingMode} aria-label="Kamerayı değiştir">
+                                        <SwitchCamera className="h-5 w-5" />
+                                    </Button>
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-semibold text-center mb-4">{translations.selfieSpot.chooseFilter}</h3>
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                        {filters.map((f) => (
+                                            <button
+                                                key={f.src}
+                                                onClick={() => setSelectedFilter(f.src)}
+                                                className={cn(
+                                                    "border-2 p-1 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-primary",
+                                                    selectedFilter === f.src ? "border-primary" : "border-transparent hover:border-primary/50"
+                                                )}
+                                            >
+                                                <Image src={f.src} alt={f.name} width={150} height={150} className="w-full h-auto aspect-square object-contain rounded-md bg-muted" />
+                                                <p className="text-xs font-semibold mt-1 text-center">{f.name}</p>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                    </div>
                 )}
                 
                 <canvas ref={canvasRef} className="hidden"></canvas>
@@ -211,4 +240,3 @@ export default function SelfieSpotPage() {
         </div>
     );
 }
-
