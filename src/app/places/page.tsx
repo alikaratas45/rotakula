@@ -63,7 +63,9 @@ export default function PlacesPage() {
                 setIsLoading(true);
                 const allPois = await getPois(language);
                 
-                const sortedPois = allPois.sort((a, b) => {
+                const filteredPois = allPois.filter(p => p.category !== 'accommodation' && p.category !== 'food');
+
+                const sortedPois = filteredPois.sort((a, b) => {
                     const aIndex = customPoiOrder.indexOf(a.id);
                     const bIndex = customPoiOrder.indexOf(b.id);
                     const aIsNeighborhood = neighborhoodSlugs.includes(a.slug);
