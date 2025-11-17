@@ -12,7 +12,8 @@
         "myRoutes": "Rotalarım",
         "qrScanner": "QR Kod Okut",
         "about": "Kula Hakkında",
-        "digitalMemory": "Dijital Hatıra"
+        "digitalMemory": "Dijital Hatıra",
+        "selfieSpot": "Selfie Noktası"
     },
     "header": {
         "menu": "Menü",
@@ -131,6 +132,17 @@
         "toastSuccessDescription": "Çerçeve başarıyla uygulandı. Şimdi fotoğrafınızı indirebilirsiniz.",
         "toastErrorDescription": "Fotoğraf işlenirken bir hata oluştu. Lütfen farklı bir fotoğraf deneyin."
     },
+     "selfieSpot": {
+        "title": "Filtreli Selfie Noktası",
+        "subtitle": "Kula temalı AR filtreleriyle eğlenceli anılar biriktirin!",
+        "chooseFilter": "Filtre Seç",
+        "takeSelfie": "Selfie Çek",
+        "selfieAlt": "Filtreli selfie",
+        "retake": "Tekrar Çek",
+        "cameraAccessDeniedTitle": "Kamera Erişimi Reddedildi",
+        "cameraAccessDenied": "Bu özelliği kullanmak için lütfen tarayıcı ayarlarınızdan kamera erişimine izin verin.",
+        "cameraUnsupported": "Tarayıcınız kamera erişimini desteklemiyor."
+    },
     "map": {
         "yourLocation": "Sizin Konumunuz",
         "loading": "Harita Yükleniyor...",
@@ -217,5 +229,3 @@
         ]
     }
 }
-
-    

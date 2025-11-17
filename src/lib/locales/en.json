@@ -12,7 +12,8 @@
         "myRoutes": "My Routes",
         "qrScanner": "Scan QR Code",
         "about": "About Kula",
-        "digitalMemory": "Digital Memory"
+        "digitalMemory": "Digital Memory",
+        "selfieSpot": "Selfie Spot"
     },
     "header": {
         "menu": "Menu",
@@ -131,6 +132,17 @@
         "toastSuccessDescription": "The frame has been applied successfully. You can now download your photo.",
         "toastErrorDescription": "An error occurred while processing the photo. Please try a different photo."
     },
+    "selfieSpot": {
+        "title": "Filtered Selfie Spot",
+        "subtitle": "Create fun memories with Kula-themed AR filters!",
+        "chooseFilter": "Choose Filter",
+        "takeSelfie": "Take Selfie",
+        "selfieAlt": "Filtered selfie",
+        "retake": "Retake",
+        "cameraAccessDeniedTitle": "Camera Access Denied",
+        "cameraAccessDenied": "To use this feature, please allow camera access in your browser settings.",
+        "cameraUnsupported": "Your browser does not support camera access."
+    },
     "map": {
         "yourLocation": "Your Location",
         "loading": "Map is Loading...",
@@ -218,5 +230,3 @@
         ]
     }
 }
-
-    

@@ -12,7 +12,8 @@
         "myRoutes": "Mes Itinéraires",
         "qrScanner": "Scanner QR Code",
         "about": "À propos de Kula",
-        "digitalMemory": "Souvenir Numérique"
+        "digitalMemory": "Souvenir Numérique",
+        "selfieSpot": "Point Selfie"
     },
     "header": {
         "menu": "Menu",
@@ -131,6 +132,17 @@
         "toastSuccessDescription": "Le cadre a été appliqué avec succès. Vous pouvez maintenant télécharger votre photo.",
         "toastErrorDescription": "Une erreur s'est produite lors du traitement de la photo. Veuillez essayer une autre photo."
     },
+    "selfieSpot": {
+        "title": "Point Selfie avec Filtre",
+        "subtitle": "Créez des souvenirs amusants avec les filtres AR sur le thème de Kula !",
+        "chooseFilter": "Choisir un Filtre",
+        "takeSelfie": "Prendre un Selfie",
+        "selfieAlt": "Selfie avec filtre",
+        "retake": "Reprendre",
+        "cameraAccessDeniedTitle": "Accès à la Caméra Refusé",
+        "cameraAccessDenied": "Pour utiliser cette fonctionnalité, veuillez autoriser l'accès à la caméra dans les paramètres de votre navigateur.",
+        "cameraUnsupported": "Votre navigateur ne prend pas en charge l'accès à la caméra."
+    },
     "map": {
         "yourLocation": "Votre Emplacement",
         "loading": "Chargement de la carte...",
@@ -218,5 +230,3 @@
         ]
     }
 }
-
-    

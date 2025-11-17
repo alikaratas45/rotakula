@@ -12,7 +12,8 @@
         "myRoutes": "Meine Routen",
         "qrScanner": "QR-Code Scannen",
         "about": "Über Kula",
-        "digitalMemory": "Digitale Erinnerung"
+        "digitalMemory": "Digitale Erinnerung",
+        "selfieSpot": "Selfie-Punkt"
     },
     "header": {
         "menu": "Menü",
@@ -131,6 +132,17 @@
         "toastSuccessDescription": "Der Rahmen wurde erfolgreich angewendet. Sie können Ihr Foto jetzt herunterladen.",
         "toastErrorDescription": "Beim Verarbeiten des Fotos ist ein Fehler aufgetreten. Bitte versuchen Sie es mit einem anderen Foto."
     },
+    "selfieSpot": {
+        "title": "Gefilterter Selfie-Punkt",
+        "subtitle": "Schaffen Sie lustige Erinnerungen mit Kula-Themen-AR-Filtern!",
+        "chooseFilter": "Filter wählen",
+        "takeSelfie": "Selfie machen",
+        "selfieAlt": "Gefiltertes Selfie",
+        "retake": "Erneut aufnehmen",
+        "cameraAccessDeniedTitle": "Kamerazugriff verweigert",
+        "cameraAccessDenied": "Um diese Funktion zu nutzen, erlauben Sie bitte den Kamerazugriff in Ihren Browsereinstellungen.",
+        "cameraUnsupported": "Ihr Browser unterstützt den Kamerazugriff nicht."
+    },
     "map": {
         "yourLocation": "Ihr Standort",
         "loading": "Karte wird geladen...",
@@ -218,5 +230,3 @@
         ]
     }
 }
-
-    
