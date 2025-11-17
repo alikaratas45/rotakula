@@ -175,7 +175,15 @@ export default function SelfieSpotPage() {
                     </div>
                 ) : (
                     hasCameraPermission && (
-                        <>
+                        <div className="space-y-6">
+                            <Button size="lg" className="w-full" onClick={takeSelfie} disabled={isProcessing}>
+                                {isProcessing ? (
+                                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                ) : (
+                                    <Camera className="mr-2 h-5 w-5" />
+                                )}
+                                {translations.selfieSpot.takeSelfie}
+                            </Button>
                             <div>
                                 <h3 className="text-lg font-semibold text-center mb-4">{translations.selfieSpot.chooseFilter}</h3>
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -194,15 +202,7 @@ export default function SelfieSpotPage() {
                                     ))}
                                 </div>
                             </div>
-                            <Button size="lg" className="w-full" onClick={takeSelfie} disabled={isProcessing}>
-                                {isProcessing ? (
-                                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                                ) : (
-                                    <Camera className="mr-2 h-5 w-5" />
-                                )}
-                                {translations.selfieSpot.takeSelfie}
-                            </Button>
-                        </>
+                        </div>
                     )
                 )}
                 
@@ -211,3 +211,4 @@ export default function SelfieSpotPage() {
         </div>
     );
 }
+
