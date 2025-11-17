@@ -1,15 +1,24 @@
-<svg viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg" style="font-family: 'Playfair Display', serif; font-weight: 700; letter-spacing: 0.05em;">
-    <defs>
-        <style>
-            .title {
-                font-size: 100px;
-                fill: white;
-                stroke: black;
-                stroke-width: 2px;
-                paint-order: stroke;
-                text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            }
-        </style>
-    </defs>
-    <text x="50%" y="90%" dominant-baseline="middle" text-anchor="middle" class="title">KULA - VOLKANİK PARK</text>
+<svg width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+  <!-- Define the font to be used -->
+  <defs>
+    <style type="text/css">
+      @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
+    </style>
+  </defs>
+  <!-- Text element with artistic font and effects -->
+  <text
+    x="50%"
+    y="90%"
+    dominant-baseline="middle"
+    text-anchor="middle"
+    font-family="'Playfair Display', serif"
+    font-size="90px"
+    font-weight="700"
+    fill="white"
+    stroke="black"
+    stroke-width="1"
+    style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);"
+  >
+    KULA - VOLKANİK PARK
+  </text>
 </svg>
