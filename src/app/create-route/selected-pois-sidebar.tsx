@@ -37,7 +37,7 @@ function PoiItem({ poi }: { poi: PointOfInterest }) {
     )
 }
 
-export default function SelectedPoisSidebar({ selectedPois, setSelectedPois, isDrawer = false }: { selectedPois: PointOfInterest[], setSelectedPois: React.Dispatch<React.SetStateAction<PointOfInterest[]>>, isDrawer?: boolean }) {
+export default function SelectedPoisSidebar({ selectedPois, setSelectedPois }: { selectedPois: PointOfInterest[], setSelectedPois: React.Dispatch<React.SetStateAction<PointOfInterest[]>> }) {
     const { translations } = useLanguage();
     const { toast } = useToast();
     const [isStartingRoute, setIsStartingRoute] = useState(false);
@@ -100,8 +100,8 @@ export default function SelectedPoisSidebar({ selectedPois, setSelectedPois, isD
                     <p className="text-xs text-muted-foreground hidden md:block">{translations.createRoute.dragAndDrop}</p>
                 </div>
                  {selectedPois.length === 0 ? (
-                    <div className="flex h-full items-center justify-center p-4 text-center border rounded-lg">
-                        <p className="text-muted-foreground">{translations.createRoute.noPoisSelected}</p>
+                    <div className="flex h-full items-center justify-center p-4 text-center border-2 border-dashed rounded-lg bg-muted/50">
+                        <p className="text-muted-foreground text-sm">{translations.createRoute.noPoisSelected}</p>
                     </div>
                 ) : (
                     <ScrollArea className="w-full">
@@ -114,41 +114,41 @@ export default function SelectedPoisSidebar({ selectedPois, setSelectedPois, isD
                 )}
             </div>
             
-             {selectedPois.length > 0 && (
-                <div className="flex-shrink-0 flex md:flex-col gap-2 w-full md:w-auto">
-                     <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                            <Button className="w-full" disabled={isStartingRoute}>
-                                {isStartingRoute ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Map className="mr-2 h-4 w-4" />}
-                                {translations.createRoute.createRoute}
-                            </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>{translations.createRoute.chooseTravelMode}</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    {translations.createRoute.travelModeDescription}
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter className="sm:justify-center gap-2">
-                                 <AlertDialogAction onClick={() => handleCreateRoute('walking')}>
-                                    <Footprints className="mr-2 h-4 w-4" />
-                                    {translations.createRoute.walking}
-                                </AlertDialogAction>
-                                <AlertDialogAction onClick={() => handleCreateRoute('driving')}>
-                                    <Car className="mr-2 h-4 w-4" />
-                                    {translations.createRoute.driving}
-                                </AlertDialogAction>
-                                <AlertDialogCancel>{translations.common.cancel}</AlertDialogCancel>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
-                    <Button variant="outline" className="w-full" onClick={() => setSelectedPois([])}>
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        {translations.createRoute.clearSelection}
-                    </Button>
-                </div>
-            )}
+             
+            <div className="flex-shrink-0 flex md:flex-col gap-2 w-full md:w-auto">
+                 <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                        <Button className="w-full" disabled={isStartingRoute || selectedPois.length === 0}>
+                            {isStartingRoute ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Map className="mr-2 h-4 w-4" />}
+                            {translations.createRoute.createRoute}
+                        </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>{translations.createRoute.chooseTravelMode}</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                {translations.createRoute.travelModeDescription}
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter className="sm:justify-center gap-2">
+                             <AlertDialogAction onClick={() => handleCreateRoute('walking')}>
+                                <Footprints className="mr-2 h-4 w-4" />
+                                {translations.createRoute.walking}
+                            </AlertDialogAction>
+                            <AlertDialogAction onClick={() => handleCreateRoute('driving')}>
+                                <Car className="mr-2 h-4 w-4" />
+                                {translations.createRoute.driving}
+                            </AlertDialogAction>
+                            <AlertDialogCancel>{translations.common.cancel}</AlertDialogCancel>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+                <Button variant="outline" className="w-full" onClick={() => setSelectedPois([])} disabled={selectedPois.length === 0}>
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    {translations.createRoute.clearSelection}
+                </Button>
+            </div>
+            
         </div>
     );
 }

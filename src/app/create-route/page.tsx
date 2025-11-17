@@ -85,6 +85,11 @@ export default function CreateRoutePage() {
     return (
         <div className="container mx-auto px-4 py-8">
             <div className="flex flex-col gap-8">
+                {/* Selected POIs */}
+                <div className="sticky top-16 z-20 -mx-4 px-4 py-4 border-y bg-background/95 backdrop-blur-sm">
+                    <SelectedPoisSidebar selectedPois={selectedPois} setSelectedPois={setSelectedPois} />
+                </div>
+                
                 {/* POI Selection List */}
                 <div>
                      <PoiSelectionList 
@@ -95,13 +100,6 @@ export default function CreateRoutePage() {
                         loading={loading}
                     />
                 </div>
-                
-                {/* Selected POIs */}
-                {selectedPois.length > 0 && (
-                    <div className="sticky top-16 z-10 bg-background/80 backdrop-blur-sm -mx-4 px-4 py-4 border-y">
-                        <SelectedPoisSidebar selectedPois={selectedPois} setSelectedPois={setSelectedPois} isDrawer />
-                    </div>
-                )}
                 
                 {/* Map */}
                 <div>
