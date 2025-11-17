@@ -167,7 +167,7 @@ export default function DigitalMemoryPage() {
                                                 selectedFrame === f.src ? "border-primary" : "border-transparent hover:border-primary/50"
                                             )}
                                         >
-                                            <Image src={`/${f.src}`} alt={f.name} width={150} height={150} className="w-full h-auto aspect-square object-cover rounded-md bg-muted" />
+                                            <Image src={f.src} alt={f.name} width={150} height={150} className="w-full h-auto aspect-square object-cover rounded-md bg-muted" />
                                             <p className="text-xs font-semibold mt-1 text-center">{f.name}</p>
                                         </button>
                                     ))}
@@ -221,7 +221,3 @@ export default function DigitalMemoryPage() {
         </div>
     );
 }
-
-    
-
-    
