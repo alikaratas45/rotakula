@@ -15,6 +15,27 @@ import EmbeddedMap from '@/components/map';
 import { APIProvider } from '@vis.gl/react-google-maps';
 import { useLanguage } from '@/context/language-context';
 
+const customPoiOrder = [
+    'poi-30', // Ahşap köprüler
+    'poi-2',  // Peri Bacaları
+    'poi-3',  // Çakırca Bazalt Sütunları
+    'poi-4',  // tarihi kula evleri
+    'poi-1',  // sandal divlit volkan konisi
+    'poi-18', // jeopark ziyaretçi merkezi
+];
+
+const neighborhoodSlugs = [
+    'encekler-village',
+    'sandal-village',
+    'gokceoren-village',
+    'incesu-village',
+    'korez-village',
+    'emre-village',
+    'evciler-village',
+    'yurtbasi-tabala-village',
+];
+
+
 function getCategoryIcon(category: PointOfInterest['category']) {
     switch (category) {
         case 'geopark':
@@ -41,7 +62,29 @@ export default function PlacesPage() {
             try {
                 setIsLoading(true);
                 const allPois = await getPois(language);
-                setPois(allPois);
+                
+                const sortedPois = allPois.sort((a, b) => {
+                    const aIndex = customPoiOrder.indexOf(a.id);
+                    const bIndex = customPoiOrder.indexOf(b.id);
+                    const aIsNeighborhood = neighborhoodSlugs.includes(a.slug);
+                    const bIsNeighborhood = neighborhoodSlugs.includes(b.slug);
+                    const aIsBelediye = a.slug === 'kula-belediyesi';
+                    const bIsBelediye = b.slug === 'kula-belediyesi';
+
+                    if (aIsBelediye) return 1;
+                    if (bIsBelediye) return -1;
+
+                    if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
+                    if (aIndex !== -1) return -1;
+                    if (bIndex !== -1) return 1;
+
+                    if (aIsNeighborhood && !bIsNeighborhood) return 1;
+                    if (!aIsNeighborhood && bIsNeighborhood) return -1;
+
+                    return a.name.localeCompare(b.name, language);
+                });
+
+                setPois(sortedPois);
             } catch (error) {
                 console.error("Failed to fetch POIs", error);
             } finally {
