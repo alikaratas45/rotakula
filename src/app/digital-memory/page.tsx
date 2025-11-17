@@ -11,10 +11,10 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
 const frames = [
-    { src: "/frames/kula-geopark.png", name: "UNESCO Global Geopark" },
-    { src: "/frames/kula-houses.png", name: "Tarihi Evler" },
-    { src: "/frames/kula-peribacalari.png", name: "Peri Bacaları" },
-    { src: "/frames/kula-volcanic.png", name: "Volkanik Park" },
+    { src: "frames/kula-geopark.png", name: "UNESCO Global Geopark" },
+    { src: "frames/kula-houses.png", name: "Tarihi Evler" },
+    { src: "frames/kula-peribacalari.png", name: "Peri Bacaları" },
+    { src: "frames/kula-volcanic.png", name: "Volkanik Park" },
 ];
 
 export default function DigitalMemoryPage() {
@@ -167,7 +167,7 @@ export default function DigitalMemoryPage() {
                                                 selectedFrame === f.src ? "border-primary" : "border-transparent hover:border-primary/50"
                                             )}
                                         >
-                                            <Image src={f.src} alt={f.name} width={150} height={150} className="w-full h-auto aspect-square object-cover rounded-md bg-muted" />
+                                            <Image src={`/${f.src}`} alt={f.name} width={150} height={150} className="w-full h-auto aspect-square object-cover rounded-md bg-muted" />
                                             <p className="text-xs font-semibold mt-1 text-center">{f.name}</p>
                                         </button>
                                     ))}
@@ -221,5 +221,7 @@ export default function DigitalMemoryPage() {
         </div>
     );
 }
+
+    
 
     
