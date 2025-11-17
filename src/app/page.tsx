@@ -10,7 +10,7 @@ import { getImageById } from '@/lib/placeholder-images';
 import { useEffect, useState, useMemo } from 'react';
 import { useLanguage } from '@/context/language-context';
 import { Button } from '@/components/ui/button';
-import { Utensils, Map, Pin, Route, Info, BookOpen, QrCode, Landmark, HelpCircle } from 'lucide-react';
+import { Utensils, Map, Pin, Route, Info, BookOpen, QrCode, Landmark, HelpCircle, Camera } from 'lucide-react';
 import { BedIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { FeedbackSection } from '@/components/feedback';
@@ -74,6 +74,7 @@ export default function Home() {
     { href: "/about", label: translations.nav.about, icon: Info, colorClass: "bg-purple-200 dark:bg-purple-900" },
     { href: "/routes/kula-flavor-tour", label: translations.nav.food, icon: Utensils, colorClass: "bg-orange-200 dark:bg-orange-900" },
     { href: "/accommodation", label: translations.nav.accommodation, icon: BedIcon, colorClass: "bg-teal-200 dark:bg-teal-900" },
+    { href: "/digital-memory", label: translations.nav.digitalMemory, icon: Camera, colorClass: "bg-pink-200 dark:bg-pink-900" },
     { href: "/qr-scanner", label: translations.nav.qrScanner, icon: QrCode, colorClass: "bg-indigo-200 dark:bg-indigo-900" },
   ];
 
@@ -103,7 +104,7 @@ export default function Home() {
 
       <section className="py-12 px-4 md:px-8 bg-background relative z-20">
          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-4 md:grid-cols-5 lg:grid-cols-9 gap-4">
+            <div className="grid grid-cols-4 md:grid-cols-5 lg:grid-cols-10 gap-4">
               {iconNavItems.map((item, index) => (
                 <Link
                   key={item.href}
@@ -184,3 +185,5 @@ export default function Home() {
     </div>
   );
 }
+
+    

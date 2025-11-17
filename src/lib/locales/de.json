@@ -11,7 +11,8 @@
         "nearby": "Was ist in meiner Nähe?",
         "myRoutes": "Meine Routen",
         "qrScanner": "QR-Code Scannen",
-        "about": "Über Kula"
+        "about": "Über Kula",
+        "digitalMemory": "Digitale Erinnerung"
     },
     "header": {
         "menu": "Menü",
@@ -110,6 +111,26 @@
         "viewSelected": "Auswahl anzeigen",
         "viewOnMap": "Auf der Karte anzeigen"
     },
+    "digitalMemory": {
+        "title": "Digitaler Erinnerungsrahmen",
+        "subtitle": "Verewigen Sie Ihre Kula-Erinnerungen mit einzigartigen Rahmen.",
+        "step1Title": "Schritt 1: Laden Sie Ihr Foto hoch",
+        "step1Description": "Wählen Sie das Foto aus, dem Sie einen Rahmen hinzufügen möchten.",
+        "uploadButton": "Foto auswählen oder aufnehmen",
+        "step2Title": "Schritt 2: Fotovorschau",
+        "step2Description": "Das von Ihnen hochgeladene Foto wird unten angezeigt.",
+        "step3Title": "Schritt 3: Wählen Sie Ihren Rahmen",
+        "step3Description": "Wählen Sie den Rahmen aus, den Sie auf Ihr Foto anwenden möchten.",
+        "applyFrameButton": "Rahmen anwenden",
+        "applyingFrame": "Rahmen wird angewendet...",
+        "step4Title": "Schritt 4: Ihre Erinnerung ist fertig!",
+        "step4Description": "Sie können Ihr gerahmtes Foto über die Schaltfläche unten herunterladen.",
+        "downloadButton": "Foto herunterladen",
+        "waitingForPhoto": "Bitte laden Sie ein Foto hoch, um eine Erinnerung zu erstellen.",
+        "toastSuccessTitle": "Erfolg!",
+        "toastSuccessDescription": "Der Rahmen wurde erfolgreich angewendet. Sie können Ihr Foto jetzt herunterladen.",
+        "toastErrorDescription": "Beim Verarbeiten des Fotos ist ein Fehler aufgetreten. Bitte versuchen Sie es mit einem anderen Foto."
+    },
     "map": {
         "yourLocation": "Ihr Standort",
         "loading": "Karte wird geladen...",
@@ -197,3 +218,5 @@
         ]
     }
 }
+
+    

@@ -11,7 +11,8 @@
         "nearby": "Qu'y a-t-il autour de moi ?",
         "myRoutes": "Mes Itinéraires",
         "qrScanner": "Scanner QR Code",
-        "about": "À propos de Kula"
+        "about": "À propos de Kula",
+        "digitalMemory": "Souvenir Numérique"
     },
     "header": {
         "menu": "Menu",
@@ -110,6 +111,26 @@
         "viewSelected": "Voir la sélection",
         "viewOnMap": "Voir sur la Carte"
     },
+    "digitalMemory": {
+        "title": "Cadre de Souvenir Numérique",
+        "subtitle": "Immortalisez vos souvenirs de Kula avec des cadres uniques.",
+        "step1Title": "Étape 1 : Téléchargez votre photo",
+        "step1Description": "Sélectionnez la photo à laquelle vous souhaitez ajouter un cadre.",
+        "uploadButton": "Sélectionner ou Prendre une Photo",
+        "step2Title": "Étape 2 : Aperçu de la photo",
+        "step2Description": "La photo que vous avez téléchargée est affichée ci-dessous.",
+        "step3Title": "Étape 3 : Choisissez votre cadre",
+        "step3Description": "Sélectionnez le cadre que vous souhaitez appliquer à votre photo.",
+        "applyFrameButton": "Appliquer le Cadre",
+        "applyingFrame": "Application du cadre...",
+        "step4Title": "Étape 4 : Votre souvenir est prêt !",
+        "step4Description": "Vous pouvez télécharger votre photo encadrée en utilisant le bouton ci-dessous.",
+        "downloadButton": "Télécharger la Photo",
+        "waitingForPhoto": "Veuillez télécharger une photo pour créer un souvenir.",
+        "toastSuccessTitle": "Succès !",
+        "toastSuccessDescription": "Le cadre a été appliqué avec succès. Vous pouvez maintenant télécharger votre photo.",
+        "toastErrorDescription": "Une erreur s'est produite lors du traitement de la photo. Veuillez essayer une autre photo."
+    },
     "map": {
         "yourLocation": "Votre Emplacement",
         "loading": "Chargement de la carte...",
@@ -197,3 +218,5 @@
         ]
     }
 }
+
+    

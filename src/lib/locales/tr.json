@@ -11,7 +11,8 @@
         "nearby": "Çevremde Ne Var?",
         "myRoutes": "Rotalarım",
         "qrScanner": "QR Kod Okut",
-        "about": "Kula Hakkında"
+        "about": "Kula Hakkında",
+        "digitalMemory": "Dijital Hatıra"
     },
     "header": {
         "menu": "Menü",
@@ -110,6 +111,26 @@
         "viewSelected": "Seçilenleri Görüntüle",
         "viewOnMap": "Haritada Görüntüle"
     },
+    "digitalMemory": {
+        "title": "Dijital Hatıra Çerçevesi",
+        "subtitle": "Kula anılarınızı eşsiz çerçevelerle ölümsüzleştirin.",
+        "step1Title": "1. Adım: Fotoğrafınızı Yükleyin",
+        "step1Description": "Çerçeve eklemek istediğiniz fotoğrafı seçin.",
+        "uploadButton": "Fotoğraf Seç veya Çek",
+        "step2Title": "2. Adım: Fotoğraf Önizlemesi",
+        "step2Description": "Yüklediğiniz fotoğraf aşağıda görünüyor.",
+        "step3Title": "3. Adım: Çerçevenizi Seçin",
+        "step3Description": "Fotoğrafınıza uygulamak istediğiniz çerçeveyi seçin.",
+        "applyFrameButton": "Çerçeveyi Uygula",
+        "applyingFrame": "Çerçeve Uygulanıyor...",
+        "step4Title": "4. Adım: Anınız Hazır!",
+        "step4Description": "Aşağıdaki butonu kullanarak çerçeveli fotoğrafınızı indirebilirsiniz.",
+        "downloadButton": "Fotoğrafı İndir",
+        "waitingForPhoto": "Bir hatıra oluşturmak için lütfen bir fotoğraf yükleyin.",
+        "toastSuccessTitle": "Başarılı!",
+        "toastSuccessDescription": "Çerçeve başarıyla uygulandı. Şimdi fotoğrafınızı indirebilirsiniz.",
+        "toastErrorDescription": "Fotoğraf işlenirken bir hata oluştu. Lütfen farklı bir fotoğraf deneyin."
+    },
     "map": {
         "yourLocation": "Sizin Konumunuz",
         "loading": "Harita Yükleniyor...",
@@ -196,3 +217,5 @@
         ]
     }
 }
+
+    

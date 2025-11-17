@@ -11,7 +11,8 @@
         "nearby": "What's Around Me?",
         "myRoutes": "My Routes",
         "qrScanner": "Scan QR Code",
-        "about": "About Kula"
+        "about": "About Kula",
+        "digitalMemory": "Digital Memory"
     },
     "header": {
         "menu": "Menu",
@@ -110,6 +111,26 @@
         "viewSelected": "View Selected",
         "viewOnMap": "View on Map"
     },
+    "digitalMemory": {
+        "title": "Digital Memory Frame",
+        "subtitle": "Immortalize your Kula memories with unique frames.",
+        "step1Title": "Step 1: Upload Your Photo",
+        "step1Description": "Select the photo you want to add a frame to.",
+        "uploadButton": "Select or Take a Photo",
+        "step2Title": "Step 2: Photo Preview",
+        "step2Description": "The photo you uploaded is shown below.",
+        "step3Title": "Step 3: Choose Your Frame",
+        "step3Description": "Select the frame you want to apply to your photo.",
+        "applyFrameButton": "Apply Frame",
+        "applyingFrame": "Applying Frame...",
+        "step4Title": "Step 4: Your Memory is Ready!",
+        "step4Description": "You can download your framed photo using the button below.",
+        "downloadButton": "Download Photo",
+        "waitingForPhoto": "Please upload a photo to create a memory.",
+        "toastSuccessTitle": "Success!",
+        "toastSuccessDescription": "The frame has been applied successfully. You can now download your photo.",
+        "toastErrorDescription": "An error occurred while processing the photo. Please try a different photo."
+    },
     "map": {
         "yourLocation": "Your Location",
         "loading": "Map is Loading...",
@@ -197,3 +218,5 @@
         ]
     }
 }
+
+    
