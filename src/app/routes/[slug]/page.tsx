@@ -8,11 +8,11 @@ import Image from 'next/image';
 import RouteDetailsClient from './route-details-client';
 import type { ThematicRoute, PointOfInterest } from '@/lib/types';
 import { useLanguage } from '@/context/language-context';
-import { useEffect, useState, use } from 'react';
+import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 
 export default function RoutePage({ params }: { params: { slug: string } }) {
-    const { slug } = use(params);
+    const { slug } = params;
     const { language } = useLanguage();
     const [route, setRoute] = useState<ThematicRoute | null>(null);
     const [pois, setPois] = useState<PointOfInterest[]>([]);
