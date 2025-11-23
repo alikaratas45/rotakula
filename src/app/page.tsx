@@ -68,7 +68,6 @@ export default function Home() {
   
   const iconNavItems = [
     { href: "/places", label: translations.nav.places, icon: Landmark, colorClass: "bg-blue-200 dark:bg-blue-900" },
-    { href: "/my-badges", label: translations.nav.myBadges, icon: Award, colorClass: "bg-yellow-200 dark:bg-yellow-900" },
     { href: "/create-route", label: translations.nav.createRoute, icon: Route, colorClass: "bg-green-200 dark:bg-green-900" },
     { href: "/stories", label: translations.nav.stories, icon: BookOpen, colorClass: "bg-purple-200 dark:bg-purple-900" },
     { href: "/routes/kula-flavor-tour", label: translations.nav.food, icon: Utensils, colorClass: "bg-orange-200 dark:bg-orange-900" },
@@ -76,6 +75,7 @@ export default function Home() {
     { href: "/selfie-spot", label: translations.nav.selfieSpot, icon: Smile, colorClass: "bg-cyan-200 dark:bg-cyan-900" },
     { href: "/qr-scanner", label: translations.nav.qrScanner, icon: QrCode, colorClass: "bg-indigo-200 dark:bg-indigo-900" },
     { href: "/nearby", label: translations.nav.nearby, icon: Pin, colorClass: "bg-red-200 dark:bg-red-900" },
+    { href: "/my-badges", label: translations.nav.myBadges, icon: Award, colorClass: "bg-yellow-200 dark:bg-yellow-900" },
   ];
 
   return (
