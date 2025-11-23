@@ -224,12 +224,12 @@ export default function SelfieSpotPage() {
                                                 key={f.src}
                                                 onClick={() => setSelectedFilter(f.src)}
                                                 className={cn(
-                                                    "border-2 p-1 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-primary",
+                                                    "border-2 p-1 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-primary flex flex-col items-center gap-1",
                                                     selectedFilter === f.src ? "border-primary" : "border-transparent hover:border-primary/50"
                                                 )}
                                             >
                                                 <Image src={f.src} alt={f.name} width={150} height={150} className="w-full h-auto aspect-square object-contain rounded-md bg-muted" />
-                                                <p className="text-xs font-semibold mt-1 text-center">{f.name}</p>
+                                                <p className="text-xs font-semibold mt-1 text-center flex-grow">{f.name}</p>
                                             </button>
                                         ))}
                                     </div>
