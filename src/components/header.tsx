@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AudioGuideControl } from "./audio-guide-control";
-import { useLanguage } from "@/context/language-context";
+import { useApp } from "@/context/app-context";
 import { TurkishFlagIcon, UKFlagIcon, FrenchFlagIcon, GermanFlagIcon } from "./icons";
 import { useAuth, useUser } from "@/firebase";
 import { useToast } from "@/hooks/use-toast";
@@ -26,7 +26,7 @@ import { useToast } from "@/hooks/use-toast";
 
 function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
     const { setTheme, theme } = useTheme();
-    const { translations } = useLanguage();
+    const { translations } = useApp();
     
     return (
          <Button
@@ -61,7 +61,7 @@ function AdminAuth({ isMobile = false }: { isMobile?: boolean }) {
     if (!auth) return;
     try {
       await auth.signOut();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error during sign-out:", error);
     }
   };
@@ -85,7 +85,7 @@ function AdminAuth({ isMobile = false }: { isMobile?: boolean }) {
 
 export function Header() {
     const pathname = usePathname();
-    const { language, setLanguage, translations } = useLanguage();
+    const { language, setLanguage, translations } = useApp();
     const [adminClickCount, setAdminClickCount] = React.useState(0);
     const [showAdmin, setShowAdmin] = React.useState(false);
     const adminClickTimer = React.useRef<NodeJS.Timeout | null>(null);

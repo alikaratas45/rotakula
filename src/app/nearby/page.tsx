@@ -13,7 +13,7 @@ import { Loader2, MapPin, Mountain, Info, Compass, Navigation } from 'lucide-rea
 import { HistoricHouseIcon, FoodIcon, BedIcon } from '@/components/icons';
 import EmbeddedMap from '@/components/map';
 import { APIProvider } from '@vis.gl/react-google-maps';
-import { useLanguage } from '@/context/language-context';
+import { useApp } from '@/context/app-context';
 import { haversineDistance } from '@/lib/utils';
 
 const NEARBY_RADIUS_KM = 10;
@@ -37,7 +37,7 @@ function getCategoryIcon(category: PointOfInterest['category']) {
 }
 
 export default function NearbyPage() {
-    const { language, translations } = useLanguage();
+    const { language, translations } = useApp();
     const [nearbyPois, setNearbyPois] = useState<PoiWithDistance[]>([]);
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
     const [status, setStatus] = useState<'loading' | 'error' | 'success' | 'no_results'>('loading');

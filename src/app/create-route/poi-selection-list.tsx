@@ -6,7 +6,7 @@ import { getImageById } from "@/lib/placeholder-images";
 import Image from "next/image";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2 } from "lucide-react";
-import { useLanguage } from "@/context/language-context";
+import { useApp } from "@/context/app-context";
 import { cn } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -23,7 +23,7 @@ export default function PoiSelectionList({
     maxSelection: number,
     loading: boolean
 }) {
-    const { translations } = useLanguage();
+    const { translations } = useApp();
     const selectionCount = selectedPois.length;
 
     const isPoiSelected = (poiId: string) => selectedPois.some(p => p.id === poiId);

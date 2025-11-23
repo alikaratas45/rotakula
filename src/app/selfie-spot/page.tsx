@@ -4,7 +4,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { useLanguage } from '@/context/language-context';
+import { useApp } from '@/context/app-context';
 import { Camera, Download, Loader2, RefreshCw, Sparkles, Smile, ShieldAlert, SwitchCamera, Save } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -18,7 +18,7 @@ const filters = [
 ];
 
 export default function SelfieSpotPage() {
-    const { translations } = useLanguage();
+    const { translations } = useApp();
     const { toast } = useToast();
 
     const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);

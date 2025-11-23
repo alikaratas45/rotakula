@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect, useRef, useCallback, useState } from 'react';
-import { useLanguage } from '@/context/language-context';
+import { useApp } from '@/context/app-context';
 import { useRouter } from 'next/navigation';
 import { Button } from './ui/button';
 import { X } from 'lucide-react';
@@ -17,7 +17,7 @@ const TourSteps = [
 ];
 
 export default function IntroTour() {
-  const { language, translations, isTourActive, setIsTourActive, setIsAudioGuideActive } = useLanguage();
+  const { language, translations, isTourActive, setIsTourActive, setIsAudioGuideActive } = useApp();
   const router = useRouter();
   const synthRef = useRef<SpeechSynthesis | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);

@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useLanguage } from "@/context/language-context";
+import { useApp } from "@/context/app-context";
 import { Button } from "@/components/ui/button";
 import { Car, Footprints, Loader2, Map, Trash2 } from "lucide-react";
 import type { PointOfInterest } from "@/lib/types";
@@ -20,7 +20,7 @@ import {
 import { useState }from 'react';
 
 export default function SelectedPoisSidebar({ selectedPois, setSelectedPois }: { selectedPois: PointOfInterest[], setSelectedPois: React.Dispatch<React.SetStateAction<PointOfInterest[]>> }) {
-    const { translations } = useLanguage();
+    const { translations } = useApp();
     const { toast } = useToast();
     const [isStartingRoute, setIsStartingRoute] = useState(false);
 

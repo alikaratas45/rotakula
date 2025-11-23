@@ -13,7 +13,8 @@
         "qrScanner": "QR-Code Scannen",
         "about": "Über Kula",
         "digitalMemory": "Digitale Erinnerung",
-        "selfieSpot": "Selfie-Punkt"
+        "selfieSpot": "Selfie-Punkt",
+        "myBadges": "Meine Abzeichen"
     },
     "header": {
         "menu": "Menü",
@@ -228,5 +229,14 @@
             "Außerdem können Sie durch Aktivieren der Funktion 'Audioguide' auf der Hauptseite automatische Audioerzählungen anhören, wenn Sie sich den von Ihnen besuchten Orten nähern.",
             "Wenn Sie bereit sind zu erkunden, endet unsere Tour hier. Ich wünsche Ihnen angenehme Reisen mit RotaKula!"
         ]
+    },
+    "badges": {
+        "title": "Meine Abzeichen",
+        "totalPoints": "Gesamtpunkte",
+        "earnedBadges": "Verdiente Abzeichen",
+        "noBadges": "Du hast noch keine Abzeichen verdient.",
+        "noBadgesDescription": "Beginne mit der Erkundung von Kula und schalte den Audioguide ein, um Abzeichen zu sammeln!",
+        "earnedTitle": "Abzeichen Verdient!",
+        "earnedDescription": "Herzlichen Glückwunsch, du hast das {poiName}-Abzeichen verdient!"
     }
 }

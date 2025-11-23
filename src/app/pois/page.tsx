@@ -13,7 +13,7 @@ import { Loader2, MapPin, Mountain, Info, Navigation } from 'lucide-react';
 import { HistoricHouseIcon, FoodIcon } from '@/components/icons';
 import EmbeddedMap from '@/components/map';
 import { APIProvider } from '@vis.gl/react-google-maps';
-import { useLanguage } from '@/context/language-context';
+import { useApp } from '@/context/app-context';
 
 function getCategoryIcon(category: PointOfInterest['category']) {
     switch (category) {
@@ -31,7 +31,7 @@ function getCategoryIcon(category: PointOfInterest['category']) {
 
 
 export default function PoisPage() {
-    const { language, translations } = useLanguage();
+    const { language, translations } = useApp();
     const [pois, setPois] = useState<PointOfInterest[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;

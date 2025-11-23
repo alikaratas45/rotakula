@@ -2,7 +2,7 @@
 "use client";
 
 import Image from "next/image";
-import { useLanguage } from "@/context/language-context";
+import { useLanguage } from "@/context/app-context";
 
 export function Footer() {
     const { translations } = useLanguage();

@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useLanguage } from '@/context/language-context';
+import { useApp } from '@/context/app-context';
 import { BookOpen, PauseIcon, PlayIcon, Users, Home, Landmark } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -11,7 +11,7 @@ import { getImageById } from '@/lib/placeholder-images';
 import { Card, CardContent } from '@/components/ui/card';
 
 export default function AboutPage() {
-    const { language, translations } = useLanguage();
+    const { language, translations } = useApp();
     const { toast } = useToast();
     const heroImage = getImageById('hero-home');
 

@@ -13,7 +13,8 @@
         "qrScanner": "Scan QR Code",
         "about": "About Kula",
         "digitalMemory": "Digital Memory",
-        "selfieSpot": "Selfie Spot"
+        "selfieSpot": "Selfie Spot",
+        "myBadges": "My Badges"
     },
     "header": {
         "menu": "Menu",
@@ -228,5 +229,14 @@
             "Also, by activating the 'Audio Guide' feature on the main page, you can listen to automatic audio narrations as you approach the places you visit.",
             "If you're ready to explore, our tour ends here. I wish you pleasant travels with RotaKula!"
         ]
+    },
+    "badges": {
+        "title": "My Badges",
+        "totalPoints": "Total Points",
+        "earnedBadges": "Earned Badges",
+        "noBadges": "You haven't earned any badges yet.",
+        "noBadgesDescription": "Start exploring Kula and turn on the audio guide to collect badges!",
+        "earnedTitle": "Badge Earned!",
+        "earnedDescription": "Congratulations, you have earned the {poiName} badge!"
     }
 }

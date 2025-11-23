@@ -10,13 +10,13 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { PlayIcon, PauseIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { useLanguage } from '@/context/language-context';
+import { useApp } from '@/context/app-context';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
     const heroImage = getImageById(poi.imageId);
-    const { language, translations } = useLanguage();
+    const { language, translations } = useApp();
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -201,4 +201,3 @@ export default function PoiClientPage({ poi }: { poi: PointOfInterest }) {
         </APIProvider>
     );
 }
-

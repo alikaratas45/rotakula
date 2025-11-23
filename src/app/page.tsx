@@ -8,9 +8,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getImageById } from '@/lib/placeholder-images';
 import { useEffect, useState, useMemo } from 'react';
-import { useLanguage } from '@/context/language-context';
+import { useApp } from '@/context/app-context';
 import { Button } from '@/components/ui/button';
-import { Utensils, Map, Pin, Route, Info, BookOpen, QrCode, Landmark, HelpCircle, Camera, Smile } from 'lucide-react';
+import { Utensils, Map, Pin, Route, Info, BookOpen, QrCode, Landmark, HelpCircle, Camera, Smile, Award } from 'lucide-react';
 import { BedIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { FeedbackSection } from '@/components/feedback';
@@ -49,7 +49,7 @@ const RouteCard = ({ route, delay }: { route: ThematicRoute, delay: number }) =>
 };
 
 export default function Home() {
-  const { language, translations, setIsTourActive } = useLanguage();
+  const { language, translations, setIsTourActive } = useApp();
   const [allRoutes, setAllRoutes] = useState<ThematicRoute[]>([]);
   
   useEffect(() => {
@@ -68,14 +68,14 @@ export default function Home() {
   
   const iconNavItems = [
     { href: "/places", label: translations.nav.places, icon: Landmark, colorClass: "bg-blue-200 dark:bg-blue-900" },
-    { href: "/nearby", label: translations.nav.nearby, icon: Pin, colorClass: "bg-red-200 dark:bg-red-900" },
+    { href: "/my-badges", label: translations.nav.myBadges, icon: Award, colorClass: "bg-yellow-200 dark:bg-yellow-900" },
     { href: "/create-route", label: translations.nav.createRoute, icon: Route, colorClass: "bg-green-200 dark:bg-green-900" },
-    { href: "/stories", label: translations.nav.stories, icon: BookOpen, colorClass: "bg-yellow-200 dark:bg-yellow-900" },
-    { href: "/about", label: translations.nav.about, icon: Info, colorClass: "bg-purple-200 dark:bg-purple-900" },
+    { href: "/stories", label: translations.nav.stories, icon: BookOpen, colorClass: "bg-purple-200 dark:bg-purple-900" },
     { href: "/routes/kula-flavor-tour", label: translations.nav.food, icon: Utensils, colorClass: "bg-orange-200 dark:bg-orange-900" },
     { href: "/accommodation", label: translations.nav.accommodation, icon: BedIcon, colorClass: "bg-teal-200 dark:bg-teal-900" },
     { href: "/selfie-spot", label: translations.nav.selfieSpot, icon: Smile, colorClass: "bg-cyan-200 dark:bg-cyan-900" },
     { href: "/qr-scanner", label: translations.nav.qrScanner, icon: QrCode, colorClass: "bg-indigo-200 dark:bg-indigo-900" },
+    { href: "/nearby", label: translations.nav.nearby, icon: Pin, colorClass: "bg-red-200 dark:bg-red-900" },
   ];
 
   return (

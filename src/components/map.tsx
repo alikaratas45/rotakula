@@ -8,7 +8,7 @@ import { Loader2, Star, Navigation, X } from "lucide-react";
 import Image from "next/image";
 import { getImageById } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
-import { useLanguage } from "@/context/language-context";
+import { useApp } from "@/context/app-context";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { cn } from "@/lib/utils";
@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 // --- User Location Marker ---
 function UserLocationMarker() {
   const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
-  const { translations } = useLanguage();
+  const { translations } = useApp();
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (geoPosition) => {
@@ -65,7 +65,7 @@ function PoiMarker({
 export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
   const map = useMap();
   const router = useRouter();
-  const { translations } = useLanguage();
+  const { translations } = useApp();
   const [markersLoaded, setMarkersLoaded] = useState(false);
   const [userPosition, setUserPosition] = useState<{ lat: number; lng: number } | null>(null);
   const [selectedPoi, setSelectedPoi] = useState<PointOfInterest | null>(null);
@@ -224,7 +224,7 @@ const PlaceMarker = ({ place, onClick }: { place: google.maps.places.PlaceResult
 
 export const NearbySearch = () => {
     const map = useMap();
-    const { translations } = useLanguage();
+    const { translations } = useApp();
     const [places, setPlaces] = useState<google.maps.places.PlaceResult[]>([]);
     const [selectedPlace, setSelectedPlace] = useState<google.maps.places.PlaceResult | null>(null);
     const [userPosition, setUserPosition] = useState<{ lat: number; lng: number } | null>(null);
@@ -368,20 +368,3 @@ export const NearbySearch = () => {
         </div>
     );
 };
-
-
-    
-
-    
-
-
-
-
-    
-
-    
-
-    
-
-    
-

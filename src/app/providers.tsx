@@ -8,7 +8,7 @@ import { Footer } from '@/components/footer';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import IntroTour from '@/components/intro-tour';
-import { LanguageProvider } from '@/context/language-context';
+import { AppProvider } from '@/context/app-context';
 import { ThemeProvider } from 'next-themes';
 import { FirebaseClientProvider } from '@/firebase';
 
@@ -55,21 +55,12 @@ export function Providers({ children }: PropsWithChildren) {
   }
 
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="light"
-      enableSystem
-      disableTransitionOnChange
-    >
-      <LanguageProvider>
-        <FirebaseClientProvider>
-          <IntroTour />
-          <Header />
-          <main className="flex-grow">{children}</main>
-          <Footer />
-          <Toaster />
-        </FirebaseClientProvider>
-      </LanguageProvider>
-    </ThemeProvider>
+    <>
+        <IntroTour />
+        <Header />
+        <main className="flex-grow">{children}</main>
+        <Footer />
+        <Toaster />
+    </>
   );
 }

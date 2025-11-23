@@ -7,13 +7,13 @@ import { getImageById } from '@/lib/placeholder-images';
 import Image from 'next/image';
 import RouteDetailsClient from './route-details-client';
 import type { ThematicRoute, PointOfInterest } from '@/lib/types';
-import { useLanguage } from '@/context/language-context';
+import { useApp } from '@/context/app-context';
 import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 
 export default function RoutePage({ params }: { params: { slug: string } }) {
     const { slug } = params;
-    const { language } = useLanguage();
+    const { language } = useApp();
     const [route, setRoute] = useState<ThematicRoute | null>(null);
     const [pois, setPois] = useState<PointOfInterest[]>([]);
     const [loading, setLoading] = useState(true);

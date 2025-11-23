@@ -27,6 +27,8 @@ export type PointOfInterest = {
   description_de?: string;
   longDescription_de?: string;
   category_de?: string;
+  badgeId?: string;
+  points?: number;
 };
 
 export type ThematicRoute = {
@@ -67,5 +69,3 @@ export type Story = {
   excerpt_de?: string;
   content_de?: string;
 };
-
-    

@@ -7,7 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getImageById } from '@/lib/placeholder-images';
 import { BookOpen } from 'lucide-react';
-import { useLanguage } from '@/context/language-context';
+import { useApp } from '@/context/app-context';
 import { useEffect, useState } from 'react';
 
 const StoryCard = ({ story }: { story: Story }) => {
@@ -39,7 +39,7 @@ const StoryCard = ({ story }: { story: Story }) => {
 };
 
 export default function StoriesPage() {
-  const { language, translations } = useLanguage();
+  const { language, translations } = useApp();
   const [stories, setStories] = useState<Story[]>([]);
 
   useEffect(() => {

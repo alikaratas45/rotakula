@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import { getPois } from '@/lib/kula-data';
 import type { PointOfInterest } from '@/lib/types';
-import { useLanguage } from '@/context/language-context';
+import { useApp } from '@/context/app-context';
 import PoiSelectionList from './poi-selection-list';
 import SelectedPoisSidebar from './selected-pois-sidebar';
 import { RouteMap } from './route-map';
@@ -32,7 +32,7 @@ const neighborhoodSlugs = [
 ];
 
 export default function CreateRoutePage() {
-    const { language, translations } = useLanguage();
+    const { language, translations } = useApp();
     const [allPois, setAllPois] = useState<PointOfInterest[]>([]);
     const [selectedPois, setSelectedPois] = useState<PointOfInterest[]>([]);
     const [loading, setLoading] = useState(true);

@@ -13,7 +13,8 @@
         "qrScanner": "QR Kod Okut",
         "about": "Kula Hakkında",
         "digitalMemory": "Dijital Hatıra",
-        "selfieSpot": "Selfie Noktası"
+        "selfieSpot": "Selfie Noktası",
+        "myBadges": "Rozetlerim"
     },
     "header": {
         "menu": "Menü",
@@ -227,5 +228,14 @@
             "Ayrıca, ana sayfadaki 'Sesli Rehber' özelliğini aktive ederek, gezdiğiniz yerlere yaklaştığınızda otomatik sesli anlatımları dinleyebilirsiniz.",
             "Keşfetmeye hazırsanız, turumuz burada sona eriyor. RotaKula ile keyifli geziler dilerim!"
         ]
+    },
+    "badges": {
+        "title": "Rozetlerim",
+        "totalPoints": "Toplam Puan",
+        "earnedBadges": "Kazanılan Rozetler",
+        "noBadges": "Henüz hiç rozet kazanmadın.",
+        "noBadgesDescription": "Kula'yı keşfetmeye başla ve sesli rehberi açarak rozetleri topla!",
+        "earnedTitle": "Rozet Kazanıldı!",
+        "earnedDescription": "Tebrikler, {poiName} rozetini kazandınız!"
     }
 }

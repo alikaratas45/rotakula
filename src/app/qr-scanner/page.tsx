@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { Html5Qrcode, Html5QrcodeError, Html5QrcodeResult, Html5QrcodeScanType } from "html5-qrcode";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
-import { useLanguage } from "@/context/language-context";
+import { useApp } from "@/context/app-context";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { QrCode, ShieldAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,7 @@ const qrboxFunction = (viewfinderWidth: number, viewfinderHeight: number) => {
 export default function QRScannerPage() {
   const router = useRouter();
   const { toast } = useToast();
-  const { translations } = useLanguage();
+  const { translations } = useApp();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const isScannerInitialized = useRef(false);

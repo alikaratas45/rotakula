@@ -7,9 +7,9 @@ import { getPois } from '@/lib/kula-data';
 import type { PointOfInterest } from '@/lib/types';
 import { haversineDistance } from '@/lib/utils';
 import { Button } from './ui/button';
-import { Radio, RadioTower } from 'lucide-react';
+import { Radio, RadioTower, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { useLanguage } from '@/context/language-context';
+import { useApp } from '@/context/app-context';
 import { PlayIcon } from 'lucide-react';
 
 const PROXIMITY_THRESHOLD_CENTER = 10; // meters for city center
@@ -39,7 +39,7 @@ const isPoiOutsideCenter = (poi: PointOfInterest): boolean => {
 }
 
 export function AudioGuideControl() {
-    const { language, translations, isAudioGuideActive, setIsAudioGuideActive } = useLanguage();
+    const { language, translations, isAudioGuideActive, setIsAudioGuideActive, addBadge, earnedBadges } = useApp();
     const router = useRouter();
 
     const [pois, setPois] = useState<PointOfInterest[]>([]);
@@ -147,7 +147,7 @@ export function AudioGuideControl() {
         }
 
         for (const poi of pois) {
-            if (triggeredPois.has(poi.id)) {
+            if (triggeredPois.has(poi.id) || !poi.badgeId) { // Skip if already triggered or no badge
                 continue; 
             }
 
@@ -163,22 +163,33 @@ export function AudioGuideControl() {
             if (distance < threshold) {
                 setTriggeredPois(prev => new Set(prev).add(poi.id));
                 
-                playProximityAlert(poi.name);
+                const isBadgeAlreadyEarned = earnedBadges.some(b => b.id === poi.badgeId);
                 
-                const { id: toastId } = toast({
-                    title: `${translations.audioGuide.nearby}: ${poi.name}`,
-                    description: translations.audioGuide.nearbyDescription,
-                    duration: 15000, 
-                    action: (
-                        <Button onClick={() => handlePlayAudioForPoi(poi, toastId)}>
-                           <PlayIcon className="mr-2 h-4 w-4" /> {translations.pois.listen}
-                        </Button>
-                    )
-                });
+                if (!isBadgeAlreadyEarned) {
+                    addBadge(poi.id);
+                    toast({
+                        title: `✨ ${translations.badges.earnedTitle}`,
+                        description: translations.badges.earnedDescription.replace('{poiName}', poi.name),
+                        duration: 8000,
+                    });
+                } else {
+                     playProximityAlert(poi.name);
+                     const { id: toastId } = toast({
+                        title: `${translations.audioGuide.nearby}: ${poi.name}`,
+                        description: translations.audioGuide.nearbyDescription,
+                        duration: 15000, 
+                        action: (
+                            <Button onClick={() => handlePlayAudioForPoi(poi, toastId)}>
+                               <PlayIcon className="mr-2 h-4 w-4" /> {translations.pois.listen}
+                            </Button>
+                        )
+                    });
+                }
+
                 break; 
             }
         }
-    }, [userLocation, pois, status, triggeredPois, handlePlayAudioForPoi, toast, translations, playProximityAlert]);
+    }, [userLocation, pois, status, triggeredPois, handlePlayAudioForPoi, toast, translations, playProximityAlert, addBadge, earnedBadges]);
 
 
     const toggleGuide = () => {
@@ -186,26 +197,19 @@ export function AudioGuideControl() {
     };
 
     useEffect(() => {
-        const wasActive = isAudioGuideActive;
+        if (isAudioGuideActive) {
+            startLocationTracking();
+            toast({
+                title: translations.audioGuide.started,
+                description: translations.audioGuide.startedDescription,
+                duration: 5000,
+            });
+        } else {
+            stopLocationTracking();
+        }
+
         return () => {
-            // This is a cleanup function that runs when the component unmounts
-            // or when isAudioGuideActive changes.
-            if (wasActive && !isAudioGuideActive) {
-                // If the state changed from active to inactive
-                stopLocationTracking();
-                toast({
-                    title: translations.audioGuide.stopped,
-                    duration: 3000,
-                });
-            } else if (!wasActive && isAudioGuideActive) {
-                // If the state changed from inactive to active
-                startLocationTracking();
-                toast({
-                    title: translations.audioGuide.started,
-                    description: translations.audioGuide.startedDescription,
-                    duration: 5000,
-                });
-            }
+            stopLocationTracking();
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAudioGuideActive]);

@@ -4,7 +4,7 @@
 import { getStoryBySlug } from '@/lib/kula-data';
 import Image from 'next/image';
 import { Calendar, User, PlayIcon, PauseIcon } from 'lucide-react';
-import { useLanguage } from '@/context/language-context';
+import { useApp } from '@/context/app-context';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import type { Story } from '@/lib/types';
 import { notFound } from 'next/navigation';
@@ -14,7 +14,7 @@ import { useToast } from '@/hooks/use-toast';
 
 export default function StoryPage({ params }: { params: { slug: string } }) {
     const { slug } = params;
-    const { language, translations } = useLanguage();
+    const { language, translations } = useApp();
     const { toast } = useToast();
     const [story, setStory] = useState<Story | null>(null);
     const [loading, setLoading] = useState(true);

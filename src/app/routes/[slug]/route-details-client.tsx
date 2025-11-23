@@ -13,7 +13,7 @@ import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import EmbeddedMap, { NearbySearch } from '@/components/map';
 import { APIProvider } from '@vis.gl/react-google-maps';
-import { useLanguage } from '@/context/language-context';
+import { useApp } from '@/context/app-context';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -43,7 +43,7 @@ function getCategoryIcon(category: PointOfInterest['category']) {
 }
 
 export default function RouteDetailsClient({ route, pois }: { route: ThematicRoute; pois: PointOfInterest[] }) {
-    const { translations } = useLanguage();
+    const { translations } = useApp();
     const { toast } = useToast();
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
     const [isStartingRoute, setIsStartingRoute] = useState(false);

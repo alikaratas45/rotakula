@@ -1,7 +1,8 @@
+
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { type PropsWithChildren } from 'react';
-import { LanguageProvider } from '@/context/language-context';
+import { AppProvider } from '@/context/app-context';
 import { ThemeProvider } from 'next-themes';
 import { Providers } from './providers';
 import { FirebaseClientProvider } from '@/firebase';
@@ -33,11 +34,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <LanguageProvider>
+          <AppProvider>
             <FirebaseClientProvider>
               <Providers>{children}</Providers>
             </FirebaseClientProvider>
-          </LanguageProvider>
+          </AppProvider>
         </ThemeProvider>
       </body>
     </html>
