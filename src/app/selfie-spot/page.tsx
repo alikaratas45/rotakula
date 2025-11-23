@@ -14,7 +14,11 @@ const filters = [
     { src: "/frames/kula-geopark.svg", name: "UNESCO Global Geopark" },
     { src: "/frames/kula-houses.svg", name: "Tarihi Evler" },
     { src: "/frames/kula-peribacalari.svg", name: "Peri Bacaları" },
-    { src: "/frames/kula-volcanic.svg", name: "Volkanik Park" }
+    { src: "/frames/kula-volcanic.svg", name: "Volkanik Park" },
+    { src: "/frames/kula-suleyman-sah.svg", name: "Süleyman Şah Türbesi" },
+    { src: "/frames/kula-kursunlu-camii.svg", name: "Kurşunlu Camii" },
+    { src: "/frames/kula-bazalt.svg", name: "Çakırca Bazalt Sütunları" },
+    { src: "/frames/kula-sandal-divlit.svg", name: "Sandal Divlit" }
 ];
 
 export default function SelfieSpotPage() {
@@ -216,7 +220,7 @@ export default function SelfieSpotPage() {
                                     <h3 className="text-lg font-semibold text-center mb-4">{translations.selfieSpot.chooseFilter}</h3>
                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                         {filters.map((f) => (
-                                            <button
+                                             <button
                                                 key={f.src}
                                                 onClick={() => setSelectedFilter(f.src)}
                                                 className={cn(
