@@ -18,7 +18,7 @@ const filters = [
     { src: "/frames/kula-suleyman-sah.svg", name: "Süleyman Şah Türbesi" },
     { src: "/frames/kula-kursunlu-camii.svg", name: "Kurşunlu Camii" },
     { src: "/frames/kula-bazalt.svg", name: "Çakırca Bazalt Sütunları" },
-    { src,"/frames/kula-sandal-divlit.svg", name: "Sandal Divlit" }
+    { src: "/frames/kula-sandal-divlit.svg", name: "Sandal Divlit" }
 ];
 
 export default function SelfieSpotPage() {
@@ -244,5 +244,7 @@ export default function SelfieSpotPage() {
         </div>
     );
 }
+
+    
 
     
