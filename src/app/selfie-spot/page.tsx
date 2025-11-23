@@ -15,6 +15,8 @@ const filters = [
     { src: "/frames/kula-houses.svg", name: "Tarihi Evler" },
     { src: "/frames/kula-peribacalari.svg", name: "Peri Bacaları" },
     { src: "/frames/kula-volcanic.svg", name: "Volkanik Park" },
+    { src: "/frames/suleyman-sah.svg", name: "Süleyman Şah Türbesi" },
+    { src: "/frames/kursunlu-camii.svg", name: "Kurşunlu Camii" },
 ];
 
 export default function SelfieSpotPage() {
@@ -132,7 +134,7 @@ export default function SelfieSpotPage() {
             setIsProcessing(false);
         };
 
-    }, [selectedFilter, toast, facingMode, stopCameraStream]);
+    }, [selectedFilter, toast, facingMode, stopCameraStream, translations.toast.errorTitle]);
     
     const downloadSelfie = () => {
         if (!selfie) return;
