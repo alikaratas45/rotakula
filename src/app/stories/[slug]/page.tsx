@@ -12,7 +12,8 @@ import { getImageById } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 
-export default function StoryPage({ params: { slug } }: { params: { slug: string } }) {
+export default function StoryPage({ params }: { params: { slug: string } }) {
+    const slug = params.slug;
     const { language, translations } = useApp();
     const { toast } = useToast();
     const [story, setStory] = useState<Story | null>(null);
