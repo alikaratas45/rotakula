@@ -63,7 +63,10 @@ export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
             synth.cancel();
         }
 
-        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        // Replace UNESCO for Turkish pronunciation only for speech
+        const textForSpeech = language === 'tr' ? textToSpeak.replace(/UNESCO/g, 'Unesko') : textToSpeak;
+
+        const utterance = new SpeechSynthesisUtterance(textForSpeech);
         utteranceRef.current = utterance;
         
         const voices = synth.getVoices();

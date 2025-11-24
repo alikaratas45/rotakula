@@ -21,25 +21,9 @@ function translateItem<T extends { [key: string]: any }>(item: T, lang: string):
                 translatedItem[key] = item[langKey];
             }
         });
-        // Replace UNESCO for TTS in non-Turkish languages
-        if (translatedItem.longDescription) {
-            translatedItem.longDescription = translatedItem.longDescription.replace(/Unesko/g, 'UNESCO');
-        }
-        if (translatedItem.description) {
-            translatedItem.description = translatedItem.description.replace(/Unesko/g, 'UNESCO');
-        }
         return translatedItem;
-    } else {
-        // Turkish specific replacements for TTS
-        const turkishItem = { ...item };
-        if (turkishItem.longDescription) {
-            turkishItem.longDescription = turkishItem.longDescription.replace(/UNESCO/g, 'Unesko');
-        }
-        if (turkishItem.description) {
-            turkishItem.description = turkishItem.description.replace(/UNESCO/g, 'Unesko');
-        }
-        return turkishItem;
     }
+    return item;
 }
 
 export async function getRoutes(lang: string = 'tr'): Promise<ThematicRoute[]> {

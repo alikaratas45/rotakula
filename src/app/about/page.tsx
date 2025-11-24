@@ -49,7 +49,7 @@ export default function AboutPage() {
             synth.cancel();
         }
 
-        // Replace UNESCO for Turkish pronunciation
+        // Replace UNESCO for Turkish pronunciation only for speech
         const textForSpeech = language === 'tr' ? textToSpeak.replace(/UNESCO/g, 'Unesko') : textToSpeak;
 
         const utterance = new SpeechSynthesisUtterance(textForSpeech);
