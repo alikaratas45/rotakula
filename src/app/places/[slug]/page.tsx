@@ -5,12 +5,12 @@ import { getPoiBySlug } from '@/lib/kula-data';
 import { notFound } from 'next/navigation';
 import PlaceClientPage from './place-client-page';
 import { useApp } from '@/context/app-context';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import type { PointOfInterest } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
 
-export default function PlaceDetailPage({ params }: { params: { slug: string } }) {
-    const slug = params.slug;
+export default function PlaceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = use(params);
     const { language } = useApp();
     const [poi, setPoi] = useState<PointOfInterest | null>(null);
     const [loading, setLoading] = useState(true);
