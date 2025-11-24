@@ -49,7 +49,10 @@ export default function AboutPage() {
             synth.cancel();
         }
 
-        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        // Replace UNESCO for Turkish pronunciation
+        const textForSpeech = language === 'tr' ? textToSpeak.replace(/UNESCO/g, 'Unesko') : textToSpeak;
+
+        const utterance = new SpeechSynthesisUtterance(textForSpeech);
         utteranceRef.current = utterance;
         
         const voices = synth.getVoices();
@@ -120,7 +123,7 @@ export default function AboutPage() {
                 startPlayback(remainingText);
             }
         }
-    }, [isPaused, remainingText, narrationText, toast, translations]);
+    }, [isPaused, remainingText, narrationText, toast, translations, startPlayback]);
 
 
      useEffect(() => {
