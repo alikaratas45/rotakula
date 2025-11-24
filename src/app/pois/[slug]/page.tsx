@@ -9,8 +9,7 @@ import { useEffect, useState } from 'react';
 import type { PointOfInterest } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
 
-export default function PoiDetailPage({ params }: { params: { slug: string } }) {
-    const { slug } = params;
+export default function PoiDetailPage({ params: { slug } }: { params: { slug: string } }) {
     const { language } = useApp();
     const [poi, setPoi] = useState<PointOfInterest | null>(null);
     const [loading, setLoading] = useState(true);

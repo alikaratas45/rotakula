@@ -11,8 +11,7 @@ import { useApp } from '@/context/app-context';
 import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 
-export default function RoutePage({ params }: { params: { slug: string } }) {
-    const { slug } = params;
+export default function RoutePage({ params: { slug } }: { params: { slug: string } }) {
     const { language } = useApp();
     const [route, setRoute] = useState<ThematicRoute | null>(null);
     const [pois, setPois] = useState<PointOfInterest[]>([]);
