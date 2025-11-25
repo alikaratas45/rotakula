@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useApp } from '@/context/app-context';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,6 +16,9 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Star, Smile, Meh, Frown, ThumbsUp, ThumbsDown, HelpCircle, Trash2, Leaf, Siren, UserCheck, UserX } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useFirestore, addDocumentNonBlocking, useMemoFirebase } from '@/firebase';
+import { collection, serverTimestamp } from 'firebase/firestore';
+
 
 type SurveyAnswers = {
   rating: string | null;
@@ -28,6 +31,7 @@ type SurveyAnswers = {
 export default function SurveyDialog() {
   const { translations, poiToSurvey, setPoiToSurvey, addCompletedSurvey } = useApp();
   const { toast } = useToast();
+  const firestore = useFirestore();
   const [open, setOpen] = useState(false);
   const [answers, setAnswers] = useState<SurveyAnswers>({
     rating: null,
@@ -36,6 +40,11 @@ export default function SurveyDialog() {
     guided: null,
     importance: null,
   });
+
+  const surveysColRef = useMemoFirebase(
+    () => (firestore ? collection(firestore, 'surveys') : null),
+    [firestore]
+  );
 
   useEffect(() => {
     if (poiToSurvey) {
@@ -54,9 +63,14 @@ export default function SurveyDialog() {
   };
 
   const handleSubmit = () => {
-    if (poiToSurvey) {
-        // Here you would typically send the 'answers' object to your backend (e.g., Firebase)
-        console.log(`Survey for ${poiToSurvey.name}:`, answers);
+    if (poiToSurvey && surveysColRef) {
+        addDocumentNonBlocking(surveysColRef, {
+            poiId: poiToSurvey.id,
+            poiName: poiToSurvey.name,
+            answers: answers,
+            createdAt: serverTimestamp(),
+        });
+        
         addCompletedSurvey(poiToSurvey.id);
         
         toast({

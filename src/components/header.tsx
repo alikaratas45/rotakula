@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import * as React from "react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
-import { Moon, Sun, Home, LogIn, LogOut } from "lucide-react";
+import { Moon, Sun, Home, LogIn, LogOut, FileText } from "lucide-react";
 import { signInAnonymously } from "firebase/auth";
 
 import { cn } from "@/lib/utils";
@@ -68,10 +68,18 @@ function AdminAuth({ isMobile = false }: { isMobile?: boolean }) {
 
   if (user) {
     return (
-      <Button variant="outline" size="sm" className={cn("h-9", isMobile && "w-full justify-start")} onClick={handleSignOut}>
-        <LogOut className="mr-2 h-4 w-4" />
-        Admin Çıkış
-      </Button>
+      <div className="flex gap-2">
+        <Button asChild variant="outline" size="sm" className="h-9">
+            <Link href="/admin/surveys">
+                <FileText className="mr-2 h-4 w-4" />
+                Anketler
+            </Link>
+        </Button>
+        <Button variant="outline" size="sm" className={cn("h-9", isMobile && "w-full justify-start")} onClick={handleSignOut}>
+            <LogOut className="mr-2 h-4 w-4" />
+            Çıkış
+        </Button>
+      </div>
     );
   }
 

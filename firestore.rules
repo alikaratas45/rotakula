@@ -1,3 +1,4 @@
+
 rules_version = '2';
 
 // NOTE: This file is automatically updated with the admin user's UID.
@@ -12,6 +13,12 @@ service cloud.firestore {
       allow read, create: if true;
       // Allow delete only for the admin user
       allow delete: if isAdmin();
+    }
+    
+    // Allow anyone to create a survey response, but only admins to read them.
+    match /surveys/{surveyId} {
+        allow create: if true;
+        allow read, write, delete: if isAdmin();
     }
   }
 }
