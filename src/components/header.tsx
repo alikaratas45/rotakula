@@ -16,21 +16,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogFooter,
-  DialogTitle,
-  DialogDescription,
-  DialogClose,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useAuth, useFirebase, useUser } from '@/firebase';
+import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { AudioGuideControl } from "./audio-guide-control";
 import { useApp } from "@/context/app-context";
 import { TurkishFlagIcon, UKFlagIcon, FrenchFlagIcon, GermanFlagIcon } from "./icons";
 import { useToast } from "@/hooks/use-toast";
+import { ADMIN_UID } from "@/firebase/config";
 
 
 function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
@@ -54,37 +46,46 @@ function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
 
 function AdminAuth({ isMobile = false }: { isMobile?: boolean }) {
   const { toast } = useToast();
-  const { isAdminAuthenticated, setIsAdminAuthenticated } = useApp();
-  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-  const [password, setPassword] = React.useState("");
+  const auth = useAuth();
+  const { user, isUserLoading } = useUser();
+  const isAdmin = user && user.uid === ADMIN_UID;
 
-  const handleSignIn = () => {
-    if (password === "kula123") {
-      setIsAdminAuthenticated(true);
+  const handleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
       toast({
-        title: "Giriş Başarılı",
-        description: "Yönetici paneline erişim sağlandı.",
+        title: `Giriş Başarılı, ${result.user.displayName}`,
+        description: `Admin UID'niz: ${result.user.uid}`,
+        duration: 10000, // Show for longer
       });
-      setIsDialogOpen(false);
-      setPassword("");
-    } else {
+    } catch (error) {
+      console.error("Admin sign-in error:", error);
       toast({
         title: "Giriş Başarısız",
-        description: "Hatalı şifre girdiniz.",
+        description: "Google ile giriş yapılırken bir hata oluştu.",
         variant: "destructive",
       });
     }
   };
 
-  const handleSignOut = () => {
-    setIsAdminAuthenticated(false);
-    toast({
-      title: "Çıkış Yapıldı",
-      description: "Yönetici oturumu sonlandırıldı.",
-    });
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      toast({
+        title: "Çıkış Yapıldı",
+        description: "Yönetici oturumu sonlandırıldı.",
+      });
+    } catch (error) {
+      console.error("Admin sign-out error:", error);
+    }
   };
 
-  if (isAdminAuthenticated) {
+  if (isUserLoading) {
+    return <Button variant="outline" size="sm" className={cn("h-9", isMobile && "w-full justify-start")} disabled>...</Button>;
+  }
+
+  if (isAdmin) {
     return (
       <div className="flex gap-2">
         <Button asChild variant="outline" size="sm" className="h-9">
@@ -102,41 +103,10 @@ function AdminAuth({ isMobile = false }: { isMobile?: boolean }) {
   }
 
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <Button variant="outline" size="sm" className={cn("h-9", isMobile && "w-full justify-start")} onClick={() => setIsDialogOpen(true)}>
-        <LogIn className="mr-2 h-4 w-4" />
-        Admin Girişi
-      </Button>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Yönetici Girişi</DialogTitle>
-          <DialogDescription>
-            Anket sonuçlarını görüntülemek için lütfen yönetici şifresini girin.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="password"className="text-right">
-              Şifre
-            </Label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="col-span-3"
-              onKeyDown={(e) => e.key === 'Enter' && handleSignIn()}
-            />
-          </div>
-        </div>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button type="button" variant="secondary">İptal</Button>
-          </DialogClose>
-          <Button type="submit" onClick={handleSignIn}>Giriş Yap</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <Button variant="outline" size="sm" className={cn("h-9", isMobile && "w-full justify-start")} onClick={handleSignIn}>
+      <LogIn className="mr-2 h-4 w-4" />
+      Admin Girişi
+    </Button>
   );
 }
 
@@ -248,3 +218,5 @@ export function Header() {
         </header>
     );
 }
+
+    

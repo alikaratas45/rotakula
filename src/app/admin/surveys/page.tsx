@@ -24,6 +24,8 @@ import { Badge } from '@/components/ui/badge';
 import { formatDistanceToNow } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import { useApp } from '@/context/app-context';
+import { useUser } from '@/firebase';
+import { ADMIN_UID } from '@/firebase/config';
 
 type Survey = {
   id: string;
@@ -50,7 +52,8 @@ function renderStars(count: string | number) {
 }
 
 export default function SurveyResultsPage() {
-  const { isAdminAuthenticated } = useApp();
+  const { user, isUserLoading } = useUser();
+  const isAdminAuthenticated = user?.uid === ADMIN_UID;
   const firestore = useFirestore();
 
   const surveysQuery = useMemoFirebase(
@@ -63,6 +66,15 @@ export default function SurveyResultsPage() {
 
   const { data: surveys, isLoading, error } = useCollection<Survey>(surveysQuery);
 
+  if (isUserLoading) {
+     return (
+      <div className="flex h-screen items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin" />
+        <p className="ml-2">Yönetici durumu kontrol ediliyor...</p>
+      </div>
+    );
+  }
+
   if (!isAdminAuthenticated) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -70,7 +82,7 @@ export default function SurveyResultsPage() {
             <ShieldAlert className="h-4 w-4" />
             <AlertTitle>Erişim Engellendi</AlertTitle>
             <AlertDescription>
-                Bu sayfayı görüntülemek için yönetici yetkiniz bulunmamaktadır.
+                Bu sayfayı görüntülemek için yönetici olarak giriş yapmanız gerekmektedir.
             </AlertDescription>
         </Alert>
       </div>
@@ -146,3 +158,5 @@ export default function SurveyResultsPage() {
     </div>
   );
 }
+
+    

@@ -8,6 +8,8 @@ import fr from '@/lib/locales/fr.json';
 import de from '@/lib/locales/de.json';
 import { getPois } from '@/lib/kula-data';
 import type { PointOfInterest } from '@/lib/types';
+import { useUser } from '@/firebase';
+import { ADMIN_UID } from '@/firebase/config';
 
 type Language = 'tr' | 'en' | 'fr' | 'de';
 
@@ -34,7 +36,6 @@ interface AppContextType {
   addCompletedSurvey: (poiId: string) => void;
   hasCompletedSurvey: (poiId: string) => boolean;
   isAdminAuthenticated: boolean;
-  setIsAdminAuthenticated: (isAuthenticated: boolean) => void;
 }
 
 const translations = { tr, en, fr, de };
@@ -49,22 +50,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [allPois, setAllPois] = useState<any[]>([]);
   const [poiToSurvey, setPoiToSurvey] = useState<PointOfInterest | null>(null);
   const [completedSurveys, setCompletedSurveys] = useState<Set<string>>(new Set());
-  const [isAdminAuthenticated, setAdminAuthenticated] = useState(false);
+  const { user } = useUser();
 
-
-  useEffect(() => {
-    // Check sessionStorage for admin auth state on initial load
-    const storedAuthState = sessionStorage.getItem('isAdminAuthenticated');
-    if (storedAuthState === 'true') {
-      setAdminAuthenticated(true);
-    }
-  }, []);
-
-  const handleSetIsAdminAuthenticated = (isAuthenticated: boolean) => {
-    setAdminAuthenticated(isAuthenticated);
-    sessionStorage.setItem('isAdminAuthenticated', isAuthenticated.toString());
-  };
-
+  const isAdminAuthenticated = useMemo(() => user?.uid === ADMIN_UID, [user]);
 
   // Fetch all POIs on mount to map badge IDs to badge data
   useEffect(() => {
@@ -158,7 +146,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     addCompletedSurvey,
     hasCompletedSurvey,
     isAdminAuthenticated,
-    setIsAdminAuthenticated: handleSetIsAdminAuthenticated,
   };
 
   return (
@@ -177,3 +164,5 @@ export function useApp(): AppContextType {
 }
 // Keep useLanguage for backward compatibility if needed, but preferably refactor to useApp
 export const useLanguage = useApp;
+
+    
