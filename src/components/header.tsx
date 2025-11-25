@@ -22,6 +22,7 @@ import { useApp } from "@/context/app-context";
 import { TurkishFlagIcon, UKFlagIcon, FrenchFlagIcon, GermanFlagIcon } from "./icons";
 import { useAuth, useUser } from "@/firebase";
 import { useToast } from "@/hooks/use-toast";
+import { ADMIN_UID } from "@/firebase/config";
 
 
 function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
@@ -52,7 +53,13 @@ function AdminAuth({ isMobile = false }: { isMobile?: boolean }) {
     if (!auth) return;
     try {
       const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      // After successful sign-in, log the user's UID to the console
+      console.log("Yönetici UID'niz:", result.user.uid);
+      toast({
+        title: "Giriş Başarılı",
+        description: "Yönetici olarak giriş yaptınız. UID'niz konsola yazdırıldı.",
+      });
     } catch (error: any) {
       console.error("Error during Google sign-in:", error);
       toast({
@@ -72,7 +79,7 @@ function AdminAuth({ isMobile = false }: { isMobile?: boolean }) {
     }
   };
 
-  if (user) {
+  if (user && user.uid === ADMIN_UID) {
     return (
       <div className="flex gap-2">
         <Button asChild variant="outline" size="sm" className="h-9">

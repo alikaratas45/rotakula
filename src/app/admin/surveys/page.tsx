@@ -23,9 +23,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { formatDistanceToNow } from 'date-fns';
 import { tr } from 'date-fns/locale';
-
-// Admin UID - should match the one in firestore.rules
-const ADMIN_UID = 'UXt4xEAkIwUSAQXvaM4pngZCBtI3';
+import { ADMIN_UID } from '@/firebase/config';
 
 type Survey = {
   id: string;

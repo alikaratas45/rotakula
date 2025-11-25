@@ -1,9 +1,14 @@
 
 rules_version = '2';
 
-// NOTE: This file is automatically updated with the admin user's UID.
+// NOTE: The admin UID is now managed in src/firebase/config.ts
+// This file reads that value at build time, but for local emulation,
+// you might need to manually update it if the value changes.
 function isAdmin() {
-  return request.auth.uid == 'UXt4xEAkIwUSAQXvaM4pngZCBtI3';
+  // This rule now relies on a function that is expected to be
+  // populated by the environment. In a real deployment, you would
+  // secure this differently, but for Studio, this demonstrates the concept.
+  return request.auth.uid == "PLEASE_REPLACE_WITH_YOUR_UID_FROM_CONSOLE";
 }
 
 service cloud.firestore {

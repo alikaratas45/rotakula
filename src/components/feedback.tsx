@@ -45,6 +45,7 @@ import {
 import { Loader2, Trash2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { tr } from 'date-fns/locale';
+import { ADMIN_UID } from '@/firebase/config';
 
 // Zod schema for form validation
 const feedbackSchema = z.object({
@@ -61,8 +62,6 @@ type Feedback = FeedbackFormValues & {
   };
 };
 
-// Admin UID is set here.
-const ADMIN_UID = 'UXt4xEAkIwUSAQXvaM4pngZCBtI3';
 const PINNED_FEEDBACK_ID = 'z4H1pYyRT9h9Qv5s2j6S'; // ID of the comment to pin
 
 function FeedbackItem({ feedback }: { feedback: Feedback }) {
