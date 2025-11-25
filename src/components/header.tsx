@@ -7,7 +7,7 @@ import * as React from "react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { Moon, Sun, Home, LogIn, LogOut, FileText } from "lucide-react";
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { signInAnonymously } from "firebase/auth";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -52,25 +52,20 @@ function AdminAuth({ isMobile = false }: { isMobile?: boolean }) {
   const handleSignIn = async () => {
     if (!auth) return;
     try {
-      const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
-      // After successful sign-in, show a toast with the user's UID
+      const userCredential = await signInAnonymously(auth);
+      const uid = userCredential.user.uid;
       toast({
         title: "Giriş Başarılı",
-        description: `Yönetici UID'niz: ${result.user.uid}. Lütfen bu kimliği kopyalayıp geliştiricinize iletin.`,
-        duration: 20000, // 20 seconds to make sure it's seen
+        description: `Yönetici UID'niz: ${uid}. Lütfen bu kimliği kopyalayıp geliştiricinize iletin.`,
+        duration: 30000, 
       });
     } catch (error: any) {
-      // Gracefully handle the case where the user closes the popup
-      if (error.code === 'auth/cancelled-popup-request' || error.code === 'auth/popup-closed-by-user') {
-        return; // Do nothing if the user cancelled
-      }
-      console.error("Error during Google sign-in:", error);
+      console.error("Anonymous sign-in failed:", error);
       toast({
         title: "Giriş Hatası",
-        description: "Google ile giriş yapılırken bir hata oluştu: " + error.message,
+        description: "Giriş yapılırken bir hata oluştu: " + error.message,
         variant: "destructive"
-      })
+      });
     }
   };
 
