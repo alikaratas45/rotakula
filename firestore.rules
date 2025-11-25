@@ -16,11 +16,13 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
     
-    // Allow anyone to create a survey response, but only authenticated users to manage them.
+    // Allow anyone to create a survey response.
+    // Allow anyone to read/list survey responses.
+    // Only allow admin to write/delete.
     match /surveys/{surveyId} {
         allow create: if true;
-        // 'list' permission is required to query the entire collection.
-        allow get, list, write, delete: if request.auth != null;
+        allow get, list: if true;
+        allow write, delete: if isAdmin();
     }
   }
 }
