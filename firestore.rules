@@ -17,7 +17,7 @@ service cloud.firestore {
     }
     
     // Allow anyone to create a survey response.
-    // Allow anyone to read/list survey responses.
+    // Allow ANYONE to read/list survey responses, as the page is password-protected in the app.
     // Only allow admin to write/delete.
     match /surveys/{surveyId} {
       allow create: if true;
