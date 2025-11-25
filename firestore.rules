@@ -1,13 +1,9 @@
 
 rules_version = '2';
 
-// NOTE: The admin UID is now managed in src/firebase/config.ts
-// This file reads that value at build time, but for local emulation,
-// you might need to manually update it if the value changes.
+// IMPORTANT: This UID is now correctly set based on your login.
+// Do not change it unless you need to assign a new admin.
 function isAdmin() {
-  // This rule now relies on a function that is expected to be
-  // populated by the environment. In a real deployment, you would
-  // secure this differently, but for Studio, this demonstrates the concept.
   return request.auth.uid == "C97QgdGSwoYAiHnICO2OhdVBARt2";
 }
 
@@ -20,10 +16,11 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
     
-    // Allow anyone to create a survey response, but only admins to read them.
+    // Allow anyone to create a survey response, but only admins to read, list, write, or delete them.
     match /surveys/{surveyId} {
         allow create: if true;
-        allow read, write, delete: if isAdmin();
+        // 'list' permission is required to query the entire collection.
+        allow get, list, write, delete: if isAdmin();
     }
   }
 }
