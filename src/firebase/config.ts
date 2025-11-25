@@ -1,5 +1,3 @@
-
-
 // IMPORTANT: If you are seeing an "Access Denied" error on the admin page,
 // it means your current user's UID does not match the ADMIN_UID below.
 // To fix this:
@@ -16,7 +14,7 @@ export const firebaseConfig = {
   "appId": "1:439778065473:web:fda799cce92caec7519ac0",
   "storageBucket": "studio-7362296001-816cc.appspot.com",
   "apiKey": "AIzaSyDiNYyy_sXwD_nCQX015vHxImsOrWIK3ig",
-  "authDomain": "studio-7362296001-816cc.firebaseapp.com",
+  "authDomain": "studio--studio-7362296001-816cc.us-central1.hosted.app",
   "measurementId": "G-5G9J1MM31M",
   "messagingSenderId": "439778065473"
 };
