@@ -54,11 +54,11 @@ function AdminAuth({ isMobile = false }: { isMobile?: boolean }) {
     try {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
-      // After successful sign-in, log the user's UID to the console
-      console.log("Yönetici UID'niz:", result.user.uid);
+      // After successful sign-in, show a toast with the user's UID
       toast({
         title: "Giriş Başarılı",
-        description: "Yönetici olarak giriş yaptınız. UID'niz konsola yazdırıldı.",
+        description: `Yönetici UID'niz: ${result.user.uid}. Lütfen bu kimliği kopyalayıp geliştiricinize iletin.`,
+        duration: 9000,
       });
     } catch (error: any) {
       console.error("Error during Google sign-in:", error);
