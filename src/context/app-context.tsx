@@ -33,6 +33,8 @@ interface AppContextType {
   setPoiToSurvey: React.Dispatch<React.SetStateAction<PointOfInterest | null>>;
   addCompletedSurvey: (poiId: string) => void;
   hasCompletedSurvey: (poiId: string) => boolean;
+  isAdminAuthenticated: boolean;
+  setIsAdminAuthenticated: (isAuthenticated: boolean) => void;
 }
 
 const translations = { tr, en, fr, de };
@@ -47,6 +49,21 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [allPois, setAllPois] = useState<any[]>([]);
   const [poiToSurvey, setPoiToSurvey] = useState<PointOfInterest | null>(null);
   const [completedSurveys, setCompletedSurveys] = useState<Set<string>>(new Set());
+  const [isAdminAuthenticated, setAdminAuthenticated] = useState(false);
+
+
+  useEffect(() => {
+    // Check sessionStorage for admin auth state on initial load
+    const storedAuthState = sessionStorage.getItem('isAdminAuthenticated');
+    if (storedAuthState === 'true') {
+      setAdminAuthenticated(true);
+    }
+  }, []);
+
+  const handleSetIsAdminAuthenticated = (isAuthenticated: boolean) => {
+    setAdminAuthenticated(isAuthenticated);
+    sessionStorage.setItem('isAdminAuthenticated', isAuthenticated.toString());
+  };
 
 
   // Fetch all POIs on mount to map badge IDs to badge data
@@ -125,7 +142,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const currentTranslations = useMemo(() => translations[language], [language]);
 
-  const value = { 
+  const value: AppContextType = { 
     language, 
     setLanguage: handleSetLanguage, 
     translations: currentTranslations,
@@ -140,6 +157,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setPoiToSurvey,
     addCompletedSurvey,
     hasCompletedSurvey,
+    isAdminAuthenticated,
+    setIsAdminAuthenticated: handleSetIsAdminAuthenticated,
   };
 
   return (
@@ -149,7 +168,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function useApp() {
+export function useApp(): AppContextType {
   const context = useContext(AppContext);
   if (context === undefined) {
     throw new Error('useApp must be used within an AppProvider');

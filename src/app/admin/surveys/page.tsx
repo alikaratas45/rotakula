@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useCollection, useUser, useFirestore, useMemoFirebase } from '@/firebase';
+import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, query, orderBy, Timestamp } from 'firebase/firestore';
 import { Loader2, ShieldAlert, Star } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -23,7 +23,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { formatDistanceToNow } from 'date-fns';
 import { tr } from 'date-fns/locale';
-import { ADMIN_UID } from '@/firebase/config';
+import { useApp } from '@/context/app-context';
 
 type Survey = {
   id: string;
@@ -49,39 +49,21 @@ function renderStars(count: string | number) {
     return <div className="flex">{stars}</div>;
 }
 
-function AnswerDisplay({ label, value }: { label: string; value: string | JSX.Element | null | undefined }) {
-    if (!value) return null;
-    return (
-        <div className="text-xs">
-            <span className="font-semibold">{label}:</span>{' '}
-            <span className="text-muted-foreground">{typeof value === 'string' ? value.charAt(0).toUpperCase() + value.slice(1) : value}</span>
-        </div>
-    );
-}
-
 export default function SurveyResultsPage() {
-  const { user, isUserLoading } = useUser();
+  const { isAdminAuthenticated } = useApp();
   const firestore = useFirestore();
 
   const surveysQuery = useMemoFirebase(
     () => {
-      if (!firestore || !user || user.uid !== ADMIN_UID) return null;
+      if (!firestore || !isAdminAuthenticated) return null;
       return query(collection(firestore, 'surveys'), orderBy('createdAt', 'desc'));
     },
-    [firestore, user]
+    [firestore, isAdminAuthenticated]
   );
 
   const { data: surveys, isLoading, error } = useCollection<Survey>(surveysQuery);
 
-  if (isUserLoading || (user && user.uid === ADMIN_UID && isLoading)) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    );
-  }
-
-  if (!user || user.uid !== ADMIN_UID) {
+  if (!isAdminAuthenticated) {
     return (
       <div className="container mx-auto px-4 py-8">
         <Alert variant="destructive" className="max-w-md mx-auto">
@@ -94,6 +76,14 @@ export default function SurveyResultsPage() {
       </div>
     );
   }
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
   
   if (error) {
     return (
@@ -102,7 +92,7 @@ export default function SurveyResultsPage() {
             <ShieldAlert className="h-4 w-4" />
             <AlertTitle>Veri Yükleme Hatası</AlertTitle>
             <AlertDescription>
-                Anket verileri yüklenirken bir hata oluştu. Lütfen Firestore kurallarınızı kontrol edin.
+                Anket verileri yüklenirken bir hata oluştu. Lütfen Firestore kurallarınızı veya internet bağlantınızı kontrol edin.
             </AlertDescription>
         </Alert>
       </div>

@@ -7,7 +7,6 @@ import * as React from "react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { Moon, Sun, Home, LogIn, LogOut, FileText } from "lucide-react";
-import { signInAnonymously } from "firebase/auth";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -20,9 +19,7 @@ import {
 import { AudioGuideControl } from "./audio-guide-control";
 import { useApp } from "@/context/app-context";
 import { TurkishFlagIcon, UKFlagIcon, FrenchFlagIcon, GermanFlagIcon } from "./icons";
-import { useAuth, useUser } from "@/firebase";
 import { useToast } from "@/hooks/use-toast";
-import { ADMIN_UID } from "@/firebase/config";
 
 
 function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
@@ -45,36 +42,35 @@ function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
 }
 
 function AdminAuth({ isMobile = false }: { isMobile?: boolean }) {
-  const auth = useAuth();
-  const { user } = useUser();
   const { toast } = useToast();
+  const { isAdminAuthenticated, setIsAdminAuthenticated } = useApp();
 
-  const handleSignIn = async () => {
-    if (!auth) return;
-    try {
-      await signInAnonymously(auth);
-      // The onAuthStateChanged listener in the provider will handle the UI update.
-      // No need to show a toast here anymore as the main goal was to get the UID.
-    } catch (error: any) {
-      console.error("Anonymous sign-in failed:", error);
+  const handleSignIn = () => {
+    const password = prompt("Yönetici şifresini girin:");
+    if (password === "kula123") {
+      setIsAdminAuthenticated(true);
       toast({
-        title: "Giriş Hatası",
-        description: "Giriş yapılırken bir hata oluştu: " + error.message,
-        variant: "destructive"
+        title: "Giriş Başarılı",
+        description: "Yönetici paneline erişim sağlandı.",
+      });
+    } else if (password !== null) {
+      toast({
+        title: "Giriş Başarısız",
+        description: "Hatalı şifre girdiniz.",
+        variant: "destructive",
       });
     }
   };
 
-  const handleSignOut = async () => {
-    if (!auth) return;
-    try {
-      await auth.signOut();
-    } catch (error: any) {
-      console.error("Error during sign-out:", error);
-    }
+  const handleSignOut = () => {
+    setIsAdminAuthenticated(false);
+    toast({
+      title: "Çıkış Yapıldı",
+      description: "Yönetici oturumu sonlandırıldı.",
+    });
   };
 
-  if (user && user.uid === ADMIN_UID) {
+  if (isAdminAuthenticated) {
     return (
       <div className="flex gap-2">
         <Button asChild variant="outline" size="sm" className="h-9">
@@ -100,7 +96,6 @@ function AdminAuth({ isMobile = false }: { isMobile?: boolean }) {
 }
 
 export function Header() {
-    const pathname = usePathname();
     const { language, setLanguage, translations } = useApp();
     const [adminClickCount, setAdminClickCount] = React.useState(0);
     const [showAdmin, setShowAdmin] = React.useState(false);

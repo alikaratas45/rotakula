@@ -20,9 +20,9 @@ service cloud.firestore {
     // Allow anyone to read/list survey responses.
     // Only allow admin to write/delete.
     match /surveys/{surveyId} {
-        allow create: if true;
-        allow get, list: if true;
-        allow write, delete: if isAdmin();
+      allow create: if true;
+      allow get, list: if true;
+      allow write, delete: if isAdmin();
     }
   }
 }
