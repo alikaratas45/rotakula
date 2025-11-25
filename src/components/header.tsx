@@ -16,6 +16,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { AudioGuideControl } from "./audio-guide-control";
 import { useApp } from "@/context/app-context";
 import { TurkishFlagIcon, UKFlagIcon, FrenchFlagIcon, GermanFlagIcon } from "./icons";
@@ -44,16 +55,19 @@ function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
 function AdminAuth({ isMobile = false }: { isMobile?: boolean }) {
   const { toast } = useToast();
   const { isAdminAuthenticated, setIsAdminAuthenticated } = useApp();
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const [password, setPassword] = React.useState("");
 
   const handleSignIn = () => {
-    const password = prompt("Yönetici şifresini girin:");
     if (password === "kula123") {
       setIsAdminAuthenticated(true);
       toast({
         title: "Giriş Başarılı",
         description: "Yönetici paneline erişim sağlandı.",
       });
-    } else if (password !== null) {
+      setIsDialogOpen(false);
+      setPassword("");
+    } else {
       toast({
         title: "Giriş Başarısız",
         description: "Hatalı şifre girdiniz.",
@@ -88,10 +102,41 @@ function AdminAuth({ isMobile = false }: { isMobile?: boolean }) {
   }
 
   return (
-    <Button variant="outline" size="sm" className={cn("h-9", isMobile && "w-full justify-start")} onClick={handleSignIn}>
-      <LogIn className="mr-2 h-4 w-4" />
-      Admin Girişi
-    </Button>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <Button variant="outline" size="sm" className={cn("h-9", isMobile && "w-full justify-start")} onClick={() => setIsDialogOpen(true)}>
+        <LogIn className="mr-2 h-4 w-4" />
+        Admin Girişi
+      </Button>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Yönetici Girişi</DialogTitle>
+          <DialogDescription>
+            Anket sonuçlarını görüntülemek için lütfen yönetici şifresini girin.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="password"className="text-right">
+              Şifre
+            </Label>
+            <Input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="col-span-3"
+              onKeyDown={(e) => e.key === 'Enter' && handleSignIn()}
+            />
+          </div>
+        </div>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button type="button" variant="secondary">İptal</Button>
+          </DialogClose>
+          <Button type="submit" onClick={handleSignIn}>Giriş Yap</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 
