@@ -7,6 +7,7 @@ import en from '@/lib/locales/en.json';
 import fr from '@/lib/locales/fr.json';
 import de from '@/lib/locales/de.json';
 import { getPois } from '@/lib/kula-data';
+import type { PointOfInterest } from '@/lib/types';
 
 type Language = 'tr' | 'en' | 'fr' | 'de';
 
@@ -28,6 +29,10 @@ interface AppContextType {
   earnedBadges: Badge[];
   addBadge: (poiId: string) => void;
   totalPoints: number;
+  poiToSurvey: PointOfInterest | null;
+  setPoiToSurvey: React.Dispatch<React.SetStateAction<PointOfInterest | null>>;
+  addCompletedSurvey: (poiId: string) => void;
+  hasCompletedSurvey: (poiId: string) => boolean;
 }
 
 const translations = { tr, en, fr, de };
@@ -40,6 +45,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isAudioGuideActive, setIsAudioGuideActive] = useState(false);
   const [earnedBadges, setEarnedBadges] = useState<Badge[]>([]);
   const [allPois, setAllPois] = useState<any[]>([]);
+  const [poiToSurvey, setPoiToSurvey] = useState<PointOfInterest | null>(null);
+  const [completedSurveys, setCompletedSurveys] = useState<Set<string>>(new Set());
+
 
   // Fetch all POIs on mount to map badge IDs to badge data
   useEffect(() => {
@@ -107,6 +115,13 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     return earnedBadges.reduce((sum, badge) => sum + badge.points, 0);
   }, [earnedBadges]);
 
+  const addCompletedSurvey = useCallback((poiId: string) => {
+    setCompletedSurveys(prev => new Set(prev).add(poiId));
+  }, []);
+
+  const hasCompletedSurvey = useCallback((poiId: string) => {
+    return completedSurveys.has(poiId);
+  }, [completedSurveys]);
 
   const currentTranslations = useMemo(() => translations[language], [language]);
 
@@ -121,6 +136,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     earnedBadges,
     addBadge,
     totalPoints,
+    poiToSurvey,
+    setPoiToSurvey,
+    addCompletedSurvey,
+    hasCompletedSurvey,
   };
 
   return (

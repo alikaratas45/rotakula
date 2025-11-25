@@ -173,7 +173,9 @@
         "loading": "Yükleniyor",
         "map": "Harita",
         "moreInfo": "Daha Fazla Bilgi",
-        "cancel": "İptal"
+        "cancel": "İptal",
+        "submit": "Gönder",
+        "close": "Kapat"
     },
     "category": {
         "geopark": "Jeopark",
@@ -237,5 +239,26 @@
         "noBadgesDescription": "Kula'yı keşfetmeye başla ve sesli rehberi açarak rozetleri topla!",
         "earnedTitle": "Rozet Kazanıldı!",
         "earnedDescription": "Tebrikler, {poiName} rozetini kazandınız!"
+    },
+    "survey": {
+        "title": "Deneyiminizi Değerlendirin",
+        "description": "{poiName} ziyaretiniz hakkındaki düşünceleriniz bizim için değerli.",
+        "question1": "Bu yerdeki genel deneyiminizi nasıl değerlendirirsiniz?",
+        "question2": "Bölgenin temizliği ve bakımı nasıldı?",
+        "question3": "Bu yeri başkalarına tavsiye eder misiniz?",
+        "rating": {
+            "veryBad": "Çok Kötü",
+            "bad": "Kötü",
+            "average": "Orta",
+            "good": "İyi",
+            "veryGood": "Çok İyi"
+        },
+        "recommend": {
+            "yes": "Evet",
+            "no": "Hayır",
+            "notSure": "Emin Değilim"
+        },
+        "thankYouTitle": "Teşekkürler!",
+        "thankYouDescription": "Geri bildiriminiz uygulamamızı geliştirmemize yardımcı oluyor."
     }
 }

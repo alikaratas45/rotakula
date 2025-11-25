@@ -8,10 +8,7 @@ import { Footer } from '@/components/footer';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import IntroTour from '@/components/intro-tour';
-import { AppProvider } from '@/context/app-context';
-import { ThemeProvider } from 'next-themes';
-import { FirebaseClientProvider } from '@/firebase';
-
+import SurveyDialog from '@/components/survey-dialog';
 
 function SplashScreen() {
     return (
@@ -57,6 +54,7 @@ export function Providers({ children }: PropsWithChildren) {
   return (
     <>
         <IntroTour />
+        <SurveyDialog />
         <Header />
         <main className="flex-grow">{children}</main>
         <Footer />
