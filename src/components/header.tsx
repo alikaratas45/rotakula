@@ -52,13 +52,9 @@ function AdminAuth({ isMobile = false }: { isMobile?: boolean }) {
   const handleSignIn = async () => {
     if (!auth) return;
     try {
-      const userCredential = await signInAnonymously(auth);
-      const uid = userCredential.user.uid;
-      toast({
-        title: "Giriş Başarılı",
-        description: `Yönetici UID'niz: ${uid}. Lütfen bu kimliği kopyalayıp geliştiricinize iletin.`,
-        duration: 30000, 
-      });
+      await signInAnonymously(auth);
+      // The onAuthStateChanged listener in the provider will handle the UI update.
+      // No need to show a toast here anymore as the main goal was to get the UID.
     } catch (error: any) {
       console.error("Anonymous sign-in failed:", error);
       toast({

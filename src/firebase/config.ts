@@ -8,7 +8,7 @@
 // 4. Copy that long string (your UID) and replace the value of ADMIN_UID below.
 // 5. Ask your AI partner to apply this change.
 
-export const ADMIN_UID = "PLEASE_REPLACE_WITH_YOUR_UID_FROM_THE_UI_NOTIFICATION";
+export const ADMIN_UID = "C97QgdGSwoYAiHnICO2OhdVBARt2";
 
 export const firebaseConfig = {
   "projectId": "studio-7362296001-816cc",

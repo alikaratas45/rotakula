@@ -8,7 +8,7 @@ function isAdmin() {
   // This rule now relies on a function that is expected to be
   // populated by the environment. In a real deployment, you would
   // secure this differently, but for Studio, this demonstrates the concept.
-  return request.auth.uid == "PLEASE_REPLACE_WITH_YOUR_UID_FROM_CONSOLE";
+  return request.auth.uid == "C97QgdGSwoYAiHnICO2OhdVBARt2";
 }
 
 service cloud.firestore {
