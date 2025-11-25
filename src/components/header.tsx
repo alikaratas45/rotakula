@@ -176,6 +176,7 @@ export function Header() {
                         </Link>
                     </div>
                     <div className="flex items-center gap-1">
+                         {showAdmin && <AdminAuth isMobile={true} />}
                         <Button asChild variant="outline" size="icon" className="h-8 w-8">
                             <Link href="/">
                                 <Home className="h-4 w-4" />
