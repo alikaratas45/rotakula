@@ -62,7 +62,7 @@ function AdminAuth({ isMobile = false }: { isMobile?: boolean }) {
       });
     } catch (error: any) {
       // Gracefully handle the case where the user closes the popup
-      if (error.code === 'auth/cancelled-popup-request') {
+      if (error.code === 'auth/cancelled-popup-request' || error.code === 'auth/popup-closed-by-user') {
         return; // Do nothing if the user cancelled
       }
       console.error("Error during Google sign-in:", error);
