@@ -58,7 +58,7 @@ function AdminAuth({ isMobile = false }: { isMobile?: boolean }) {
       toast({
         title: "Giriş Başarılı",
         description: `Yönetici UID'niz: ${result.user.uid}. Lütfen bu kimliği kopyalayıp geliştiricinize iletin.`,
-        duration: 9000,
+        duration: 20000, // 20 seconds to make sure it's seen
       });
     } catch (error: any) {
       // Gracefully handle the case where the user closes the popup
@@ -68,7 +68,7 @@ function AdminAuth({ isMobile = false }: { isMobile?: boolean }) {
       console.error("Error during Google sign-in:", error);
       toast({
         title: "Giriş Hatası",
-        description: "Google ile giriş yapılırken bir hata oluştu.",
+        description: "Google ile giriş yapılırken bir hata oluştu: " + error.message,
         variant: "destructive"
       })
     }
