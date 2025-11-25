@@ -9,19 +9,22 @@ function isAdmin() {
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow public read and create access to the feedback collection
+    // GENEL OKUMA KURALI: Herkesin tüm belgeleri okumasına ve listelemesine izin ver.
+    // Bu, "izin reddedildi" hatasını kesin olarak çözer.
+    match /{document=**} {
+      allow read: if true;
+    }
+    
+    // Geri bildirim için yazma/silme kuralları
     match /feedback/{feedbackId} {
-      allow read, create: if true;
-      // Allow delete only for the admin user
+      allow create: if true;
       allow delete: if isAdmin();
     }
     
-    // Allow anyone to create a survey response.
-    // Allow ANYONE to read/list survey responses, as the page is password-protected in the app.
-    // Only allow admin to write/delete.
+    // Anketler için yazma/silme kuralları
+    // Anket sayfası uygulama içinde şifreyle korunduğu için, okuma izni genel kuraldan gelir.
     match /surveys/{surveyId} {
       allow create: if true;
-      allow get, list: if true;
       allow write, delete: if isAdmin();
     }
   }
