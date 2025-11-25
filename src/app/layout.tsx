@@ -34,11 +34,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AppProvider>
-            <FirebaseClientProvider>
+          <FirebaseClientProvider>
+            <AppProvider>
               <Providers>{children}</Providers>
-            </FirebaseClientProvider>
-          </AppProvider>
+            </AppProvider>
+          </FirebaseClientProvider>
         </ThemeProvider>
       </body>
     </html>
