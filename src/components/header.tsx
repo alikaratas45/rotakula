@@ -7,7 +7,7 @@ import * as React from "react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { Moon, Sun, Home, LogIn, LogOut, FileText } from "lucide-react";
-import { signInAnonymously } from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -51,9 +51,15 @@ function AdminAuth({ isMobile = false }: { isMobile?: boolean }) {
   const handleSignIn = async () => {
     if (!auth) return;
     try {
-      await signInAnonymously(auth);
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
     } catch (error: any) {
-      console.error("Error during anonymous sign-in:", error);
+      console.error("Error during Google sign-in:", error);
+      toast({
+        title: "Giriş Hatası",
+        description: "Google ile giriş yapılırken bir hata oluştu.",
+        variant: "destructive"
+      })
     }
   };
 
