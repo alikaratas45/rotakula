@@ -61,6 +61,10 @@ function AdminAuth({ isMobile = false }: { isMobile?: boolean }) {
         duration: 9000,
       });
     } catch (error: any) {
+      // Gracefully handle the case where the user closes the popup
+      if (error.code === 'auth/cancelled-popup-request') {
+        return; // Do nothing if the user cancelled
+      }
       console.error("Error during Google sign-in:", error);
       toast({
         title: "Giriş Hatası",
