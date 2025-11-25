@@ -173,7 +173,9 @@
         "loading": "Chargement",
         "map": "Carte",
         "moreInfo": "Plus d'Infos",
-        "cancel": "Annuler"
+        "cancel": "Annuler",
+        "submit": "Envoyer",
+        "close": "Fermer"
     },
     "category": {
         "geopark": "Géoparc",
@@ -238,5 +240,28 @@
         "noBadgesDescription": "Commencez à explorer Kula et activez l'audioguide pour collecter des badges !",
         "earnedTitle": "Badge Gagné !",
         "earnedDescription": "Félicitations, vous avez gagné le badge {poiName} !"
+    },
+    "survey": {
+        "title": "Évaluez Votre Expérience",
+        "description": "Vos réflexions sur votre visite à {poiName} nous sont précieuses.",
+        "question1": "Comment évalueriez-vous votre expérience globale dans ce lieu ?",
+        "question2": "Comment étaient la propreté et l'entretien de la zone ?",
+        "question3": "Recommanderiez-vous ce lieu à d'autres ?",
+        "question4": "Un guide vous a-t-il accompagné lors de votre visite de ce lieu ?",
+        "question5": "Comment évalueriez-vous l'importance historique ou naturelle de ce lieu ?",
+        "rating": {
+            "veryBad": "Très Mauvais",
+            "bad": "Mauvais",
+            "average": "Moyen",
+            "good": "Bon",
+            "veryGood": "Très Bon"
+        },
+        "recommend": {
+            "yes": "Oui",
+            "no": "Non",
+            "notSure": "Pas Sûr"
+        },
+        "thankYouTitle": "Merci !",
+        "thankYouDescription": "Vos commentaires nous aident à améliorer notre application."
     }
 }

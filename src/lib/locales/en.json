@@ -173,7 +173,9 @@
         "loading": "Loading",
         "map": "Map",
         "moreInfo": "More Info",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "submit": "Submit",
+        "close": "Close"
     },
     "category": {
         "geopark": "Geopark",
@@ -238,5 +240,28 @@
         "noBadgesDescription": "Start exploring Kula and turn on the audio guide to collect badges!",
         "earnedTitle": "Badge Earned!",
         "earnedDescription": "Congratulations, you have earned the {poiName} badge!"
+    },
+    "survey": {
+        "title": "Rate Your Experience",
+        "description": "Your thoughts on your visit to {poiName} are valuable to us.",
+        "question1": "How would you rate your overall experience at this place?",
+        "question2": "How was the cleanliness and maintenance of the area?",
+        "question3": "Would you recommend this place to others?",
+        "question4": "Did a guide accompany you during your visit to this place?",
+        "question5": "How would you rate the historical or natural importance of this place?",
+        "rating": {
+            "veryBad": "Very Bad",
+            "bad": "Bad",
+            "average": "Average",
+            "good": "Good",
+            "veryGood": "Very Good"
+        },
+        "recommend": {
+            "yes": "Yes",
+            "no": "No",
+            "notSure": "Not Sure"
+        },
+        "thankYouTitle": "Thank You!",
+        "thankYouDescription": "Your feedback helps us improve our application."
     }
 }

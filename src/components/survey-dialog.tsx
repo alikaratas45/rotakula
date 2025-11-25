@@ -14,13 +14,15 @@ import {
 } from '@/components/ui/dialog';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-import { Star, Smile, Meh, Frown, ThumbsUp, ThumbsDown, HelpCircle, Trash2, Leaf, Siren } from 'lucide-react';
+import { Star, Smile, Meh, Frown, ThumbsUp, ThumbsDown, HelpCircle, Trash2, Leaf, Siren, UserCheck, UserX } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 type SurveyAnswers = {
   rating: string | null;
   cleanliness: string | null;
   recommend: string | null;
+  guided: string | null;
+  importance: string | null;
 };
 
 export default function SurveyDialog() {
@@ -31,6 +33,8 @@ export default function SurveyDialog() {
     rating: null,
     cleanliness: null,
     recommend: null,
+    guided: null,
+    importance: null,
   });
 
   useEffect(() => {
@@ -45,7 +49,7 @@ export default function SurveyDialog() {
     setTimeout(() => {
         setPoiToSurvey(null);
         // Reset answers for the next survey
-        setAnswers({ rating: null, cleanliness: null, recommend: null });
+        setAnswers({ rating: null, cleanliness: null, recommend: null, guided: null, importance: null });
     }, 300);
   };
 
@@ -67,7 +71,7 @@ export default function SurveyDialog() {
     return null;
   }
 
-  const isSubmitDisabled = !answers.rating || !answers.cleanliness || !answers.recommend;
+  const isSubmitDisabled = !answers.rating || !answers.cleanliness || !answers.recommend || !answers.guided || !answers.importance;
 
   const ratingOptions = [
     { value: '5', label: translations.survey.rating.veryGood, icon: <Smile className="text-green-500" /> },
@@ -89,9 +93,23 @@ export default function SurveyDialog() {
     { value: 'notSure', label: translations.survey.recommend.notSure, icon: <HelpCircle className="text-gray-500" /> },
   ];
 
+  const guidedOptions = [
+      { value: 'yes', label: translations.survey.recommend.yes, icon: <UserCheck className="text-green-500" /> },
+      { value: 'no', label: translations.survey.recommend.no, icon: <UserX className="text-red-500" /> },
+  ]
+
+  const importanceOptions = [
+      { value: '1', icon: <Star className="text-muted-foreground" />},
+      { value: '2', icon: <Star className="text-muted-foreground" />},
+      { value: '3', icon: <Star className="text-muted-foreground" />},
+      { value: '4', icon: <Star className="text-muted-foreground" />},
+      { value: '5', icon: <Star className="text-muted-foreground" />},
+  ]
+
+
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>{translations.survey.title}</DialogTitle>
           <DialogDescription>
@@ -154,6 +172,46 @@ export default function SurveyDialog() {
                   <Label htmlFor={`rec-${opt.value}`} className="flex items-center justify-center gap-2 p-3 rounded-md border-2 border-muted data-[state=checked]:border-primary cursor-pointer transition-colors">
                      {opt.icon}
                      <span className="font-medium">{opt.label}</span>
+                  </Label>
+                </div>
+              ))}
+            </RadioGroup>
+          </div>
+          
+           {/* Question 4: Guided */}
+          <div className="space-y-3">
+            <Label className="font-semibold">{translations.survey.question4}</Label>
+             <RadioGroup
+              value={answers.guided || ''}
+              onValueChange={(value) => setAnswers(prev => ({...prev, guided: value}))}
+              className="grid grid-cols-2 gap-4"
+            >
+              {guidedOptions.map(opt => (
+                <div key={opt.value}>
+                  <RadioGroupItem value={opt.value} id={`guided-${opt.value}`} className="sr-only" />
+                  <Label htmlFor={`guided-${opt.value}`} className="flex items-center justify-center gap-2 p-3 rounded-md border-2 border-muted data-[state=checked]:border-primary cursor-pointer transition-colors">
+                     {opt.icon}
+                     <span className="font-medium">{opt.label}</span>
+                  </Label>
+                </div>
+              ))}
+            </RadioGroup>
+          </div>
+
+           {/* Question 5: Importance */}
+          <div className="space-y-3">
+            <Label className="font-semibold">{translations.survey.question5}</Label>
+            <RadioGroup
+              value={answers.importance || ''}
+              onValueChange={(value) => setAnswers(prev => ({...prev, importance: value}))}
+              className="flex justify-around"
+            >
+              {importanceOptions.map(opt => (
+                <div key={opt.value} className="flex flex-col items-center space-y-1">
+                  <RadioGroupItem value={opt.value} id={`importance-${opt.value}`} className="sr-only" />
+                  <Label htmlFor={`importance-${opt.value}`} className="flex flex-col items-center gap-2 p-2 rounded-md border-2 border-transparent data-[state=checked]:border-primary cursor-pointer transition-colors">
+                     <Star className={`transition-colors ${answers.importance && parseInt(answers.importance) >= parseInt(opt.value) ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground'}`} />
+                     <span className="text-xs font-medium">{opt.value}</span>
                   </Label>
                 </div>
               ))}

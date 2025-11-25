@@ -246,6 +246,8 @@
         "question1": "Bu yerdeki genel deneyiminizi nasıl değerlendirirsiniz?",
         "question2": "Bölgenin temizliği ve bakımı nasıldı?",
         "question3": "Bu yeri başkalarına tavsiye eder misiniz?",
+        "question4": "Bu mekanı ziyaretiniz sırasında size bir rehber eşlik etti mi?",
+        "question5": "Sizce bu mekanın tarihi veya doğal önemi ne kadar?",
         "rating": {
             "veryBad": "Çok Kötü",
             "bad": "Kötü",
