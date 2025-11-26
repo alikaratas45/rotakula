@@ -51,43 +51,18 @@ function renderStars(count: string | number) {
     return <div className="flex">{stars}</div>;
 }
 
-export default function SurveyResultsPage() {
-  const { user, isUserLoading } = useUser();
-  const isAdminAuthenticated = user?.uid === ADMIN_UID;
+function SurveyResults() {
   const firestore = useFirestore();
 
   const surveysQuery = useMemoFirebase(
     () => {
-      if (!firestore || !isAdminAuthenticated) return null;
+      if (!firestore) return null;
       return query(collection(firestore, 'surveys'), orderBy('createdAt', 'desc'));
     },
-    [firestore, isAdminAuthenticated]
+    [firestore]
   );
 
   const { data: surveys, isLoading, error } = useCollection<Survey>(surveysQuery);
-
-  if (isUserLoading) {
-     return (
-      <div className="flex h-screen items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin" />
-        <p className="ml-2">Yönetici durumu kontrol ediliyor...</p>
-      </div>
-    );
-  }
-
-  if (!isAdminAuthenticated) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <Alert variant="destructive" className="max-w-md mx-auto">
-            <ShieldAlert className="h-4 w-4" />
-            <AlertTitle>Erişim Engellendi</AlertTitle>
-            <AlertDescription>
-                Bu sayfayı görüntülemek için yönetici olarak giriş yapmanız gerekmektedir.
-            </AlertDescription>
-        </Alert>
-      </div>
-    );
-  }
 
   if (isLoading) {
     return (
@@ -104,7 +79,7 @@ export default function SurveyResultsPage() {
             <ShieldAlert className="h-4 w-4" />
             <AlertTitle>Veri Yükleme Hatası</AlertTitle>
             <AlertDescription>
-                Anket verileri yüklenirken bir hata oluştu. Lütfen Firestore kurallarınızı veya internet bağlantınızı kontrol edin.
+                Anket verileri yüklenirken bir hata oluştu. Lütfen Firestore kurallarınızı veya internet bağlantınızı kontrol edin. Hata: {error.message}
             </AlertDescription>
         </Alert>
       </div>
@@ -112,8 +87,7 @@ export default function SurveyResultsPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Anket Sonuçları</h1>
+    <>
       {surveys && surveys.length > 0 ? (
         <Card>
             <Table>
@@ -155,8 +129,41 @@ export default function SurveyResultsPage() {
           </CardHeader>
         </Card>
       )}
-    </div>
+    </>
   );
 }
 
-    
+
+export default function SurveyResultsPage() {
+  const { isAdminAuthenticated, isUserLoading } = useApp();
+  
+  if (isUserLoading) {
+     return (
+      <div className="flex h-screen items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin" />
+        <p className="ml-2">Yönetici durumu kontrol ediliyor...</p>
+      </div>
+    );
+  }
+
+  if (!isAdminAuthenticated) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <Alert variant="destructive" className="max-w-md mx-auto">
+            <ShieldAlert className="h-4 w-4" />
+            <AlertTitle>Erişim Engellendi</AlertTitle>
+            <AlertDescription>
+                Bu sayfayı görüntülemek için yönetici olarak giriş yapmanız gerekmektedir.
+            </AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold mb-6">Anket Sonuçları</h1>
+        <SurveyResults />
+    </div>
+  );
+}
