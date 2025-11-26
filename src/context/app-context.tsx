@@ -63,6 +63,32 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     fetchPois();
   }, []);
 
+  useEffect(() => {
+    const welcomeSurveyKey = 'rota-kula-welcome-survey-completed';
+    const hasCompletedWelcomeSurvey = localStorage.getItem(welcomeSurveyKey);
+
+    if (!hasCompletedWelcomeSurvey) {
+        // Use a timeout to not show the survey immediately on load
+        const timer = setTimeout(() => {
+            const generalPoi: PointOfInterest = {
+                id: 'general-app-survey',
+                name: 'Genel Uygulama Deneyimi',
+                slug: '',
+                description: '',
+                longDescription: '',
+                category: 'history',
+                imageId: '',
+                latitude: 0,
+                longitude: 0,
+            };
+            setPoiToSurvey(generalPoi);
+            localStorage.setItem(welcomeSurveyKey, 'true');
+        }, 5000); // Show after 5 seconds
+
+        return () => clearTimeout(timer);
+    }
+  }, []);
+
 
   // Load language and badges from localStorage
   useEffect(() => {
