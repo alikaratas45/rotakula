@@ -11,8 +11,6 @@ import { PlayIcon, PauseIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useApp } from '@/context/app-context';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Separator } from '@/components/ui/separator';
-import { PoiComments } from '@/components/poi-comments';
 
 export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
@@ -190,13 +188,6 @@ export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
                                     <p key={index}>{paragraph}</p>
                                 ))}
                             </div>
-
-                             <Separator className="my-12" />
-
-                            <div>
-                                <PoiComments poiId={poi.id} />
-                            </div>
-
                         </div>
 
                         <aside className="lg:col-span-1">
