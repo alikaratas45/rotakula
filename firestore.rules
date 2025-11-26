@@ -9,6 +9,12 @@ service cloud.firestore {
       allow read, create: if true;
       allow update, delete: if false;
     }
+
+    // POI Comments Collection: Allow anyone to list and read comments, and create new ones.
+    match /poi_comments/{document=**} {
+      allow read, create: if true;
+      allow update, delete: if false;
+    }
     
     // Default-deny all other reads and writes for security.
     match /{document=**} {
