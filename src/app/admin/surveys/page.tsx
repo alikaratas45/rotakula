@@ -1,8 +1,10 @@
 
 'use client';
 
-import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
-import { collection, query, orderBy, Timestamp } from 'firebase/firestore';
+import { useApp } from '@/context/app-context';
+import { useFirestore } from '@/firebase';
+import { collection, getDocs, orderBy, query, Timestamp } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
 import { Loader2, ShieldAlert, Star } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
@@ -23,9 +25,6 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { formatDistanceToNow } from 'date-fns';
 import { tr } from 'date-fns/locale';
-import { useApp } from '@/context/app-context';
-import { useUser } from '@/firebase';
-import { ADMIN_UID } from '@/firebase/config';
 
 type Survey = {
   id: string;
@@ -53,20 +52,32 @@ function renderStars(count: string | number) {
 
 function SurveyResults() {
   const firestore = useFirestore();
+  const [surveys, setSurveys] = useState<Survey[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
-  const surveysQuery = useMemoFirebase(
-    () => {
-      if (!firestore) return null;
-      return query(collection(firestore, 'surveys'), orderBy('createdAt', 'desc'));
-    },
-    [firestore]
-  );
-
-  const { data: surveys, isLoading, error } = useCollection<Survey>(surveysQuery);
+  useEffect(() => {
+    async function fetchSurveys() {
+      if (!firestore) return;
+      setIsLoading(true);
+      try {
+        const surveysQuery = query(collection(firestore, 'surveys'), orderBy('createdAt', 'desc'));
+        const querySnapshot = await getDocs(surveysQuery);
+        const surveysData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Survey));
+        setSurveys(surveysData);
+      } catch (e: any) {
+        setError(e);
+        console.error("Error fetching surveys: ", e);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchSurveys();
+  }, [firestore]);
 
   if (isLoading) {
     return (
-      <div className="flex h-screen items-center justify-center">
+      <div className="flex h-64 items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
@@ -79,7 +90,7 @@ function SurveyResults() {
             <ShieldAlert className="h-4 w-4" />
             <AlertTitle>Veri Yükleme Hatası</AlertTitle>
             <AlertDescription>
-                Anket verileri yüklenirken bir hata oluştu. Lütfen Firestore kurallarınızı veya internet bağlantınızı kontrol edin. Hata: {error.message}
+                Anket verileri yüklenirken bir hata oluştu. Lütfen internet bağlantınızı kontrol edin veya daha sonra tekrar deneyin. Hata: {error.message}
             </AlertDescription>
         </Alert>
       </div>
