@@ -240,27 +240,15 @@
         "earnedTitle": "Rozet Kazanıldı!",
         "earnedDescription": "Tebrikler, {poiName} rozetini kazandınız!"
     },
-    "survey": {
-        "title": "Deneyiminizi Değerlendirin",
-        "description": "{poiName} ziyaretiniz hakkındaki düşünceleriniz bizim için değerli.",
-        "question1": "Bu yerdeki genel deneyiminizi nasıl değerlendirirsiniz?",
-        "question2": "Bölgenin temizliği ve bakımı nasıldı?",
-        "question3": "Bu yeri başkalarına tavsiye eder misiniz?",
-        "question4": "Bu mekanı ziyaretiniz sırasında size bir rehber eşlik etti mi?",
-        "question5": "Sizce bu mekanın tarihi veya doğal önemi ne kadar?",
-        "rating": {
-            "veryBad": "Çok Kötü",
-            "bad": "Kötü",
-            "average": "Orta",
-            "good": "İyi",
-            "veryGood": "Çok İyi"
-        },
-        "recommend": {
-            "yes": "Evet",
-            "no": "Hayır",
-            "notSure": "Emin Değilim"
-        },
-        "thankYouTitle": "Teşekkürler!",
-        "thankYouDescription": "Geri bildiriminiz uygulamamızı geliştirmemize yardımcı oluyor."
+    "comments": {
+        "title": "Yorumlar",
+        "description": "Bu yer hakkındaki düşüncelerinizi ve deneyimlerinizi paylaşın.",
+        "nameLabel": "İsminiz (İsteğe Bağlı)",
+        "namePlaceholder": "Adınız Soyadınız",
+        "messageLabel": "Yorumunuz",
+        "messagePlaceholder": "Deneyiminizi veya tavsiyelerinizi buraya yazın...",
+        "submit": "Yorumu Gönder",
+        "sending": "Gönderiliyor...",
+        "sent": "Gönderildi!"
     }
 }

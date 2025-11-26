@@ -241,27 +241,15 @@
         "earnedTitle": "Abzeichen Verdient!",
         "earnedDescription": "Herzlichen Glückwunsch, du hast das {poiName}-Abzeichen verdient!"
     },
-    "survey": {
-        "title": "Bewerten Sie Ihre Erfahrung",
-        "description": "Ihre Meinung zu Ihrem Besuch bei {poiName} ist uns wichtig.",
-        "question1": "Wie würden Sie Ihre Gesamterfahrung an diesem Ort bewerten?",
-        "question2": "Wie war die Sauberkeit und Instandhaltung des Bereichs?",
-        "question3": "Würden Sie diesen Ort anderen empfehlen?",
-        "question4": "Hat Sie ein Führer bei Ihrem Besuch an diesem Ort begleitet?",
-        "question5": "Wie würden Sie die historische oder natürliche Bedeutung dieses Ortes bewerten?",
-        "rating": {
-            "veryBad": "Sehr Schlecht",
-            "bad": "Schlecht",
-            "average": "Durchschnittlich",
-            "good": "Gut",
-            "veryGood": "Sehr Gut"
-        },
-        "recommend": {
-            "yes": "Ja",
-            "no": "Nein",
-            "notSure": "Nicht Sicher"
-        },
-        "thankYouTitle": "Danke!",
-        "thankYouDescription": "Ihr Feedback hilft uns, unsere Anwendung zu verbessern."
+    "comments": {
+        "title": "Kommentare",
+        "description": "Teilen Sie Ihre Gedanken und Erfahrungen zu diesem Ort.",
+        "nameLabel": "Ihr Name (Optional)",
+        "namePlaceholder": "Ihr Name",
+        "messageLabel": "Ihr Kommentar",
+        "messagePlaceholder": "Schreiben Sie hier Ihre Erfahrung oder Ihren Rat...",
+        "submit": "Kommentar Senden",
+        "sending": "Wird gesendet...",
+        "sent": "Gesendet!"
     }
 }
