@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -45,11 +44,10 @@ import {
 import { Loader2, Trash2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { tr } from 'date-fns/locale';
-import { ADMIN_UID } from '@/firebase/config';
 
 // Zod schema for form validation
 const feedbackSchema = z.object({
-  name: z.string().min(2, 'İsim en az 2 karakter olmalıdır.'),
+  name: z.string().optional(), // Name is now optional
   message: z.string().min(10, 'Mesaj en az 10 karakter olmalıdır.'),
 });
 
@@ -63,6 +61,7 @@ type Feedback = FeedbackFormValues & {
 };
 
 const PINNED_FEEDBACK_ID = 'z4H1pYyRT9h9Qv5s2j6S'; // ID of the comment to pin
+const ADMIN_UID = "C97QgdGSwoYAiHnICO2OhdVBARt2"; // Keep this for delete check on client
 
 function FeedbackItem({ feedback }: { feedback: Feedback }) {
   const firestore = useFirestore();
@@ -87,7 +86,8 @@ function FeedbackItem({ feedback }: { feedback: Feedback }) {
     <Card>
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg">{feedback.name}</CardTitle>
+          {/* Display 'Anonymous' if name is not provided */}
+          <CardTitle className="text-lg">{feedback.name || 'Anonim'}</CardTitle>
           <div className="flex items-center gap-4">
             <CardDescription>{displayDate}</CardDescription>
             {isAdmin && (
@@ -174,6 +174,7 @@ function FeedbackForm() {
     try {
       await addDocumentNonBlocking(feedbackColRef, {
         ...data,
+        name: data.name || 'Anonim', // Default to 'Anonim' if empty
         createdAt: serverTimestamp(),
       });
       setIsSubmitted(true);
@@ -202,7 +203,7 @@ function FeedbackForm() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>İsminiz</FormLabel>
+                  <FormLabel>İsminiz (İsteğe Bağlı)</FormLabel>
                   <FormControl>
                     <Input placeholder="Adınız Soyadınız" {...field} />
                   </FormControl>

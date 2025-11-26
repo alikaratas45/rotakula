@@ -1,7 +1,6 @@
+'use client';
 
-"use client";
-
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useApp } from '@/context/app-context';
 import { Button } from '@/components/ui/button';
 import {
@@ -85,7 +84,8 @@ export default function SurveyDialog() {
     return null;
   }
 
-  const isSubmitDisabled = !answers.rating || !answers.cleanliness || !answers.recommend || !answers.guided || !answers.importance;
+  // Submit button is always enabled as per user request
+  const isSubmitDisabled = false;
 
   const ratingOptions = [
     { value: '5', label: translations.survey.rating.veryGood, icon: <Smile className="text-green-500" /> },
