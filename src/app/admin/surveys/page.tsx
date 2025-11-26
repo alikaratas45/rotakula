@@ -2,7 +2,7 @@
 'use client';
 
 import { useApp } from '@/context/app-context';
-import { useFirestore } from '@/firebase';
+import { useFirestore, useUser } from '@/firebase';
 import { collection, getDocs, orderBy, query, Timestamp } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { Loader2, ShieldAlert, Star } from 'lucide-react';
@@ -25,6 +25,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { formatDistanceToNow } from 'date-fns';
 import { tr } from 'date-fns/locale';
+import { ADMIN_UID } from '@/firebase/config';
 
 type Survey = {
   id: string;
@@ -52,17 +53,19 @@ function renderStars(count: string | number) {
 
 function SurveyResults() {
   const firestore = useFirestore();
-  const { isAdminAuthenticated } = useApp();
+  const { user, isUserLoading } = useUser();
+  const isAdmin = user?.uid === ADMIN_UID;
   const [surveys, setSurveys] = useState<Survey[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     async function fetchSurveys() {
-      if (!firestore || !isAdminAuthenticated) {
-        setIsLoading(false);
-        return;
-      };
+      // Return early if still loading user or not an admin
+      if (isUserLoading || !isAdmin) {
+          setIsLoading(false);
+          return;
+      }
       
       setIsLoading(true);
       setError(null);
@@ -80,10 +83,8 @@ function SurveyResults() {
       }
     }
 
-    if (isAdminAuthenticated) {
-        fetchSurveys();
-    }
-  }, [firestore, isAdminAuthenticated]);
+    fetchSurveys();
+  }, [firestore, isAdmin, isUserLoading]);
 
   if (isLoading) {
     return (
@@ -105,6 +106,10 @@ function SurveyResults() {
         </Alert>
       </div>
     );
+  }
+  
+  if (!isAdmin) {
+     return null; // Don't render anything if not admin, parent component handles the message
   }
 
   return (
@@ -156,7 +161,8 @@ function SurveyResults() {
 
 
 export default function SurveyResultsPage() {
-  const { isAdminAuthenticated, isUserLoading } = useApp();
+  const { user, isUserLoading } = useUser();
+  const isAdmin = user?.uid === ADMIN_UID;
   
   if (isUserLoading) {
      return (
@@ -167,7 +173,7 @@ export default function SurveyResultsPage() {
     );
   }
 
-  if (!isAdminAuthenticated) {
+  if (!isAdmin) {
     return (
       <div className="container mx-auto px-4 py-8">
         <Alert variant="destructive" className="max-w-md mx-auto">
