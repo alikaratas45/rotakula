@@ -4,14 +4,8 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Feedback Collection (Homepage): Anyone can read and create.
+    // Feedback Collection (Homepage & POI): Anyone can read and create.
     match /feedback/{document=**} {
-      allow read, create: if true;
-      allow update, delete: if false;
-    }
-
-    // POI Comments Collection: Allow anyone to read and create.
-    match /poi_comments/{document=**} {
       allow read, create: if true;
       allow update, delete: if false;
     }
