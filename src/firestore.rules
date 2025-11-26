@@ -6,7 +6,7 @@ service cloud.firestore {
     
     // Feedback Collection: Anyone can read and create. No one can update or delete.
     // This single collection now handles both general feedback and POI-specific comments.
-    match /feedback/{feedbackId} {
+    match /feedback/{document=**} {
       allow read, create: if true;
       allow update, delete: if false;
     }
