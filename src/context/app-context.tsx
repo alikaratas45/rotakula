@@ -64,29 +64,23 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    const welcomeSurveyKey = 'rota-kula-welcome-survey-completed-v2'; // Changed key to re-trigger survey
-    const hasCompletedWelcomeSurvey = localStorage.getItem(welcomeSurveyKey);
+    // For testing: always show the survey on load.
+    const timer = setTimeout(() => {
+        const generalPoi: PointOfInterest = {
+            id: 'general-app-survey',
+            name: 'Genel Uygulama Deneyimi',
+            slug: '',
+            description: '',
+            longDescription: '',
+            category: 'history',
+            imageId: '',
+            latitude: 0,
+            longitude: 0,
+        };
+        setPoiToSurvey(generalPoi);
+    }, 2500); // Show after 2.5 seconds to allow splash screen to finish
 
-    if (!hasCompletedWelcomeSurvey) {
-        // Use a timeout to not show the survey immediately on load
-        const timer = setTimeout(() => {
-            const generalPoi: PointOfInterest = {
-                id: 'general-app-survey',
-                name: 'Genel Uygulama Deneyimi',
-                slug: '',
-                description: '',
-                longDescription: '',
-                category: 'history',
-                imageId: '',
-                latitude: 0,
-                longitude: 0,
-            };
-            setPoiToSurvey(generalPoi);
-            localStorage.setItem(welcomeSurveyKey, 'true');
-        }, 5000); // Show after 5 seconds
-
-        return () => clearTimeout(timer);
-    }
+    return () => clearTimeout(timer);
   }, []);
 
 
@@ -190,5 +184,3 @@ export function useApp(): AppContextType {
 }
 // Keep useLanguage for backward compatibility if needed, but preferably refactor to useApp
 export const useLanguage = useApp;
-
-    
