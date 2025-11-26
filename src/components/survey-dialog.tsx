@@ -123,14 +123,14 @@ export default function SurveyDialog() {
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md max-h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>{translations.survey.title}</DialogTitle>
           <DialogDescription>
             {translations.survey.description.replace('{poiName}', poiToSurvey.name)}
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-6 py-4">
+        <div className="grid gap-6 py-4 overflow-y-auto pr-6">
           
           {/* Question 1: Rating */}
           <div className="space-y-3">
@@ -233,7 +233,7 @@ export default function SurveyDialog() {
           </div>
 
         </div>
-        <DialogFooter>
+        <DialogFooter className="mt-auto">
           <Button type="button" variant="ghost" onClick={handleClose}>{translations.common.close}</Button>
           <Button type="submit" onClick={handleSubmit} disabled={isSubmitDisabled}>
             {translations.common.submit}
