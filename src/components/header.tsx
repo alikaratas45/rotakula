@@ -104,7 +104,7 @@ export function Header() {
                     </button>
                     <div className="flex items-center gap-1">
                          {showAdminButton && (
-                            <Button onClick={() => handleAdminLogin()} variant="destructive" size="icon" className="h-8 w-8">
+                            <Button onClick={handleAdminLogin} variant="destructive" size="icon" className="h-8 w-8">
                                 <UserCog className="h-4 w-4" />
                             </Button>
                         )}
@@ -123,7 +123,7 @@ export function Header() {
                 {/* Desktop right side */}
                 <div className="hidden md:flex items-center justify-end gap-2">
                      {showAdminButton && (
-                        <Button onClick={() => handleAdminLogin()} variant="destructive" size="sm" className="h-9">
+                        <Button onClick={handleAdminLogin} variant="destructive" size="sm" className="h-9">
                             <UserCog className="mr-2 h-4 w-4" />
                             Admin Paneli
                         </Button>

@@ -103,8 +103,6 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
                 duration: 15000,
             });
         } catch (error: any) {
-            // This is not a "real" error, but a user action.
-            // Don't show an error toast or log to console.
             if (error.code === 'auth/cancelled-popup-request') {
                 return;
             }

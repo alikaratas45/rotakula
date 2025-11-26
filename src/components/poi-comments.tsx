@@ -76,7 +76,6 @@ function CommentList({ poiId }: { poiId: string }) {
   
   const commentsQuery = useMemoFirebase(() => {
     const commentsCollection = collection(firestore, 'poi_comments');
-    // Removed orderBy from the query to avoid composite index requirement
     return query(commentsCollection, where('poiId', '==', poiId));
   }, [firestore, poiId]);
 
@@ -84,8 +83,11 @@ function CommentList({ poiId }: { poiId: string }) {
 
   useEffect(() => {
     if (comments) {
-      // Sort the comments on the client-side
-      const sorted = [...comments].sort((a, b) => b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime());
+      const sorted = [...comments].sort((a, b) => {
+        const timeA = a.createdAt?.toDate().getTime() || 0;
+        const timeB = b.createdAt?.toDate().getTime() || 0;
+        return timeB - timeA;
+      });
       setSortedComments(sorted);
     }
   }, [comments]);
