@@ -8,8 +8,6 @@ import fr from '@/lib/locales/fr.json';
 import de from '@/lib/locales/de.json';
 import { getPois } from '@/lib/kula-data';
 import type { PointOfInterest } from '@/lib/types';
-import { useUser } from '@/firebase';
-import { ADMIN_UID } from '@/firebase/config';
 
 type Language = 'tr' | 'en' | 'fr' | 'de';
 
@@ -31,7 +29,6 @@ interface AppContextType {
   earnedBadges: Badge[];
   addBadge: (poiId: string) => void;
   totalPoints: number;
-  isAdminAuthenticated: boolean;
 }
 
 const translations = { tr, en, fr, de };
@@ -44,9 +41,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isAudioGuideActive, setIsAudioGuideActive] = useState(false);
   const [earnedBadges, setEarnedBadges] = useState<Badge[]>([]);
   const [allPois, setAllPois] = useState<any[]>([]);
-  const { user } = useUser();
-
-  const isAdminAuthenticated = useMemo(() => user?.uid === ADMIN_UID, [user]);
 
   // Fetch all POIs on mount to map badge IDs to badge data
   useEffect(() => {
@@ -126,7 +120,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     earnedBadges,
     addBadge,
     totalPoints,
-    isAdminAuthenticated,
   };
 
   return (

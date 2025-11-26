@@ -1,21 +1,13 @@
 
 rules_version = '2';
 
-// The isAdmin() function is used to protect delete operations.
-// Replace "PLACEHOLDER_UID_REPLACE_ME" with the actual admin's UID
-// if you need to enable administrative deletion.
-function isAdmin() {
-  return request.auth.uid == "PLACEHOLDER_UID_REPLACE_ME";
-}
-
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Feedback Collection: Anyone can read and create. Only admin can delete.
+    // Feedback Collection: Anyone can read and create. No one can update or delete.
     match /feedback/{feedbackId} {
       allow read, create: if true;
-      allow update: if request.auth != null; // Allow updates for authenticated users
-      allow delete: if isAdmin();
+      allow update, delete: if false;
     }
     
     // Default-deny all other reads and writes for security.

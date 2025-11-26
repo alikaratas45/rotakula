@@ -12,7 +12,6 @@ import {
   orderBy,
   serverTimestamp,
   doc,
-  limit,
   getCountFromServer
 } from 'firebase/firestore';
 import {
@@ -20,8 +19,6 @@ import {
   useCollection,
   useMemoFirebase,
   addDocumentNonBlocking,
-  deleteDocumentNonBlocking,
-  useUser,
 } from '@/firebase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -42,13 +39,13 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Loader2, Trash2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { tr } from 'date-fns/locale';
 
 // Zod schema for form validation
 const feedbackSchema = z.object({
-  name: z.string().min(2, 'İsim en az 2 karakter olmalıdır.'),
+  name: z.string().optional(),
   message: z.string().min(10, 'Mesaj en az 10 karakter olmalıdır.'),
 });
 
@@ -61,13 +58,9 @@ type Feedback = FeedbackFormValues & {
   };
 };
 
-// Admin UID is set here.
-const ADMIN_UID = 'UXt4xEAkIwUSAQXvaM4pngZCBtI3';
 const PINNED_FEEDBACK_ID = 'z4H1pYyRT9h9Qv5s2j6S'; // ID of the comment to pin
 
 function FeedbackItem({ feedback }: { feedback: Feedback }) {
-  const firestore = useFirestore();
-  const { user } = useUser();
   const displayDate = useMemo(() => {
     if (!feedback.createdAt?.seconds) {
       return 'biraz önce';
@@ -76,27 +69,12 @@ function FeedbackItem({ feedback }: { feedback: Feedback }) {
     return formatDistanceToNow(date, { addSuffix: true, locale: tr });
   }, [feedback.createdAt]);
 
-  const handleDelete = () => {
-    if (!firestore) return;
-    const docRef = doc(firestore, 'feedback', feedback.id);
-    deleteDocumentNonBlocking(docRef);
-  };
-  
-  const isAdmin = user && user.uid === ADMIN_UID;
-
   return (
     <Card>
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg">{feedback.name}</CardTitle>
-          <div className="flex items-center gap-4">
-            <CardDescription>{displayDate}</CardDescription>
-            {isAdmin && (
-              <Button variant="ghost" size="icon" onClick={handleDelete} className="h-8 w-8">
-                <Trash2 className="h-4 w-4 text-destructive" />
-              </Button>
-            )}
-          </div>
+          <CardTitle className="text-lg">{feedback.name || 'Anonim'}</CardTitle>
+          <CardDescription>{displayDate}</CardDescription>
         </div>
       </CardHeader>
       <CardContent>
@@ -112,7 +90,6 @@ function FeedbackList({ isLimited }: { isLimited?: boolean }) {
   const feedbackQuery = useMemoFirebase(
     () => {
       if (!firestore) return null;
-      // Fetch all comments and sort by date for pinning logic
       return query(collection(firestore, 'feedback'), orderBy('createdAt', 'desc'));
     },
     [firestore]
@@ -175,11 +152,12 @@ function FeedbackForm() {
     try {
       await addDocumentNonBlocking(feedbackColRef, {
         ...data,
+        name: data.name || 'Anonim',
         createdAt: serverTimestamp(),
       });
       setIsSubmitted(true);
       form.reset();
-      setTimeout(() => setIsSubmitted(false), 3000); // Reset form after 3s
+      setTimeout(() => setIsSubmitted(false), 3000);
     } catch (error) {
       console.error('Error submitting feedback:', error);
     } finally {
@@ -203,7 +181,7 @@ function FeedbackForm() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>İsminiz</FormLabel>
+                  <FormLabel>İsminiz (İsteğe Bağlı)</FormLabel>
                   <FormControl>
                     <Input placeholder="Adınız Soyadınız" {...field} />
                   </FormControl>
