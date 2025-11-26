@@ -1,7 +1,6 @@
 
 'use client';
 
-import { useApp } from '@/context/app-context';
 import { useFirestore, useUser } from '@/firebase';
 import { collection, getDocs, orderBy, query, Timestamp } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
@@ -51,7 +50,7 @@ function renderStars(count: string | number) {
     return <div className="flex">{stars}</div>;
 }
 
-function SurveyResults({ surveys }: { surveys: Survey[] }) {
+function SurveyResultsTable({ surveys }: { surveys: Survey[] }) {
   if (surveys.length === 0) {
     return (
       <Card>
@@ -102,28 +101,30 @@ function SurveyResults({ surveys }: { surveys: Survey[] }) {
 
 export default function SurveyResultsPage() {
   const { user, isUserLoading } = useUser();
-  const isAdmin = user?.uid === ADMIN_UID;
   const firestore = useFirestore();
   const [surveys, setSurveys] = useState<Survey[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
+  const isAdmin = user?.uid === ADMIN_UID;
+
   useEffect(() => {
-    // Return early if user is still loading or if not an admin
+    // Wait until the user's authentication status is resolved.
     if (isUserLoading) {
-      setIsLoading(true);
       return;
     }
+
+    // If the user is not an admin, don't attempt to fetch data.
     if (!isAdmin) {
       setIsLoading(false);
       return;
     }
 
-    // Only fetch data when user is loaded and confirmed as admin
-    async function fetchSurveys() {
+    // Only fetch data when we have confirmed the user is an admin.
+    const fetchSurveys = async () => {
+      if (!firestore) return; // Ensure firestore is available
       setIsLoading(true);
       setError(null);
-      
       try {
         const surveysQuery = query(collection(firestore, 'surveys'), orderBy('createdAt', 'desc'));
         const querySnapshot = await getDocs(surveysQuery);
@@ -135,42 +136,34 @@ export default function SurveyResultsPage() {
       } finally {
         setIsLoading(false);
       }
-    }
+    };
 
     fetchSurveys();
-  }, [firestore, isAdmin, isUserLoading]);
-  
-  if (isUserLoading) {
-     return (
-      <div className="flex h-screen items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin" />
-        <p className="ml-2">Yönetici durumu kontrol ediliyor...</p>
-      </div>
-    );
-  }
-
-  if (!isAdmin) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <Alert variant="destructive" className="max-w-md mx-auto">
-            <ShieldAlert className="h-4 w-4" />
-            <AlertTitle>Erişim Engellendi</AlertTitle>
-            <AlertDescription>
-                Bu sayfayı görüntülemek için yönetici olarak giriş yapmanız gerekmektedir.
-            </AlertDescription>
-        </Alert>
-      </div>
-    );
-  }
+  }, [user, isUserLoading, isAdmin, firestore]); // Rerun effect if user or loading state changes
 
   const renderContent = () => {
-    if (isLoading) {
+    if (isUserLoading || (isLoading && isAdmin)) {
       return (
         <div className="flex h-64 items-center justify-center">
           <Loader2 className="h-8 w-8 animate-spin" />
         </div>
       );
     }
+
+    if (!isAdmin) {
+      return (
+        <div className="container mx-auto px-4 py-8">
+          <Alert variant="destructive" className="max-w-md mx-auto">
+              <ShieldAlert className="h-4 w-4" />
+              <AlertTitle>Erişim Engellendi</AlertTitle>
+              <AlertDescription>
+                  Bu sayfayı görüntülemek için yönetici olarak giriş yapmanız gerekmektedir.
+              </AlertDescription>
+          </Alert>
+        </div>
+      );
+    }
+    
     if (error) {
       return (
         <Alert variant="destructive">
@@ -182,7 +175,7 @@ export default function SurveyResultsPage() {
         </Alert>
       );
     }
-    return <SurveyResults surveys={surveys} />;
+    return <SurveyResultsTable surveys={surveys} />;
   };
 
   return (
