@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -28,7 +28,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { tr, enUS } from 'date-fns/locale';
 import { useApp } from '@/context/app-context';
 import { useCollection, useFirestore, addDocumentNonBlocking, useMemoFirebase } from '@/firebase';
-import { collection, query, where, orderBy } from 'firebase/firestore';
+import { collection, query, where, orderBy, Timestamp } from 'firebase/firestore';
 
 const locales: { [key: string]: Locale } = { tr, en: enUS };
 
@@ -41,19 +41,16 @@ type CommentFormValues = z.infer<typeof commentSchema>;
 type Comment = CommentFormValues & {
   id: string;
   poiId: string;
-  createdAt: {
-    seconds: number;
-    nanoseconds: number;
-  };
+  createdAt: Timestamp; // Using Firestore Timestamp
 };
 
 function CommentItem({ comment }: { comment: Comment }) {
   const { language } = useApp();
   const displayDate = useMemo(() => {
-    if (!comment.createdAt?.seconds) {
+    if (!comment.createdAt) {
       return 'az önce';
     }
-    const date = new Date(comment.createdAt.seconds * 1000);
+    const date = comment.createdAt.toDate();
     const locale = locales[language] || enUS;
     return formatDistanceToNow(date, { addSuffix: true, locale: locale });
   }, [comment.createdAt, language]);
@@ -75,13 +72,24 @@ function CommentItem({ comment }: { comment: Comment }) {
 
 function CommentList({ poiId }: { poiId: string }) {
   const firestore = useFirestore();
+  const [sortedComments, setSortedComments] = useState<Comment[]>([]);
   
   const commentsQuery = useMemoFirebase(() => {
     const commentsCollection = collection(firestore, 'poi_comments');
-    return query(commentsCollection, where('poiId', '==', poiId), orderBy('createdAt', 'desc'));
+    // Removed orderBy from the query to avoid composite index requirement
+    return query(commentsCollection, where('poiId', '==', poiId));
   }, [firestore, poiId]);
 
   const { data: comments, isLoading } = useCollection<Comment>(commentsQuery);
+
+  useEffect(() => {
+    if (comments) {
+      // Sort the comments on the client-side
+      const sorted = [...comments].sort((a, b) => b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime());
+      setSortedComments(sorted);
+    }
+  }, [comments]);
+
 
   if (isLoading) {
     return (
@@ -93,8 +101,8 @@ function CommentList({ poiId }: { poiId: string }) {
 
   return (
     <div className="space-y-4">
-      {comments && comments.length > 0 ? (
-        comments.map((item) => <CommentItem key={item.id} comment={item} />)
+      {sortedComments && sortedComments.length > 0 ? (
+        sortedComments.map((item) => <CommentItem key={item.id} comment={item} />)
       ) : (
         <p className="text-center text-muted-foreground">
           Henüz yorum yapılmamış. İlk yorumu siz yapın!
