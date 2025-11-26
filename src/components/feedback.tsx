@@ -92,21 +92,20 @@ function FeedbackList({ isLimited, poiId }: { isLimited?: boolean, poiId?: strin
   const firestore = useFirestore();
   const { translations } = useApp();
   
-  const collectionName = poiId ? 'poi_comments' : 'feedback';
-
   const feedbackQuery = useMemoFirebase(
     () => {
       if (!firestore) return null;
       
-      const coll = collection(firestore, collectionName);
+      const coll = collection(firestore, 'feedback');
 
       if (poiId) {
         return query(coll, where('poiId', '==', poiId), orderBy('createdAt', 'desc'));
       }
       
-      return query(coll, orderBy('createdAt', 'desc'));
+      // For general feedback, show only those without a poiId
+      return query(coll, where('poiId', '==', null), orderBy('createdAt', 'desc'));
     },
-    [firestore, poiId, collectionName]
+    [firestore, poiId]
   );
 
   const { data: feedback, isLoading } = useCollection<Feedback>(feedbackQuery);
@@ -114,7 +113,7 @@ function FeedbackList({ isLimited, poiId }: { isLimited?: boolean, poiId?: strin
   const processedFeedback = useMemo(() => {
     if (!feedback) return [];
     
-    // Pinning is only for general feedback
+    // Pinning is only for general feedback (no poiId)
     if (poiId) {
       return isLimited ? feedback.slice(0, 5) : feedback;
     }
@@ -153,10 +152,9 @@ function FeedbackForm({ poiId }: { poiId?: string }) {
   const firestore = useFirestore();
   const { translations } = useApp();
   
-  const collectionName = poiId ? 'poi_comments' : 'feedback';
   const feedbackColRef = useMemoFirebase(
-    () => (firestore ? collection(firestore, collectionName) : null),
-    [firestore, collectionName]
+    () => (firestore ? collection(firestore, 'feedback') : null),
+    [firestore]
   );
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -178,11 +176,8 @@ function FeedbackForm({ poiId }: { poiId?: string }) {
       ...data,
       name: data.name || 'Anonim',
       createdAt: serverTimestamp(),
+      poiId: poiId || null, // Add poiId or null for general feedback
     };
-
-    if (poiId) {
-      dataToSave.poiId = poiId;
-    }
 
     try {
       await addDocumentNonBlocking(feedbackColRef, dataToSave);
@@ -255,7 +250,7 @@ function FeedbackForm({ poiId }: { poiId?: string }) {
 }
 
 export function FeedbackSection({ isLimited = false, poiId }: { isLimited?: boolean, poiId?: string }) {
-  // Total feedback count logic is only for the main feedback page
+  // If poiId is provided, this is a POI-specific comment section.
   if (poiId) {
     return (
       <div className="space-y-8">
@@ -265,7 +260,7 @@ export function FeedbackSection({ isLimited = false, poiId }: { isLimited?: bool
     );
   }
 
-  // Original logic for homepage
+  // Otherwise, it's the general feedback section for the homepage.
   return (
     <div className="space-y-8">
       <FeedbackForm />

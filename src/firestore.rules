@@ -5,13 +5,8 @@ service cloud.firestore {
   match /databases/{database}/documents {
     
     // Feedback Collection: Anyone can read and create. No one can update or delete.
+    // This single collection now handles both general feedback and POI-specific comments.
     match /feedback/{feedbackId} {
-      allow read, create: if true;
-      allow update, delete: if false;
-    }
-
-    // POI Comments Collection: Anyone can read and create. No one can update or delete.
-    match /poi_comments/{commentId} {
       allow read, create: if true;
       allow update, delete: if false;
     }
