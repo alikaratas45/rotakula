@@ -28,7 +28,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { tr, enUS } from 'date-fns/locale';
 import { useApp } from '@/context/app-context';
 import { useCollection, useFirestore, addDocumentNonBlocking, useMemoFirebase } from '@/firebase';
-import { collection, query, where, orderBy, Timestamp } from 'firebase/firestore';
+import { collection, query, where, Timestamp } from 'firebase/firestore';
 
 const locales: { [key: string]: Locale } = { tr, en: enUS };
 
@@ -81,12 +81,13 @@ function CommentList({ poiId }: { poiId: string }) {
 
   const { data: comments, isLoading } = useCollection<Comment>(commentsQuery);
 
+  // Sorting is now done on the client-side after fetching
   useEffect(() => {
     if (comments) {
       const sorted = [...comments].sort((a, b) => {
         const timeA = a.createdAt?.toDate().getTime() || 0;
         const timeB = b.createdAt?.toDate().getTime() || 0;
-        return timeB - timeA;
+        return timeB - timeA; // Sort descending (newest first)
       });
       setSortedComments(sorted);
     }
@@ -134,7 +135,7 @@ function CommentForm({ poiId }: { poiId: string }) {
     const newComment = {
       ...data,
       poiId: poiId,
-      createdAt: new Date(),
+      createdAt: Timestamp.now(), // Use Firestore Timestamp for consistency
     };
     
     await addDocumentNonBlocking(commentsCollection, newComment);
