@@ -102,7 +102,13 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
                 description: `Hoş geldiniz, ${result.user.displayName}. Admin UID'niz: ${result.user.uid}`,
                 duration: 15000,
             });
-        } catch (error) {
+        } catch (error: any) {
+            // This is not a "real" error, but a user action.
+            // Don't show an error toast or log to console.
+            if (error.code === 'auth/cancelled-popup-request') {
+                return;
+            }
+
             console.error("Admin login error:", error);
             toast({
                 title: "Giriş Hatası",
