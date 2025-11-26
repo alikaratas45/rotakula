@@ -22,7 +22,7 @@ import { AudioGuideControl } from "./audio-guide-control";
 import { useApp } from "@/context/app-context";
 import { TurkishFlagIcon, UKFlagIcon, FrenchFlagIcon, GermanFlagIcon } from "./icons";
 import { useToast } from "@/hooks/use-toast";
-import { ADMIN_UID } from "@/firebase/config";
+import { ADMIN_UID } from '@/firebase/config';
 
 
 function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {

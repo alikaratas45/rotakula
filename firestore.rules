@@ -3,24 +3,31 @@ rules_version = '2';
 // IMPORTANT: This UID is now correctly set based on your login.
 // Do not change it unless you need to assign a new admin.
 function isAdmin() {
-  return request.auth.uid == "C97QgdGSwoYAiHnICO2OhdVBARt2";
+  return request.auth.uid == "PLACEHOLDER_UID_REPLACE_ME";
 }
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // GENEL OKUMA ve YAZMA KURALI: Herkesin tüm belgeleri okumasına, listelemesine ve oluşturmasına/güncellemesine izin ver.
-    // Bu, hem okuma hem de yazma sırasındaki "izin reddedildi" hatalarını kesin olarak çözer.
-    match /{document=**} {
-      allow read, write: if true;
-    }
     
-    // Yalnızca SİLME işlemleri yöneticiye özel olacaktır.
+    // Feedback and Surveys can be created by any authenticated user.
     match /feedback/{feedbackId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null;
       allow delete: if isAdmin();
     }
     
     match /surveys/{surveyId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null;
       allow delete: if isAdmin();
+    }
+
+    // Default-deny all other writes.
+    match /{document=**} {
+      allow read: if true;
+      allow write: if false;
     }
   }
 }
