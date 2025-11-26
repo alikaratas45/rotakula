@@ -18,8 +18,7 @@ import {
 import { AudioGuideControl } from "./audio-guide-control";
 import { useApp } from "@/context/app-context";
 import { TurkishFlagIcon, UKFlagIcon, FrenchFlagIcon, GermanFlagIcon } from "./icons";
-import { useUser } from "@/firebase";
-import { useToast } from "@/hooks/use-toast";
+import { useFirebase } from "@/firebase";
 
 function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
     const { setTheme, theme } = useTheme();
@@ -44,30 +43,13 @@ export function Header() {
     const { language, setLanguage, translations } = useApp();
     const [logoClickCount, setLogoClickCount] = React.useState(0);
     const [showAdminButton, setShowAdminButton] = React.useState(false);
-    const { user } = useUser();
-    const { toast } = useToast();
+    const { handleAdminLogin } = useFirebase();
 
     const handleLogoClick = () => {
         const newCount = logoClickCount + 1;
         setLogoClickCount(newCount);
         if (newCount >= 5) {
             setShowAdminButton(true);
-        }
-    };
-
-    const handleAdminButtonClick = () => {
-        if (user) {
-            toast({
-                title: "Admin UID",
-                description: `Mevcut Admin UID: ${user.uid}`,
-                duration: 15000, 
-            });
-        } else {
-            toast({
-                title: "Giriş Yapılmamış",
-                description: "UID'nizi görmek için lütfen önce giriş yapın.",
-                variant: "destructive",
-            });
         }
     };
 
@@ -121,6 +103,11 @@ export function Header() {
                         <span className="font-bold font-headline text-lg">RotaKula</span>
                     </button>
                     <div className="flex items-center gap-1">
+                         {showAdminButton && (
+                            <Button onClick={() => handleAdminLogin()} variant="destructive" size="icon" className="h-8 w-8">
+                                <UserCog className="h-4 w-4" />
+                            </Button>
+                        )}
                         <Button asChild variant="outline" size="icon" className="h-8 w-8">
                             <Link href="/">
                                 <Home className="h-4 w-4" />
@@ -136,7 +123,7 @@ export function Header() {
                 {/* Desktop right side */}
                 <div className="hidden md:flex items-center justify-end gap-2">
                      {showAdminButton && (
-                        <Button onClick={handleAdminButtonClick} variant="destructive" size="sm" className="h-9">
+                        <Button onClick={() => handleAdminLogin()} variant="destructive" size="sm" className="h-9">
                             <UserCog className="mr-2 h-4 w-4" />
                             Admin Paneli
                         </Button>
