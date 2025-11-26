@@ -51,22 +51,76 @@ function renderStars(count: string | number) {
     return <div className="flex">{stars}</div>;
 }
 
-function SurveyResults() {
-  const firestore = useFirestore();
+function SurveyResults({ surveys }: { surveys: Survey[] }) {
+  if (surveys.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Henüz Anket Yok</CardTitle>
+          <CardDescription>
+            Kullanıcılar anketleri doldurdukça sonuçlar burada görünecektir.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
+
+  return (
+    <Card>
+        <Table>
+            <TableHeader>
+            <TableRow>
+                <TableHead>Ziyaret Edilen Yer</TableHead>
+                <TableHead>Tarih</TableHead>
+                <TableHead>Genel Deneyim</TableHead>
+                <TableHead>Temizlik</TableHead>
+                <TableHead>Tavsiye</TableHead>
+                <TableHead>Rehber</TableHead>
+                <TableHead>Önem Derecesi</TableHead>
+            </TableRow>
+            </TableHeader>
+            <TableBody>
+            {surveys.map((survey) => (
+                <TableRow key={survey.id}>
+                    <TableCell className="font-medium">{survey.poiName}</TableCell>
+                    <TableCell>
+                        {survey.createdAt ? formatDistanceToNow(survey.createdAt.toDate(), { addSuffix: true, locale: tr }) : 'Bilinmiyor'}
+                    </TableCell>
+                    <TableCell>{renderStars(survey.answers.rating)}</TableCell>
+                    <TableCell><Badge variant={survey.answers.cleanliness === 'good' ? 'default' : survey.answers.cleanliness === 'average' ? 'secondary' : 'destructive'}>{survey.answers.cleanliness}</Badge></TableCell>
+                    <TableCell><Badge variant={survey.answers.recommend === 'yes' ? 'default' : 'secondary'}>{survey.answers.recommend}</Badge></TableCell>
+                    <TableCell><Badge variant={survey.answers.guided === 'yes' ? 'default' : 'secondary'}>{survey.answers.guided}</Badge></TableCell>
+                    <TableCell>{renderStars(survey.answers.importance)}</TableCell>
+                </TableRow>
+            ))}
+            </TableBody>
+        </Table>
+    </Card>
+  );
+}
+
+
+export default function SurveyResultsPage() {
   const { user, isUserLoading } = useUser();
   const isAdmin = user?.uid === ADMIN_UID;
+  const firestore = useFirestore();
   const [surveys, setSurveys] = useState<Survey[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
+    // Return early if user is still loading or if not an admin
+    if (isUserLoading) {
+      setIsLoading(true);
+      return;
+    }
+    if (!isAdmin) {
+      setIsLoading(false);
+      return;
+    }
+
+    // Only fetch data when user is loaded and confirmed as admin
     async function fetchSurveys() {
-      // Return early if still loading user or not an admin
-      if (isUserLoading || !isAdmin) {
-          setIsLoading(false);
-          return;
-      }
-      
       setIsLoading(true);
       setError(null);
       
@@ -85,84 +139,6 @@ function SurveyResults() {
 
     fetchSurveys();
   }, [firestore, isAdmin, isUserLoading]);
-
-  if (isLoading) {
-    return (
-      <div className="flex h-64 items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    );
-  }
-  
-  if (error) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <Alert variant="destructive" className="max-w-md mx-auto">
-            <ShieldAlert className="h-4 w-4" />
-            <AlertTitle>Veri Yükleme Hatası</AlertTitle>
-            <AlertDescription>
-                Anket verileri yüklenirken bir hata oluştu. Lütfen internet bağlantınızı kontrol edin veya daha sonra tekrar deneyin. Hata: {error.message}
-            </AlertDescription>
-        </Alert>
-      </div>
-    );
-  }
-  
-  if (!isAdmin) {
-     return null; // Don't render anything if not admin, parent component handles the message
-  }
-
-  return (
-    <>
-      {surveys && surveys.length > 0 ? (
-        <Card>
-            <Table>
-                <TableHeader>
-                <TableRow>
-                    <TableHead>Ziyaret Edilen Yer</TableHead>
-                    <TableHead>Tarih</TableHead>
-                    <TableHead>Genel Deneyim</TableHead>
-                    <TableHead>Temizlik</TableHead>
-                    <TableHead>Tavsiye</TableHead>
-                    <TableHead>Rehber</TableHead>
-                    <TableHead>Önem Derecesi</TableHead>
-                </TableRow>
-                </TableHeader>
-                <TableBody>
-                {surveys.map((survey) => (
-                    <TableRow key={survey.id}>
-                        <TableCell className="font-medium">{survey.poiName}</TableCell>
-                        <TableCell>
-                            {survey.createdAt ? formatDistanceToNow(survey.createdAt.toDate(), { addSuffix: true, locale: tr }) : 'Bilinmiyor'}
-                        </TableCell>
-                        <TableCell>{renderStars(survey.answers.rating)}</TableCell>
-                        <TableCell><Badge variant={survey.answers.cleanliness === 'good' ? 'default' : survey.answers.cleanliness === 'average' ? 'secondary' : 'destructive'}>{survey.answers.cleanliness}</Badge></TableCell>
-                        <TableCell><Badge variant={survey.answers.recommend === 'yes' ? 'default' : 'secondary'}>{survey.answers.recommend}</Badge></TableCell>
-                        <TableCell><Badge variant={survey.answers.guided === 'yes' ? 'default' : 'secondary'}>{survey.answers.guided}</Badge></TableCell>
-                        <TableCell>{renderStars(survey.answers.importance)}</TableCell>
-                    </TableRow>
-                ))}
-                </TableBody>
-            </Table>
-        </Card>
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>Henüz Anket Yok</CardTitle>
-            <CardDescription>
-              Kullanıcılar anketleri doldurdukça sonuçlar burada görünecektir.
-            </CardDescription>
-          </CardHeader>
-        </Card>
-      )}
-    </>
-  );
-}
-
-
-export default function SurveyResultsPage() {
-  const { user, isUserLoading } = useUser();
-  const isAdmin = user?.uid === ADMIN_UID;
   
   if (isUserLoading) {
      return (
@@ -187,10 +163,32 @@ export default function SurveyResultsPage() {
     );
   }
 
+  const renderContent = () => {
+    if (isLoading) {
+      return (
+        <div className="flex h-64 items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+      );
+    }
+    if (error) {
+      return (
+        <Alert variant="destructive">
+          <ShieldAlert className="h-4 w-4" />
+          <AlertTitle>Veri Yükleme Hatası</AlertTitle>
+          <AlertDescription>
+            Anket verileri yüklenirken bir hata oluştu. Lütfen internet bağlantınızı kontrol edin veya daha sonra tekrar deneyin. Hata: {error.message}
+          </AlertDescription>
+        </Alert>
+      );
+    }
+    return <SurveyResults surveys={surveys} />;
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Anket Sonuçları</h1>
-        <SurveyResults />
+        {renderContent()}
     </div>
   );
 }
