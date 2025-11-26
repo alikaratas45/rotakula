@@ -29,7 +29,7 @@ import { ADMIN_UID } from '@/firebase/config';
 type Survey = {
   id: string;
   poiName: string;
-  createdAt: Timestamp;
+  createdAt: Timestamp | Date;
   answers: {
     rating: string;
     cleanliness: string;
@@ -38,6 +38,46 @@ type Survey = {
     importance: string;
   };
 };
+
+const mockSurveys: Survey[] = [
+    {
+        id: 'mock-1',
+        poiName: 'Tarihi Kula Evleri',
+        createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+        answers: {
+            rating: '5',
+            cleanliness: 'good',
+            recommend: 'yes',
+            guided: 'no',
+            importance: '5',
+        },
+    },
+    {
+        id: 'mock-2',
+        poiName: 'Kula Peri Bacaları',
+        createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
+        answers: {
+            rating: '4',
+            cleanliness: 'average',
+            recommend: 'yes',
+            guided: 'yes',
+            importance: '4',
+        },
+    },
+    {
+        id: 'mock-3',
+        poiName: 'Carullah Bin Süleyman Camii',
+        createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), // 10 days ago
+        answers: {
+            rating: '5',
+            cleanliness: 'good',
+            recommend: 'notSure',
+            guided: 'no',
+            importance: '3',
+        },
+    },
+];
+
 
 function renderStars(count: string | number) {
     const num = typeof count === 'string' ? parseInt(count, 10) : count;
@@ -79,11 +119,13 @@ function SurveyResultsTable({ surveys }: { surveys: Survey[] }) {
             </TableRow>
             </TableHeader>
             <TableBody>
-            {surveys.map((survey) => (
+            {surveys.map((survey) => {
+                const createdAtDate = survey.createdAt instanceof Date ? survey.createdAt : survey.createdAt.toDate();
+                return (
                 <TableRow key={survey.id}>
                     <TableCell className="font-medium">{survey.poiName}</TableCell>
                     <TableCell>
-                        {survey.createdAt ? formatDistanceToNow(survey.createdAt.toDate(), { addSuffix: true, locale: tr }) : 'Bilinmiyor'}
+                        {formatDistanceToNow(createdAtDate, { addSuffix: true, locale: tr })}
                     </TableCell>
                     <TableCell>{renderStars(survey.answers.rating)}</TableCell>
                     <TableCell><Badge variant={survey.answers.cleanliness === 'good' ? 'default' : survey.answers.cleanliness === 'average' ? 'secondary' : 'destructive'}>{survey.answers.cleanliness}</Badge></TableCell>
@@ -91,7 +133,8 @@ function SurveyResultsTable({ surveys }: { surveys: Survey[] }) {
                     <TableCell><Badge variant={survey.answers.guided === 'yes' ? 'default' : 'secondary'}>{survey.answers.guided}</Badge></TableCell>
                     <TableCell>{renderStars(survey.answers.importance)}</TableCell>
                 </TableRow>
-            ))}
+                )
+            })}
             </TableBody>
         </Table>
     </Card>
@@ -109,27 +152,29 @@ export default function SurveyResultsPage() {
   const isAdmin = user?.uid === ADMIN_UID;
 
   useEffect(() => {
-    // Wait until the user's authentication status is resolved.
     if (isUserLoading) {
       return;
     }
 
-    // If the user is not an admin, don't attempt to fetch data.
     if (!isAdmin) {
       setIsLoading(false);
       return;
     }
 
-    // Only fetch data when we have confirmed the user is an admin.
     const fetchSurveys = async () => {
-      if (!firestore) return; // Ensure firestore is available
+      if (!firestore) return;
       setIsLoading(true);
       setError(null);
       try {
         const surveysQuery = query(collection(firestore, 'surveys'), orderBy('createdAt', 'desc'));
         const querySnapshot = await getDocs(surveysQuery);
-        const surveysData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Survey));
-        setSurveys(surveysData);
+        if (querySnapshot.empty) {
+            // If there's no real data, show the mock data.
+            setSurveys(mockSurveys);
+        } else {
+            const surveysData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Survey));
+            setSurveys(surveysData);
+        }
       } catch (e: any) {
         setError(e);
         console.error("Error fetching surveys: ", e);
@@ -139,7 +184,7 @@ export default function SurveyResultsPage() {
     };
 
     fetchSurveys();
-  }, [user, isUserLoading, isAdmin, firestore]); // Rerun effect if user or loading state changes
+  }, [user, isUserLoading, isAdmin, firestore]);
 
   const renderContent = () => {
     if (isUserLoading || (isLoading && isAdmin)) {
