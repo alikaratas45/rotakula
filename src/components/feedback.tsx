@@ -5,19 +5,6 @@ import Link from 'next/link';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import {
-  collection,
-  query,
-  orderBy,
-  serverTimestamp,
-  where,
-} from 'firebase/firestore';
-import {
-  useFirestore,
-  useCollection,
-  useMemoFirebase,
-  addDocumentNonBlocking,
-} from '@/firebase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -59,8 +46,6 @@ type Feedback = FeedbackFormValues & {
   };
 };
 
-const PINNED_FEEDBACK_ID = 'z4H1pYyRT9h9Qv5s2j6S';
-
 function FeedbackItem({ feedback }: { feedback: Feedback }) {
   const { language } = useApp();
   const displayDate = useMemo(() => {
@@ -88,39 +73,11 @@ function FeedbackItem({ feedback }: { feedback: Feedback }) {
 }
 
 function FeedbackList({ isLimited, poiId }: { isLimited?: boolean; poiId?: string; }) {
-  const firestore = useFirestore();
   const { translations } = useApp();
+  const [feedback, setFeedback] = useState<Feedback[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const feedbackQuery = useMemoFirebase(() => {
-    if (!firestore) return null;
-    const feedbackColRef = collection(firestore, 'feedback');
-    
-    if (poiId) {
-      return query(feedbackColRef, where('poiId', '==', poiId), orderBy('createdAt', 'desc'));
-    }
-    
-    // For homepage: show only general comments (without a poiId)
-    return query(feedbackColRef, where('poiId', '==', null), orderBy('createdAt', 'desc'));
-  }, [firestore, poiId]);
-
-  const { data: feedback, isLoading } = useCollection<Feedback>(feedbackQuery);
-
-  const processedFeedback = useMemo(() => {
-    if (!feedback) return [];
-    
-    const pinned = feedback.find(item => item.id === PINNED_FEEDBACK_ID);
-    const others = feedback.filter(item => item.id !== PINNED_FEEDBACK_ID);
-    
-    let sortedList = pinned ? [pinned, ...others] : others;
-    
-    if (isLimited) {
-      sortedList = sortedList.slice(0, 5);
-    }
-    
-    return sortedList;
-
-  }, [feedback, isLimited]);
-
+  // This is now a placeholder. It will not fetch from Firebase.
   if (isLoading) {
     return (
       <div className="flex justify-center py-8">
@@ -131,8 +88,8 @@ function FeedbackList({ isLimited, poiId }: { isLimited?: boolean; poiId?: strin
 
   return (
     <div className="space-y-4">
-      {processedFeedback && processedFeedback.length > 0 ? (
-        processedFeedback.map((item) => <FeedbackItem key={item.id} feedback={item} />)
+      {feedback && feedback.length > 0 ? (
+        feedback.map((item) => <FeedbackItem key={item.id} feedback={item} />)
       ) : (
         <p className="text-center text-muted-foreground">
           Henüz yorum yapılmamış. İlk yorumu siz yapın!
@@ -143,14 +100,8 @@ function FeedbackList({ isLimited, poiId }: { isLimited?: boolean; poiId?: strin
 }
 
 function FeedbackForm({ poiId }: { poiId?: string }) {
-  const firestore = useFirestore();
   const { translations } = useApp();
   
-  const feedbackColRef = useMemoFirebase(
-    () => (firestore ? collection(firestore, 'feedback') : null),
-    [firestore]
-  );
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   
@@ -162,27 +113,19 @@ function FeedbackForm({ poiId }: { poiId?: string }) {
     },
   });
 
+  // This function now only simulates submission.
   const onSubmit: SubmitHandler<FeedbackFormValues> = async (data) => {
-    if (!feedbackColRef) return;
     setIsSubmitting(true);
     
-    const dataToSave = {
-      ...data,
-      name: data.name || 'Anonim',
-      poiId: poiId || null, // Add poiId if it exists, otherwise null
-      createdAt: serverTimestamp(),
-    };
+    // Simulate a network request
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    console.log('Simulated feedback submission:', { ...data, poiId: poiId || null });
 
-    try {
-      await addDocumentNonBlocking(feedbackColRef, dataToSave);
-      setIsSubmitted(true);
-      form.reset();
-      setTimeout(() => setIsSubmitted(false), 3000);
-    } catch (error) {
-      console.error('Error submitting feedback:', error);
-    } finally {
-      setIsSubmitting(false);
-    }
+    setIsSubmitted(true);
+    form.reset();
+    setTimeout(() => setIsSubmitted(false), 3000);
+    setIsSubmitting(false);
   };
 
   const title = poiId ? translations.comments.title : 'Site Hakkında Görüşleriniz';
