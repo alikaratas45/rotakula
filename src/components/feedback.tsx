@@ -28,6 +28,8 @@ import { Loader2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { tr, enUS } from 'date-fns/locale';
 import { useApp } from '@/context/app-context';
+import { useCollection, useFirestore, addDocumentNonBlocking, useMemoFirebase } from '@/firebase';
+import { collection, query, orderBy, limit } from 'firebase/firestore';
 
 const locales: { [key: string]: Locale } = { tr, en: enUS };
 
@@ -39,7 +41,6 @@ const feedbackSchema = z.object({
 type FeedbackFormValues = z.infer<typeof feedbackSchema>;
 type Feedback = FeedbackFormValues & {
   id: string;
-  poiId?: string;
   createdAt: {
     seconds: number;
     nanoseconds: number;
@@ -72,12 +73,20 @@ function FeedbackItem({ feedback }: { feedback: Feedback }) {
   );
 }
 
-function FeedbackList({ isLimited, poiId }: { isLimited?: boolean; poiId?: string; }) {
+function FeedbackList({ isLimited }: { isLimited?: boolean }) {
   const { translations } = useApp();
-  const [feedback, setFeedback] = useState<Feedback[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const firestore = useFirestore();
+  
+  const feedbackQuery = useMemoFirebase(() => {
+    const feedbackCollection = collection(firestore, 'feedback');
+    if (isLimited) {
+      return query(feedbackCollection, orderBy('createdAt', 'desc'), limit(3));
+    }
+    return query(feedbackCollection, orderBy('createdAt', 'desc'));
+  }, [firestore, isLimited]);
 
-  // This is now a placeholder. It will not fetch from Firebase.
+  const { data: feedback, isLoading } = useCollection<Feedback>(feedbackQuery);
+
   if (isLoading) {
     return (
       <div className="flex justify-center py-8">
@@ -99,9 +108,9 @@ function FeedbackList({ isLimited, poiId }: { isLimited?: boolean; poiId?: strin
   );
 }
 
-function FeedbackForm({ poiId }: { poiId?: string }) {
+function FeedbackForm() {
   const { translations } = useApp();
-  
+  const firestore = useFirestore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   
@@ -113,29 +122,27 @@ function FeedbackForm({ poiId }: { poiId?: string }) {
     },
   });
 
-  // This function now only simulates submission.
   const onSubmit: SubmitHandler<FeedbackFormValues> = async (data) => {
     setIsSubmitting(true);
+    const feedbackCollection = collection(firestore, 'feedback');
+    const newFeedback = {
+      ...data,
+      createdAt: new Date(),
+    };
     
-    // Simulate a network request
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    console.log('Simulated feedback submission:', { ...data, poiId: poiId || null });
+    await addDocumentNonBlocking(feedbackCollection, newFeedback);
 
+    setIsSubmitting(false);
     setIsSubmitted(true);
     form.reset();
     setTimeout(() => setIsSubmitted(false), 3000);
-    setIsSubmitting(false);
   };
-
-  const title = poiId ? translations.comments.title : 'Site Hakkında Görüşleriniz';
-  const description = poiId ? translations.comments.description : 'Uygulama hakkındaki düşüncelerinizi bizimle paylaşın.';
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+        <CardTitle>Site Hakkında Görüşleriniz</CardTitle>
+        <CardDescription>Uygulama hakkındaki düşüncelerinizi bizimle paylaşın.</CardDescription>
       </CardHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -187,14 +194,12 @@ function FeedbackForm({ poiId }: { poiId?: string }) {
   );
 }
 
-export function FeedbackSection({ isLimited = false, poiId }: { isLimited?: boolean; poiId?: string }) {
-    const isPoiCommentSection = !!poiId;
-
+export function FeedbackSection({ isLimited = false }: { isLimited?: boolean }) {
     return (
         <div className="space-y-8">
-            <FeedbackForm poiId={poiId} />
-            <FeedbackList isLimited={isLimited} poiId={poiId} />
-             {isLimited && !isPoiCommentSection && (
+            {!isLimited && <FeedbackForm />}
+            <FeedbackList isLimited={isLimited} />
+             {isLimited && (
                 <div className="flex justify-center pt-4">
                   <Button asChild>
                       <Link href="/feedback">Tüm Yorumları Gör</Link>
