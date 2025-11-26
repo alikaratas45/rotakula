@@ -52,14 +52,21 @@ function renderStars(count: string | number) {
 
 function SurveyResults() {
   const firestore = useFirestore();
+  const { isAdminAuthenticated } = useApp();
   const [surveys, setSurveys] = useState<Survey[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     async function fetchSurveys() {
-      if (!firestore) return;
+      if (!firestore || !isAdminAuthenticated) {
+        setIsLoading(false);
+        return;
+      };
+      
       setIsLoading(true);
+      setError(null);
+      
       try {
         const surveysQuery = query(collection(firestore, 'surveys'), orderBy('createdAt', 'desc'));
         const querySnapshot = await getDocs(surveysQuery);
@@ -72,8 +79,11 @@ function SurveyResults() {
         setIsLoading(false);
       }
     }
-    fetchSurveys();
-  }, [firestore]);
+
+    if (isAdminAuthenticated) {
+        fetchSurveys();
+    }
+  }, [firestore, isAdminAuthenticated]);
 
   if (isLoading) {
     return (
