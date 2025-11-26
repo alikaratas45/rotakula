@@ -130,7 +130,7 @@ export default function SurveyDialog() {
             {translations.survey.description.replace('{poiName}', poiToSurvey.name)}
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-6 py-4 overflow-y-auto pr-6">
+        <div className="grid gap-6 py-4 overflow-y-auto pr-2 -mr-4">
           
           {/* Question 1: Rating */}
           <div className="space-y-3">
@@ -141,7 +141,7 @@ export default function SurveyDialog() {
               className="flex justify-around"
             >
               {ratingOptions.map(opt => (
-                <div key={opt.value} className="flex flex-col items-center space-y-1">
+                <div key={`rating-${opt.value}`} className="flex flex-col items-center space-y-1">
                   <RadioGroupItem value={opt.value} id={`rating-${opt.value}`} className="sr-only" />
                   <Label htmlFor={`rating-${opt.value}`} className="flex flex-col items-center gap-2 p-2 rounded-md border-2 border-transparent data-[state=checked]:border-primary cursor-pointer transition-colors">
                      {opt.icon}
@@ -161,7 +161,7 @@ export default function SurveyDialog() {
               className="grid grid-cols-3 gap-4"
             >
               {cleanlinessOptions.map(opt => (
-                <div key={opt.value}>
+                <div key={`clean-${opt.value}`}>
                   <RadioGroupItem value={opt.value} id={`clean-${opt.value}`} className="sr-only" />
                   <Label htmlFor={`clean-${opt.value}`} className="flex items-center justify-center gap-2 p-3 rounded-md border-2 border-muted data-[state=checked]:border-primary cursor-pointer transition-colors">
                      {opt.icon}
@@ -181,7 +181,7 @@ export default function SurveyDialog() {
               className="grid grid-cols-3 gap-4"
             >
               {recommendOptions.map(opt => (
-                <div key={opt.value}>
+                <div key={`rec-${opt.value}`}>
                   <RadioGroupItem value={opt.value} id={`rec-${opt.value}`} className="sr-only" />
                   <Label htmlFor={`rec-${opt.value}`} className="flex items-center justify-center gap-2 p-3 rounded-md border-2 border-muted data-[state=checked]:border-primary cursor-pointer transition-colors">
                      {opt.icon}
@@ -201,7 +201,7 @@ export default function SurveyDialog() {
               className="grid grid-cols-2 gap-4"
             >
               {guidedOptions.map(opt => (
-                <div key={opt.value}>
+                <div key={`guided-${opt.value}`}>
                   <RadioGroupItem value={opt.value} id={`guided-${opt.value}`} className="sr-only" />
                   <Label htmlFor={`guided-${opt.value}`} className="flex items-center justify-center gap-2 p-3 rounded-md border-2 border-muted data-[state=checked]:border-primary cursor-pointer transition-colors">
                      {opt.icon}
@@ -221,7 +221,7 @@ export default function SurveyDialog() {
               className="flex justify-around"
             >
               {importanceOptions.map(opt => (
-                <div key={opt.value} className="flex flex-col items-center space-y-1">
+                <div key={`importance-${opt.value}`} className="flex flex-col items-center space-y-1">
                   <RadioGroupItem value={opt.value} id={`importance-${opt.value}`} className="sr-only" />
                   <Label htmlFor={`importance-${opt.value}`} className="flex flex-col items-center gap-2 p-2 rounded-md border-2 border-transparent data-[state=checked]:border-primary cursor-pointer transition-colors">
                      <Star className={`transition-colors ${answers.importance && parseInt(answers.importance) >= parseInt(opt.value) ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground'}`} />
@@ -233,7 +233,7 @@ export default function SurveyDialog() {
           </div>
 
         </div>
-        <DialogFooter className="mt-auto">
+        <DialogFooter className="mt-auto pt-4 border-t">
           <Button type="button" variant="ghost" onClick={handleClose}>{translations.common.close}</Button>
           <Button type="submit" onClick={handleSubmit} disabled={isSubmitDisabled}>
             {translations.common.submit}

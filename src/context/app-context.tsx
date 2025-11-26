@@ -64,7 +64,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    const welcomeSurveyKey = 'rota-kula-welcome-survey-completed';
+    const welcomeSurveyKey = 'rota-kula-welcome-survey-completed-v2'; // Changed key to re-trigger survey
     const hasCompletedWelcomeSurvey = localStorage.getItem(welcomeSurveyKey);
 
     if (!hasCompletedWelcomeSurvey) {
