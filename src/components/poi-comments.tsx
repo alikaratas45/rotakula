@@ -39,8 +39,10 @@ import {
 } from '@/components/ui/form';
 import { Loader2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
-import { tr } from 'date-fns/locale';
+import { tr, enUS, fr, de } from 'date-fns/locale';
 import { useApp } from '@/context/app-context';
+
+const locales: { [key: string]: Locale } = { tr, en: enUS, fr, de };
 
 // Zod schema for form validation
 const commentSchema = z.object({
@@ -51,6 +53,7 @@ const commentSchema = z.object({
 type CommentFormValues = z.infer<typeof commentSchema>;
 type Comment = CommentFormValues & {
   id: string;
+  poiId: string;
   createdAt: {
     seconds: number;
     nanoseconds: number;
@@ -58,13 +61,14 @@ type Comment = CommentFormValues & {
 };
 
 function CommentItem({ comment }: { comment: Comment }) {
+  const { language } = useApp();
   const displayDate = useMemo(() => {
     if (!comment.createdAt?.seconds) {
       return 'az önce';
     }
     const date = new Date(comment.createdAt.seconds * 1000);
-    return formatDistanceToNow(date, { addSuffix: true, locale: tr });
-  }, [comment.createdAt]);
+    return formatDistanceToNow(date, { addSuffix: true, locale: locales[language] });
+  }, [comment.createdAt, language]);
 
   return (
     <Card>
@@ -83,6 +87,7 @@ function CommentItem({ comment }: { comment: Comment }) {
 
 function CommentList({ poiId }: { poiId: string }) {
   const firestore = useFirestore();
+  const { translations } = useApp();
 
   const commentsQuery = useMemoFirebase(
     () => {
