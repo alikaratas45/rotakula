@@ -12,7 +12,7 @@ import { PlayIcon, PauseIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useApp } from '@/context/app-context';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { PoiComments } from '@/components/poi-comments';
+import { FeedbackSection } from '@/components/feedback';
 import { Separator } from '@/components/ui/separator';
 
 export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
@@ -195,7 +195,7 @@ export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
                              <Separator className="my-12" />
 
                             <div>
-                                <PoiComments poiId={poi.id} />
+                                <FeedbackSection poiId={poi.id} />
                             </div>
 
                         </div>

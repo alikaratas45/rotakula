@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,8 +11,7 @@ import {
   query,
   orderBy,
   serverTimestamp,
-  doc,
-  getCountFromServer
+  where,
 } from 'firebase/firestore';
 import {
   useFirestore,
@@ -41,17 +40,21 @@ import {
 } from '@/components/ui/form';
 import { Loader2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
-import { tr } from 'date-fns/locale';
+import { tr, enUS, fr, de } from 'date-fns/locale';
+import { useApp } from '@/context/app-context';
+
+const locales: { [key: string]: Locale } = { tr, en: enUS, fr, de };
 
 // Zod schema for form validation
 const feedbackSchema = z.object({
   name: z.string().optional(),
-  message: z.string().min(10, 'Mesaj en az 10 karakter olmalıdır.'),
+  message: z.string().min(1, 'Lütfen bir yorum yazın.'),
 });
 
 type FeedbackFormValues = z.infer<typeof feedbackSchema>;
 type Feedback = FeedbackFormValues & {
   id: string;
+  poiId?: string;
   createdAt: {
     seconds: number;
     nanoseconds: number;
@@ -61,13 +64,14 @@ type Feedback = FeedbackFormValues & {
 const PINNED_FEEDBACK_ID = 'z4H1pYyRT9h9Qv5s2j6S'; // ID of the comment to pin
 
 function FeedbackItem({ feedback }: { feedback: Feedback }) {
+  const { language } = useApp();
   const displayDate = useMemo(() => {
     if (!feedback.createdAt?.seconds) {
-      return 'biraz önce';
+      return 'az önce';
     }
     const date = new Date(feedback.createdAt.seconds * 1000);
-    return formatDistanceToNow(date, { addSuffix: true, locale: tr });
-  }, [feedback.createdAt]);
+    return formatDistanceToNow(date, { addSuffix: true, locale: locales[language] });
+  }, [feedback.createdAt, language]);
 
   return (
     <Card>
@@ -84,15 +88,25 @@ function FeedbackItem({ feedback }: { feedback: Feedback }) {
   );
 }
 
-function FeedbackList({ isLimited }: { isLimited?: boolean }) {
+function FeedbackList({ isLimited, poiId }: { isLimited?: boolean, poiId?: string }) {
   const firestore = useFirestore();
+  const { translations } = useApp();
+  
+  const collectionName = poiId ? 'poi_comments' : 'feedback';
 
   const feedbackQuery = useMemoFirebase(
     () => {
       if (!firestore) return null;
-      return query(collection(firestore, 'feedback'), orderBy('createdAt', 'desc'));
+      
+      const coll = collection(firestore, collectionName);
+
+      if (poiId) {
+        return query(coll, where('poiId', '==', poiId), orderBy('createdAt', 'desc'));
+      }
+      
+      return query(coll, orderBy('createdAt', 'desc'));
     },
-    [firestore]
+    [firestore, poiId, collectionName]
   );
 
   const { data: feedback, isLoading } = useCollection<Feedback>(feedbackQuery);
@@ -100,6 +114,11 @@ function FeedbackList({ isLimited }: { isLimited?: boolean }) {
   const processedFeedback = useMemo(() => {
     if (!feedback) return [];
     
+    // Pinning is only for general feedback
+    if (poiId) {
+      return isLimited ? feedback.slice(0, 5) : feedback;
+    }
+
     const pinned = feedback.find(item => item.id === PINNED_FEEDBACK_ID);
     const others = feedback.filter(item => item.id !== PINNED_FEEDBACK_ID);
     
@@ -107,7 +126,7 @@ function FeedbackList({ isLimited }: { isLimited?: boolean }) {
     
     return isLimited ? sortedList.slice(0, 5) : sortedList;
 
-  }, [feedback, isLimited]);
+  }, [feedback, isLimited, poiId]);
 
   if (isLoading) {
     return (
@@ -130,14 +149,19 @@ function FeedbackList({ isLimited }: { isLimited?: boolean }) {
   );
 }
 
-function FeedbackForm() {
+function FeedbackForm({ poiId }: { poiId?: string }) {
   const firestore = useFirestore();
+  const { translations } = useApp();
+  
+  const collectionName = poiId ? 'poi_comments' : 'feedback';
   const feedbackColRef = useMemoFirebase(
-    () => (firestore ? collection(firestore, 'feedback') : null),
-    [firestore]
+    () => (firestore ? collection(firestore, collectionName) : null),
+    [firestore, collectionName]
   );
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  
   const form = useForm<FeedbackFormValues>({
     resolver: zodResolver(feedbackSchema),
     defaultValues: {
@@ -149,12 +173,19 @@ function FeedbackForm() {
   const onSubmit: SubmitHandler<FeedbackFormValues> = async (data) => {
     if (!feedbackColRef) return;
     setIsSubmitting(true);
+    
+    const dataToSave: any = {
+      ...data,
+      name: data.name || 'Anonim',
+      createdAt: serverTimestamp(),
+    };
+
+    if (poiId) {
+      dataToSave.poiId = poiId;
+    }
+
     try {
-      await addDocumentNonBlocking(feedbackColRef, {
-        ...data,
-        name: data.name || 'Anonim',
-        createdAt: serverTimestamp(),
-      });
+      await addDocumentNonBlocking(feedbackColRef, dataToSave);
       setIsSubmitted(true);
       form.reset();
       setTimeout(() => setIsSubmitted(false), 3000);
@@ -168,9 +199,9 @@ function FeedbackForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Site Hakkında Görüşleriniz</CardTitle>
+        <CardTitle>{poiId ? translations.comments.title : 'Site Hakkında Görüşleriniz'}</CardTitle>
         <CardDescription>
-          Uygulama hakkındaki düşüncelerinizi bizimle paylaşın.
+          {poiId ? translations.comments.description : 'Uygulama hakkındaki düşüncelerinizi bizimle paylaşın.'}
         </CardDescription>
       </CardHeader>
       <Form {...form}>
@@ -181,9 +212,9 @@ function FeedbackForm() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>İsminiz (İsteğe Bağlı)</FormLabel>
+                  <FormLabel>{translations.comments.nameLabel}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Adınız Soyadınız" {...field} />
+                    <Input placeholder={translations.comments.namePlaceholder} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -194,9 +225,9 @@ function FeedbackForm() {
               name="message"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Mesajınız</FormLabel>
+                  <FormLabel>{translations.comments.messageLabel}</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="İstek veya yorumunuzu buraya yazın..." {...field} />
+                    <Textarea placeholder={translations.comments.messagePlaceholder} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -208,12 +239,12 @@ function FeedbackForm() {
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Gönderiliyor...
+                  {translations.comments.sending}
                 </>
               ) : isSubmitted ? (
-                'Gönderildi!'
+                translations.comments.sent
               ) : (
-                'Gönder'
+                translations.comments.submit
               )}
             </Button>
           </CardFooter>
@@ -223,30 +254,29 @@ function FeedbackForm() {
   );
 }
 
-export function FeedbackSection({ isLimited = false }: { isLimited?: boolean }) {
-    const firestore = useFirestore();
-    const [totalFeedback, setTotalFeedback] = useState(0);
-
-    useEffect(() => {
-        if (firestore) {
-            const feedbackColRef = collection(firestore, 'feedback');
-            getCountFromServer(feedbackColRef).then(snapshot => {
-                setTotalFeedback(snapshot.data().count);
-            });
-        }
-    }, [firestore]);
-
+export function FeedbackSection({ isLimited = false, poiId }: { isLimited?: boolean, poiId?: string }) {
+  // Total feedback count logic is only for the main feedback page
+  if (poiId) {
     return (
-        <div className="space-y-8">
-            <FeedbackForm />
-            <FeedbackList isLimited={isLimited} />
-             {isLimited && totalFeedback > 5 && (
-                <div className="flex justify-center pt-4">
-                  <Button asChild>
-                      <Link href="/feedback">Tüm Yorumları Gör</Link>
-                  </Button>
-                </div>
-            )}
-        </div>
+      <div className="space-y-8">
+        <FeedbackForm poiId={poiId} />
+        <FeedbackList poiId={poiId} />
+      </div>
     );
+  }
+
+  // Original logic for homepage
+  return (
+    <div className="space-y-8">
+      <FeedbackForm />
+      <FeedbackList isLimited={isLimited} />
+       {isLimited && (
+          <div className="flex justify-center pt-4">
+            <Button asChild>
+                <Link href="/feedback">Tüm Yorumları Gör</Link>
+            </Button>
+          </div>
+      )}
+    </div>
+  );
 }
