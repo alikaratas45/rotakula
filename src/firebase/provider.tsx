@@ -1,10 +1,12 @@
+
 'use client';
 
 import React, { DependencyList, createContext, useContext, ReactNode, useMemo, useState, useEffect } from 'react';
 import { FirebaseApp } from 'firebase/app';
 import { Firestore } from 'firebase/firestore';
-import { Auth, User, onAuthStateChanged } from 'firebase/auth';
+import { Auth, User, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import { FirebaseErrorListener } from '@/components/FirebaseErrorListener'
+import { useToast } from '@/hooks/use-toast';
 
 interface FirebaseProviderProps {
   children: ReactNode;
@@ -30,17 +32,19 @@ export interface FirebaseContextState {
   user: User | null;
   isUserLoading: boolean; // True during initial auth check
   userError: Error | null; // Error from auth listener
+  // Admin specific state
+  isAdminAuthenticated: boolean;
+  handleAdminLogin: () => Promise<void>;
+  handleAdminLogout: () => Promise<void>;
 }
 
 // Return type for useFirebase()
-export interface FirebaseServicesAndUser {
+export interface FirebaseServicesAndUser extends Omit<FirebaseContextState, 'areServicesAvailable' | 'firebaseApp' | 'firestore' | 'auth'> {
   firebaseApp: FirebaseApp;
   firestore: Firestore;
   auth: Auth;
-  user: User | null;
-  isUserLoading: boolean;
-  userError: Error | null;
 }
+
 
 // Return type for useUser() - specific to user auth state
 export interface UserHookResult { // Renamed from UserAuthHookResult for consistency if desired, or keep as UserAuthHookResult
@@ -61,6 +65,7 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
   firestore,
   auth,
 }) => {
+  const { toast } = useToast();
   const [userAuthState, setUserAuthState] = useState<UserAuthState>({
     user: null,
     isUserLoading: true, // Start loading until first auth event
@@ -73,8 +78,6 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
       setUserAuthState({ user: null, isUserLoading: false, userError: new Error("Auth service not provided.") });
       return;
     }
-
-    setUserAuthState({ user: null, isUserLoading: true, userError: null }); // Reset on auth instance change
 
     const unsubscribe = onAuthStateChanged(
       auth,
@@ -89,9 +92,44 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
     return () => unsubscribe(); // Cleanup
   }, [auth]); // Depends on the auth instance
 
+  const handleAdminLogin = async () => {
+        if (!auth) return;
+        const provider = new GoogleAuthProvider();
+        try {
+            const result = await signInWithPopup(auth, provider);
+            toast({
+                title: "Giriş Başarılı",
+                description: `Hoş geldiniz, ${result.user.displayName}. Admin UID'niz: ${result.user.uid}`,
+                duration: 15000,
+            });
+        } catch (error) {
+            console.error("Admin login error:", error);
+            toast({
+                title: "Giriş Hatası",
+                description: "Google ile giriş yapılırken bir sorun oluştu.",
+                variant: "destructive",
+            });
+        }
+    };
+
+    const handleAdminLogout = async () => {
+        if (!auth) return;
+        try {
+            await signOut(auth);
+            toast({
+                title: "Çıkış Başarılı",
+            });
+        } catch (error) {
+            console.error("Admin logout error:", error);
+        }
+    };
+
+
   // Memoize the context value
   const contextValue = useMemo((): FirebaseContextState => {
     const servicesAvailable = !!(firebaseApp && firestore && auth);
+    const isAdmin = !!userAuthState.user;
+
     return {
       areServicesAvailable: servicesAvailable,
       firebaseApp: servicesAvailable ? firebaseApp : null,
@@ -100,7 +138,11 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
       user: userAuthState.user,
       isUserLoading: userAuthState.isUserLoading,
       userError: userAuthState.userError,
+      isAdminAuthenticated: isAdmin,
+      handleAdminLogin,
+      handleAdminLogout,
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [firebaseApp, firestore, auth, userAuthState]);
 
   return (
@@ -133,6 +175,9 @@ export const useFirebase = (): FirebaseServicesAndUser => {
     user: context.user,
     isUserLoading: context.isUserLoading,
     userError: context.userError,
+    isAdminAuthenticated: context.isAdminAuthenticated,
+    handleAdminLogin: context.handleAdminLogin,
+    handleAdminLogout: context.handleAdminLogout,
   };
 };
 

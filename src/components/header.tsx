@@ -5,7 +5,7 @@ import Link from "next/link";
 import * as React from "react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
-import { Moon, Sun, Home } from "lucide-react";
+import { Moon, Sun, Home, UserCog } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,8 @@ import {
 import { AudioGuideControl } from "./audio-guide-control";
 import { useApp } from "@/context/app-context";
 import { TurkishFlagIcon, UKFlagIcon, FrenchFlagIcon, GermanFlagIcon } from "./icons";
+import { useUser } from "@/firebase";
+import { useToast } from "@/hooks/use-toast";
 
 function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
     const { setTheme, theme } = useTheme();
@@ -40,6 +42,34 @@ function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
 
 export function Header() {
     const { language, setLanguage, translations } = useApp();
+    const [logoClickCount, setLogoClickCount] = React.useState(0);
+    const [showAdminButton, setShowAdminButton] = React.useState(false);
+    const { user } = useUser();
+    const { toast } = useToast();
+
+    const handleLogoClick = () => {
+        const newCount = logoClickCount + 1;
+        setLogoClickCount(newCount);
+        if (newCount >= 5) {
+            setShowAdminButton(true);
+        }
+    };
+
+    const handleAdminButtonClick = () => {
+        if (user) {
+            toast({
+                title: "Admin UID",
+                description: `Mevcut Admin UID: ${user.uid}`,
+                duration: 15000, 
+            });
+        } else {
+            toast({
+                title: "Giriş Yapılmamış",
+                description: "UID'nizi görmek için lütfen önce giriş yapın.",
+                variant: "destructive",
+            });
+        }
+    };
 
     const languageOptions = {
         tr: { name: 'Türkçe', Icon: TurkishFlagIcon },
@@ -76,20 +106,20 @@ export function Header() {
             <div className="container flex h-16 items-center">
                 {/* Desktop Header */}
                 <div className="hidden md:flex flex-1 items-center">
-                    <Link href="/" className="flex items-center space-x-2">
+                    <button onClick={handleLogoClick} className="flex items-center space-x-2 focus:outline-none">
                         <Image src="/logo.png?v=2" alt="RotaKula Logo" width={28} height={28} />
                         <span className="hidden font-bold sm:inline-block font-headline text-lg">
                             RotaKula
                         </span>
-                    </Link>
+                    </button>
                 </div>
                 
                 {/* Mobile Header */}
                 <div className="flex flex-1 items-center justify-between md:hidden">
-                    <Link href="/" className="flex items-center space-x-2">
+                    <button onClick={handleLogoClick} className="flex items-center space-x-2 focus:outline-none">
                         <Image src="/logo.png?v=2" alt="RotaKula Logo" width={28} height={28} />
                         <span className="font-bold font-headline text-lg">RotaKula</span>
-                    </Link>
+                    </button>
                     <div className="flex items-center gap-1">
                         <Button asChild variant="outline" size="icon" className="h-8 w-8">
                             <Link href="/">
@@ -105,6 +135,12 @@ export function Header() {
 
                 {/* Desktop right side */}
                 <div className="hidden md:flex items-center justify-end gap-2">
+                     {showAdminButton && (
+                        <Button onClick={handleAdminButtonClick} variant="destructive" size="sm" className="h-9">
+                            <UserCog className="mr-2 h-4 w-4" />
+                            Admin Paneli
+                        </Button>
+                    )}
                     <Button asChild variant="outline" size="sm" className="h-9">
                          <Link href="/">
                             <Home className="mr-2 h-4 w-4" />
