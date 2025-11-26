@@ -88,12 +88,6 @@ function AdminAuth({ isMobile = false }: { isMobile?: boolean }) {
   if (isAdmin) {
     return (
       <div className="flex gap-2">
-        <Button asChild variant="outline" size="sm" className="h-9">
-            <Link href="/admin/surveys">
-                <FileText className="mr-2 h-4 w-4" />
-                Anketler
-            </Link>
-        </Button>
         <Button variant="outline" size="sm" className={cn("h-9", isMobile && "w-full justify-start")} onClick={handleSignOut}>
             <LogOut className="mr-2 h-4 w-4" />
             Çıkış

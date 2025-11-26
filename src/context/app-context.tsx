@@ -31,10 +31,6 @@ interface AppContextType {
   earnedBadges: Badge[];
   addBadge: (poiId: string) => void;
   totalPoints: number;
-  poiToSurvey: PointOfInterest | null;
-  setPoiToSurvey: React.Dispatch<React.SetStateAction<PointOfInterest | null>>;
-  addCompletedSurvey: (poiId: string) => void;
-  hasCompletedSurvey: (poiId: string) => boolean;
   isAdminAuthenticated: boolean;
 }
 
@@ -48,8 +44,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isAudioGuideActive, setIsAudioGuideActive] = useState(false);
   const [earnedBadges, setEarnedBadges] = useState<Badge[]>([]);
   const [allPois, setAllPois] = useState<any[]>([]);
-  const [poiToSurvey, setPoiToSurvey] = useState<PointOfInterest | null>(null);
-  const [completedSurveys, setCompletedSurveys] = useState<Set<string>>(new Set());
   const { user } = useUser();
 
   const isAdminAuthenticated = useMemo(() => user?.uid === ADMIN_UID, [user]);
@@ -62,27 +56,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
     fetchPois();
   }, []);
-
-  useEffect(() => {
-    // For testing: always show the survey on load.
-    const timer = setTimeout(() => {
-        const generalPoi: PointOfInterest = {
-            id: 'general-app-survey',
-            name: 'Genel Uygulama Deneyimi',
-            slug: '',
-            description: '',
-            longDescription: '',
-            category: 'history',
-            imageId: '',
-            latitude: 0,
-            longitude: 0,
-        };
-        setPoiToSurvey(generalPoi);
-    }, 2500); // Show after 2.5 seconds to allow splash screen to finish
-
-    return () => clearTimeout(timer);
-  }, []);
-
 
   // Load language and badges from localStorage
   useEffect(() => {
@@ -140,14 +113,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     return earnedBadges.reduce((sum, badge) => sum + badge.points, 0);
   }, [earnedBadges]);
 
-  const addCompletedSurvey = useCallback((poiId: string) => {
-    setCompletedSurveys(prev => new Set(prev).add(poiId));
-  }, []);
-
-  const hasCompletedSurvey = useCallback((poiId: string) => {
-    return completedSurveys.has(poiId);
-  }, [completedSurveys]);
-
   const currentTranslations = useMemo(() => translations[language], [language]);
 
   const value: AppContextType = { 
@@ -161,10 +126,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     earnedBadges,
     addBadge,
     totalPoints,
-    poiToSurvey,
-    setPoiToSurvey,
-    addCompletedSurvey,
-    hasCompletedSurvey,
     isAdminAuthenticated,
   };
 

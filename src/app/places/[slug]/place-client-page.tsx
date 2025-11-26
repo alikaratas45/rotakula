@@ -16,7 +16,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
     const heroImage = getImageById(poi.imageId);
-    const { language, translations, setPoiToSurvey, hasCompletedSurvey } = useApp();
+    const { language, translations } = useApp();
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -51,10 +51,6 @@ export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
         return () => {
             if (synthRef.current?.speaking) {
                 synthRef.current.cancel();
-            }
-             // Trigger survey on unmount if not already completed
-            if (!hasCompletedSurvey(poi.id)) {
-                setPoiToSurvey(poi);
             }
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,3 +1,4 @@
+
 rules_version = '2';
 
 // The isAdmin() function is used to protect delete operations.
@@ -17,13 +18,6 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
     
-    // Surveys Collection: Anyone can create. Only admin can read and delete.
-    match /surveys/{surveyId} {
-      allow create: if true;
-      allow read, update: if isAdmin();
-      allow delete: if isAdmin();
-    }
-
     // Default-deny all other reads and writes for security.
     match /{document=**} {
       allow read, write: if false;

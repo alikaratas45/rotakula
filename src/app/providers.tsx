@@ -8,7 +8,6 @@ import { Footer } from '@/components/footer';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import IntroTour from '@/components/intro-tour';
-import SurveyDialog from '@/components/survey-dialog';
 
 function SplashScreen() {
     return (
@@ -54,7 +53,6 @@ export function Providers({ children }: PropsWithChildren) {
   return (
     <>
         <IntroTour />
-        <SurveyDialog />
         <Header />
         <main className="flex-grow">{children}</main>
         <Footer />
