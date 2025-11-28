@@ -19,7 +19,7 @@ import { Separator } from './ui/separator';
 import { Label } from '@/components/ui/label';
 import { useApp } from '@/context/app-context';
 
-const Survey = ({ poiId, poiName, onSubmitted }: { poiId: string; poiName: string; onSubmitted?: () => void; }) => {
+export const Survey = ({ poiId, poiName, onSubmitted }: { poiId: string; poiName: string; onSubmitted?: () => void; }) => {
   const { translations } = useApp();
   
   const surveySchema = z.object({
