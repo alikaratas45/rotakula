@@ -8,7 +8,7 @@ import fr from '@/lib/locales/fr.json';
 import de from '@/lib/locales/de.json';
 import { getPois } from '@/lib/kula-data';
 import type { PointOfInterest } from '@/lib/types';
-import { useFirebase } from '@/firebase';
+import { useFirebase, useUser } from '@/firebase';
 
 type Language = 'tr' | 'en' | 'fr' | 'de';
 
@@ -31,6 +31,8 @@ interface AppContextType {
   addBadge: (poiId: string) => void;
   totalPoints: number;
   handleAdminLogin: () => void;
+  handleAdminLogout: () => void;
+  isAdmin: boolean;
 }
 
 const translations = { tr, en, fr, de };
@@ -43,8 +45,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isAudioGuideActive, setIsAudioGuideActive] = useState(false);
   const [earnedBadges, setEarnedBadges] = useState<Badge[]>([]);
   const [allPois, setAllPois] = useState<any[]>([]);
-  const { handleAdminLogin } = useFirebase();
+  const { handleAdminLogin, handleAdminLogout } = useFirebase();
+  const { user } = useUser();
 
+  const isAdmin = useMemo(() => user?.email === 'salihturbey@gmail.com', [user]);
 
   // Fetch all POIs on mount to map badge IDs to badge data
   useEffect(() => {
@@ -125,6 +129,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     addBadge,
     totalPoints,
     handleAdminLogin,
+    handleAdminLogout,
+    isAdmin
   };
 
   return (

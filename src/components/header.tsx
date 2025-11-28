@@ -40,7 +40,7 @@ function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
 }
 
 export function Header() {
-    const { language, setLanguage, translations, handleAdminLogin } = useApp();
+    const { language, setLanguage, translations, handleAdminLogin, isAdmin } = useApp();
     const [clickCount, setClickCount] = React.useState(0);
     const [showAdmin, setShowAdmin] = React.useState(false);
 
@@ -83,6 +83,28 @@ export function Header() {
         </DropdownMenu>
     );
 
+    const AdminButton = () => {
+        if (!showAdmin) return null;
+
+        if (isAdmin) {
+            return (
+                <Button asChild variant="outline" size="sm" className="h-9">
+                    <Link href="/admin/surveys">
+                        <UserCog className="mr-2 h-4 w-4" />
+                        Admin Paneli
+                    </Link>
+                </Button>
+            )
+        }
+
+        return (
+            <Button onClick={handleAdminLogin} variant="outline" size="sm" className="h-9">
+                 <UserCog className="mr-2 h-4 w-4" />
+                Admin Girişi
+            </Button>
+        )
+    }
+
     return (
         <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container flex h-16 items-center">
@@ -121,12 +143,7 @@ export function Header() {
 
                 {/* Desktop right side */}
                 <div className="hidden md:flex items-center justify-end gap-2">
-                    {showAdmin && (
-                        <Button onClick={handleAdminLogin} variant="outline" size="sm" className="h-9">
-                             <UserCog className="mr-2 h-4 w-4" />
-                            Admin Paneli
-                        </Button>
-                    )}
+                    <AdminButton />
                     <Button asChild variant="outline" size="sm" className="h-9">
                          <Link href="/">
                             <Home className="mr-2 h-4 w-4" />

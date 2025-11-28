@@ -1,9 +1,9 @@
 
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
+import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { collection, query, orderBy, where, Query } from 'firebase/firestore';
 import { Loader2, Star, LogOut, Filter, X } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { cn } from '@/lib/utils';
 
 type SurveyResponse = {
   id: string;
@@ -43,22 +44,22 @@ const StarDisplay = ({ rating }: { rating: number }) => (
 
 export default function SurveyResultsPage() {
   const router = useRouter();
-  const { user, isUserLoading } = useUser();
+  const { isAdmin, isUserLoading, handleAdminLogout } = useApp();
   const firestore = useFirestore();
-  const { handleAdminLogout } = useApp();
   
   const [pois, setPois] = useState<PointOfInterest[]>([]);
   const [filters, setFilters] = useState<{ poiId: string; rating: number }>({ poiId: 'all', rating: 0 });
 
-  useState(() => {
+  useEffect(() => {
     async function fetchPois() {
         const allPois = await getPois('tr');
         setPois(allPois);
     }
     fetchPois();
-  });
+  }, []);
 
   const surveysQuery = useMemoFirebase(() => {
+    if (!isAdmin) return null; // Do not query if not admin
     let q: Query = query(collection(firestore, 'surveys'), orderBy('createdAt', 'desc'));
     if (filters.poiId !== 'all') {
         q = query(q, where('poiId', '==', filters.poiId));
@@ -67,7 +68,7 @@ export default function SurveyResultsPage() {
         q = query(q, where('rating', '==', filters.rating));
     }
     return q;
-  }, [firestore, filters]);
+  }, [firestore, filters, isAdmin]);
 
   const { data: surveys, isLoading: isLoadingSurveys } = useCollection<SurveyResponse>(surveysQuery);
 
@@ -86,11 +87,12 @@ export default function SurveyResultsPage() {
     );
   }
 
-  if (!user) {
+  // Redirect if not admin after loading is complete
+  if (!isUserLoading && !isAdmin) {
     router.push('/');
     return null;
   }
-
+  
   const handleFilterChange = (type: 'poiId' | 'rating', value: string | number) => {
     setFilters(prev => ({...prev, [type]: value}));
   }
