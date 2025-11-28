@@ -17,20 +17,30 @@
           "type": "string",
           "format": "date-time",
           "description": "The timestamp indicating when the feedback was submitted."
+        },
+        "poiId": {
+          "type": "string",
+          "description": "The ID of the Point of Interest the feedback is about, if applicable."
         }
       },
-      "required": ["name", "message", "createdAt"]
+      "required": [
+        "name",
+        "message",
+        "createdAt"
+      ]
     }
   },
   "auth": {
-    "providers": ["anonymous", "google.com"]
+    "providers": [
+      "anonymous"
+    ]
   },
   "firestore": {
     "/feedback/{feedbackId}": {
       "schema": {
         "$ref": "#/entities/Feedback"
       },
-      "description": "Stores user feedback and suggestions. Publicly readable and writable, but only deletable by an admin."
+      "description": "Stores user feedback and suggestions. Publicly readable and writable."
     }
   }
 }

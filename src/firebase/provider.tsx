@@ -32,10 +32,6 @@ export interface FirebaseContextState {
   user: User | null;
   isUserLoading: boolean; // True during initial auth check
   userError: Error | null; // Error from auth listener
-  // Admin specific state
-  isAdminAuthenticated: boolean;
-  handleAdminLogin: () => Promise<void>;
-  handleAdminLogout: () => Promise<void>;
 }
 
 // Return type for useFirebase()
@@ -92,47 +88,10 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
     return () => unsubscribe(); // Cleanup
   }, [auth]); // Depends on the auth instance
 
-  const handleAdminLogin = async () => {
-        if (!auth) return;
-        const provider = new GoogleAuthProvider();
-        try {
-            const result = await signInWithPopup(auth, provider);
-            toast({
-                title: "Giriş Başarılı",
-                description: `Hoş geldiniz, ${result.user.displayName}. Admin UID'niz: ${result.user.uid}`,
-                duration: 15000,
-            });
-        } catch (error: any) {
-            if (error.code === 'auth/cancelled-popup-request' || error.code === 'auth/popup-closed-by-user') {
-                return;
-            }
-
-            console.error("Admin login error:", error);
-            toast({
-                title: "Giriş Hatası",
-                description: "Google ile giriş yapılırken bir sorun oluştu.",
-                variant: "destructive",
-            });
-        }
-    };
-
-    const handleAdminLogout = async () => {
-        if (!auth) return;
-        try {
-            await signOut(auth);
-            toast({
-                title: "Çıkış Başarılı",
-            });
-        } catch (error) {
-            console.error("Admin logout error:", error);
-        }
-    };
-
 
   // Memoize the context value
   const contextValue = useMemo((): FirebaseContextState => {
     const servicesAvailable = !!(firebaseApp && firestore && auth);
-    const isAdmin = !!userAuthState.user;
 
     return {
       areServicesAvailable: servicesAvailable,
@@ -142,9 +101,6 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
       user: userAuthState.user,
       isUserLoading: userAuthState.isUserLoading,
       userError: userAuthState.userError,
-      isAdminAuthenticated: isAdmin,
-      handleAdminLogin,
-      handleAdminLogout,
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [firebaseApp, firestore, auth, userAuthState]);
@@ -177,11 +133,8 @@ export const useFirebase = (): FirebaseServicesAndUser => {
     firestore: context.firestore,
     auth: context.auth,
     user: context.user,
-    isUserLoading: context.isUserLoading,
+isUserLoading: context.isUserLoading,
     userError: context.userError,
-    isAdminAuthenticated: context.isAdminAuthenticated,
-    handleAdminLogin: context.handleAdminLogin,
-    handleAdminLogout: context.handleAdminLogout,
   };
 };
 

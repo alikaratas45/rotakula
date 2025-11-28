@@ -18,7 +18,7 @@ import {
 import { AudioGuideControl } from "./audio-guide-control";
 import { useApp } from "@/context/app-context";
 import { TurkishFlagIcon, UKFlagIcon, FrenchFlagIcon, GermanFlagIcon } from "./icons";
-import { useFirebase } from "@/firebase";
+
 
 function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
     const { setTheme, theme } = useTheme();
@@ -41,17 +41,6 @@ function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
 
 export function Header() {
     const { language, setLanguage, translations } = useApp();
-    const [logoClickCount, setLogoClickCount] = React.useState(0);
-    const [showAdminButton, setShowAdminButton] = React.useState(false);
-    const { handleAdminLogin } = useFirebase();
-
-    const handleLogoClick = () => {
-        const newCount = logoClickCount + 1;
-        setLogoClickCount(newCount);
-        if (newCount >= 5) {
-            setShowAdminButton(true);
-        }
-    };
 
     const languageOptions = {
         tr: { name: 'Türkçe', Icon: TurkishFlagIcon },
@@ -88,26 +77,21 @@ export function Header() {
             <div className="container flex h-16 items-center">
                 {/* Desktop Header */}
                 <div className="hidden md:flex flex-1 items-center">
-                    <button onClick={handleLogoClick} className="flex items-center space-x-2 focus:outline-none">
+                    <Link href="/" className="flex items-center space-x-2 focus:outline-none">
                         <Image src="/logo.png?v=2" alt="RotaKula Logo" width={28} height={28} />
                         <span className="hidden font-bold sm:inline-block font-headline text-lg">
                             RotaKula
                         </span>
-                    </button>
+                    </Link>
                 </div>
                 
                 {/* Mobile Header */}
                 <div className="flex flex-1 items-center justify-between md:hidden">
-                    <button onClick={handleLogoClick} className="flex items-center space-x-2 focus:outline-none">
+                    <Link href="/" className="flex items-center space-x-2 focus:outline-none">
                         <Image src="/logo.png?v=2" alt="RotaKula Logo" width={28} height={28} />
                         <span className="font-bold font-headline text-lg">RotaKula</span>
-                    </button>
+                    </Link>
                     <div className="flex items-center gap-1">
-                         {showAdminButton && (
-                            <Button onClick={handleAdminLogin} variant="destructive" size="icon" className="h-8 w-8">
-                                <UserCog className="h-4 w-4" />
-                            </Button>
-                        )}
                         <Button asChild variant="outline" size="icon" className="h-8 w-8">
                             <Link href="/">
                                 <Home className="h-4 w-4" />
@@ -122,12 +106,6 @@ export function Header() {
 
                 {/* Desktop right side */}
                 <div className="hidden md:flex items-center justify-end gap-2">
-                     {showAdminButton && (
-                        <Button onClick={handleAdminLogin} variant="destructive" size="sm" className="h-9">
-                            <UserCog className="mr-2 h-4 w-4" />
-                            Admin Paneli
-                        </Button>
-                    )}
                     <Button asChild variant="outline" size="sm" className="h-9">
                          <Link href="/">
                             <Home className="mr-2 h-4 w-4" />
