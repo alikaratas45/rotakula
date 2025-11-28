@@ -17,9 +17,8 @@ service cloud.firestore {
     // Survey responses: Anyone can create a response. Admin can read, list and delete.
     match /surveys/{surveyId} {
       allow create: if true;
-      allow read, list: if isAdmin();
+      allow read, list, delete: if isAdmin();
       allow update: if false;
-      allow delete: if isAdmin();
     }
     
     // Default-deny all other reads and writes for security.
@@ -28,3 +27,5 @@ service cloud.firestore {
     }
   }
 }
+
+    

@@ -130,7 +130,7 @@ export default function SurveyResultsPage() {
   }, [isAdmin]);
 
   const surveysQuery = useMemoFirebase(() => {
-    if (!isAdmin) return null;
+    if (isUserLoading || !isAdmin) return null;
     
     let q: Query = query(collection(firestore, 'surveys'), orderBy('createdAt', 'desc'));
     if (filters.poiId !== 'all') {
@@ -140,7 +140,7 @@ export default function SurveyResultsPage() {
         q = query(q, where('overall', '==', filters.rating));
     }
     return q;
-  }, [firestore, filters, isAdmin]);
+  }, [firestore, filters, isAdmin, isUserLoading]);
 
   const { data: surveys, isLoading: isLoadingSurveys } = useCollection<SurveyResponse>(surveysQuery);
 
@@ -177,7 +177,7 @@ export default function SurveyResultsPage() {
   }, [surveys]);
 
 
-  if (initialLoading) {
+  if (initialLoading || isUserLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin" />
@@ -368,3 +368,5 @@ export default function SurveyResultsPage() {
     </div>
   );
 }
+
+    
