@@ -5,7 +5,7 @@ import { useMemo, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { collection, query, orderBy, where, Query } from 'firebase/firestore';
-import { Loader2, Star, LogOut, Filter, X } from 'lucide-react';
+import { Loader2, Star, LogOut, Filter, X, Smile, ThumbsUp, Users, Bus, Sparkles } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { formatDistanceToNow } from 'date-fns';
@@ -21,25 +21,46 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { cn } from '@/lib/utils';
+import { Separator } from '@/components/ui/separator';
 
 type SurveyResponse = {
   id: string;
   poiId: string;
   poiName: string;
-  rating: number;
+  cleanliness: number;
+  guidance: number;
+  staffing: number;
+  transportation: number;
+  overall: number;
   comment: string;
   createdAt: { seconds: number; nanoseconds: number };
 };
 
-const StarDisplay = ({ rating }: { rating: number }) => (
-  <div className="flex">
-    {[...Array(5)].map((_, i) => (
-      <Star
-        key={i}
-        className={cn('h-4 w-4', i < rating ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground/30')}
-      />
-    ))}
+const StarDisplay = ({ rating, label }: { rating: number, label?: string }) => (
+  <div className="flex items-center gap-2">
+    {label && <span className="text-sm font-medium text-muted-foreground">{label}:</span>}
+    <div className="flex">
+        {[...Array(5)].map((_, i) => (
+        <Star
+            key={i}
+            className={cn('h-4 w-4', i < rating ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground/30')}
+        />
+        ))}
+    </div>
+     <span className="text-sm font-semibold">{rating}/5</span>
   </div>
+);
+
+const AverageRatingCard = ({ title, value, icon: Icon }: { title: string, value: string, icon: React.ElementType }) => (
+    <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{title}</CardTitle>
+            <Icon className="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent>
+            <div className="text-2xl font-bold">{value}</div>
+        </CardContent>
+    </Card>
 );
 
 export default function SurveyResultsPage() {
@@ -52,7 +73,6 @@ export default function SurveyResultsPage() {
   const [initialLoading, setInitialLoading] = useState(true);
 
   useEffect(() => {
-    // Combine isUserLoading and initial admin check
     if (!isUserLoading) {
       if (!isAdmin) {
         router.push('/');
@@ -73,7 +93,6 @@ export default function SurveyResultsPage() {
   }, [isAdmin]);
 
   const surveysQuery = useMemoFirebase(() => {
-    // Only build the query if the user is an admin
     if (!isAdmin) return null;
     
     let q: Query = query(collection(firestore, 'surveys'), orderBy('createdAt', 'desc'));
@@ -81,17 +100,33 @@ export default function SurveyResultsPage() {
         q = query(q, where('poiId', '==', filters.poiId));
     }
     if (filters.rating > 0) {
-        q = query(q, where('rating', '==', filters.rating));
+        q = query(q, where('overall', '==', filters.rating));
     }
     return q;
   }, [firestore, filters, isAdmin]);
 
   const { data: surveys, isLoading: isLoadingSurveys } = useCollection<SurveyResponse>(surveysQuery);
 
-  const averageRating = useMemo(() => {
-    if (!surveys || surveys.length === 0) return 0;
-    const total = surveys.reduce((sum, s) => sum + s.rating, 0);
-    return (total / surveys.length).toFixed(1);
+  const averageRatings = useMemo(() => {
+    if (!surveys || surveys.length === 0) {
+      return { cleanliness: "0.0", guidance: "0.0", staffing: "0.0", transportation: "0.0", overall: "0.0" };
+    }
+    const total = surveys.reduce((sum, s) => ({
+        cleanliness: sum.cleanliness + s.cleanliness,
+        guidance: sum.guidance + s.guidance,
+        staffing: sum.staffing + s.staffing,
+        transportation: sum.transportation + s.transportation,
+        overall: sum.overall + s.overall
+    }), { cleanliness: 0, guidance: 0, staffing: 0, transportation: 0, overall: 0 });
+    
+    const count = surveys.length;
+    return {
+        cleanliness: (total.cleanliness / count).toFixed(1),
+        guidance: (total.guidance / count).toFixed(1),
+        staffing: (total.staffing / count).toFixed(1),
+        transportation: (total.transportation / count).toFixed(1),
+        overall: (total.overall / count).toFixed(1),
+    };
   }, [surveys]);
 
 
@@ -123,24 +158,30 @@ export default function SurveyResultsPage() {
             Çıkış Yap
         </Button>
       </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <Card>
-            <CardHeader>
-                <CardTitle>Toplam Anket</CardTitle>
-            </CardHeader>
-            <CardContent>
-                 <p className="text-3xl font-bold">{surveys?.length || 0}</p>
-            </CardContent>
-        </Card>
-        <Card>
-            <CardHeader>
-                <CardTitle>Ortalama Puan</CardTitle>
-            </CardHeader>
-            <CardContent>
-                 <p className="text-3xl font-bold">{averageRating}</p>
-            </CardContent>
-        </Card>
+      
+      <div className="mb-8">
+         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Toplam Anket</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-3xl font-bold">{surveys?.length || 0}</p>
+                </CardContent>
+            </Card>
+            <Card className="col-span-1 md:col-span-2">
+                <CardHeader>
+                    <CardTitle>Genel Ortalama Puanlar</CardTitle>
+                </CardHeader>
+                <CardContent className="grid grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+                    <div className="flex items-center gap-2 font-medium"><Smile className="h-4 w-4 text-blue-500" /> Temizlik: <span className="font-bold">{averageRatings.cleanliness}</span></div>
+                    <div className="flex items-center gap-2 font-medium"><ThumbsUp className="h-4 w-4 text-green-500" /> Rehberlik: <span className="font-bold">{averageRatings.guidance}</span></div>
+                    <div className="flex items-center gap-2 font-medium"><Users className="h-4 w-4 text-indigo-500" /> Personel: <span className="font-bold">{averageRatings.staffing}</span></div>
+                    <div className="flex items-center gap-2 font-medium"><Bus className="h-4 w-4 text-orange-500" /> Ulaşım: <span className="font-bold">{averageRatings.transportation}</span></div>
+                    <div className="flex items-center gap-2 font-medium"><Sparkles className="h-4 w-4 text-yellow-500" /> Genel: <span className="font-bold">{averageRatings.overall}</span></div>
+                </CardContent>
+            </Card>
+         </div>
       </div>
       
       <Card className="mb-8">
@@ -164,7 +205,7 @@ export default function SurveyResultsPage() {
             </Select>
            </div>
            <div>
-            <label className="text-sm font-medium mb-2 block">Puana Göre Filtrele</label>
+            <label className="text-sm font-medium mb-2 block">Genel Puana Göre Filtrele</label>
              <Select value={String(filters.rating)} onValueChange={(value) => handleFilterChange('rating', Number(value))}>
                 <SelectTrigger>
                     <SelectValue placeholder="Tüm Puanlar" />
@@ -199,7 +240,7 @@ export default function SurveyResultsPage() {
             surveys.map((survey) => (
               <Card key={survey.id}>
                 <CardHeader>
-                  <div className="flex justify-between items-start">
+                  <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
                     <div>
                         <CardTitle className="text-lg">{survey.poiName}</CardTitle>
                         <CardDescription>
@@ -209,14 +250,28 @@ export default function SurveyResultsPage() {
                             })}
                         </CardDescription>
                     </div>
-                    <StarDisplay rating={survey.rating} />
+                    <div className="flex-shrink-0 pt-1">
+                        <StarDisplay rating={survey.overall} label="Genel" />
+                    </div>
                   </div>
                 </CardHeader>
-                {survey.comment && (
-                    <CardContent>
-                        <p className="text-muted-foreground italic">"{survey.comment}"</p>
-                    </CardContent>
-                )}
+                <CardContent className="space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                        <StarDisplay rating={survey.cleanliness} label="Temizlik"/>
+                        <StarDisplay rating={survey.guidance} label="Rehberlik"/>
+                        <StarDisplay rating={survey.staffing} label="Personel"/>
+                        <StarDisplay rating={survey.transportation} label="Ulaşım"/>
+                    </div>
+                    {survey.comment && (
+                        <>
+                            <Separator />
+                            <div>
+                                <p className="text-sm font-semibold mb-1">Ziyaretçi Yorumu:</p>
+                                <p className="text-muted-foreground italic">"{survey.comment}"</p>
+                            </div>
+                        </>
+                    )}
+                </CardContent>
               </Card>
             ))
           ) : (

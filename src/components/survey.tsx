@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -7,37 +6,52 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Loader2, Star } from 'lucide-react';
 import { useUser, useFirestore, addDocumentNonBlocking } from '@/firebase';
 import { collection } from 'firebase/firestore';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import { Separator } from './ui/separator';
 
 const surveySchema = z.object({
-  rating: z.number().min(1, 'Lütfen 1-5 arası bir puan verin.'),
+  cleanliness: z.number().min(1, 'Puanlama zorunludur.'),
+  guidance: z.number().min(1, 'Puanlama zorunludur.'),
+  staffing: z.number().min(1, 'Puanlama zorunludur.'),
+  transportation: z.number().min(1, 'Puanlama zorunludur.'),
+  overall: z.number().min(1, 'Puanlama zorunludur.'),
   comment: z.string().optional(),
 });
 
 type SurveyFormValues = z.infer<typeof surveySchema>;
 
-function StarRating({ value, onChange }: { value: number; onChange: (value: number) => void }) {
+interface StarRatingRowProps {
+  label: string;
+  value: number;
+  onChange: (value: number) => void;
+}
+
+function StarRatingRow({ label, value, onChange }: StarRatingRowProps) {
   return (
-    <div className="flex gap-1">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <Star
-          key={star}
-          className={cn(
-            'h-8 w-8 cursor-pointer transition-colors',
-            star <= value ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground/50'
-          )}
-          onClick={() => onChange(star)}
-        />
-      ))}
+    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4">
+      <FormLabel className="text-base sm:text-sm font-medium whitespace-nowrap">{label}</FormLabel>
+      <div className="flex gap-1">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <Star
+            key={star}
+            className={cn(
+              'h-8 w-8 cursor-pointer transition-colors',
+              star <= value ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground/50 hover:text-yellow-300'
+            )}
+            onClick={() => onChange(star)}
+          />
+        ))}
+      </div>
     </div>
   );
 }
+
 
 export function Survey({ poiId, poiName }: { poiId: string; poiName: string }) {
   const { user } = useUser();
@@ -49,7 +63,11 @@ export function Survey({ poiId, poiName }: { poiId: string; poiName: string }) {
   const form = useForm<SurveyFormValues>({
     resolver: zodResolver(surveySchema),
     defaultValues: {
-      rating: 0,
+      cleanliness: 0,
+      guidance: 0,
+      staffing: 0,
+      transportation: 0,
+      overall: 0,
       comment: '',
     },
   });
@@ -82,7 +100,7 @@ export function Survey({ poiId, poiName }: { poiId: string; poiName: string }) {
 
   if (isSubmitted) {
     return (
-      <Card className="bg-muted/50">
+      <Card className="bg-muted/50 text-center">
         <CardHeader>
           <CardTitle>Görüşleriniz İçin Teşekkür Ederiz!</CardTitle>
           <CardDescription>Ankete katılımınız, Kula'yı daha iyi bir yer haline getirmemize yardımcı oluyor.</CardDescription>
@@ -100,39 +118,81 @@ export function Survey({ poiId, poiName }: { poiId: string; poiName: string }) {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <CardContent className="space-y-6">
-            <FormField
+             <FormField
               control={form.control}
-              name="rating"
+              name="cleanliness"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Puanınız</FormLabel>
-                  <FormControl>
-                    <StarRating value={field.value} onChange={field.onChange} />
-                  </FormControl>
-                  <FormMessage />
+                   <StarRatingRow label="Temizlik" value={field.value} onChange={field.onChange} />
+                   <FormMessage className="text-right" />
                 </FormItem>
               )}
             />
+             <Separator />
+             <FormField
+              control={form.control}
+              name="guidance"
+              render={({ field }) => (
+                <FormItem>
+                   <StarRatingRow label="Rehberlik Hizmeti" value={field.value} onChange={field.onChange} />
+                   <FormMessage className="text-right" />
+                </FormItem>
+              )}
+            />
+             <Separator />
+             <FormField
+              control={form.control}
+              name="staffing"
+              render={({ field }) => (
+                <FormItem>
+                   <StarRatingRow label="Personel Durumu" value={field.value} onChange={field.onChange} />
+                   <FormMessage className="text-right" />
+                </FormItem>
+              )}
+            />
+             <Separator />
+             <FormField
+              control={form.control}
+              name="transportation"
+              render={({ field }) => (
+                <FormItem>
+                   <StarRatingRow label="Ulaşım Kolaylığı" value={field.value} onChange={field.onChange} />
+                   <FormMessage className="text-right" />
+                </FormItem>
+              )}
+            />
+             <Separator />
+             <FormField
+              control={form.control}
+              name="overall"
+              render={({ field }) => (
+                <FormItem>
+                   <StarRatingRow label="Genel Değerlendirme" value={field.value} onChange={field.onChange} />
+                   <FormMessage className="text-right" />
+                </FormItem>
+              )}
+            />
+            <Separator />
             <FormField
               control={form.control}
               name="comment"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Yorumunuz (İsteğe Bağlı)</FormLabel>
+                  <FormLabel>Ek Yorumlarınız (İsteğe Bağlı)</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Deneyiminizi birkaç kelimeyle anlatın..." {...field} />
+                    <Textarea placeholder="Deneyiminizle ilgili eklemek istediğiniz başka bir şey var mı?" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </CardContent>
-          <div className="p-6 pt-0">
-            <Button type="submit" disabled={isSubmitting}>
+          <CardFooter>
+            <Button type="submit" disabled={isSubmitting} size="lg">
               {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Anketi Gönder
             </Button>
-          </div>
+          </CardFooter>
         </form>
       </Form>
     </Card>

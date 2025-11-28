@@ -42,9 +42,25 @@
           "type": "string",
           "description": "The name of the Point of Interest."
         },
-        "rating": {
-          "type": "number",
-          "description": "The user's rating, from 1 to 5."
+        "cleanliness": {
+            "type": "number",
+            "description": "User rating for cleanliness, from 1 to 5."
+        },
+        "guidance": {
+            "type": "number",
+            "description": "User rating for guidance services, from 1 to 5."
+        },
+        "staffing": {
+            "type": "number",
+            "description": "User rating for staff availability, from 1 to 5."
+        },
+        "transportation": {
+            "type": "number",
+            "description": "User rating for ease of transportation, from 1 to 5."
+        },
+        "overall": {
+            "type": "number",
+            "description": "User's overall rating, from 1 to 5."
         },
         "comment": {
           "type": "string",
@@ -60,13 +76,12 @@
           "description": "The timestamp of the submission."
         }
       },
-      "required": ["poiId", "poiName", "rating", "userId", "createdAt"]
+      "required": ["poiId", "poiName", "cleanliness", "guidance", "staffing", "transportation", "overall", "userId", "createdAt"]
     }
   },
   "auth": {
     "providers": [
-      "anonymous",
-      "google.com"
+      "anonymous"
     ]
   },
   "firestore": {
