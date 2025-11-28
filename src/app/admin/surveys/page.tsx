@@ -3,7 +3,7 @@
 
 import { useMemo, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
+import { useFirestore, useCollection, useMemoFirebase, FirestorePermissionError, errorEmitter } from '@/firebase';
 import { collection, query, orderBy, where, Query, doc, deleteDoc } from 'firebase/firestore';
 import { Loader2, Star, LogOut, Filter, X, Smile, ThumbsUp, Users, Bus, Sparkles, Trash2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -163,18 +163,27 @@ export default function SurveyResultsPage() {
   const handleDeleteSurvey = async (surveyId: string) => {
     setIsDeleting(surveyId);
     try {
-      await deleteDoc(doc(firestore, 'surveys', surveyId));
+      const surveyRef = doc(firestore, 'surveys', surveyId);
+      await deleteDoc(surveyRef);
       toast({
         title: "Başarılı",
         description: "Anket başarıyla silindi.",
       });
-    } catch (error) {
-      console.error("Error deleting survey: ", error);
-      toast({
-        title: "Hata",
-        description: "Anket silinirken bir sorun oluştu.",
-        variant: "destructive",
-      });
+    } catch (error: any) {
+      if (error.code === 'permission-denied') {
+          const contextualError = new FirestorePermissionError({
+              operation: 'delete',
+              path: `surveys/${surveyId}`,
+          });
+          errorEmitter.emit('permission-error', contextualError);
+          // Let the global error handler show the toast
+      } else {
+          toast({
+              title: "Hata",
+              description: "Anket silinirken bir sorun oluştu.",
+              variant: "destructive",
+          });
+      }
     } finally {
       setIsDeleting(null);
     }
@@ -187,10 +196,12 @@ export default function SurveyResultsPage() {
             <h1 className="text-3xl font-bold font-headline">Anket Sonuçları</h1>
             <p className="text-muted-foreground">Ziyaretçi deneyimlerini ve geri bildirimlerini inceleyin.</p>
         </div>
-        <Button onClick={handleAdminLogout} variant="outline">
-            <LogOut className="mr-2 h-4 w-4" />
-            Çıkış Yap
-        </Button>
+         {isAdmin ? (
+            <Button onClick={handleAdminLogout} variant="outline">
+                <LogOut className="mr-2 h-4 w-4" />
+                Çıkış Yap
+            </Button>
+         ) : null}
       </div>
       
       <div className="mb-8">
