@@ -14,10 +14,10 @@ service cloud.firestore {
       allow update, delete: if false;
     }
 
-    // Survey responses: Anyone can create a response. Only admin can read them.
+    // Survey responses: Anyone can create a response. Only admin can read and list them.
     match /surveys/{surveyId} {
       allow create: if true;
-      allow read: if isAdmin();
+      allow read, list: if isAdmin();
       allow update, delete: if false;
     }
     
