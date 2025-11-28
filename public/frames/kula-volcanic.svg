@@ -1,12 +1,4 @@
 <svg width="1080" height="1080" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g style="mix-blend-mode:luminosity">
-<rect y="930" width="1080" height="150" fill="url(#paint0_linear_108_2)"/>
-</g>
-<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Playfair Display" font-size="64" font-weight="bold" letter-spacing="0em"><tspan x="296.227" y="1045.22">Bazalt Sütunları</tspan></text>
-<defs>
-<linearGradient id="paint0_linear_108_2" x1="540" y1="930" x2="540" y2="1080" gradientUnits="userSpaceOnUse">
-<stop stop-color="black" stop-opacity="0"/>
-<stop offset="1" stop-color="black"/>
-</linearGradient>
-</defs>
+<path d="M0 898C179 844 322.5 831 433 898H591.5C702.5 831 832.5 844 1080 898V1080H0V898Z" fill="black" fill-opacity="0.5"/>
+<text x="540" y="800" dominant-baseline="text-bottom" text-anchor="middle" fill="white" font-family="Playfair Display, serif" font-size="80" font-weight="700">Bazalt Sütunları</text>
 </svg>
