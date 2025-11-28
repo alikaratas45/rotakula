@@ -14,7 +14,7 @@ const filters = [
     { src: "/frames/kula-geopark.svg", name: "UNESCO Global Geopark" },
     { src: "/frames/kula-houses.svg", name: "Tarihi Evler" },
     { src: "/frames/kula-peribacalari.svg", name: "Peri Bacaları" },
-    { src: "/frames/kula-volcanic.svg", name: "Volkanik Park" }
+    { src: "/frames/kula-volcanic.svg", name: "Bazalt Sütunları" }
 ];
 
 export default function SelfieSpotPage() {
@@ -240,9 +240,3 @@ export default function SelfieSpotPage() {
         </div>
     );
 }
-
-    
-
-    
-
-    
