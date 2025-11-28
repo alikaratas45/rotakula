@@ -15,6 +15,7 @@ import { collection } from 'firebase/firestore';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from './ui/separator';
+import { Label } from '@/components/ui/label';
 
 const surveySchema = z.object({
   guidance: z.enum(['yes', 'no'], {
