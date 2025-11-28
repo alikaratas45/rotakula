@@ -5,7 +5,7 @@ import { useMemo, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useFirestore, useCollection, useMemoFirebase, FirestorePermissionError, errorEmitter } from '@/firebase';
 import { collection, query, orderBy, where, Query, doc, deleteDoc } from 'firebase/firestore';
-import { Loader2, Star, LogOut, Filter, X, Smile, ThumbsUp, Users, Bus, Sparkles, Trash2 } from 'lucide-react';
+import { Loader2, Star, LogOut, Filter, X, Smile, ThumbsUp, Users, Bus, Sparkles, Trash2, Check, Hand } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { formatDistanceToNow } from 'date-fns';
@@ -39,9 +39,9 @@ type SurveyResponse = {
   id: string;
   poiId: string;
   poiName: string;
+  guidance: boolean;
+  staffing: boolean;
   cleanliness: number;
-  guidance: number;
-  staffing: number;
   transportation: number;
   overall: number;
   comment: string;
@@ -63,6 +63,16 @@ const StarDisplay = ({ rating, label }: { rating: number, label?: string }) => (
   </div>
 );
 
+const YesNoDisplay = ({ value, label }: { value: boolean, label: string }) => (
+    <div className="flex items-center gap-2">
+        <span className="text-sm font-medium text-muted-foreground">{label}:</span>
+        <div className={cn("flex items-center gap-1 font-semibold text-sm", value ? "text-green-600" : "text-red-600")}>
+            {value ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
+            <span>{value ? 'Evet' : 'Hayır'}</span>
+        </div>
+    </div>
+);
+
 const AverageRatingCard = ({ title, value, icon: Icon }: { title: string, value: string, icon: React.ElementType }) => (
     <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -74,6 +84,19 @@ const AverageRatingCard = ({ title, value, icon: Icon }: { title: string, value:
         </CardContent>
     </Card>
 );
+
+const YesNoStatCard = ({ title, yesPercent, noPercent, icon: Icon }: { title: string, yesPercent: string, noPercent: string, icon: React.ElementType }) => (
+     <Card>
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{title}</CardTitle>
+            <Icon className="h-4 w-4 text-muted-foreground" />
+        </CardHeader>
+        <CardContent className="flex items-baseline gap-4">
+            <div className="text-xl font-bold text-green-600">{yesPercent}% Evet</div>
+            <div className="text-lg font-semibold text-red-600">{noPercent}% Hayır</div>
+        </CardContent>
+    </Card>
+)
 
 export default function SurveyResultsPage() {
   const router = useRouter();
@@ -123,23 +146,33 @@ export default function SurveyResultsPage() {
 
   const averageRatings = useMemo(() => {
     if (!surveys || surveys.length === 0) {
-      return { cleanliness: "0.0", guidance: "0.0", staffing: "0.0", transportation: "0.0", overall: "0.0" };
+      return { 
+          cleanliness: "0.0", 
+          transportation: "0.0", 
+          overall: "0.0",
+          guidanceYes: "0",
+          guidanceNo: "0",
+          staffingYes: "0",
+          staffingNo: "0",
+      };
     }
     const total = surveys.reduce((sum, s) => ({
         cleanliness: sum.cleanliness + s.cleanliness,
-        guidance: sum.guidance + s.guidance,
-        staffing: sum.staffing + s.staffing,
         transportation: sum.transportation + s.transportation,
-        overall: sum.overall + s.overall
-    }), { cleanliness: 0, guidance: 0, staffing: 0, transportation: 0, overall: 0 });
+        overall: sum.overall + s.overall,
+        guidanceYes: sum.guidanceYes + (s.guidance ? 1 : 0),
+        staffingYes: sum.staffingYes + (s.staffing ? 1 : 0),
+    }), { cleanliness: 0, transportation: 0, overall: 0, guidanceYes: 0, staffingYes: 0 });
     
     const count = surveys.length;
     return {
         cleanliness: (total.cleanliness / count).toFixed(1),
-        guidance: (total.guidance / count).toFixed(1),
-        staffing: (total.staffing / count).toFixed(1),
         transportation: (total.transportation / count).toFixed(1),
         overall: (total.overall / count).toFixed(1),
+        guidanceYes: ((total.guidanceYes / count) * 100).toFixed(0),
+        guidanceNo: (((count - total.guidanceYes) / count) * 100).toFixed(0),
+        staffingYes: ((total.staffingYes / count) * 100).toFixed(0),
+        staffingNo: (((count - total.staffingYes) / count) * 100).toFixed(0),
     };
   }, [surveys]);
 
@@ -161,6 +194,7 @@ export default function SurveyResultsPage() {
   }
 
   const handleDeleteSurvey = async (surveyId: string) => {
+    if (!isAdmin) return;
     setIsDeleting(surveyId);
     try {
       const surveyRef = doc(firestore, 'surveys', surveyId);
@@ -170,20 +204,11 @@ export default function SurveyResultsPage() {
         description: "Anket başarıyla silindi.",
       });
     } catch (error: any) {
-      if (error.code === 'permission-denied') {
-          const contextualError = new FirestorePermissionError({
-              operation: 'delete',
-              path: `surveys/${surveyId}`,
-          });
-          errorEmitter.emit('permission-error', contextualError);
-          // Let the global error handler show the toast
-      } else {
-          toast({
-              title: "Hata",
-              description: "Anket silinirken bir sorun oluştu.",
-              variant: "destructive",
-          });
-      }
+       toast({
+          title: "Hata",
+          description: "Anket silinirken bir sorun oluştu.",
+          variant: "destructive",
+      });
     } finally {
       setIsDeleting(null);
     }
@@ -205,7 +230,7 @@ export default function SurveyResultsPage() {
       </div>
       
       <div className="mb-8">
-         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card>
                 <CardHeader>
                     <CardTitle>Toplam Anket</CardTitle>
@@ -214,18 +239,11 @@ export default function SurveyResultsPage() {
                     <p className="text-3xl font-bold">{surveys?.length || 0}</p>
                 </CardContent>
             </Card>
-            <Card className="col-span-1 md:col-span-2">
-                <CardHeader>
-                    <CardTitle>Genel Ortalama Puanlar</CardTitle>
-                </CardHeader>
-                <CardContent className="grid grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
-                    <div className="flex items-center gap-2 font-medium"><Smile className="h-4 w-4 text-blue-500" /> Temizlik: <span className="font-bold">{averageRatings.cleanliness}</span></div>
-                    <div className="flex items-center gap-2 font-medium"><ThumbsUp className="h-4 w-4 text-green-500" /> Rehberlik: <span className="font-bold">{averageRatings.guidance}</span></div>
-                    <div className="flex items-center gap-2 font-medium"><Users className="h-4 w-4 text-indigo-500" /> Personel: <span className="font-bold">{averageRatings.staffing}</span></div>
-                    <div className="flex items-center gap-2 font-medium"><Bus className="h-4 w-4 text-orange-500" /> Ulaşım: <span className="font-bold">{averageRatings.transportation}</span></div>
-                    <div className="flex items-center gap-2 font-medium"><Sparkles className="h-4 w-4 text-yellow-500" /> Genel: <span className="font-bold">{averageRatings.overall}</span></div>
-                </CardContent>
-            </Card>
+            <YesNoStatCard title="Rehberlik Hizmeti Memnuniyeti" yesPercent={averageRatings.guidanceYes} noPercent={averageRatings.guidanceNo} icon={ThumbsUp} />
+            <YesNoStatCard title="Personel İlgisi Memnuniyeti" yesPercent={averageRatings.staffingYes} noPercent={averageRatings.staffingNo} icon={Users} />
+            <AverageRatingCard title="Temizlik Ortalaması" value={averageRatings.cleanliness} icon={Smile} />
+            <AverageRatingCard title="Ulaşım Kolaylığı Ortalaması" value={averageRatings.transportation} icon={Bus} />
+            <AverageRatingCard title="Genel Değerlendirme Ortalaması" value={averageRatings.overall} icon={Sparkles} />
          </div>
       </div>
       
@@ -324,11 +342,11 @@ export default function SurveyResultsPage() {
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3 text-sm">
+                        <YesNoDisplay value={survey.guidance} label="Rehberlik Hizmeti"/>
+                        <YesNoDisplay value={survey.staffing} label="Personel İlgisi"/>
                         <StarDisplay rating={survey.cleanliness} label="Temizlik"/>
-                        <StarDisplay rating={survey.guidance} label="Rehberlik"/>
-                        <StarDisplay rating={survey.staffing} label="Personel"/>
-                        <StarDisplay rating={survey.transportation} label="Ulaşım"/>
+                        <StarDisplay rating={survey.transportation} label="Ulaşım Kolaylığı"/>
                     </div>
                     {survey.comment && (
                         <>
@@ -350,5 +368,3 @@ export default function SurveyResultsPage() {
     </div>
   );
 }
-
-    

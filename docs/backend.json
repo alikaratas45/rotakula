@@ -42,25 +42,25 @@
           "type": "string",
           "description": "The name of the Point of Interest."
         },
-        "cleanliness": {
-            "type": "number",
-            "description": "User rating for cleanliness, from 1 to 5."
-        },
         "guidance": {
-            "type": "number",
-            "description": "User rating for guidance services, from 1 to 5."
+          "type": "boolean",
+          "description": "Did the user receive guidance service? (true for Yes, false for No)"
         },
         "staffing": {
-            "type": "number",
-            "description": "User rating for staff availability, from 1 to 5."
+          "type": "boolean",
+          "description": "Was there a staff member who attended to the user? (true for Yes, false for No)"
+        },
+        "cleanliness": {
+          "type": "number",
+          "description": "User rating for cleanliness, from 1 to 5."
         },
         "transportation": {
-            "type": "number",
-            "description": "User rating for ease of transportation, from 1 to 5."
+          "type": "number",
+          "description": "User rating for ease of transportation, from 1 to 5."
         },
         "overall": {
-            "type": "number",
-            "description": "User's overall rating, from 1 to 5."
+          "type": "number",
+          "description": "User's overall rating, from 1 to 5."
         },
         "comment": {
           "type": "string",
@@ -76,7 +76,17 @@
           "description": "The timestamp of the submission."
         }
       },
-      "required": ["poiId", "poiName", "cleanliness", "guidance", "staffing", "transportation", "overall", "userId", "createdAt"]
+      "required": [
+        "poiId",
+        "poiName",
+        "guidance",
+        "staffing",
+        "cleanliness",
+        "transportation",
+        "overall",
+        "userId",
+        "createdAt"
+      ]
     }
   },
   "auth": {

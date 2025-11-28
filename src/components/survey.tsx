@@ -8,7 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Loader2, Star } from 'lucide-react';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Loader2, Star, Check, X } from 'lucide-react';
 import { useUser, useFirestore, addDocumentNonBlocking } from '@/firebase';
 import { collection } from 'firebase/firestore';
 import { cn } from '@/lib/utils';
@@ -16,9 +17,13 @@ import { useToast } from '@/hooks/use-toast';
 import { Separator } from './ui/separator';
 
 const surveySchema = z.object({
+  guidance: z.enum(['yes', 'no'], {
+    required_error: "Lütfen bir seçim yapın.",
+  }),
+  staffing: z.enum(['yes', 'no'], {
+    required_error: "Lütfen bir seçim yapın.",
+  }),
   cleanliness: z.number().min(1, 'Puanlama zorunludur.'),
-  guidance: z.number().min(1, 'Puanlama zorunludur.'),
-  staffing: z.number().min(1, 'Puanlama zorunludur.'),
   transportation: z.number().min(1, 'Puanlama zorunludur.'),
   overall: z.number().min(1, 'Puanlama zorunludur.'),
   comment: z.string().optional(),
@@ -34,8 +39,8 @@ interface StarRatingRowProps {
 
 function StarRatingRow({ label, value, onChange }: StarRatingRowProps) {
   return (
-    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4">
-      <FormLabel className="text-base sm:text-sm font-medium whitespace-nowrap">{label}</FormLabel>
+    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 py-2">
+      <FormLabel className="text-base sm:text-sm font-medium">{label}</FormLabel>
       <div className="flex gap-1">
         {[1, 2, 3, 4, 5].map((star) => (
           <Star
@@ -52,6 +57,38 @@ function StarRatingRow({ label, value, onChange }: StarRatingRowProps) {
   );
 }
 
+interface YesNoQuestionRowProps {
+    label: string;
+    value: 'yes' | 'no' | undefined;
+    onChange: (value: 'yes' | 'no') => void;
+}
+
+function YesNoQuestionRow({ label, value, onChange }: YesNoQuestionRowProps) {
+    return (
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 py-2">
+            <FormLabel className="text-base sm:text-sm font-medium">{label}</FormLabel>
+             <RadioGroup
+                value={value}
+                onValueChange={onChange}
+                className="flex gap-4"
+            >
+                <FormItem className="flex items-center space-x-2">
+                    <FormControl>
+                        <RadioGroupItem value="yes" id={`${label}-yes`} />
+                    </FormControl>
+                    <Label htmlFor={`${label}-yes`}>Evet</Label>
+                </FormItem>
+                <FormItem className="flex items-center space-x-2">
+                    <FormControl>
+                        <RadioGroupItem value="no" id={`${label}-no`} />
+                    </FormControl>
+                    <Label htmlFor={`${label}-no`}>Hayır</Label>
+                </FormItem>
+            </RadioGroup>
+        </div>
+    )
+}
+
 
 export function Survey({ poiId, poiName }: { poiId: string; poiName: string }) {
   const { user } = useUser();
@@ -64,8 +101,6 @@ export function Survey({ poiId, poiName }: { poiId: string; poiName: string }) {
     resolver: zodResolver(surveySchema),
     defaultValues: {
       cleanliness: 0,
-      guidance: 0,
-      staffing: 0,
       transportation: 0,
       overall: 0,
       comment: '',
@@ -83,15 +118,19 @@ export function Survey({ poiId, poiName }: { poiId: string; poiName: string }) {
     }
     setIsSubmitting(true);
     const surveysCollection = collection(firestore, 'surveys');
-    const newSurvey = {
+    
+    // Convert 'yes'/'no' to boolean
+    const newSurveyData = {
       ...data,
+      guidance: data.guidance === 'yes',
+      staffing: data.staffing === 'yes',
       poiId,
       poiName,
       userId: user.uid,
       createdAt: new Date(),
     };
     
-    await addDocumentNonBlocking(surveysCollection, newSurvey);
+    await addDocumentNonBlocking(surveysCollection, newSurveyData);
 
     setIsSubmitting(false);
     setIsSubmitted(true);
@@ -117,25 +156,14 @@ export function Survey({ poiId, poiName }: { poiId: string; poiName: string }) {
       </CardHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <CardContent className="space-y-6">
-             <FormField
-              control={form.control}
-              name="cleanliness"
-              render={({ field }) => (
-                <FormItem>
-                   <StarRatingRow label="Temizlik" value={field.value} onChange={field.onChange} />
-                   <FormMessage className="text-right" />
-                </FormItem>
-              )}
-            />
-             <Separator />
+          <CardContent className="space-y-4">
              <FormField
               control={form.control}
               name="guidance"
               render={({ field }) => (
                 <FormItem>
-                   <StarRatingRow label="Rehberlik Hizmeti" value={field.value} onChange={field.onChange} />
-                   <FormMessage className="text-right" />
+                   <YesNoQuestionRow label="Rehberlik hizmeti aldınız mı?" value={field.value} onChange={field.onChange} />
+                   <FormMessage />
                 </FormItem>
               )}
             />
@@ -145,7 +173,18 @@ export function Survey({ poiId, poiName }: { poiId: string; poiName: string }) {
               name="staffing"
               render={({ field }) => (
                 <FormItem>
-                   <StarRatingRow label="Personel Durumu" value={field.value} onChange={field.onChange} />
+                   <YesNoQuestionRow label="Sizinle ilgilenen bir personel oldu mu?" value={field.value} onChange={field.onChange} />
+                   <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Separator />
+             <FormField
+              control={form.control}
+              name="cleanliness"
+              render={({ field }) => (
+                <FormItem>
+                   <StarRatingRow label="Alanın temizliğini değerlendirin (5 üzerinden)" value={field.value} onChange={field.onChange} />
                    <FormMessage className="text-right" />
                 </FormItem>
               )}
@@ -156,7 +195,7 @@ export function Survey({ poiId, poiName }: { poiId: string; poiName: string }) {
               name="transportation"
               render={({ field }) => (
                 <FormItem>
-                   <StarRatingRow label="Ulaşım Kolaylığı" value={field.value} onChange={field.onChange} />
+                   <StarRatingRow label="Bu alana ulaşım kolaylığını değerlendirin" value={field.value} onChange={field.onChange} />
                    <FormMessage className="text-right" />
                 </FormItem>
               )}
@@ -167,7 +206,7 @@ export function Survey({ poiId, poiName }: { poiId: string; poiName: string }) {
               name="overall"
               render={({ field }) => (
                 <FormItem>
-                   <StarRatingRow label="Genel Değerlendirme" value={field.value} onChange={field.onChange} />
+                   <StarRatingRow label="Genel değerlendirmeniz nedir?" value={field.value} onChange={field.onChange} />
                    <FormMessage className="text-right" />
                 </FormItem>
               )}
