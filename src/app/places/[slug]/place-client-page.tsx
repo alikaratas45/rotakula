@@ -17,7 +17,7 @@ import { Separator } from '@/components/ui/separator';
 export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
     const heroImage = getImageById(poi.imageId);
-    const { language, translations } = useApp();
+    const { language, translations, setSurveyState } = useApp();
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -87,6 +87,12 @@ export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
             setIsPaused(false);
             charIndexRef.current = 0;
             setRemainingText(narrationText); 
+             // --- ANKET TETİKLEYİCİ ---
+            // Anlatım bittiğinde anketi göster
+            const submittedSurveys = JSON.parse(localStorage.getItem('kula-submitted-surveys') || '{}');
+            if (!submittedSurveys[poi.id]) {
+                setSurveyState({ isOpen: true, poi: poi });
+            }
         };
 
         utterance.onerror = (event) => {

@@ -23,7 +23,7 @@ export function AudioGuideControl() {
 
     const [pois, setPois] = useState<PointOfInterest[]>([]);
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-    const [visitedPoi, setVisitedPoi] = useState<PointOfInterest | null>(null);
+    const [visitedPoiId, setVisitedPoiId] = useState<string | null>(null);
 
     const watchIdRef = useRef<number | null>(null);
     const synthRef = useRef<SpeechSynthesis | null>(null);
@@ -46,7 +46,7 @@ export function AudioGuideControl() {
             watchIdRef.current = null;
         }
         setUserLocation(null);
-        setVisitedPoi(null);
+        setVisitedPoiId(null);
         dismiss();
     }, [dismiss]);
 
@@ -122,8 +122,8 @@ export function AudioGuideControl() {
         const closestPoi = sortedPoisByDistance[0];
 
         // LOGIC FOR ENTERING A POI's GEOFENCE
-        if (closestPoi && closestPoi.distance < PROXIMITY_THRESHOLD_ENTER && !visitedPoi) {
-            setVisitedPoi(closestPoi); // Mark as currently visiting
+        if (closestPoi && closestPoi.distance < PROXIMITY_THRESHOLD_ENTER && visitedPoiId !== closestPoi.id) {
+            setVisitedPoiId(closestPoi.id); // Mark as currently visiting
             
             // Badge earning logic
             const isBadgeAlreadyEarned = earnedBadges.some(b => b.id === closestPoi.badgeId);
@@ -150,23 +150,21 @@ export function AudioGuideControl() {
         }
         
         // LOGIC FOR EXITING A POI's GEOFENCE
-        if (visitedPoi) {
+        if (visitedPoiId) {
+             const visitedPoi = pois.find(p => p.id === visitedPoiId);
+             if (!visitedPoi) return;
+
              const distanceToVisitedPoi = haversineDistance(
                 { lat: userLocation.lat, lon: userLocation.lng },
                 { lat: visitedPoi.latitude, lon: visitedPoi.longitude }
             );
 
             if (distanceToVisitedPoi > PROXIMITY_THRESHOLD_EXIT) {
-                // Check if a survey has already been submitted for this POI
-                const submittedSurveys = JSON.parse(localStorage.getItem('kula-submitted-surveys') || '{}');
-                if (!submittedSurveys[visitedPoi.id]) {
-                     setSurveyState({ isOpen: true, poi: visitedPoi });
-                }
-                setVisitedPoi(null); // Reset visited POI
+                setVisitedPoiId(null); // Reset visited POI, ready for the next one
             }
         }
 
-    }, [userLocation, pois, isAudioGuideActive, visitedPoi, handlePlayAudioForPoi, toast, translations, playProximityAlert, addBadge, earnedBadges, setSurveyState]);
+    }, [userLocation, pois, isAudioGuideActive, visitedPoiId, handlePlayAudioForPoi, toast, translations, playProximityAlert, addBadge, earnedBadges, setSurveyState]);
 
 
     const toggleGuide = () => {
