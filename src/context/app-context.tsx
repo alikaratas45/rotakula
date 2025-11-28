@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
@@ -8,7 +9,7 @@ import en from '@/lib/locales/en.json';
 import fr from '@/lib/locales/fr.json';
 import de from '@/lib/locales/de.json';
 import { getPois } from '@/lib/kula-data';
-import type { PointOfInterest } from '@/lib/types';
+import type { PointOfInterest, SurveyState } from '@/lib/types';
 import { useFirebase, useUser } from '@/firebase';
 import { useToast } from '@/hooks/use-toast';
 
@@ -37,6 +38,8 @@ interface AppContextType {
   handleAdminLogout: () => void;
   isAdmin: boolean;
   isUserLoading: boolean;
+  surveyState: SurveyState;
+  setSurveyState: React.Dispatch<React.SetStateAction<SurveyState>>;
 }
 
 const translations = { tr, en, fr, de };
@@ -51,6 +54,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [earnedBadges, setEarnedBadges] = useState<Badge[]>([]);
   const [allPois, setAllPois] = useState<any[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [surveyState, setSurveyState] = useState<SurveyState>({ isOpen: false, poi: null });
   const { user, isUserLoading } = useUser();
   const router = useRouter();
   const { toast } = useToast();
@@ -162,7 +166,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     handleAdminLogin,
     handleAdminLogout,
     isAdmin,
-    isUserLoading
+    isUserLoading,
+    surveyState,
+    setSurveyState,
   };
 
   return (

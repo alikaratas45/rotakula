@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -91,7 +92,7 @@ function YesNoQuestionRow({ label, value, onChange }: YesNoQuestionRowProps) {
 }
 
 
-export function Survey({ poiId, poiName }: { poiId: string; poiName: string }) {
+export function Survey({ poiId, poiName, onSubmitted }: { poiId: string; poiName: string; onSubmitted?: () => void; }) {
   const { user } = useUser();
   const firestore = useFirestore();
   const { toast } = useToast();
@@ -150,11 +151,14 @@ export function Survey({ poiId, poiName }: { poiId: string; poiName: string }) {
     localStorage.setItem('kula-submitted-surveys', JSON.stringify(submittedSurveys));
     
     form.reset();
+    if(onSubmitted) {
+        setTimeout(onSubmitted, 1500);
+    }
   };
 
   if (isSubmitted) {
     return (
-      <Card className="bg-muted/50 text-center">
+      <Card className="bg-muted/50 text-center border-none shadow-none">
         <CardHeader>
           <CardTitle>Görüşleriniz İçin Teşekkür Ederiz!</CardTitle>
           <CardDescription>Bu yer için daha önce anket doldurdunuz. Katkınız, Kula'yı daha iyi bir yer haline getirmemize yardımcı oluyor.</CardDescription>
@@ -164,14 +168,10 @@ export function Survey({ poiId, poiName }: { poiId: string; poiName: string }) {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Deneyiminizi Değerlendirin</CardTitle>
-        <CardDescription>Bu yer hakkındaki düşüncelerinizi bizimle paylaşarak gezi deneyimini geliştirmemize yardımcı olun.</CardDescription>
-      </CardHeader>
+    <Card className="border-none shadow-none">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 p-0">
              <FormField
               control={form.control}
               name="guidance"
@@ -241,7 +241,7 @@ export function Survey({ poiId, poiName }: { poiId: string; poiName: string }) {
               )}
             />
           </CardContent>
-          <CardFooter>
+          <CardFooter className="px-0 pt-6">
             <Button type="submit" disabled={isSubmitting} size="lg">
               {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Anketi Gönder

@@ -1,4 +1,5 @@
 
+
 export type Coordinate = {
   lat: number;
   lon: number;
@@ -69,3 +70,8 @@ export type Story = {
   excerpt_de?: string;
   content_de?: string;
 };
+
+export interface SurveyState {
+  isOpen: boolean;
+  poi: PointOfInterest | null;
+}

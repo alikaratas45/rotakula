@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from 'react';
@@ -7,51 +8,27 @@ import { getPois } from '@/lib/kula-data';
 import type { PointOfInterest } from '@/lib/types';
 import { haversineDistance } from '@/lib/utils';
 import { Button } from './ui/button';
-import { Radio, RadioTower, Sparkles } from 'lucide-react';
+import { Radio, RadioTower } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useApp } from '@/context/app-context';
 import { PlayIcon } from 'lucide-react';
+import { Survey } from './survey';
 
-const PROXIMITY_THRESHOLD_CENTER = 10; // meters for city center
-const PROXIMITY_THRESHOLD_OUTSIDE = 50; // meters for geopark/villages
-
-// Helper to check if a POI is likely outside the dense city center
-const isPoiOutsideCenter = (poi: PointOfInterest): boolean => {
-    // Geopark and Nature are always considered outside
-    if (poi.category === 'geopark' || poi.category === 'nature') {
-        return true;
-    }
-    // Specific history POIs that are villages/neighborhoods outside the main walking tour area
-    const outsideSlugs = [
-        'sandal-village', 
-        'gokceoren-village', 
-        'incesu-village',
-        'korez-village',
-        'emre-village',
-        'evciler-village',
-        'yurtbasi-tabala-village',
-        'encekler-village'
-    ];
-    if (poi.category === 'history' && outsideSlugs.includes(poi.slug)) {
-        return true;
-    }
-    return false;
-}
+const PROXIMITY_THRESHOLD_ENTER = 50; // meters to consider a POI 'visited'
+const PROXIMITY_THRESHOLD_EXIT = 150; // meters to consider 'left' the POI
 
 export function AudioGuideControl() {
-    const { language, translations, isAudioGuideActive, setIsAudioGuideActive, addBadge, earnedBadges } = useApp();
+    const { language, translations, isAudioGuideActive, setIsAudioGuideActive, addBadge, earnedBadges, setSurveyState } = useApp();
     const router = useRouter();
 
     const [pois, setPois] = useState<PointOfInterest[]>([]);
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-    const [triggeredPois, setTriggeredPois] = useState<Set<string>>(new Set());
-    const [isNarrating, setIsNarrating] = useState(false);
+    const [visitedPoi, setVisitedPoi] = useState<PointOfInterest | null>(null);
+
     const watchIdRef = useRef<number | null>(null);
     const synthRef = useRef<SpeechSynthesis | null>(null);
     const { toast, dismiss } = useToast();
     
-    const status = isAudioGuideActive ? 'listening' : 'idle';
-
     useEffect(() => {
         async function fetchPois() {
             const allPois = await getPois(language);
@@ -68,17 +45,13 @@ export function AudioGuideControl() {
             navigator.geolocation.clearWatch(watchIdRef.current);
             watchIdRef.current = null;
         }
-        if (isNarrating && synthRef.current && synthRef.current.speaking) {
-            synthRef.current.cancel();
-            setIsNarrating(false);
-        }
         setUserLocation(null);
-        setTriggeredPois(new Set());
+        setVisitedPoi(null);
         dismiss();
-    }, [dismiss, isNarrating]);
+    }, [dismiss]);
 
     const startLocationTracking = () => {
-        if (!('geolocation' in navigator) || !('speechSynthesis' in window)) {
+        if (!('geolocation' in navigator)) {
             toast({
                 title: translations.toast.unsupportedTitle,
                 description: translations.toast.audioGuideUnsupported,
@@ -111,85 +84,89 @@ export function AudioGuideControl() {
     };
 
     const handlePlayAudioForPoi = useCallback((poi: PointOfInterest, toastId?: string) => {
-        if (toastId) {
-            dismiss(toastId);
-        }
+        if (toastId) dismiss(toastId);
         router.push(`/places/${poi.slug}?autoplay=true`);
     }, [router, dismiss]);
     
     const playProximityAlert = useCallback((poiName: string) => {
         const synth = synthRef.current;
-        if (!synth) return;
-        if (synth.speaking) {
-            synth.cancel();
-        }
+        if (!synth || synth.speaking) return;
+
         const notificationText = translations.audioGuide.proximityPrompt.replace('{poiName}', poiName);
         const utterance = new SpeechSynthesisUtterance(notificationText);
         utterance.lang = language;
         
         const voices = synth.getVoices();
         const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
-        if (voice) {
-            utterance.voice = voice;
-        }
-
-        utterance.onstart = () => setIsNarrating(true);
-        utterance.onend = () => setIsNarrating(false);
-        utterance.onerror = () => setIsNarrating(false);
+        if (voice) utterance.voice = voice;
 
         synth.speak(utterance);
     }, [language, translations]);
 
 
     useEffect(() => {
-        if (status !== 'listening' || !userLocation || pois.length === 0) {
+        if (!isAudioGuideActive || !userLocation || pois.length === 0) {
             return;
         }
 
-        for (const poi of pois) {
-            if (triggeredPois.has(poi.id) || !poi.badgeId) { // Skip if already triggered or no badge
-                continue; 
-            }
+        const sortedPoisByDistance = [...pois]
+            .map(poi => ({
+                ...poi,
+                distance: haversineDistance(
+                    { lat: userLocation.lat, lon: userLocation.lng },
+                    { lat: poi.latitude, lon: poi.longitude }
+                ),
+            }))
+            .sort((a, b) => a.distance - b.distance);
 
-            const distance = haversineDistance(
-                { lat: userLocation.lat, lon: userLocation.lng },
-                { lat: poi.latitude, lon: poi.longitude }
-            );
+        const closestPoi = sortedPoisByDistance[0];
 
-            const threshold = isPoiOutsideCenter(poi)
-                ? PROXIMITY_THRESHOLD_OUTSIDE
-                : PROXIMITY_THRESHOLD_CENTER;
-
-            if (distance < threshold) {
-                setTriggeredPois(prev => new Set(prev).add(poi.id));
-                
-                const isBadgeAlreadyEarned = earnedBadges.some(b => b.id === poi.badgeId);
-                
-                if (!isBadgeAlreadyEarned) {
-                    addBadge(poi.id);
-                    toast({
-                        title: `✨ ${translations.badges.earnedTitle}`,
-                        description: translations.badges.earnedDescription.replace('{poiName}', poi.name),
-                        duration: 8000,
-                    });
-                } else {
-                     playProximityAlert(poi.name);
-                     const { id: toastId } = toast({
-                        title: `${translations.audioGuide.nearby}: ${poi.name}`,
-                        description: translations.audioGuide.nearbyDescription,
-                        duration: 15000, 
-                        action: (
-                            <Button onClick={() => handlePlayAudioForPoi(poi, toastId)}>
-                               <PlayIcon className="mr-2 h-4 w-4" /> {translations.pois.listen}
-                            </Button>
-                        )
-                    });
-                }
-
-                break; 
+        // LOGIC FOR ENTERING A POI's GEOFENCE
+        if (closestPoi && closestPoi.distance < PROXIMITY_THRESHOLD_ENTER && !visitedPoi) {
+            setVisitedPoi(closestPoi); // Mark as currently visiting
+            
+            // Badge earning logic
+            const isBadgeAlreadyEarned = earnedBadges.some(b => b.id === closestPoi.badgeId);
+            if (closestPoi.badgeId && !isBadgeAlreadyEarned) {
+                addBadge(closestPoi.id);
+                toast({
+                    title: `✨ ${translations.badges.earnedTitle}`,
+                    description: translations.badges.earnedDescription.replace('{poiName}', closestPoi.name),
+                    duration: 8000,
+                });
+            } else {
+                 playProximityAlert(closestPoi.name);
+                 const { id: toastId } = toast({
+                    title: `${translations.audioGuide.nearby}: ${closestPoi.name}`,
+                    description: translations.audioGuide.nearbyDescription,
+                    duration: 15000, 
+                    action: (
+                        <Button onClick={() => handlePlayAudioForPoi(closestPoi, toastId)}>
+                           <PlayIcon className="mr-2 h-4 w-4" /> {translations.pois.listen}
+                        </Button>
+                    )
+                });
             }
         }
-    }, [userLocation, pois, status, triggeredPois, handlePlayAudioForPoi, toast, translations, playProximityAlert, addBadge, earnedBadges]);
+        
+        // LOGIC FOR EXITING A POI's GEOFENCE
+        if (visitedPoi) {
+             const distanceToVisitedPoi = haversineDistance(
+                { lat: userLocation.lat, lon: userLocation.lng },
+                { lat: visitedPoi.latitude, lon: visitedPoi.longitude }
+            );
+
+            if (distanceToVisitedPoi > PROXIMITY_THRESHOLD_EXIT) {
+                // Check if a survey has already been submitted for this POI
+                const submittedSurveys = JSON.parse(localStorage.getItem('kula-submitted-surveys') || '{}');
+                if (!submittedSurveys[visitedPoi.id]) {
+                     setSurveyState({ isOpen: true, poi: visitedPoi });
+                }
+                setVisitedPoi(null); // Reset visited POI
+            }
+        }
+
+    }, [userLocation, pois, isAudioGuideActive, visitedPoi, handlePlayAudioForPoi, toast, translations, playProximityAlert, addBadge, earnedBadges, setSurveyState]);
 
 
     const toggleGuide = () => {
@@ -220,11 +197,11 @@ export function AudioGuideControl() {
                 variant="outline"
                 size="sm"
                 onClick={toggleGuide}
-                aria-label={status === 'idle' ? translations.audioGuide.start : translations.audioGuide.active}
+                aria-label={!isAudioGuideActive ? translations.audioGuide.start : translations.audioGuide.active}
                 className="h-8 md:h-9"
             >
-                {status === 'listening' ? <RadioTower className="h-4 w-4 animate-pulse text-green-500" /> : <Radio className="h-4 w-4" />}
-                <span className="ml-2 text-xs md:text-sm">{status === 'listening' ? translations.audioGuide.activeShort : translations.audioGuide.title}</span>
+                {isAudioGuideActive ? <RadioTower className="h-4 w-4 animate-pulse text-green-500" /> : <Radio className="h-4 w-4" />}
+                <span className="ml-2 text-xs md:text-sm">{isAudioGuideActive ? translations.audioGuide.activeShort : translations.audioGuide.title}</span>
             </Button>
         </div>
     );
