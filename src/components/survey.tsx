@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -9,7 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Loader2, Star, Check, X } from 'lucide-react';
+import { Loader2, Star } from 'lucide-react';
 import { useUser, useFirestore, addDocumentNonBlocking } from '@/firebase';
 import { collection } from 'firebase/firestore';
 import { cn } from '@/lib/utils';
@@ -108,6 +108,15 @@ export function Survey({ poiId, poiName }: { poiId: string; poiName: string }) {
     },
   });
 
+  useEffect(() => {
+    // Check local storage on mount to see if a survey for this POI was already submitted
+    const submittedSurveys = JSON.parse(localStorage.getItem('kula-submitted-surveys') || '{}');
+    if (submittedSurveys[poiId]) {
+      setIsSubmitted(true);
+    }
+  }, [poiId]);
+
+
   const onSubmit: SubmitHandler<SurveyFormValues> = async (data) => {
     if (!user) {
       toast({
@@ -120,7 +129,6 @@ export function Survey({ poiId, poiName }: { poiId: string; poiName: string }) {
     setIsSubmitting(true);
     const surveysCollection = collection(firestore, 'surveys');
     
-    // Convert 'yes'/'no' to boolean
     const newSurveyData = {
       ...data,
       guidance: data.guidance === 'yes',
@@ -135,6 +143,12 @@ export function Survey({ poiId, poiName }: { poiId: string; poiName: string }) {
 
     setIsSubmitting(false);
     setIsSubmitted(true);
+
+    // Store the submission in local storage
+    const submittedSurveys = JSON.parse(localStorage.getItem('kula-submitted-surveys') || '{}');
+    submittedSurveys[poiId] = true;
+    localStorage.setItem('kula-submitted-surveys', JSON.stringify(submittedSurveys));
+    
     form.reset();
   };
 
@@ -143,7 +157,7 @@ export function Survey({ poiId, poiName }: { poiId: string; poiName: string }) {
       <Card className="bg-muted/50 text-center">
         <CardHeader>
           <CardTitle>Görüşleriniz İçin Teşekkür Ederiz!</CardTitle>
-          <CardDescription>Ankete katılımınız, Kula'yı daha iyi bir yer haline getirmemize yardımcı oluyor.</CardDescription>
+          <CardDescription>Bu yer için daha önce anket doldurdunuz. Katkınız, Kula'yı daha iyi bir yer haline getirmemize yardımcı oluyor.</CardDescription>
         </CardHeader>
       </Card>
     );
