@@ -32,32 +32,7 @@ export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
     const [remainingText, setRemainingText] = useState(narrationText);
     const charIndexRef = useRef(0);
 
-     useEffect(() => {
-        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-            synthRef.current = window.speechSynthesis;
-        }
-        setRemainingText(narrationText);
-        charIndexRef.current = 0;
-        
-        const shouldAutoplay = searchParams.get('autoplay') === 'true';
-        if (shouldAutoplay) {
-            const newPath = `/places/${poi.slug}`;
-            router.replace(newPath, { scroll: false });
-            setTimeout(() => {
-                handlePlayPause();
-            }, 500); 
-        }
-
-        // Cleanup function for unmount
-        return () => {
-            if (synthRef.current?.speaking) {
-                synthRef.current.cancel();
-            }
-        };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [poi.id, poi.slug, language, narrationText]); // Only re-init on major changes
-
-    const startPlayback = (textToSpeak: string) => {
+    const startPlayback = useCallback((textToSpeak: string) => {
         const synth = synthRef.current;
         if (!synth || !textToSpeak) return;
 
@@ -65,7 +40,6 @@ export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
             synth.cancel();
         }
 
-        // Replace UNESCO for Turkish pronunciation only for speech
         const textForSpeech = language === 'tr' ? textToSpeak.replace(/UNESCO/g, 'Unesko') : textToSpeak;
 
         const utterance = new SpeechSynthesisUtterance(textForSpeech);
@@ -87,8 +61,6 @@ export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
             setIsPaused(false);
             charIndexRef.current = 0;
             setRemainingText(narrationText); 
-             // --- ANKET TETİKLEYİCİ ---
-            // Anlatım bittiğinde anketi göster
             const submittedSurveys = JSON.parse(localStorage.getItem('kula-submitted-surveys') || '{}');
             if (!submittedSurveys[poi.id]) {
                 setSurveyState({ isOpen: true, poi: poi });
@@ -114,7 +86,7 @@ export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
             setIsPlaying(true);
             setIsPaused(false);
         }, 100);
-    };
+    }, [language, narrationText, poi.id, poi, setSurveyState, toast, translations]);
 
     const handlePlayPause = useCallback(() => {
         const synth = synthRef.current;
@@ -127,25 +99,54 @@ export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
             return;
         }
 
-        if (synth.speaking && !isPaused) { // Is playing, so pause it
-            // Calculate remaining text based on the original full text
+        if (synth.speaking && !isPaused) { 
             const fullText = utteranceRef.current?.text || narrationText;
             const spokenTextLength = charIndexRef.current;
             const remaining = fullText.substring(spokenTextLength);
             
-            synth.cancel(); // Use cancel() which is more reliable
+            synth.cancel(); 
             setRemainingText(remaining);
             setIsPaused(true);
             setIsPlaying(false);
 
-        } else { // Is paused or not started, so play
+        } else { 
              if (synth.getVoices().length === 0) {
                  synth.onvoiceschanged = () => startPlayback(remainingText);
             } else {
                 startPlayback(remainingText);
             }
         }
-    }, [isPaused, remainingText, narrationText, toast, translations]);
+    }, [isPaused, remainingText, narrationText, toast, translations, startPlayback]);
+
+     useEffect(() => {
+        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+            synthRef.current = window.speechSynthesis;
+        }
+        setRemainingText(narrationText);
+        charIndexRef.current = 0;
+        
+        const shouldAutoplay = searchParams.get('autoplay') === 'true';
+        if (shouldAutoplay) {
+            const newPath = `/places/${poi.slug}`;
+            router.replace(newPath, { scroll: false });
+            setTimeout(() => {
+                // Check if synth is ready, otherwise wait for voices
+                const synth = synthRef.current;
+                if (synth && synth.getVoices().length > 0) {
+                    startPlayback(narrationText);
+                } else if (synth) {
+                    synth.onvoiceschanged = () => startPlayback(narrationText);
+                }
+            }, 500); 
+        }
+
+        return () => {
+            if (synthRef.current?.speaking) {
+                synthRef.current.cancel();
+            }
+        };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [poi.id, narrationText, startPlayback]);
 
 
     return (
@@ -212,3 +213,4 @@ export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
         </APIProvider>
     );
 }
+
