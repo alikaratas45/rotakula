@@ -14,7 +14,11 @@ const filters = [
     { src: "/frames/kula-geopark.svg", name: "UNESCO Global Geopark" },
     { src: "/frames/kula-houses.svg", name: "Tarihi Evler" },
     { src: "/frames/kula-peribacalari.svg", name: "Peri Bacaları" },
-    { src: "/frames/kula-volcanic.svg", name: "Bazalt Sütunları" }
+    { src: "/frames/kula-volcanic.svg", name: "Bazalt Sütunları" },
+    { src: "/frames/kula-yunus-emre.svg", name: "Yunus Emre Türbesi" },
+    { src: "/frames/kula-sandal-divlit.svg", name: "Sandal Divlit Volkanı" },
+    { src: "/frames/kula-kursunlu-camii.svg", name: "Kurşunlu Camii" },
+    { src: "/frames/kula-beyler-evi.svg", name: "Beyler Evi" }
 ];
 
 export default function SelfieSpotPage() {

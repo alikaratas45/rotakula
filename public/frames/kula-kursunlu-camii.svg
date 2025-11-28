@@ -1,0 +1,9 @@
+<svg width="1080" height="1080" viewBox="0 0 1080 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+    <filter id="shadow" x="-5" y="-5" width="1100" height="150">
+      <feDropShadow dx="2" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+</defs>
+<rect y="980" width="1080" height="100" fill="black" fill-opacity="0.3"/>
+<text x="540" y="1045" font-family="'Playfair Display', serif" font-weight="bold" font-size="60" fill="white" text-anchor="middle" filter="url(#shadow)">Kurşunlu Camii</text>
+</svg>
