@@ -2,6 +2,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import tr from '@/lib/locales/tr.json';
 import en from '@/lib/locales/en.json';
 import fr from '@/lib/locales/fr.json';
@@ -9,6 +10,8 @@ import de from '@/lib/locales/de.json';
 import { getPois } from '@/lib/kula-data';
 import type { PointOfInterest } from '@/lib/types';
 import { useFirebase, useUser } from '@/firebase';
+import { useToast } from '@/hooks/use-toast';
+
 
 type Language = 'tr' | 'en' | 'fr' | 'de';
 
@@ -30,13 +33,14 @@ interface AppContextType {
   earnedBadges: Badge[];
   addBadge: (poiId: string) => void;
   totalPoints: number;
-  handleAdminLogin: () => void;
+  handleAdminLogin: (password: string) => void;
   handleAdminLogout: () => void;
   isAdmin: boolean;
   isUserLoading: boolean;
 }
 
 const translations = { tr, en, fr, de };
+const ADMIN_PASSWORD = "kulaadmin"; 
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -46,10 +50,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isAudioGuideActive, setIsAudioGuideActive] = useState(false);
   const [earnedBadges, setEarnedBadges] = useState<Badge[]>([]);
   const [allPois, setAllPois] = useState<any[]>([]);
-  const { handleAdminLogin, handleAdminLogout } = useFirebase();
+  const [isAdmin, setIsAdmin] = useState(false);
   const { user, isUserLoading } = useUser();
-
-  const isAdmin = useMemo(() => user?.email === 'alikarataskula@gmail.com', [user]);
+  const router = useRouter();
+  const { toast } = useToast();
 
   // Fetch all POIs on mount to map badge IDs to badge data
   useEffect(() => {
@@ -60,7 +64,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     fetchPois();
   }, []);
 
-  // Load language and badges from localStorage
+  // Load language, badges, and admin status from localStorage
   useEffect(() => {
     const storedLang = localStorage.getItem('rota-kula-language') as Language;
     if (storedLang && ['tr', 'en', 'fr', 'de'].includes(storedLang)) {
@@ -76,6 +80,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     if (storedBadges) {
         setEarnedBadges(JSON.parse(storedBadges));
     }
+    
+    const storedAdmin = localStorage.getItem('rota-kula-is-admin');
+    if (storedAdmin === 'true') {
+        setIsAdmin(true);
+    }
+
   }, []);
 
   const handleSetLanguage = (lang: Language) => {
@@ -83,6 +93,26 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('rota-kula-language', lang);
     document.documentElement.lang = lang;
   };
+  
+  const handleAdminLogin = (password: string) => {
+    if (password === ADMIN_PASSWORD) {
+        setIsAdmin(true);
+        localStorage.setItem('rota-kula-is-admin', 'true');
+        router.push('/admin/surveys');
+    } else {
+        toast({
+            title: "Hatalı Şifre",
+            description: "Admin paneline girmek için girdiğiniz şifre yanlış.",
+            variant: "destructive"
+        })
+    }
+  }
+
+  const handleAdminLogout = () => {
+    setIsAdmin(false);
+    localStorage.removeItem('rota-kula-is-admin');
+    router.push('/');
+  }
   
   useEffect(() => {
       document.documentElement.lang = language;

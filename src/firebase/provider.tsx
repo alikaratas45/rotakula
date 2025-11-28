@@ -4,7 +4,7 @@
 import React, { DependencyList, createContext, useContext, ReactNode, useMemo, useState, useEffect } from 'react';
 import { FirebaseApp } from 'firebase/app';
 import { Firestore } from 'firebase/firestore';
-import { Auth, User, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { Auth, User, onAuthStateChanged } from 'firebase/auth';
 import { FirebaseErrorListener } from '@/components/FirebaseErrorListener'
 import { useToast } from '@/hooks/use-toast';
 
@@ -32,8 +32,6 @@ export interface FirebaseContextState {
   user: User | null;
   isUserLoading: boolean; // True during initial auth check
   userError: Error | null; // Error from auth listener
-  handleAdminLogin: () => void;
-  handleAdminLogout: () => void;
 }
 
 // Return type for useFirebase()
@@ -90,30 +88,6 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
     return () => unsubscribe(); // Cleanup
   }, [auth]); // Depends on the auth instance
 
-  const handleAdminLogin = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      await signInWithPopup(auth, provider);
-      window.location.href = '/admin/surveys';
-    } catch (error: any) {
-       // Don't show a toast if the user closes the popup
-      if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
-        return;
-      }
-      toast({
-        title: "Giriş Başarısız",
-        description: "Admin olarak giriş yapılırken bir hata oluştu.",
-        variant: "destructive",
-      });
-      console.error("Admin login failed:", error);
-    }
-  };
-
-  const handleAdminLogout = async () => {
-    await signOut(auth);
-    window.location.href = '/';
-  };
-
   // Memoize the context value
   const contextValue = useMemo((): FirebaseContextState => {
     const servicesAvailable = !!(firebaseApp && firestore && auth);
@@ -126,8 +100,6 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
       user: userAuthState.user,
       isUserLoading: userAuthState.isUserLoading,
       userError: userAuthState.userError,
-      handleAdminLogin,
-      handleAdminLogout,
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [firebaseApp, firestore, auth, userAuthState]);
@@ -162,8 +134,6 @@ export const useFirebase = (): FirebaseServicesAndUser => {
     user: context.user,
 isUserLoading: context.isUserLoading,
     userError: context.userError,
-    handleAdminLogin: context.handleAdminLogin,
-    handleAdminLogout: context.handleAdminLogout,
   };
 };
 

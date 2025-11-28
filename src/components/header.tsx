@@ -15,6 +15,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { AudioGuideControl } from "./audio-guide-control";
 import { useApp } from "@/context/app-context";
 import { TurkishFlagIcon, UKFlagIcon, FrenchFlagIcon, GermanFlagIcon } from "./icons";
@@ -40,19 +49,27 @@ function ThemeSwitcher({ isMobile = false }: { isMobile?: boolean }) {
 }
 
 export function Header() {
-    const { language, setLanguage, translations, handleAdminLogin, isAdmin } = useApp();
+    const { language, setLanguage, translations, isAdmin, handleAdminLogin } = useApp();
     const [clickCount, setClickCount] = React.useState(0);
-    const [showAdmin, setShowAdmin] = React.useState(false);
+    const [showAdminDialog, setShowAdminDialog] = React.useState(false);
+    const [password, setPassword] = React.useState("");
 
 
     const handleLogoClick = () => {
         const newClickCount = clickCount + 1;
         setClickCount(newClickCount);
         if (newClickCount >= 5) {
-            setShowAdmin(true);
+            setShowAdminDialog(true);
+            setClickCount(0); // Reset count
         }
     };
     
+    const onPasswordSubmit = () => {
+        handleAdminLogin(password);
+        setShowAdminDialog(false);
+        setPassword("");
+    };
+
     const languageOptions = {
         tr: { name: 'Türkçe', Icon: TurkishFlagIcon },
         en: { name: 'English', Icon: UKFlagIcon },
@@ -84,23 +101,14 @@ export function Header() {
     );
 
     const AdminButton = () => {
-        if (!showAdmin) return null;
-
-        if (isAdmin) {
-            return (
-                <Button asChild variant="outline" size="sm" className="h-9">
-                    <Link href="/admin/surveys">
-                        <UserCog className="mr-2 h-4 w-4" />
-                        Admin Paneli
-                    </Link>
-                </Button>
-            )
-        }
+        if (!isAdmin) return null;
 
         return (
-            <Button onClick={handleAdminLogin} variant="outline" size="sm" className="h-9">
-                 <UserCog className="mr-2 h-4 w-4" />
-                Admin Girişi
+            <Button asChild variant="outline" size="sm" className="h-9">
+                <Link href="/admin/surveys">
+                    <UserCog className="mr-2 h-4 w-4" />
+                    Admin Paneli
+                </Link>
             </Button>
         )
     }
@@ -155,6 +163,30 @@ export function Header() {
                     <ThemeSwitcher />
                 </div>
             </div>
+             <Dialog open={showAdminDialog} onOpenChange={setShowAdminDialog}>
+                <DialogContent>
+                    <DialogHeader>
+                    <DialogTitle>Admin Girişi</DialogTitle>
+                    <DialogDescription>
+                        Admin paneline erişmek için lütfen şifreyi girin.
+                    </DialogDescription>
+                    </DialogHeader>
+                    <Input
+                        type="password"
+                        placeholder="Şifre"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                onPasswordSubmit();
+                            }
+                        }}
+                    />
+                    <DialogFooter>
+                    <Button onClick={onPasswordSubmit}>Giriş Yap</Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </header>
     );
 }

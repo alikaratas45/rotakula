@@ -88,7 +88,7 @@ export default function SurveyResultsPage() {
   }
 
   // Redirect if not admin after loading is complete
-  if (!isUserLoading && !isAdmin) {
+  if (!isAdmin) {
     router.push('/');
     return null;
   }
