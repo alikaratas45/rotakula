@@ -137,7 +137,7 @@ export default function SurveyResultsPage() {
         q = query(q, where('overall', '==', filters.rating));
     }
     return q;
-  }, [firestore, filters, isAdmin, isUserLoading]);
+  }, [firestore, filters.poiId, filters.rating, isAdmin, isUserLoading]);
 
   const { data: surveys, isLoading: isLoadingSurveys, error } = useCollection<SurveyResponse>(surveysQuery);
 
