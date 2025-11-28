@@ -251,5 +251,24 @@
         "submit": "Submit Comment",
         "sending": "Sending...",
         "sent": "Sent!"
+    },
+    "survey": {
+        "title": "Rate Your Visit: {poiName}",
+        "description": "Help us make Kula a better place by sharing your experience with us.",
+        "guidanceLabel": "Did you receive guidance service?",
+        "staffingLabel": "Was there a staff member who attended to you?",
+        "cleanlinessLabel": "Rate the cleanliness of the area (out of 5)",
+        "transportationLabel": "Rate the ease of transportation to this area",
+        "overallLabel": "What is your overall rating?",
+        "commentLabel": "Additional Comments (Optional)",
+        "commentPlaceholder": "Is there anything else you'd like to add about your experience?",
+        "submitButton": "Submit Survey",
+        "submittingButton": "Submitting...",
+        "thanksTitle": "Thank You for Your Feedback!",
+        "thanksDescription": "You have already completed the survey for this location. Your contribution helps us make Kula a better place.",
+        "yes": "Yes",
+        "no": "No",
+        "requiredError": "Please make a selection.",
+        "ratingRequiredError": "Rating is required."
     }
 }

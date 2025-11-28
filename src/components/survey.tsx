@@ -17,82 +17,26 @@ import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from './ui/separator';
 import { Label } from '@/components/ui/label';
+import { useApp } from '@/context/app-context';
 
-const surveySchema = z.object({
-  guidance: z.enum(['yes', 'no'], {
-    required_error: "Lütfen bir seçim yapın.",
-  }),
-  staffing: z.enum(['yes', 'no'], {
-    required_error: "Lütfen bir seçim yapın.",
-  }),
-  cleanliness: z.number().min(1, 'Puanlama zorunludur.'),
-  transportation: z.number().min(1, 'Puanlama zorunludur.'),
-  overall: z.number().min(1, 'Puanlama zorunludur.'),
-  comment: z.string().optional(),
-});
+const Survey = ({ poiId, poiName, onSubmitted }: { poiId: string; poiName: string; onSubmitted?: () => void; }) => {
+  const { translations } = useApp();
+  
+  const surveySchema = z.object({
+    guidance: z.enum(['yes', 'no'], {
+      required_error: translations.survey.requiredError,
+    }),
+    staffing: z.enum(['yes', 'no'], {
+      required_error: translations.survey.requiredError,
+    }),
+    cleanliness: z.number().min(1, translations.survey.ratingRequiredError),
+    transportation: z.number().min(1, translations.survey.ratingRequiredError),
+    overall: z.number().min(1, translations.survey.ratingRequiredError),
+    comment: z.string().optional(),
+  });
 
-type SurveyFormValues = z.infer<typeof surveySchema>;
+  type SurveyFormValues = z.infer<typeof surveySchema>;
 
-interface StarRatingRowProps {
-  label: string;
-  value: number;
-  onChange: (value: number) => void;
-}
-
-function StarRatingRow({ label, value, onChange }: StarRatingRowProps) {
-  return (
-    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 py-2">
-      <FormLabel className="text-base sm:text-sm font-medium">{label}</FormLabel>
-      <div className="flex gap-1">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <Star
-            key={star}
-            className={cn(
-              'h-8 w-8 cursor-pointer transition-colors',
-              star <= value ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground/50 hover:text-yellow-300'
-            )}
-            onClick={() => onChange(star)}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-interface YesNoQuestionRowProps {
-    label: string;
-    value: 'yes' | 'no' | undefined;
-    onChange: (value: 'yes' | 'no') => void;
-}
-
-function YesNoQuestionRow({ label, value, onChange }: YesNoQuestionRowProps) {
-    return (
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 py-2">
-            <FormLabel className="text-base sm:text-sm font-medium">{label}</FormLabel>
-             <RadioGroup
-                value={value}
-                onValueChange={onChange}
-                className="flex gap-4"
-            >
-                <FormItem className="flex items-center space-x-2">
-                    <FormControl>
-                        <RadioGroupItem value="yes" id={`${label}-yes`} />
-                    </FormControl>
-                    <Label htmlFor={`${label}-yes`}>Evet</Label>
-                </FormItem>
-                <FormItem className="flex items-center space-x-2">
-                    <FormControl>
-                        <RadioGroupItem value="no" id={`${label}-no`} />
-                    </FormControl>
-                    <Label htmlFor={`${label}-no`}>Hayır</Label>
-                </FormItem>
-            </RadioGroup>
-        </div>
-    )
-}
-
-
-export function Survey({ poiId, poiName, onSubmitted }: { poiId: string; poiName: string; onSubmitted?: () => void; }) {
   const { user } = useUser();
   const firestore = useFirestore();
   const { toast } = useToast();
@@ -110,7 +54,6 @@ export function Survey({ poiId, poiName, onSubmitted }: { poiId: string; poiName
   });
 
   useEffect(() => {
-    // Check local storage on mount to see if a survey for this POI was already submitted
     const submittedSurveys = JSON.parse(localStorage.getItem('kula-submitted-surveys') || '{}');
     if (submittedSurveys[poiId]) {
       setIsSubmitted(true);
@@ -145,7 +88,6 @@ export function Survey({ poiId, poiName, onSubmitted }: { poiId: string; poiName
     setIsSubmitting(false);
     setIsSubmitted(true);
 
-    // Store the submission in local storage
     const submittedSurveys = JSON.parse(localStorage.getItem('kula-submitted-surveys') || '{}');
     submittedSurveys[poiId] = true;
     localStorage.setItem('kula-submitted-surveys', JSON.stringify(submittedSurveys));
@@ -155,13 +97,71 @@ export function Survey({ poiId, poiName, onSubmitted }: { poiId: string; poiName
         setTimeout(onSubmitted, 1500);
     }
   };
+  
+  interface StarRatingRowProps {
+    label: string;
+    value: number;
+    onChange: (value: number) => void;
+  }
+
+  function StarRatingRow({ label, value, onChange }: StarRatingRowProps) {
+    return (
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 py-2">
+        <FormLabel className="text-base sm:text-sm font-medium">{label}</FormLabel>
+        <div className="flex gap-1">
+          {[1, 2, 3, 4, 5].map((star) => (
+            <Star
+              key={star}
+              className={cn(
+                'h-8 w-8 cursor-pointer transition-colors',
+                star <= value ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground/50 hover:text-yellow-300'
+              )}
+              onClick={() => onChange(star)}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  interface YesNoQuestionRowProps {
+      label: string;
+      value: 'yes' | 'no' | undefined;
+      onChange: (value: 'yes' | 'no') => void;
+  }
+
+  function YesNoQuestionRow({ label, value, onChange }: YesNoQuestionRowProps) {
+      return (
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 py-2">
+              <FormLabel className="text-base sm:text-sm font-medium">{label}</FormLabel>
+               <RadioGroup
+                  value={value}
+                  onValueChange={onChange}
+                  className="flex gap-4"
+              >
+                  <FormItem className="flex items-center space-x-2">
+                      <FormControl>
+                          <RadioGroupItem value="yes" id={`${label}-yes`} />
+                      </FormControl>
+                      <Label htmlFor={`${label}-yes`}>{translations.survey.yes}</Label>
+                  </FormItem>
+                  <FormItem className="flex items-center space-x-2">
+                      <FormControl>
+                          <RadioGroupItem value="no" id={`${label}-no`} />
+                      </FormControl>
+                      <Label htmlFor={`${label}-no`}>{translations.survey.no}</Label>
+                  </FormItem>
+              </RadioGroup>
+          </div>
+      )
+  }
 
   if (isSubmitted) {
     return (
       <Card className="bg-muted/50 text-center border-none shadow-none">
         <CardHeader>
-          <CardTitle>Görüşleriniz İçin Teşekkür Ederiz!</CardTitle>
-          <CardDescription>Bu yer için daha önce anket doldurdunuz. Katkınız, Kula'yı daha iyi bir yer haline getirmemize yardımcı oluyor.</CardDescription>
+          <CardTitle>{translations.survey.thanksTitle}</CardTitle>
+          <CardDescription>{translations.survey.thanksDescription}</CardDescription>
         </CardHeader>
       </Card>
     );
@@ -177,7 +177,7 @@ export function Survey({ poiId, poiName, onSubmitted }: { poiId: string; poiName
               name="guidance"
               render={({ field }) => (
                 <FormItem>
-                   <YesNoQuestionRow label="Rehberlik hizmeti aldınız mı?" value={field.value} onChange={field.onChange} />
+                   <YesNoQuestionRow label={translations.survey.guidanceLabel} value={field.value} onChange={field.onChange} />
                    <FormMessage />
                 </FormItem>
               )}
@@ -188,7 +188,7 @@ export function Survey({ poiId, poiName, onSubmitted }: { poiId: string; poiName
               name="staffing"
               render={({ field }) => (
                 <FormItem>
-                   <YesNoQuestionRow label="Sizinle ilgilenen bir personel oldu mu?" value={field.value} onChange={field.onChange} />
+                   <YesNoQuestionRow label={translations.survey.staffingLabel} value={field.value} onChange={field.onChange} />
                    <FormMessage />
                 </FormItem>
               )}
@@ -199,7 +199,7 @@ export function Survey({ poiId, poiName, onSubmitted }: { poiId: string; poiName
               name="cleanliness"
               render={({ field }) => (
                 <FormItem>
-                   <StarRatingRow label="Alanın temizliğini değerlendirin (5 üzerinden)" value={field.value} onChange={field.onChange} />
+                   <StarRatingRow label={translations.survey.cleanlinessLabel} value={field.value} onChange={field.onChange} />
                    <FormMessage className="text-right" />
                 </FormItem>
               )}
@@ -210,7 +210,7 @@ export function Survey({ poiId, poiName, onSubmitted }: { poiId: string; poiName
               name="transportation"
               render={({ field }) => (
                 <FormItem>
-                   <StarRatingRow label="Bu alana ulaşım kolaylığını değerlendirin" value={field.value} onChange={field.onChange} />
+                   <StarRatingRow label={translations.survey.transportationLabel} value={field.value} onChange={field.onChange} />
                    <FormMessage className="text-right" />
                 </FormItem>
               )}
@@ -221,7 +221,7 @@ export function Survey({ poiId, poiName, onSubmitted }: { poiId: string; poiName
               name="overall"
               render={({ field }) => (
                 <FormItem>
-                   <StarRatingRow label="Genel değerlendirmeniz nedir?" value={field.value} onChange={field.onChange} />
+                   <StarRatingRow label={translations.survey.overallLabel} value={field.value} onChange={field.onChange} />
                    <FormMessage className="text-right" />
                 </FormItem>
               )}
@@ -232,9 +232,9 @@ export function Survey({ poiId, poiName, onSubmitted }: { poiId: string; poiName
               name="comment"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Ek Yorumlarınız (İsteğe Bağlı)</FormLabel>
+                  <FormLabel>{translations.survey.commentLabel}</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Deneyiminizle ilgili eklemek istediğiniz başka bir şey var mı?" {...field} />
+                    <Textarea placeholder={translations.survey.commentPlaceholder} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -244,7 +244,7 @@ export function Survey({ poiId, poiName, onSubmitted }: { poiId: string; poiName
           <CardFooter className="px-0 pt-6">
             <Button type="submit" disabled={isSubmitting} size="lg">
               {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Anketi Gönder
+              {isSubmitting ? translations.survey.submittingButton : translations.survey.submitButton}
             </Button>
           </CardFooter>
         </form>

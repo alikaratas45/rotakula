@@ -215,9 +215,9 @@ export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
                             <div className="max-w-2xl mx-auto">
                                 <Card>
                                     <CardHeader>
-                                        <CardTitle>Ziyaretinizi Değerlendirin: {poi.name}</CardTitle>
+                                        <CardTitle>{translations.survey.title.replace('{poiName}', poi.name)}</CardTitle>
                                         <CardDescription>
-                                            Deneyiminizi bizimle paylaşarak Kula'yı daha iyi bir yer haline getirmemize yardımcı olun.
+                                            {translations.survey.description}
                                         </CardDescription>
                                     </CardHeader>
                                     <CardContent>
@@ -232,4 +232,3 @@ export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
         </APIProvider>
     );
 }
-

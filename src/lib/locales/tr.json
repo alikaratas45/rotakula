@@ -250,5 +250,24 @@
         "submit": "Yorumu Gönder",
         "sending": "Gönderiliyor...",
         "sent": "Gönderildi!"
+    },
+    "survey": {
+        "title": "Ziyaretinizi Değerlendirin: {poiName}",
+        "description": "Deneyiminizi bizimle paylaşarak Kula'yı daha iyi bir yer haline getirmemize yardımcı olun.",
+        "guidanceLabel": "Rehberlik hizmeti aldınız mı?",
+        "staffingLabel": "Sizinle ilgilenen bir personel oldu mu?",
+        "cleanlinessLabel": "Alanın temizliğini değerlendirin (5 üzerinden)",
+        "transportationLabel": "Bu alana ulaşım kolaylığını değerlendirin",
+        "overallLabel": "Genel değerlendirmeniz nedir?",
+        "commentLabel": "Ek Yorumlarınız (İsteğe Bağlı)",
+        "commentPlaceholder": "Deneyiminizle ilgili eklemek istediğiniz başka bir şey var mı?",
+        "submitButton": "Anketi Gönder",
+        "submittingButton": "Gönderiliyor...",
+        "thanksTitle": "Görüşleriniz İçin Teşekkür Ederiz!",
+        "thanksDescription": "Bu yer için daha önce anket doldurdunuz. Katkınız, Kula'yı daha iyi bir yer haline getirmemize yardımcı oluyor.",
+        "yes": "Evet",
+        "no": "Hayır",
+        "requiredError": "Lütfen bir seçim yapın.",
+        "ratingRequiredError": "Puanlama zorunludur."
     }
 }

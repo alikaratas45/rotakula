@@ -251,5 +251,24 @@
         "submit": "Kommentar Senden",
         "sending": "Wird gesendet...",
         "sent": "Gesendet!"
+    },
+    "survey": {
+        "title": "Bewerten Sie Ihren Besuch: {poiName}",
+        "description": "Helfen Sie uns, Kula zu einem besseren Ort zu machen, indem Sie Ihre Erfahrungen mit uns teilen.",
+        "guidanceLabel": "Haben Sie eine Führung erhalten?",
+        "staffingLabel": "Hat sich ein Mitarbeiter um Sie gekümmert?",
+        "cleanlinessLabel": "Bewerten Sie die Sauberkeit des Bereichs (von 5)",
+        "transportationLabel": "Bewerten Sie die Erreichbarkeit dieses Bereichs",
+        "overallLabel": "Wie lautet Ihre Gesamtbewertung?",
+        "commentLabel": "Zusätzliche Kommentare (optional)",
+        "commentPlaceholder": "Möchten Sie noch etwas zu Ihrer Erfahrung hinzufügen?",
+        "submitButton": "Umfrage Absenden",
+        "submittingButton": "Wird gesendet...",
+        "thanksTitle": "Vielen Dank für Ihr Feedback!",
+        "thanksDescription": "Sie haben die Umfrage für diesen Ort bereits ausgefüllt. Ihr Beitrag hilft uns, Kula zu einem besseren Ort zu machen.",
+        "yes": "Ja",
+        "no": "Nein",
+        "requiredError": "Bitte treffen Sie eine Auswahl.",
+        "ratingRequiredError": "Bewertung ist erforderlich."
     }
 }

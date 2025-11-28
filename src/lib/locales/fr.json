@@ -251,5 +251,24 @@
         "submit": "Envoyer le Commentaire",
         "sending": "Envoi en cours...",
         "sent": "Envoyé !"
+    },
+    "survey": {
+        "title": "Évaluez Votre Visite : {poiName}",
+        "description": "Aidez-nous à faire de Kula un meilleur endroit en partageant votre expérience avec nous.",
+        "guidanceLabel": "Avez-vous reçu un service de guide ?",
+        "staffingLabel": "Un membre du personnel s'est-il occupé de vous ?",
+        "cleanlinessLabel": "Évaluez la propreté de la zone (sur 5)",
+        "transportationLabel": "Évaluez la facilité de transport vers cette zone",
+        "overallLabel": "Quelle est votre évaluation globale ?",
+        "commentLabel": "Commentaires supplémentaires (facultatif)",
+        "commentPlaceholder": "Y a-t-il autre chose que vous aimeriez ajouter concernant votre expérience ?",
+        "submitButton": "Envoyer l'Enquête",
+        "submittingButton": "Envoi en cours...",
+        "thanksTitle": "Merci pour vos commentaires !",
+        "thanksDescription": "Vous avez déjà rempli l'enquête pour ce lieu. Votre contribution nous aide à faire de Kula un meilleur endroit.",
+        "yes": "Oui",
+        "no": "Non",
+        "requiredError": "Veuillez faire une sélection.",
+        "ratingRequiredError": "Une évaluation est requise."
     }
 }
