@@ -15,11 +15,12 @@ service cloud.firestore {
     }
 
     // Survey responses: Anyone can create a response. Anyone can read/list.
-    // We will control read access from the client-side code based on isAdmin state.
+    // Admin can delete.
     match /surveys/{surveyId} {
       allow create: if true;
       allow read, list: if true;
-      allow update, delete: if false;
+      allow update: if false;
+      allow delete: if isAdmin();
     }
     
     // Default-deny all other reads and writes for security.
@@ -28,3 +29,5 @@ service cloud.firestore {
     }
   }
 }
+
+    
