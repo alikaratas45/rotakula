@@ -125,7 +125,6 @@ export default function SurveyResultsPage() {
   }, [isAdmin]);
 
   const surveysQuery = useMemoFirebase(() => {
-    // This guard is critical. Do not create a query unless the user is a fully loaded admin.
     if (isUserLoading || !isAdmin) {
       return null;
     }
