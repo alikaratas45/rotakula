@@ -33,6 +33,7 @@ interface AppContextType {
   handleAdminLogin: () => void;
   handleAdminLogout: () => void;
   isAdmin: boolean;
+  isUserLoading: boolean;
 }
 
 const translations = { tr, en, fr, de };
@@ -46,9 +47,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [earnedBadges, setEarnedBadges] = useState<Badge[]>([]);
   const [allPois, setAllPois] = useState<any[]>([]);
   const { handleAdminLogin, handleAdminLogout } = useFirebase();
-  const { user } = useUser();
+  const { user, isUserLoading } = useUser();
 
-  const isAdmin = useMemo(() => user?.email === 'salihturbey@gmail.com', [user]);
+  const isAdmin = useMemo(() => user?.email === 'alikarataskula@gmail.com', [user]);
 
   // Fetch all POIs on mount to map badge IDs to badge data
   useEffect(() => {
@@ -130,7 +131,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     totalPoints,
     handleAdminLogin,
     handleAdminLogout,
-    isAdmin
+    isAdmin,
+    isUserLoading
   };
 
   return (
