@@ -125,6 +125,7 @@ export default function SurveyResultsPage() {
   }, [isAdmin]);
 
   const surveysQuery = useMemoFirebase(() => {
+    // This guard is critical. Do not create a query unless the user is a fully loaded admin.
     if (isUserLoading || !isAdmin) {
       return null;
     }
@@ -290,7 +291,7 @@ export default function SurveyResultsPage() {
       </Card>
 
 
-      {isLoadingSurveys ? (
+      {isLoadingSurveys && !surveys ? (
         <div className="flex justify-center py-16">
           <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
         </div>
