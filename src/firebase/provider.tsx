@@ -103,7 +103,7 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
                 duration: 15000,
             });
         } catch (error: any) {
-            if (error.code === 'auth/cancelled-popup-request') {
+            if (error.code === 'auth/cancelled-popup-request' || error.code === 'auth/popup-closed-by-user') {
                 return;
             }
 
