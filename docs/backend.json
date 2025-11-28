@@ -28,11 +28,45 @@
         "message",
         "createdAt"
       ]
+    },
+    "SurveyResponse": {
+      "title": "Survey Response",
+      "type": "object",
+      "description": "Represents a user's survey response for a Point of Interest.",
+      "properties": {
+        "poiId": {
+          "type": "string",
+          "description": "The ID of the Point of Interest being surveyed."
+        },
+        "poiName": {
+          "type": "string",
+          "description": "The name of the Point of Interest."
+        },
+        "rating": {
+          "type": "number",
+          "description": "The user's rating, from 1 to 5."
+        },
+        "comment": {
+          "type": "string",
+          "description": "The user's optional comment."
+        },
+        "userId": {
+          "type": "string",
+          "description": "The anonymous user ID of the respondent."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp of the submission."
+        }
+      },
+      "required": ["poiId", "poiName", "rating", "userId", "createdAt"]
     }
   },
   "auth": {
     "providers": [
-      "anonymous"
+      "anonymous",
+      "google.com"
     ]
   },
   "firestore": {
@@ -41,6 +75,12 @@
         "$ref": "#/entities/Feedback"
       },
       "description": "Stores user feedback and suggestions. Publicly readable and writable."
+    },
+    "/surveys/{surveyId}": {
+      "schema": {
+        "$ref": "#/entities/SurveyResponse"
+      },
+      "description": "Stores survey responses for POIs. Publicly writable, but only readable by admins."
     }
   }
 }
