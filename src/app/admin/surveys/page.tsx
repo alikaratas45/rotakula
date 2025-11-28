@@ -49,17 +49,33 @@ export default function SurveyResultsPage() {
   
   const [pois, setPois] = useState<PointOfInterest[]>([]);
   const [filters, setFilters] = useState<{ poiId: string; rating: number }>({ poiId: 'all', rating: 0 });
+  const [initialLoading, setInitialLoading] = useState(true);
+
+  useEffect(() => {
+    // Combine isUserLoading and initial admin check
+    if (!isUserLoading) {
+      if (!isAdmin) {
+        router.push('/');
+      } else {
+        setInitialLoading(false);
+      }
+    }
+  }, [isAdmin, isUserLoading, router]);
 
   useEffect(() => {
     async function fetchPois() {
         const allPois = await getPois('tr');
         setPois(allPois);
     }
-    fetchPois();
-  }, []);
+    if (isAdmin) {
+      fetchPois();
+    }
+  }, [isAdmin]);
 
   const surveysQuery = useMemoFirebase(() => {
-    if (!isAdmin) return null; // Do not query if not admin
+    // Only build the query if the user is an admin
+    if (!isAdmin) return null;
+    
     let q: Query = query(collection(firestore, 'surveys'), orderBy('createdAt', 'desc'));
     if (filters.poiId !== 'all') {
         q = query(q, where('poiId', '==', filters.poiId));
@@ -79,18 +95,12 @@ export default function SurveyResultsPage() {
   }, [surveys]);
 
 
-  if (isUserLoading) {
+  if (initialLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
-  }
-
-  // Redirect if not admin after loading is complete
-  if (!isAdmin) {
-    router.push('/');
-    return null;
   }
   
   const handleFilterChange = (type: 'poiId' | 'rating', value: string | number) => {
