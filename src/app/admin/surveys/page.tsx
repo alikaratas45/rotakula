@@ -106,16 +106,11 @@ export default function SurveyResultsPage() {
   
   const [pois, setPois] = useState<PointOfInterest[]>([]);
   const [filters, setFilters] = useState<{ poiId: string; rating: number }>({ poiId: 'all', rating: 0 });
-  const [initialLoading, setInitialLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isUserLoading) {
-      if (!isAdmin) {
+    if (!isUserLoading && !isAdmin) {
         router.push('/');
-      } else {
-        setInitialLoading(false);
-      }
     }
   }, [isAdmin, isUserLoading, router]);
 
@@ -130,7 +125,11 @@ export default function SurveyResultsPage() {
   }, [isAdmin]);
 
   const surveysQuery = useMemoFirebase(() => {
-    if (isUserLoading || !isAdmin) return null;
+    // This is the critical check:
+    // Do not attempt to create a query until the user's auth state is fully loaded AND they are confirmed to be an admin.
+    if (isUserLoading || !isAdmin) {
+      return null;
+    }
     
     let q: Query = query(collection(firestore, 'surveys'), orderBy('createdAt', 'desc'));
     if (filters.poiId !== 'all') {
@@ -142,7 +141,7 @@ export default function SurveyResultsPage() {
     return q;
   }, [firestore, filters, isAdmin, isUserLoading]);
 
-  const { data: surveys, isLoading: isLoadingSurveys } = useCollection<SurveyResponse>(surveysQuery);
+  const { data: surveys, isLoading: isLoadingSurveys, error } = useCollection<SurveyResponse>(surveysQuery);
 
   const averageRatings = useMemo(() => {
     if (!surveys || surveys.length === 0) {
@@ -177,7 +176,7 @@ export default function SurveyResultsPage() {
   }, [surveys]);
 
 
-  if (initialLoading || isUserLoading) {
+  if (isUserLoading || (!isAdmin && !isUserLoading)) {
     return (
       <div className="flex h-screen items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin" />
@@ -368,5 +367,3 @@ export default function SurveyResultsPage() {
     </div>
   );
 }
-
-    
