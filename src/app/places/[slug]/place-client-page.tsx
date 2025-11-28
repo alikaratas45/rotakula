@@ -13,13 +13,16 @@ import { useToast } from '@/hooks/use-toast';
 import { useApp } from '@/context/app-context';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
+import { Survey } from '@/components/survey';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
     const heroImage = getImageById(poi.imageId);
-    const { language, translations, setSurveyState } = useApp();
+    const { language, translations } = useApp();
     const router = useRouter();
     const searchParams = useSearchParams();
+    const [showSurvey, setShowSurvey] = useState(false);
 
     const [isPlaying, setIsPlaying] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
@@ -61,10 +64,6 @@ export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
             setIsPaused(false);
             charIndexRef.current = 0;
             setRemainingText(narrationText); 
-            const submittedSurveys = JSON.parse(localStorage.getItem('kula-submitted-surveys') || '{}');
-            if (!submittedSurveys[poi.id]) {
-                setSurveyState({ isOpen: true, poi: poi });
-            }
         };
 
         utterance.onerror = (event) => {
@@ -86,7 +85,7 @@ export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
             setIsPlaying(true);
             setIsPaused(false);
         }, 100);
-    }, [language, narrationText, poi.id, poi, setSurveyState, toast, translations]);
+    }, [language, narrationText, toast, translations]);
 
     const handlePlayPause = useCallback(() => {
         const synth = synthRef.current;
@@ -127,10 +126,10 @@ export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
         
         const shouldAutoplay = searchParams.get('autoplay') === 'true';
         if (shouldAutoplay) {
+            setShowSurvey(true);
             const newPath = `/places/${poi.slug}`;
             router.replace(newPath, { scroll: false });
             setTimeout(() => {
-                // Check if synth is ready, otherwise wait for voices
                 const synth = synthRef.current;
                 if (synth && synth.getVoices().length > 0) {
                     startPlayback(narrationText);
@@ -209,6 +208,26 @@ export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
                         </aside>
                     </div>
                 </div>
+
+                {showSurvey && (
+                    <section className="py-12 bg-muted">
+                        <div className="container px-4">
+                            <div className="max-w-2xl mx-auto">
+                                <Card>
+                                    <CardHeader>
+                                        <CardTitle>Ziyaretinizi Değerlendirin: {poi.name}</CardTitle>
+                                        <CardDescription>
+                                            Deneyiminizi bizimle paylaşarak Kula'yı daha iyi bir yer haline getirmemize yardımcı olun.
+                                        </CardDescription>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <Survey poiId={poi.id} poiName={poi.name} onSubmitted={() => setShowSurvey(false)} />
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        </div>
+                    </section>
+                )}
             </article>
         </APIProvider>
     );

@@ -38,8 +38,6 @@ interface AppContextType {
   handleAdminLogout: () => void;
   isAdmin: boolean;
   isUserLoading: boolean;
-  surveyState: SurveyState;
-  setSurveyState: React.Dispatch<React.SetStateAction<SurveyState>>;
 }
 
 const translations = { tr, en, fr, de };
@@ -54,7 +52,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [earnedBadges, setEarnedBadges] = useState<Badge[]>([]);
   const [allPois, setAllPois] = useState<any[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [surveyState, setSurveyState] = useState<SurveyState>({ isOpen: false, poi: null });
   const { user, isUserLoading } = useUser();
   const router = useRouter();
   const { toast } = useToast();
@@ -167,8 +164,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     handleAdminLogout,
     isAdmin,
     isUserLoading,
-    surveyState,
-    setSurveyState,
   };
 
   return (

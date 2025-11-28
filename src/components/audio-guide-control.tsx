@@ -12,13 +12,12 @@ import { Radio, RadioTower } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useApp } from '@/context/app-context';
 import { PlayIcon } from 'lucide-react';
-import { Survey } from './survey';
 
 const PROXIMITY_THRESHOLD_ENTER = 50; // meters to consider a POI 'visited'
 const PROXIMITY_THRESHOLD_EXIT = 150; // meters to consider 'left' the POI
 
 export function AudioGuideControl() {
-    const { language, translations, isAudioGuideActive, setIsAudioGuideActive, addBadge, earnedBadges, setSurveyState } = useApp();
+    const { language, translations, isAudioGuideActive, setIsAudioGuideActive, addBadge, earnedBadges } = useApp();
     const router = useRouter();
 
     const [pois, setPois] = useState<PointOfInterest[]>([]);
@@ -164,7 +163,7 @@ export function AudioGuideControl() {
             }
         }
 
-    }, [userLocation, pois, isAudioGuideActive, visitedPoiId, handlePlayAudioForPoi, toast, translations, playProximityAlert, addBadge, earnedBadges, setSurveyState]);
+    }, [userLocation, pois, isAudioGuideActive, visitedPoiId, handlePlayAudioForPoi, toast, translations, playProximityAlert, addBadge, earnedBadges]);
 
 
     const toggleGuide = () => {
