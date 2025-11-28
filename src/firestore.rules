@@ -5,20 +5,19 @@ service cloud.firestore {
   match /databases/{database}/documents {
     
     function isAdmin() {
+      // Ensure the user is authenticated and their email matches the admin email.
       return request.auth != null && request.auth.token.email == "alikarataskula@gmail.com";
     }
 
-    // Feedback Collection: Anyone can read and create. No one can update or delete.
     match /feedback/{feedbackId} {
       allow read, create: if true;
       allow update, delete: if false;
     }
 
-    // Survey responses: Anyone can create a response. Admin can read, list and delete.
     match /surveys/{surveyId} {
-      allow create: if true;
-      allow read, list, delete: if isAdmin();
-      allow update: if false;
+      allow create: if true; // Anyone can submit a survey.
+      allow read, list, delete: if isAdmin(); // Only admin can read, list, or delete surveys.
+      allow update: if false; // No one can update a survey.
     }
     
     // Default-deny all other reads and writes for security.

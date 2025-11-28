@@ -3,7 +3,7 @@
 
 import { useMemo, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useFirestore, useCollection, useMemoFirebase, FirestorePermissionError, errorEmitter } from '@/firebase';
+import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { collection, query, orderBy, where, Query, doc, deleteDoc } from 'firebase/firestore';
 import { Loader2, Star, LogOut, Filter, X, Smile, ThumbsUp, Users, Bus, Sparkles, Trash2, Check, Hand } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -125,8 +125,6 @@ export default function SurveyResultsPage() {
   }, [isAdmin]);
 
   const surveysQuery = useMemoFirebase(() => {
-    // This is the critical check:
-    // Do not attempt to create a query until the user's auth state is fully loaded AND they are confirmed to be an admin.
     if (isUserLoading || !isAdmin) {
       return null;
     }
