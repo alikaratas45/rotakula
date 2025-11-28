@@ -129,7 +129,7 @@ export default function SurveyResultsPage() {
       return null;
     }
     
-    let q: Query = query(collection(firestore, 'surveys'), orderBy('createdAt', 'desc'));
+    let q: Query = query(collection(firestore, 'surveys'));
     if (filters.poiId !== 'all') {
         q = query(q, where('poiId', '==', filters.poiId));
     }
@@ -210,6 +210,12 @@ export default function SurveyResultsPage() {
       setIsDeleting(null);
     }
   };
+
+  const sortedSurveys = useMemo(() => {
+    if (!surveys) return [];
+    // Sort by creation date descending on the client side
+    return [...surveys].sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
+  }, [surveys]);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -296,8 +302,8 @@ export default function SurveyResultsPage() {
         </div>
       ) : (
         <div className="space-y-4">
-          {surveys && surveys.length > 0 ? (
-            surveys.map((survey) => (
+          {sortedSurveys && sortedSurveys.length > 0 ? (
+            sortedSurveys.map((survey) => (
               <Card key={survey.id}>
                 <CardHeader>
                   <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
