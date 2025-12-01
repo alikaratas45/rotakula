@@ -79,7 +79,6 @@ function ContentForm({ contentItem, onFinished }: { contentItem?: Content; onFin
         // Update existing content - slug/ID does not change
         const contentRef = doc(firestore, 'content', contentItem.id);
         await updateDoc(contentRef, {
-          // Title updates are allowed, but slug remains the same for stable URLs
           title: data.title,
           body: data.body,
           imageUrl: data.imageUrl,
@@ -117,10 +116,9 @@ function ContentForm({ contentItem, onFinished }: { contentItem?: Content; onFin
             <FormItem>
               <FormLabel>Başlık</FormLabel>
               <FormControl>
-                {/* For existing items, slug is fixed, so title can be edited.
-                    For new items, title is used to generate the slug. */}
-                <Input placeholder="İçerik başlığı..." {...field} />
+                <Input placeholder="İçerik başlığı..." {...field} disabled={!!contentItem} />
               </FormControl>
+              { !contentItem && <p className="text-sm text-muted-foreground">Başlık, sayfa URL'sini oluşturmak için kullanılır ve sonradan değiştirilemez.</p> }
               <FormMessage />
             </FormItem>
           )}
@@ -206,7 +204,7 @@ function ContentCard({ contentItem }: { contentItem: Content }) {
       </CardHeader>
       <CardContent>
          <div className="flex items-center gap-2 bg-muted p-2 rounded-md w-full sm:w-auto">
-            <span className="text-sm font-semibold">QR Kodu Yolu:</span>
+            <span className="text-sm font-semibold">Yol:</span>
             <code className="text-sm font-mono break-all">{contentPath}</code>
             <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0" onClick={copyToClipboard} title="QR kod için tam linki kopyala">
                 {copied ? <Check className="h-4 w-4 text-green-500"/> : <Copy className="h-4 w-4"/>}
@@ -321,3 +319,5 @@ export default function ContentAdminPage() {
     </div>
   );
 }
+
+    

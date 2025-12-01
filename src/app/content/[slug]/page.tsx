@@ -37,16 +37,16 @@ const MarkdownRenderer = ({ text }: { text: string | undefined | null }) => {
 };
 
 export default function ContentPage({ params }: { params: { slug: string } }) {
-  const { slug: contentSlug } = params;
+  const { slug } = params;
   const firestore = useFirestore();
   const { language, translations } = useApp();
   const { toast } = useToast();
   const searchParams = useSearchParams();
 
   const contentRef = useMemoFirebase(() => {
-    if (!firestore || !contentSlug) return null;
-    return doc(firestore, 'content', contentSlug);
-  }, [firestore, contentSlug]);
+    if (!firestore || !slug) return null;
+    return doc(firestore, 'content', slug);
+  }, [firestore, slug]);
 
   const { data: content, isLoading, error } = useDoc<Content>(contentRef);
 
@@ -57,16 +57,14 @@ export default function ContentPage({ params }: { params: { slug: string } }) {
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   
   const narrationText = content?.body || '';
-  const [remainingText, setRemainingText] = useState(narrationText);
+  const [remainingText, setRemainingText] = useState('');
   const charIndexRef = useRef(0);
   
-  // This effect ensures we handle the case where the document doesn't exist.
   useEffect(() => {
-    if (!isLoading && !content && contentSlug) {
+    if (!isLoading && !error && !content && slug) {
       notFound();
     }
-  }, [isLoading, content, contentSlug]);
-
+  }, [isLoading, error, content, slug]);
 
   const startPlayback = useCallback((textToSpeak: string) => {
       const synth = synthRef.current;
@@ -154,20 +152,16 @@ export default function ContentPage({ params }: { params: { slug: string } }) {
         synthRef.current = window.speechSynthesis;
     }
 
-    // If content is loaded, set up the text for narration
     if (content) {
         setRemainingText(content.body);
         charIndexRef.current = 0;
     }
     
-    // Only attempt to autoplay if content is fully loaded
     const shouldAutoplay = searchParams.get('autoplay') === 'true';
     if (shouldAutoplay && content?.body) {
         const synth = synthRef.current;
-        // Function to start playback safely
         const safeStartPlayback = () => startPlayback(content.body);
 
-        // Check if voices are loaded. If not, wait for them.
         if (synth && synth.getVoices().length > 0) {
             safeStartPlayback();
         } else if (synth) {
@@ -175,7 +169,6 @@ export default function ContentPage({ params }: { params: { slug: string } }) {
         }
     }
 
-    // Cleanup function: stop speech when component unmounts or content changes
     return () => {
         if (synthRef.current?.speaking) {
             synthRef.current.cancel();
@@ -192,8 +185,6 @@ export default function ContentPage({ params }: { params: { slug: string } }) {
       </div>
     );
   }
-  
-  // Error state is handled by the notFound() call in the effect hook
 
   return (
     <article className="container mx-auto px-4 py-8 md:py-12">
@@ -233,3 +224,5 @@ export default function ContentPage({ params }: { params: { slug: string } }) {
     </article>
   );
 }
+
+    
