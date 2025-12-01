@@ -98,9 +98,8 @@ const YesNoStatCard = ({ title, yesPercent, noPercent, icon: Icon }: { title: st
     </Card>
 )
 
-export default function SurveyResultsPage() {
-  const router = useRouter();
-  const { isAdmin, isUserLoading, handleAdminLogout } = useApp();
+function AdminSurveyDashboard() {
+  const { handleAdminLogout } = useApp();
   const firestore = useFirestore();
   const { toast } = useToast();
   
@@ -109,25 +108,15 @@ export default function SurveyResultsPage() {
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isUserLoading && !isAdmin) {
-        router.push('/');
-    }
-  }, [isAdmin, isUserLoading, router]);
-
-  useEffect(() => {
     async function fetchPois() {
         const allPois = await getPois('tr');
         setPois(allPois);
     }
-    if (isAdmin) {
-      fetchPois();
-    }
-  }, [isAdmin]);
+    fetchPois();
+  }, []);
 
   const surveysQuery = useMemoFirebase(() => {
-    if (isUserLoading || !isAdmin) {
-      return null;
-    }
+    if (!firestore) return null;
     
     let q: Query = query(collection(firestore, 'surveys'));
     if (filters.poiId !== 'all') {
@@ -137,7 +126,7 @@ export default function SurveyResultsPage() {
         q = query(q, where('overall', '==', filters.rating));
     }
     return q;
-  }, [firestore, filters.poiId, filters.rating, isAdmin, isUserLoading]);
+  }, [firestore, filters.poiId, filters.rating]);
 
   const { data: surveys, isLoading: isLoadingSurveys, error } = useCollection<SurveyResponse>(surveysQuery);
 
@@ -172,15 +161,6 @@ export default function SurveyResultsPage() {
         staffingNo: (((count - total.staffingYes) / count) * 100).toFixed(0),
     };
   }, [surveys]);
-
-
-  if (isUserLoading || (!isAdmin && !isUserLoading)) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    );
-  }
   
   const handleFilterChange = (type: 'poiId' | 'rating', value: string | number) => {
     setFilters(prev => ({...prev, [type]: value}));
@@ -191,7 +171,6 @@ export default function SurveyResultsPage() {
   }
 
   const handleDeleteSurvey = async (surveyId: string) => {
-    if (!isAdmin) return;
     setIsDeleting(surveyId);
     try {
       const surveyRef = doc(firestore, 'surveys', surveyId);
@@ -217,6 +196,7 @@ export default function SurveyResultsPage() {
     return [...surveys].sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
   }, [surveys]);
 
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
@@ -224,12 +204,10 @@ export default function SurveyResultsPage() {
             <h1 className="text-3xl font-bold font-headline">Anket Sonuçları</h1>
             <p className="text-muted-foreground">Ziyaretçi deneyimlerini ve geri bildirimlerini inceleyin.</p>
         </div>
-         {isAdmin ? (
-            <Button onClick={handleAdminLogout} variant="outline">
-                <LogOut className="mr-2 h-4 w-4" />
-                Çıkış Yap
-            </Button>
-         ) : null}
+        <Button onClick={handleAdminLogout} variant="outline">
+            <LogOut className="mr-2 h-4 w-4" />
+            Çıkış Yap
+        </Button>
       </div>
       
       <div className="mb-8">
@@ -369,5 +347,29 @@ export default function SurveyResultsPage() {
         </div>
       )}
     </div>
-  );
+  )
 }
+
+
+export default function SurveyResultsPage() {
+  const router = useRouter();
+  const { isAdmin, isUserLoading } = useApp();
+  
+  useEffect(() => {
+    if (!isUserLoading && !isAdmin) {
+        router.push('/');
+    }
+  }, [isAdmin, isUserLoading, router]);
+
+  if (isUserLoading || !isAdmin) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
+  
+  return <AdminSurveyDashboard />;
+}
+
+    
