@@ -15,18 +15,7 @@ export default function NarMotifiPage() {
   const { toast } = useToast();
   const searchParams = useSearchParams();
 
-  const pageContent = [
-    "Türk evleri genel olarak ahşap işçiliği ağırlıklıdır. Evlerin merdiven babaları, tavan göbeği hepsi ahşap olup birçok farklı figür tasvir edilmiştir. En çok kullanılan figürlerin başında nar motifi gelmektedir. Nar; bereketi sembolize ettiği için her Türk evinin avlusunun vazgeçilmez meyvesi olması ile birlikte, ahşap işçiliği için de önemli bir sembol olarak kullanılmıştır.  Ayrıca Osmanlı’da narın başka amaçlar için de kullanıldığı bilinmektedir. Bazı yörelerde genç erkekler evlenmek istedikleri kişiye nar sunarak evlenme teklifinde bulunurlardı. Bunu da günümüzde de halen bilinen şu türküde de görebiliriz:",
-  ];
-
-  const poem = [
-      "Şu gelen yar olaydı,",
-      "Elinde nar olaydı,",
-      "İkimiz bir gömlekte",
-      "Yakası dar olaydı."
-  ];
-  
-  const narrationText = [...pageContent, ...poem].join(' ');
+  const narrationText = [...translations.narMotifi.content, ...translations.narMotifi.poem].join(' ');
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -117,6 +106,10 @@ export default function NarMotifiPage() {
   }, [isPaused, remainingText, narrationText, toast, translations, startPlayback]);
 
   useEffect(() => {
+    setRemainingText(narrationText);
+  }, [narrationText]);
+  
+  useEffect(() => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       synthRef.current = window.speechSynthesis;
     }
@@ -156,7 +149,7 @@ export default function NarMotifiPage() {
             <div className="relative z-10 container px-4 py-8">
                 <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight drop-shadow-lg flex items-center gap-3">
                     <Gem className="h-10 w-10" />
-                    Nar Motifi
+                    {translations.narMotifi.title}
                 </h1>
             </div>
         </section>
@@ -179,11 +172,11 @@ export default function NarMotifiPage() {
               </Button>
            </div>
           <div className="prose prose-lg max-w-none text-foreground/90">
-            {pageContent.map((paragraph, index) => (
+            {translations.narMotifi.content.map((paragraph, index) => (
               <p key={index}>{paragraph}</p>
             ))}
             <blockquote className="border-l-4 border-primary pl-4 italic my-8 text-center">
-                 {poem.map((line, index) => (
+                 {translations.narMotifi.poem.map((line, index) => (
                     <p key={index} className="my-1">{line}</p>
                 ))}
             </blockquote>

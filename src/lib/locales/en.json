@@ -270,5 +270,17 @@
         "no": "No",
         "requiredError": "Please make a selection.",
         "ratingRequiredError": "Rating is required."
+    },
+    "narMotifi": {
+        "title": "Pomegranate Motif",
+        "content": [
+            "Turkish houses are generally dominated by woodwork. The newel posts of the stairs and the ceiling centerpieces are all made of wood, depicting many different figures. The pomegranate motif is one of the most used figures. The pomegranate, symbolizing abundance, is an indispensable fruit in the courtyard of every Turkish house and is also used as an important symbol in woodwork. It is also known that pomegranates were used for other purposes in the Ottoman Empire. In some regions, young men would propose to the person they wanted to marry by offering a pomegranate. We can see this in a well-known folk song today:"
+        ],
+        "poem": [
+            "If only the one coming were my love,",
+            "If only there were a pomegranate in her hand,",
+            "If only we were in one shirt,",
+            "With its collar tight."
+        ]
     }
 }

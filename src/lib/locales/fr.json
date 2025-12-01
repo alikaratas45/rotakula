@@ -270,5 +270,17 @@
         "no": "Non",
         "requiredError": "Veuillez faire une sélection.",
         "ratingRequiredError": "Une évaluation est requise."
+    },
+    "narMotifi": {
+        "title": "Motif de la Grenade",
+        "content": [
+            "Les maisons turques sont généralement dominées par le travail du bois. Les poteaux d'escalier et les rosaces de plafond sont tous en bois et représentent de nombreuses figures différentes. Le motif de la grenade est l'une des figures les plus utilisées. La grenade, symbolisant l'abondance, est un fruit indispensable dans la cour de chaque maison turque et est également utilisée comme un symbole important dans le travail du bois. On sait également que les grenades étaient utilisées à d'autres fins dans l'Empire ottoman. Dans certaines régions, les jeunes hommes demandaient en mariage la personne qu'ils souhaitaient épouser en lui offrant une grenade. On peut le voir dans une chanson folklorique bien connue aujourd'hui :"
+        ],
+        "poem": [
+            "Si seulement celle qui vient était mon amour,",
+            "Si seulement il y avait une grenade dans sa main,",
+            "Si seulement nous étions dans une seule chemise,",
+            "Avec son col serré."
+        ]
     }
 }

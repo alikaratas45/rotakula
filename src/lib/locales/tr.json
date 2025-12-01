@@ -269,5 +269,17 @@
         "no": "Hayır",
         "requiredError": "Lütfen bir seçim yapın.",
         "ratingRequiredError": "Puanlama zorunludur."
+    },
+    "narMotifi": {
+        "title": "Nar Motifi",
+        "content": [
+            "Türk evleri genel olarak ahşap işçiliği ağırlıklıdır. Evlerin merdiven babaları, tavan göbeği hepsi ahşap olup birçok farklı figür tasvir edilmiştir. En çok kullanılan figürlerin başında nar motifi gelmektedir. Nar; bereketi sembolize ettiği için her Türk evinin avlusunun vazgeçilmez meyvesi olması ile birlikte, ahşap işçiliği için de önemli bir sembol olarak kullanılmıştır.  Ayrıca Osmanlı’da narın başka amaçlar için de kullanıldığı bilinmektedir. Bazı yörelerde genç erkekler evlenmek istedikleri kişiye nar sunarak evlenme teklifinde bulunurlardı. Bunu da günümüzde de halen bilinen şu türküde de görebiliriz:"
+        ],
+        "poem": [
+            "Şu gelen yar olaydı,",
+            "Elinde nar olaydı,",
+            "İkimiz bir gömlekte",
+            "Yakası dar olaydı."
+        ]
     }
 }
