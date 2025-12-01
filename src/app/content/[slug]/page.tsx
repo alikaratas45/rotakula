@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState, useRef, useCallback } from 'react';
@@ -34,7 +35,6 @@ const MarkdownRenderer = ({ text }: { text: string | undefined | null }) => {
         </div>
     );
 };
-
 
 export default function ContentPage({ params }: { params: { slug: string } }) {
   const { slug: contentSlug } = params;

@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
-import { Loader2, PlusCircle, Edit, Trash2, Link as LinkIcon, Copy, Check, ExternalLink } from 'lucide-react';
+import { Loader2, PlusCircle, Edit, Trash2, Copy, Check, ExternalLink } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -20,17 +20,24 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { useToast } from '@/hooks/use-toast';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { formatDistanceToNow } from 'date-fns';
-import { tr } from 'date-fns/locale';
+import { tr, enUS, fr, de } from 'date-fns/locale';
+
+const locales: { [key: string]: Locale } = { tr, en: enUS, fr, de };
 
 const slugify = (text: string) => {
-  return text
-    .toString()
-    .toLowerCase()
-    .trim()
+  const a = 'şŞıİçÇüÜöÖğĞ·/_,:;'
+  const b = 'sSiIcCüUoOgG------'
+  const p = new RegExp(a.split('').join('|'), 'g')
+
+  return text.toString().toLowerCase()
     .replace(/\s+/g, '-') // Replace spaces with -
+    .replace(p, c => b.charAt(a.indexOf(c))) // Replace special characters
+    .replace(/&/g, '-and-') // Replace & with 'and'
     .replace(/[^\w\-]+/g, '') // Remove all non-word chars
-    .replace(/\-\-+/g, '-'); // Replace multiple - with single -
-};
+    .replace(/\-\-+/g, '-') // Replace multiple - with single -
+    .replace(/^-+/, '') // Trim - from start of text
+    .replace(/-+$/, '') // Trim - from end of text
+}
 
 const contentSchema = z.object({
   title: z.string().min(3, { message: 'Başlık en az 3 karakter olmalıdır.' }),
@@ -72,7 +79,8 @@ function ContentForm({ contentItem, onFinished }: { contentItem?: Content; onFin
         // Update existing content - slug/ID does not change
         const contentRef = doc(firestore, 'content', contentItem.id);
         await updateDoc(contentRef, {
-          title: data.title, // Allow title updates
+          // Title updates are allowed, but slug remains the same for stable URLs
+          title: data.title,
           body: data.body,
           imageUrl: data.imageUrl,
           updatedAt: serverTimestamp(),
@@ -109,9 +117,10 @@ function ContentForm({ contentItem, onFinished }: { contentItem?: Content; onFin
             <FormItem>
               <FormLabel>Başlık</FormLabel>
               <FormControl>
-                <Input placeholder="İçerik başlığı..." {...field} disabled={!!contentItem} />
+                {/* For existing items, slug is fixed, so title can be edited.
+                    For new items, title is used to generate the slug. */}
+                <Input placeholder="İçerik başlığı..." {...field} />
               </FormControl>
-              {!!contentItem && <p className="text-xs text-muted-foreground">İçerik yolu değişmemesi için başlık düzenlenemez.</p>}
               <FormMessage />
             </FormItem>
           )}
@@ -161,8 +170,10 @@ function ContentCard({ contentItem }: { contentItem: Content }) {
   const firestore = useFirestore();
   const { toast } = useToast();
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const { language } = useApp();
+  const currentLocale = locales[language] || enUS;
 
-  const contentPath = `/sayfa/${contentItem.slug}`;
+  const contentPath = `/content/${contentItem.slug}`;
 
   const handleDelete = async () => {
     if (!firestore) return;
@@ -190,59 +201,57 @@ function ContentCard({ contentItem }: { contentItem: Content }) {
       <CardHeader>
         <CardTitle>{contentItem.title}</CardTitle>
         <CardDescription>
-          Son Güncelleme: {contentItem.updatedAt ? formatDistanceToNow(new Date(contentItem.updatedAt.seconds * 1000), { addSuffix: true, locale: tr }) : 'Bilinmiyor'}
+          Son Güncelleme: {contentItem.updatedAt ? formatDistanceToNow(new Date(contentItem.updatedAt.seconds * 1000), { addSuffix: true, locale: currentLocale }) : 'Bilinmiyor'}
         </CardDescription>
       </CardHeader>
       <CardContent>
          <div className="flex items-center gap-2 bg-muted p-2 rounded-md w-full sm:w-auto">
             <span className="text-sm font-semibold">QR Kodu Yolu:</span>
-            <code className="text-sm font-semibold break-all">{contentPath}</code>
+            <code className="text-sm font-mono break-all">{contentPath}</code>
             <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0" onClick={copyToClipboard} title="QR kod için tam linki kopyala">
                 {copied ? <Check className="h-4 w-4 text-green-500"/> : <Copy className="h-4 w-4"/>}
             </Button>
         </div>
       </CardContent>
-      <CardFooter className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div className="flex items-center gap-2 self-end">
-          <Button asChild variant="secondary" size="sm">
-            <Link href={contentPath} target="_blank">
-                <ExternalLink className="mr-2 h-4 w-4" />
-                Sayfaya Git
-            </Link>
-          </Button>
-          <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="sm"><Edit className="mr-2 h-4 w-4" /> Düzenle</Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[625px]">
-              <DialogHeader>
-                <DialogTitle>İçeriği Düzenle</DialogTitle>
-              </DialogHeader>
-              <ContentForm contentItem={contentItem} onFinished={() => setIsFormOpen(false)} />
-            </DialogContent>
-          </Dialog>
-          
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive" size="sm" disabled={isDeleting}>
-                {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
-                Sil
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Silmek istediğinize emin misiniz?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Bu işlem geri alınamaz. "{contentItem.title}" başlıklı içeriği kalıcı olarak sileceksiniz.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>İptal</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDelete} className="bg-destructive hover:bg-destructive/90 text-destructive-foreground">Evet, Sil</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
+      <CardFooter className="flex flex-wrap justify-end items-center gap-2">
+        <Button asChild variant="secondary" size="sm">
+          <Link href={contentPath} target="_blank">
+              <ExternalLink className="mr-2 h-4 w-4" />
+              Sayfaya Git
+          </Link>
+        </Button>
+        <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+          <DialogTrigger asChild>
+            <Button variant="outline" size="sm"><Edit className="mr-2 h-4 w-4" /> Düzenle</Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[625px]">
+            <DialogHeader>
+              <DialogTitle>İçeriği Düzenle</DialogTitle>
+            </DialogHeader>
+            <ContentForm contentItem={contentItem} onFinished={() => setIsFormOpen(false)} />
+          </DialogContent>
+        </Dialog>
+        
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="destructive" size="sm" disabled={isDeleting}>
+              {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
+              Sil
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Silmek istediğinize emin misiniz?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Bu işlem geri alınamaz. "{contentItem.title}" başlıklı içeriği kalıcı olarak sileceksiniz.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>İptal</AlertDialogCancel>
+              <AlertDialogAction onClick={handleDelete} className="bg-destructive hover:bg-destructive/90 text-destructive-foreground">Evet, Sil</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </CardFooter>
     </Card>
   );
