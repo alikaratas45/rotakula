@@ -3,14 +3,15 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { collection, query, orderBy, where, Query, doc, deleteDoc } from 'firebase/firestore';
-import { Loader2, Star, LogOut, Filter, X, Smile, ThumbsUp, Users, Bus, Sparkles, Trash2, Check, Hand } from 'lucide-react';
+import { Loader2, Star, LogOut, Filter, X, Smile, ThumbsUp, Users, Bus, Sparkles, Trash2, Check, Hand, FileSpreadsheet } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { formatDistanceToNow } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import { useApp } from '@/context/app-context';
 import { getPois } from '@/lib/kula-data';
 import type { PointOfInterest } from '@/lib/types';
+import * as XLSX from 'xlsx';
 import {
   Select,
   SelectContent,
@@ -188,6 +189,47 @@ export default function AdminSurveyDashboard() {
     }
   };
 
+  const handleExportToExcel = () => {
+    if (!surveys || surveys.length === 0) {
+      toast({
+        title: "Veri Yok",
+        description: "Dışa aktarılacak anket verisi bulunamadı.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const formattedData = surveys.map(s => ({
+      'Yer Adı': s.poiName,
+      'Genel Değerlendirme': s.overall,
+      'Temizlik': s.cleanliness,
+      'Ulaşım Kolaylığı': s.transportation,
+      'Rehberlik Hizmeti': s.guidance ? 'Evet' : 'Hayır',
+      'Personel İlgisi': s.staffing ? 'Evet' : 'Hayır',
+      'Yorum': s.comment,
+      'Tarih': format(new Date(s.createdAt.seconds * 1000), 'dd/MM/yyyy HH:mm'),
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(formattedData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Anketler");
+    
+    // Set column widths
+    worksheet['!cols'] = [
+      { wch: 30 }, // Yer Adı
+      { wch: 15 }, // Genel Değerlendirme
+      { wch: 10 }, // Temizlik
+      { wch: 15 }, // Ulaşım Kolaylığı
+      { wch: 15 }, // Rehberlik Hizmeti
+      { wch: 15 }, // Personel İlgisi
+      { wch: 50 }, // Yorum
+      { wch: 20 }, // Tarih
+    ];
+
+    XLSX.writeFile(workbook, "anket_sonuclari.xlsx");
+  };
+
+
   const sortedSurveys = useMemo(() => {
     if (!surveys) return [];
     // Sort by creation date descending on the client side
@@ -227,9 +269,15 @@ export default function AdminSurveyDashboard() {
       </div>
       
       <Card className="mb-8">
-        <CardHeader className="flex flex-row items-center gap-4">
-           <Filter className="h-5 w-5" />
-           <CardTitle>Filtreler</CardTitle>
+        <CardHeader className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+           <div className="flex items-center gap-4">
+             <Filter className="h-5 w-5" />
+             <CardTitle>Filtreler</CardTitle>
+           </div>
+            <Button onClick={handleExportToExcel} disabled={!surveys || surveys.length === 0}>
+              <FileSpreadsheet className="mr-2 h-4 w-4" />
+              Excel Olarak Dışa Aktar
+            </Button>
         </CardHeader>
         <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
            <div>
