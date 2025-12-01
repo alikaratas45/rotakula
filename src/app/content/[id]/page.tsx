@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useParams, notFound } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
 import { doc } from 'firebase/firestore';
 import { Loader2 } from 'lucide-react';
@@ -34,9 +34,8 @@ const MarkdownRenderer = ({ text }: { text: string | undefined | null }) => {
 };
 
 
-export default function ContentPage() {
-  const params = useParams();
-  const contentId = params.id as string;
+export default function ContentPage({ params }: { params: { id: string } }) {
+  const contentId = params.id;
   const firestore = useFirestore();
 
   const contentRef = useMemoFirebase(() => {
