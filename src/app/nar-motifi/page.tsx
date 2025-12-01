@@ -7,6 +7,7 @@ import { Gem, PlayIcon, PauseIcon } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useSearchParams } from 'next/navigation';
+import { getImageById } from '@/lib/placeholder-images';
 
 export default function NarMotifiPage() {
     const { language, translations } = useApp();
@@ -21,6 +22,7 @@ export default function NarMotifiPage() {
     const narrationText = translations.narMotifi.content.join(' ') + ' ' + translations.narMotifi.poem.join(' ');
     const [remainingText, setRemainingText] = useState(narrationText);
     const charIndexRef = useRef(0);
+    const heroImage = getImageById('story-nar-motifi');
     
     // Initialize Speech Synthesis
     useEffect(() => {
@@ -150,14 +152,16 @@ export default function NarMotifiPage() {
     return (
         <article>
             <section className="relative h-[40vh] md:h-[50vh] w-full flex items-end text-white">
-                <Image
-                    src="https://picsum.photos/seed/pomegranate/1200/800"
-                    alt="Pomegranate carving on wood"
-                    fill
-                    priority
-                    className="object-cover"
-                    data-ai-hint="wood carving"
-                />
+                {heroImage && (
+                    <Image
+                        src={heroImage.imageUrl}
+                        alt={heroImage.description}
+                        fill
+                        priority
+                        className="object-cover"
+                        data-ai-hint={heroImage.imageHint}
+                    />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                 <div className="relative z-10 container px-4 py-8">
                     <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight drop-shadow-lg">

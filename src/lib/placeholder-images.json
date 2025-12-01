@@ -239,6 +239,12 @@
       "description": "Süleyman Şah Türbesi",
       "imageUrl": "/suleyman.jpg",
       "imageHint": "historic tomb"
+    },
+    {
+      "id": "story-nar-motifi",
+      "description": "Ahşap üzerine oyulmuş nar motifi",
+      "imageUrl": "/nar.jpg",
+      "imageHint": "wood carving pomegranate"
     }
   ]
 }
