@@ -180,14 +180,14 @@ function ContentCard({ contentItem }: { contentItem: Content }) {
       <CardContent>
         <p className="line-clamp-3 text-sm text-muted-foreground">{contentItem.body}</p>
       </CardContent>
-      <CardFooter className="flex justify-between items-center gap-2">
-        <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={copyToClipboard}>
-                {copied ? <Check className="mr-2 h-4 w-4 text-green-500"/> : <LinkIcon className="mr-2 h-4 w-4"/>}
-                {copied ? "Yol Kopyalandı!" : "QR Yolu"}
+      <CardFooter className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="flex items-center gap-2 bg-muted p-2 rounded-md w-full sm:w-auto">
+            <code className="text-sm font-semibold break-all">{qrCodePath}</code>
+            <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0" onClick={copyToClipboard}>
+                {copied ? <Check className="h-4 w-4 text-green-500"/> : <Copy className="h-4 w-4"/>}
             </Button>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 self-end">
           <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
             <DialogTrigger asChild>
               <Button variant="outline" size="sm"><Edit className="mr-2 h-4 w-4" /> Düzenle</Button>
@@ -290,3 +290,5 @@ export default function ContentAdminPage() {
     </div>
   );
 }
+
+    
