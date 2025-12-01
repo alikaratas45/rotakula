@@ -45,17 +45,18 @@ export default function QRScannerPage() {
                 console.log(`Scan result: ${decodedText}`, decodedResult);
                 try {
                     const url = new URL(decodedText, window.location.origin);
-                    if (url.origin === window.location.origin && url.pathname.startsWith('/content/')) {
-                        // This is a valid content URL for our app
-                        router.push(url.pathname + url.search + url.hash);
+                    const path = url.pathname;
+
+                    if (url.origin === window.location.origin && path.startsWith('/content/')) {
+                        // This is a valid content URL for our app, add autoplay=true
+                        router.push(`${path}?autoplay=true`);
                     } else {
-                        // This is a valid URL, but not a content URL for our app
                         setErrorMessage("Geçersiz QR Kod. Lütfen sadece bu uygulamaya ait ve bir içerik sayfasına yönlendiren bir kod tarayın.");
                     }
                 } catch (e) {
                     // This happens if decodedText is not a full URL, e.g., just a path like "/content/xyz"
                     if (decodedText.startsWith('/content/')) {
-                        router.push(decodedText);
+                         router.push(`${decodedText}?autoplay=true`);
                     } else {
                          setErrorMessage("Geçersiz QR Kod. Lütfen sadece bu uygulamaya ait ve bir içerik sayfasına yönlendiren bir kod tarayın.");
                     }
