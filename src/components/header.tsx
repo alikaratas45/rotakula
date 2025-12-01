@@ -5,7 +5,7 @@ import Link from "next/link";
 import * as React from "react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
-import { Moon, Sun, Home, UserCog } from "lucide-react";
+import { Moon, Sun, Home, UserCog, ClipboardList, QrCode } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import {
   Dialog,
@@ -107,12 +109,30 @@ export function Header() {
         if (!isAdmin) return null;
 
         return (
-            <Button asChild variant="outline" size="sm" className="h-9">
-                <Link href="/admin/surveys">
-                    <UserCog className="mr-2 h-4 w-4" />
-                    Admin Paneli
-                </Link>
-            </Button>
+           <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="h-9">
+                        <UserCog className="mr-2 h-4 w-4" />
+                        Admin Paneli
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Yönetim</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                        <Link href="/admin/surveys">
+                            <ClipboardList className="mr-2 h-4 w-4" />
+                            <span>Anket Sonuçları</span>
+                        </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <Link href="/admin/content">
+                            <QrCode className="mr-2 h-4 w-4" />
+                            <span>İçerik Yönetimi</span>
+                        </Link>
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+           </DropdownMenu>
         )
     }
 
