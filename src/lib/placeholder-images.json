@@ -251,6 +251,12 @@
       "description": "Tarihi bir konakta yer alan ve sofa olarak bilinen hayat bölümü.",
       "imageUrl": "/sofa.jpg",
       "imageHint": "ottoman house interior"
+    },
+    {
+      "id": "poi-bahas-bridge",
+      "description": "Kula volkanik arazisindeki ahşap köprü",
+      "imageUrl": "/geopark.jpg",
+      "imageHint": "stone bridge"
     }
   ]
 }
