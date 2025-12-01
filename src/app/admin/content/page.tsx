@@ -162,7 +162,7 @@ function ContentCard({ contentItem }: { contentItem: Content }) {
   const { toast } = useToast();
   const [isFormOpen, setIsFormOpen] = useState(false);
 
-  const contentPath = `/content/${contentItem.slug}`;
+  const contentPath = `/sayfa/${contentItem.slug}`;
 
   const handleDelete = async () => {
     if (!firestore) return;
@@ -195,7 +195,7 @@ function ContentCard({ contentItem }: { contentItem: Content }) {
       </CardHeader>
       <CardContent>
          <div className="flex items-center gap-2 bg-muted p-2 rounded-md w-full sm:w-auto">
-            <span className="text-sm font-semibold">Yol:</span>
+            <span className="text-sm font-semibold">QR Kodu Yolu:</span>
             <code className="text-sm font-semibold break-all">{contentPath}</code>
             <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0" onClick={copyToClipboard} title="QR kod için tam linki kopyala">
                 {copied ? <Check className="h-4 w-4 text-green-500"/> : <Copy className="h-4 w-4"/>}
