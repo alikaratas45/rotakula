@@ -282,5 +282,11 @@
             "If only we were in one shirt,",
             "With its collar tight."
         ]
+    },
+    "sofa": {
+        "title": "Sofa (Hayat)",
+        "content": [
+            "The upper floor plan, often referred to as the main floor, consists of a sofa and the rooms around it. Depending on the position of the sofa, houses are classified as having an internal, external, or intermediate sofa. Another name for the sofa is 'hayat'. Generally, the 'hayat' overlooks the courtyard. One or two stairs lead up from the courtyard to the 'hayat'. In many houses, the 'hayat' is divided into two sections: a harem (private section for women) and a selamlık (public section for men) pavilion. In some houses, there are 40cm high platforms called 'seki' at the transition from the 'hayat' to these pavilions. These platforms serve to elevate the pavilions slightly. According to a common belief, these platforms also marked a boundary for servants, which they were forbidden to cross in the presence of the masters and mistresses of the house. Additionally, in some houses, the harem pavilion has two platforms, and the second platform is said to be the boundary for the bride. This is because the most beautiful corner of the harem pavilion, which overlooks the entire courtyard, is the mother-in-law's corner. It would be disrespectful for the new bride to come here."
+        ]
     }
 }

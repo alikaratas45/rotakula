@@ -282,5 +282,11 @@
             "Si seulement nous étions dans une seule chemise,",
             "Avec son col serré."
         ]
+    },
+    "sofa": {
+        "title": "Sofa (Hayat)",
+        "content": [
+            "Le plan de l'étage supérieur, souvent appelé l'étage principal, se compose d'un sofa et des pièces qui l'entourent. Selon la position du sofa, les maisons sont classées comme ayant un sofa intérieur, extérieur ou intermédiaire. Un autre nom pour le sofa est 'hayat'. Généralement, le 'hayat' donne sur la cour. Un ou deux escaliers mènent de la cour au 'hayat'. Dans de nombreuses maisons, le 'hayat' est divisé en deux sections : un harem (section privée pour les femmes) et un selamlık (section publique pour les hommes). Dans certaines maisons, il y a des plates-formes de 40 cm de haut appelées 'seki' à la transition du 'hayat' à ces pavillons. Ces plates-formes servent à élever légèrement les pavillons. Selon une croyance répandue, ces plates-formes marquaient également une limite pour les serviteurs, qu'il leur était interdit de franchir en présence des maîtres et maîtresses de la maison. De plus, dans certaines maisons, le pavillon du harem a deux plates-formes, et la deuxième plate-forme serait la limite pour la mariée. C'est parce que le plus beau coin du pavillon du harem, qui donne sur toute la cour, est le coin de la belle-mère. Il serait irrespectueux que la nouvelle mariée vienne ici."
+        ]
     }
 }

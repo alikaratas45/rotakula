@@ -245,6 +245,12 @@
       "description": "Ahşap üzerine oyulmuş nar motifi",
       "imageUrl": "/nar.jpg",
       "imageHint": "wood carving pomegranate"
+    },
+    {
+      "id": "story-sofa",
+      "description": "Tarihi Beyler Evi'nin içindeki ahşap işlemeli sofa.",
+      "imageUrl": "/beyler.jpg",
+      "imageHint": "ottoman house interior"
     }
   ]
 }

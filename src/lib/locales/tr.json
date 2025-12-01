@@ -281,5 +281,11 @@
             "İkimiz bir gömlekte",
             "Yakası dar olaydı."
         ]
+    },
+    "sofa": {
+        "title": "Sofa (Hayat)",
+        "content": [
+            "Esas kat diye daha çok tabir edilen üst kat şeması, bir sofa ve etrafındaki odalardan oluşur. Sofanın durumuna göre evler iç, dış, ara sofalı tip şeklindedir. Sofanın bir diğer adı da “hayat”tır. Genelde hayatlar avluya bakar. Avludan hayata 1 veya 2 merdiven ile çıkılır. Hayat da birçok evde 2 bölüme ayrılmış, bir bölümü haremlik (bayanlara özel), bir bölümü de selamlık (erkeklere özel) köşkler bulunmaktadır. Bazı evlerde hayattan bu köşklere geçişte seki diye adlandırılan 40cm yüksekliğinde setler vardır. Köşkler bu setlerle biraz daha yükseğe taşınmış olur. Genel bir düşünceye göre bu sekiler aynı zamanda hizmetçi sınırı olup evdeki hizmetlinin o sınırı geçmesi, evin beyleri ve hanımları varken yasaktır. Ayrıca bazı evlerde haremlik olan köşkte 2 adet seki bulunur ve bu ikinci sekinin de gelin sınırı olduğu söylenir. Çünkü haremlik köşkünün evin avlusunun tamamını gördüğü en güzel köşesi kaynana köşesidir. Buraya yeni gelinin gelmesi saygısızlıktır."
+        ]
     }
 }
