@@ -43,24 +43,18 @@ export default function QRScannerPage() {
         if (scannerRef.current?.isScanning) {
             scannerRef.current.stop().then(() => {
                 console.log(`Scan result: ${decodedText}`, decodedResult);
-                try {
-                    const url = new URL(decodedText, window.location.origin);
-                    const path = url.pathname;
+                
+                // This is a much more robust check. It doesn't rely on full URL parsing.
+                // It just looks for the essential part of our content path.
+                const contentPathIndex = decodedText.indexOf('/content/');
 
-                    if (url.origin === window.location.origin && path.startsWith('/content/')) {
-                        // This is a valid content URL for our app, add autoplay=true
-                        router.push(`${path}?autoplay=true`);
-                    } else {
-                        setErrorMessage("Geçersiz QR Kod. Lütfen sadece bu uygulamaya ait ve bir içerik sayfasına yönlendiren bir kod tarayın.");
-                    }
-                } catch (e) {
-                    // This happens if decodedText is not a full URL, e.g., just a path like "/content/xyz"
-                    if (decodedText.startsWith('/content/')) {
-                         router.push(`${decodedText}?autoplay=true`);
-                    } else {
-                         setErrorMessage("Geçersiz QR Kod. Lütfen sadece bu uygulamaya ait ve bir içerik sayfasına yönlendiren bir kod tarayın.");
-                    }
+                if (contentPathIndex > -1) {
+                    const path = decodedText.substring(contentPathIndex);
+                    router.push(`${path}?autoplay=true`);
+                } else {
+                    setErrorMessage("Geçersiz QR Kod. Lütfen sadece bu uygulamaya ait ve bir içerik sayfasına yönlendiren bir kod tarayın.");
                 }
+
             }).catch(err => console.error("Failed to stop scanner", err));
         }
     };
@@ -137,3 +131,4 @@ export default function QRScannerPage() {
     </div>
   );
 }
+
