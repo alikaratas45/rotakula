@@ -144,11 +144,10 @@ function ContentCard({ contentItem }: { contentItem: Content }) {
   const { toast } = useToast();
   const [isFormOpen, setIsFormOpen] = useState(false);
 
-  const qrCodeUrl = useMemo(() => {
-    if (typeof window === 'undefined') {
-      return '';
-    }
-    return `${window.location.origin}/content/${contentItem.id}`;
+  // KESİN ÇÖZÜM: QR Kod linki artık tam URL yerine sadece yolu içerecek.
+  // Bu, uygulama içi tarayıcının doğru yönlendirme yapmasını sağlar.
+  const qrCodePath = useMemo(() => {
+    return `/content/${contentItem.id}`;
   }, [contentItem.id]);
 
   const handleDelete = async () => {
@@ -165,7 +164,7 @@ function ContentCard({ contentItem }: { contentItem: Content }) {
   };
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(qrCodeUrl);
+    navigator.clipboard.writeText(qrCodePath);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -185,7 +184,7 @@ function ContentCard({ contentItem }: { contentItem: Content }) {
         <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" onClick={copyToClipboard}>
                 {copied ? <Check className="mr-2 h-4 w-4 text-green-500"/> : <LinkIcon className="mr-2 h-4 w-4"/>}
-                {copied ? "Kopyalandı!" : "QR Linki"}
+                {copied ? "Kopyalandı!" : "QR Yolu"}
             </Button>
         </div>
         <div className="flex items-center gap-2">

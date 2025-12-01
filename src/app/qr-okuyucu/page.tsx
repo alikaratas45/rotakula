@@ -4,11 +4,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Html5Qrcode, Html5QrcodeError, Html5QrcodeResult, Html5QrcodeScanType } from "html5-qrcode";
 import { useRouter } from "next/navigation";
-import { useToast } from "@/hooks/use-toast";
 import { useApp } from "@/context/app-context";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { QrCode, ShieldAlert } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 const qrboxFunction = (viewfinderWidth: number, viewfinderHeight: number) => {
   const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
@@ -21,7 +19,6 @@ const qrboxFunction = (viewfinderWidth: number, viewfinderHeight: number) => {
 
 export default function QRScannerPage() {
   const router = useRouter();
-  const { toast } = useToast();
   const { translations } = useApp();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const scannerRef = useRef<Html5Qrcode | null>(null);
@@ -44,18 +41,15 @@ export default function QRScannerPage() {
             scannerRef.current.stop().then(() => {
                 console.log(`Scan result: ${decodedText}`, decodedResult);
                 
-                try {
-                  const url = new URL(decodedText);
-                  const path = url.pathname;
-
-                  if (path.startsWith('/content/')) {
-                      // Use router.push for SPA navigation
-                      router.push(`${path}?autoplay=true`);
-                  } else {
-                      setErrorMessage("Geçersiz QR Kod. Lütfen sadece bu uygulamaya ait ve bir içerik sayfasına yönlendiren bir kod tarayın.");
-                  }
-                } catch (e) {
-                   setErrorMessage("Geçersiz QR Kod formatı. Lütfen doğru bir URL içeren bir QR kod tarayın.");
+                // --- KESİN ÇÖZÜM ---
+                // QR kodun içeriğini doğrudan bir sayfa yolu olarak kabul et.
+                // Örneğin, QR kod içeriği "/content/abc12345" ise, doğrudan o yola yönlendir.
+                // Bu, tam URL'leri ayrıştırmaya çalışmaktan kaynaklanan tüm hataları ortadan kaldırır.
+                if (decodedText && decodedText.startsWith("/content/")) {
+                    const destinationPath = `${decodedText}?autoplay=true`;
+                    router.push(destinationPath);
+                } else {
+                   setErrorMessage("Geçersiz QR Kod. Lütfen uygulamaya ait bir QR kod taratın.");
                 }
 
             }).catch(err => console.error("Failed to stop scanner", err));
@@ -63,7 +57,6 @@ export default function QRScannerPage() {
     };
 
     const onError = (error: Html5QrcodeError) => {
-      // Don't show an error for "QR code not found", as this is expected when the camera is just scanning.
       if (error.message.includes("QR code not found")) {
         return;
       }
@@ -94,7 +87,6 @@ export default function QRScannerPage() {
         } else if (err.name === 'NotReadableError') {
             userFriendlyMessage = "Kamera şu anda kullanılamıyor. Başka bir uygulama veya sekme tarafından kullanılıyor olabilir veya donanımsal bir sorun olabilir.";
         } else if (err.message && err.message.includes("already under transition")) {
-            // This is an internal state error in the library, we can safely ignore it and let it resolve.
             console.warn("Scanner transition error ignored.");
             return;
         }
@@ -102,7 +94,6 @@ export default function QRScannerPage() {
       }
     };
     
-    // We need to request permission before starting, and handle the UI for that.
     Html5Qrcode.getCameras().then(cameras => {
         if (cameras && cameras.length) {
             startScanner();
@@ -117,7 +108,6 @@ export default function QRScannerPage() {
     return () => {
       if (scannerRef.current && scannerRef.current.isScanning) {
         scannerRef.current.stop().catch(err => {
-            // It might fail if the component is unmounting quickly, which is fine.
             console.warn("Failed to stop scanner on cleanup, possibly because it was already stopped.", err)
         });
       }
