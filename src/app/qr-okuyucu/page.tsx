@@ -45,25 +45,19 @@ export default function QRScannerPage() {
                 console.log(`Scan result: ${decodedText}`, decodedResult);
                 try {
                     const url = new URL(decodedText, window.location.origin);
-                    if (url.origin === window.location.origin) {
-                        // Check if the path starts with /pois and rewrite to /places for backward compatibility
-                        const path = url.pathname.startsWith('/pois/') 
-                            ? url.pathname.replace('/pois/', '/places/')
-                            : url.pathname;
-                        
-                        router.push(path + url.search + url.hash);
+                    if (url.origin === window.location.origin && url.pathname.startsWith('/content/')) {
+                        // This is a valid content URL for our app
+                        router.push(url.pathname + url.search + url.hash);
                     } else {
-                        setErrorMessage("Geçersiz QR Kod. Lütfen sadece bu uygulamaya ait kodları tarayın.");
+                        // This is a valid URL, but not a content URL for our app
+                        setErrorMessage("Geçersiz QR Kod. Lütfen sadece bu uygulamaya ait ve bir içerik sayfasına yönlendiren bir kod tarayın.");
                     }
-                } catch(e) {
-                    if (decodedText.startsWith('/')) {
-                        // Check if the path starts with /pois and rewrite to /places for backward compatibility
-                        const path = decodedText.startsWith('/pois/') 
-                            ? decodedText.replace('/pois/', '/places/')
-                            : decodedText;
-                        router.push(path);
+                } catch (e) {
+                    // This happens if decodedText is not a full URL, e.g., just a path like "/content/xyz"
+                    if (decodedText.startsWith('/content/')) {
+                        router.push(decodedText);
                     } else {
-                        setErrorMessage("Geçersiz QR Kod. Lütfen sadece bu uygulamaya ait kodları tarayın.");
+                         setErrorMessage("Geçersiz QR Kod. Lütfen sadece bu uygulamaya ait ve bir içerik sayfasına yönlendiren bir kod tarayın.");
                     }
                 }
             }).catch(err => console.error("Failed to stop scanner", err));
@@ -71,7 +65,6 @@ export default function QRScannerPage() {
     };
 
     const onError = (error: Html5QrcodeError) => {
-      // Don't log "QR code not found" errors, as they are very frequent.
       if (error.message.includes("QR code not found")) {
         return;
       }
@@ -79,8 +72,6 @@ export default function QRScannerPage() {
     };
 
     const startScanner = async () => {
-      // Check if scannerRef.current is available and not already scanning.
-      // This is an extra safeguard.
       if (!scannerRef.current || scannerRef.current.isScanning) {
           return;
       }
@@ -104,8 +95,6 @@ export default function QRScannerPage() {
         } else if (err.name === 'NotReadableError') {
             userFriendlyMessage = "Kamera şu anda kullanılamıyor. Başka bir uygulama veya sekme tarafından kullanılıyor olabilir veya donanımsal bir sorun olabilir.";
         } else if (err.message.includes("already under transition")) {
-            // This specific error can sometimes be ignored as the scanner might be self-correcting.
-            // If it persists, it indicates a bigger issue. For now, we don't show it to the user.
             console.warn("Scanner transition error ignored.");
             return;
         }

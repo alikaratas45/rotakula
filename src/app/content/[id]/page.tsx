@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams, notFound } from 'next/navigation';
 import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
 import { doc } from 'firebase/firestore';
@@ -22,7 +22,8 @@ const MarkdownRenderer = ({ text }: { text: string | undefined | null }) => {
     if (!text) {
         return null;
     }
-    const paragraphs = text.split('\n').filter(p => p.trim() !== '');
+    // Ensure text is treated as a string to prevent errors
+    const paragraphs = String(text).split('\n').filter(p => p.trim() !== '');
     return (
         <div className="prose prose-lg max-w-none text-foreground/90">
             {paragraphs.map((paragraph, index) => (
@@ -45,20 +46,20 @@ export default function ContentPage() {
 
   const { data: content, isLoading, error } = useDoc<Content>(contentRef);
 
-  if (isLoading) {
+  useEffect(() => {
+    // If there's an error fetching (like permission denied), or if loading is done and there's no data
+    if (error || (!isLoading && !content)) {
+      notFound();
+    }
+  }, [error, isLoading, content]);
+
+
+  if (isLoading || !content) {
     return (
       <div className="flex h-screen items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
-  }
-
-  if (!content && !isLoading) {
-    notFound();
-  }
-
-  if (!content) {
-     return null; // Should be caught by notFound, but for type safety
   }
 
   return (
