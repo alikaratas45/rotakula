@@ -1,0 +1,20 @@
+
+{
+  "media": [
+    {
+      "id": "media-1",
+      "title": "Tarihi Kula Evi",
+      "path": "/essanlar.jpg"
+    },
+    {
+      "id": "media-2",
+      "title": "Kula Jeoparkı",
+      "path": "/geopark.jpg"
+    },
+    {
+      "id": "media-3",
+      "title": "Kula Genel Görünüm",
+      "path": "/kula.jpg"
+    }
+  ]
+}
