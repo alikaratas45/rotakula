@@ -46,14 +46,21 @@ export default function QRScannerPage() {
                 try {
                     const url = new URL(decodedText, window.location.origin);
                     if (url.origin === window.location.origin) {
-                        const path = url.pathname.replace(/^\/pois/, '/places') + url.search + url.hash;
-                        router.push(path);
+                        // Check if the path starts with /pois and rewrite to /places for backward compatibility
+                        const path = url.pathname.startsWith('/pois/') 
+                            ? url.pathname.replace('/pois/', '/places/')
+                            : url.pathname;
+                        
+                        router.push(path + url.search + url.hash);
                     } else {
                         setErrorMessage("Geçersiz QR Kod. Lütfen sadece bu uygulamaya ait kodları tarayın.");
                     }
                 } catch(e) {
                     if (decodedText.startsWith('/')) {
-                        const path = decodedText.replace(/^\/pois/, '/places');
+                        // Check if the path starts with /pois and rewrite to /places for backward compatibility
+                        const path = decodedText.startsWith('/pois/') 
+                            ? decodedText.replace('/pois/', '/places/')
+                            : decodedText;
                         router.push(path);
                     } else {
                         setErrorMessage("Geçersiz QR Kod. Lütfen sadece bu uygulamaya ait kodları tarayın.");

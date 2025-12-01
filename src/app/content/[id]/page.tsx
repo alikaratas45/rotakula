@@ -18,7 +18,10 @@ type Content = {
 };
 
 // A simple markdown renderer
-const MarkdownRenderer = ({ text }: { text: string }) => {
+const MarkdownRenderer = ({ text }: { text: string | undefined | null }) => {
+    if (!text) {
+        return null;
+    }
     const paragraphs = text.split('\n').filter(p => p.trim() !== '');
     return (
         <div className="prose prose-lg max-w-none text-foreground/90">
