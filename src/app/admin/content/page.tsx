@@ -146,12 +146,7 @@ function ContentCard({ contentItem }: { contentItem: Content }) {
   const { toast } = useToast();
   const [isFormOpen, setIsFormOpen] = useState(false);
 
-  const qrCodePath = useMemo(() => {
-    if (typeof window === 'undefined') {
-        return `/content/${contentItem.id}`;
-    }
-    return `${window.location.origin}/content/${contentItem.id}`;
-  }, [contentItem.id]);
+  const qrCodePath = `/content/${contentItem.id}`;
 
   const handleDelete = async () => {
     if (!firestore) return;
@@ -185,15 +180,16 @@ function ContentCard({ contentItem }: { contentItem: Content }) {
         <p className="line-clamp-3 text-sm text-muted-foreground">{contentItem.body}</p>
       </CardContent>
       <CardFooter className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div className="flex items-center gap-2 bg-muted p-2 rounded-md w-full sm:w-auto">
-            <code className="text-sm font-semibold break-all">{`/content/${contentItem.id}`}</code>
-            <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0" onClick={copyToClipboard}>
+         <div className="flex items-center gap-2 bg-muted p-2 rounded-md w-full sm:w-auto">
+            <span className="text-sm font-semibold">Yol:</span>
+            <code className="text-sm font-semibold break-all">{qrCodePath}</code>
+            <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0" onClick={copyToClipboard} title="Yolu Kopyala">
                 {copied ? <Check className="h-4 w-4 text-green-500"/> : <Copy className="h-4 w-4"/>}
             </Button>
         </div>
         <div className="flex items-center gap-2 self-end">
           <Button asChild variant="secondary" size="sm">
-            <Link href={`/content/${contentItem.id}`} target="_blank">
+            <Link href={qrCodePath} target="_blank">
                 <ExternalLink className="mr-2 h-4 w-4" />
                 Sayfaya Git
             </Link>
@@ -300,5 +296,3 @@ export default function ContentAdminPage() {
     </div>
   );
 }
-
-    

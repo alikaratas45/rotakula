@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { notFound, useRouter, useSearchParams } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
 import { doc } from 'firebase/firestore';
 import { Loader2, PlayIcon, PauseIcon } from 'lucide-react';
@@ -41,8 +41,6 @@ export default function ContentPage({ params }: { params: { id: string } }) {
   const firestore = useFirestore();
   const { language, translations } = useApp();
   const { toast } = useToast();
-  const router = useRouter();
-  const searchParams = useSearchParams();
 
   const contentRef = useMemoFirebase(() => {
     if (!firestore || !contentId) return null;
@@ -148,22 +146,6 @@ export default function ContentPage({ params }: { params: { id: string } }) {
     if (content) {
         setRemainingText(content.body);
         charIndexRef.current = 0;
-        
-        const shouldAutoplay = searchParams.get('autoplay') === 'true';
-        if (shouldAutoplay) {
-            const newPath = `/content/${contentId}`;
-            router.replace(newPath, { scroll: false }); // Remove query param
-            setTimeout(() => {
-                const synth = synthRef.current;
-                if (synth) {
-                    if (synth.getVoices().length > 0) {
-                        startPlayback(content.body);
-                    } else {
-                        synth.onvoiceschanged = () => startPlayback(content.body);
-                    }
-                }
-            }, 500);
-        }
     }
 
     return () => {
@@ -171,11 +153,11 @@ export default function ContentPage({ params }: { params: { id: string } }) {
             synthRef.current.cancel();
         }
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [content]);
 
 
   useEffect(() => {
+    // If there's a Firestore error or if loading is finished and there's no content
     if (error || (!isLoading && !content)) {
       notFound();
     }
@@ -226,5 +208,3 @@ export default function ContentPage({ params }: { params: { id: string } }) {
     </article>
   );
 }
-
-    
