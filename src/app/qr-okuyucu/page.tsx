@@ -44,14 +44,18 @@ export default function QRScannerPage() {
             scannerRef.current.stop().then(() => {
                 console.log(`Scan result: ${decodedText}`, decodedResult);
                 
-                const contentPathIndex = decodedText.indexOf('/content/');
+                try {
+                  const url = new URL(decodedText);
+                  const path = url.pathname;
 
-                if (contentPathIndex > -1) {
-                    const path = decodedText.substring(contentPathIndex);
-                    // Use router.push for SPA navigation
-                    router.push(`${path}?autoplay=true`);
-                } else {
-                    setErrorMessage("Geçersiz QR Kod. Lütfen sadece bu uygulamaya ait ve bir içerik sayfasına yönlendiren bir kod tarayın.");
+                  if (path.startsWith('/content/')) {
+                      // Use router.push for SPA navigation
+                      router.push(`${path}?autoplay=true`);
+                  } else {
+                      setErrorMessage("Geçersiz QR Kod. Lütfen sadece bu uygulamaya ait ve bir içerik sayfasına yönlendiren bir kod tarayın.");
+                  }
+                } catch (e) {
+                   setErrorMessage("Geçersiz QR Kod formatı. Lütfen doğru bir URL içeren bir QR kod tarayın.");
                 }
 
             }).catch(err => console.error("Failed to stop scanner", err));
