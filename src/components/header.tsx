@@ -24,6 +24,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { AudioGuideControl } from "./audio-guide-control";
 import { useApp } from "@/context/app-context";
 import { TurkishFlagIcon, UKFlagIcon, FrenchFlagIcon, GermanFlagIcon } from "./icons";
@@ -52,6 +53,7 @@ export function Header() {
     const { language, setLanguage, translations, isAdmin, handleAdminLogin } = useApp();
     const [clickCount, setClickCount] = React.useState(0);
     const [showAdminDialog, setShowAdminDialog] = React.useState(false);
+    const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
 
 
@@ -65,8 +67,9 @@ export function Header() {
     };
     
     const onPasswordSubmit = () => {
-        handleAdminLogin(password);
+        handleAdminLogin(email, password);
         setShowAdminDialog(false);
+        setEmail("");
         setPassword("");
     };
 
@@ -164,24 +167,40 @@ export function Header() {
                 </div>
             </div>
              <Dialog open={showAdminDialog} onOpenChange={setShowAdminDialog}>
-                <DialogContent>
+                <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
                     <DialogTitle>Admin Girişi</DialogTitle>
                     <DialogDescription>
-                        Admin paneline erişmek için lütfen şifreyi girin.
+                        Admin paneline erişmek için lütfen e-posta ve şifrenizi girin.
                     </DialogDescription>
                     </DialogHeader>
-                    <Input
-                        type="password"
-                        placeholder="Şifre"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                                onPasswordSubmit();
-                            }
-                        }}
-                    />
+                    <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="email" className="text-right">
+                                E-posta
+                            </Label>
+                            <Input
+                                id="email"
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="col-span-3"
+                                placeholder="admin@example.com"
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="password" className="text-right">
+                                Şifre
+                            </Label>
+                             <Input
+                                id="password"
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="col-span-3"
+                            />
+                        </div>
+                    </div>
                     <DialogFooter>
                     <Button onClick={onPasswordSubmit}>Giriş Yap</Button>
                     </DialogFooter>

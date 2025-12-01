@@ -12,6 +12,7 @@ import { getPois } from '@/lib/kula-data';
 import type { PointOfInterest, SurveyState } from '@/lib/types';
 import { useFirebase, useUser } from '@/firebase';
 import { useToast } from '@/hooks/use-toast';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, AuthError } from 'firebase/auth';
 
 
 type Language = 'tr' | 'en' | 'fr' | 'de';
@@ -34,14 +35,14 @@ interface AppContextType {
   earnedBadges: Badge[];
   addBadge: (poiId: string) => void;
   totalPoints: number;
-  handleAdminLogin: (password: string) => void;
+  handleAdminLogin: (email: string, password: string) => void;
   handleAdminLogout: () => void;
   isAdmin: boolean;
   isUserLoading: boolean;
 }
 
 const translations = { tr, en, fr, de };
-const ADMIN_PASSWORD = "kulaadmin"; 
+const ADMIN_EMAIL = "alikarataskula@gmail.com"; 
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -51,10 +52,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isAudioGuideActive, setIsAudioGuideActive] = useState(false);
   const [earnedBadges, setEarnedBadges] = useState<Badge[]>([]);
   const [allPois, setAllPois] = useState<any[]>([]);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const { auth } = useFirebase();
   const { user, isUserLoading } = useUser();
   const router = useRouter();
   const { toast } = useToast();
+  
+  const isAdmin = useMemo(() => user?.email === ADMIN_EMAIL, [user]);
 
   // Fetch all POIs on mount to map badge IDs to badge data
   useEffect(() => {
@@ -65,7 +68,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     fetchPois();
   }, []);
 
-  // Load language, badges, and admin status from localStorage
+  // Load language and badges from localStorage
   useEffect(() => {
     const storedLang = localStorage.getItem('rota-kula-language') as Language;
     if (storedLang && ['tr', 'en', 'fr', 'de'].includes(storedLang)) {
@@ -81,12 +84,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     if (storedBadges) {
         setEarnedBadges(JSON.parse(storedBadges));
     }
-    
-    const storedAdmin = localStorage.getItem('rota-kula-is-admin');
-    if (storedAdmin === 'true') {
-        setIsAdmin(true);
-    }
-
   }, []);
 
   const handleSetLanguage = (lang: Language) => {
@@ -95,23 +92,50 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     document.documentElement.lang = lang;
   };
   
-  const handleAdminLogin = (password: string) => {
-    if (password === ADMIN_PASSWORD) {
-        setIsAdmin(true);
-        localStorage.setItem('rota-kula-is-admin', 'true');
-        router.push('/admin/surveys');
-    } else {
-        toast({
-            title: "Hatalı Şifre",
-            description: "Admin paneline girmek için girdiğiniz şifre yanlış.",
+  const handleAdminLogin = async (email: string, password: string) => {
+    if (email !== ADMIN_EMAIL) {
+         toast({
+            title: "Geçersiz E-posta",
+            description: "Admin girişi için yalnızca yetkili e-posta adresi kullanılabilir.",
             variant: "destructive"
-        })
+        });
+        return;
     }
-  }
+    try {
+        await signInWithEmailAndPassword(auth, email, password);
+        router.push('/admin/surveys');
+    } catch (error) {
+        const authError = error as AuthError;
+        if (authError.code === 'auth/user-not-found') {
+            // If admin user does not exist, create it
+            try {
+                await createUserWithEmailAndPassword(auth, email, password);
+                router.push('/admin/surveys');
+            } catch (createError) {
+                 toast({
+                    title: "Admin Oluşturma Hatası",
+                    description: "Admin kullanıcısı oluşturulurken bir hata oluştu.",
+                    variant: "destructive"
+                });
+            }
+        } else if (authError.code === 'auth/wrong-password') {
+             toast({
+                title: "Hatalı Şifre",
+                description: "E-posta veya şifre hatalı.",
+                variant: "destructive"
+            });
+        } else {
+             toast({
+                title: "Giriş Hatası",
+                description: authError.message,
+                variant: "destructive"
+            });
+        }
+    }
+  };
 
   const handleAdminLogout = () => {
-    setIsAdmin(false);
-    localStorage.removeItem('rota-kula-is-admin');
+    signOut(auth);
     router.push('/');
   }
   
