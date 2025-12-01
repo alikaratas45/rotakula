@@ -44,12 +44,11 @@ export default function QRScannerPage() {
             scannerRef.current.stop().then(() => {
                 console.log(`Scan result: ${decodedText}`, decodedResult);
                 
-                // This is a much more robust check. It doesn't rely on full URL parsing.
-                // It just looks for the essential part of our content path.
                 const contentPathIndex = decodedText.indexOf('/content/');
 
                 if (contentPathIndex > -1) {
                     const path = decodedText.substring(contentPathIndex);
+                    // Use router.push for SPA navigation
                     router.push(`${path}?autoplay=true`);
                 } else {
                     setErrorMessage("Geçersiz QR Kod. Lütfen sadece bu uygulamaya ait ve bir içerik sayfasına yönlendiren bir kod tarayın.");
@@ -60,6 +59,7 @@ export default function QRScannerPage() {
     };
 
     const onError = (error: Html5QrcodeError) => {
+      // Don't show an error for "QR code not found", as this is expected when the camera is just scanning.
       if (error.message.includes("QR code not found")) {
         return;
       }
@@ -89,7 +89,8 @@ export default function QRScannerPage() {
             userFriendlyMessage = "Kamera erişimine izin vermeniz gerekiyor. Lütfen tarayıcı ayarlarınızı kontrol edin.";
         } else if (err.name === 'NotReadableError') {
             userFriendlyMessage = "Kamera şu anda kullanılamıyor. Başka bir uygulama veya sekme tarafından kullanılıyor olabilir veya donanımsal bir sorun olabilir.";
-        } else if (err.message.includes("already under transition")) {
+        } else if (err.message && err.message.includes("already under transition")) {
+            // This is an internal state error in the library, we can safely ignore it and let it resolve.
             console.warn("Scanner transition error ignored.");
             return;
         }
@@ -97,11 +98,24 @@ export default function QRScannerPage() {
       }
     };
     
-    startScanner();
+    // We need to request permission before starting, and handle the UI for that.
+    Html5Qrcode.getCameras().then(cameras => {
+        if (cameras && cameras.length) {
+            startScanner();
+        } else {
+            setErrorMessage("Bu cihazda kamera bulunamadı veya kamera erişimine izin verilmedi.");
+        }
+    }).catch(err => {
+        setErrorMessage("Kamera erişimi reddedildi. Lütfen tarayıcı ayarlarınızdan izin verin.");
+    });
+
 
     return () => {
       if (scannerRef.current && scannerRef.current.isScanning) {
-        scannerRef.current.stop().catch(err => console.error("Failed to stop scanner on cleanup", err));
+        scannerRef.current.stop().catch(err => {
+            // It might fail if the component is unmounting quickly, which is fine.
+            console.warn("Failed to stop scanner on cleanup, possibly because it was already stopped.", err)
+        });
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -131,4 +145,3 @@ export default function QRScannerPage() {
     </div>
   );
 }
-
