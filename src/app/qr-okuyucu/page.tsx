@@ -41,10 +41,7 @@ export default function QRScannerPage() {
             scannerRef.current.stop().then(() => {
                 console.log(`Scan result: ${decodedText}`, decodedResult);
                 
-                // --- KESİN ÇÖZÜM ---
-                // QR kodun içeriğini doğrudan bir sayfa yolu olarak kabul et.
-                // Örneğin, QR kod içeriği "/content/abc12345" ise, doğrudan o yola yönlendir.
-                // Bu, tam URL'leri ayrıştırmaya çalışmaktan kaynaklanan tüm hataları ortadan kaldırır.
+                // Check if the scanned text is a valid path for the app
                 if (decodedText && decodedText.startsWith("/content/")) {
                     const destinationPath = `${decodedText}?autoplay=true`;
                     router.push(destinationPath);
@@ -57,9 +54,11 @@ export default function QRScannerPage() {
     };
 
     const onError = (error: Html5QrcodeError) => {
+      // Ignore "QR code not found" errors, as they are very frequent.
       if (error.message.includes("QR code not found")) {
         return;
       }
+      // Log other warnings to the console, but don't show to the user unless it's a critical failure.
       console.warn(`QR error: ${error.message}`);
     };
 
@@ -87,6 +86,7 @@ export default function QRScannerPage() {
         } else if (err.name === 'NotReadableError') {
             userFriendlyMessage = "Kamera şu anda kullanılamıyor. Başka bir uygulama veya sekme tarafından kullanılıyor olabilir veya donanımsal bir sorun olabilir.";
         } else if (err.message && err.message.includes("already under transition")) {
+            // This is a known benign error in the library, ignore it.
             console.warn("Scanner transition error ignored.");
             return;
         }
@@ -94,6 +94,7 @@ export default function QRScannerPage() {
       }
     };
     
+    // Check for camera permissions before attempting to start.
     Html5Qrcode.getCameras().then(cameras => {
         if (cameras && cameras.length) {
             startScanner();
@@ -101,13 +102,17 @@ export default function QRScannerPage() {
             setErrorMessage("Bu cihazda kamera bulunamadı veya kamera erişimine izin verilmedi.");
         }
     }).catch(err => {
+        // This catch block is crucial for permission denied errors.
         setErrorMessage("Kamera erişimi reddedildi. Lütfen tarayıcı ayarlarınızdan izin verin.");
     });
 
 
+    // Cleanup function to stop the scanner when the component unmounts.
     return () => {
       if (scannerRef.current && scannerRef.current.isScanning) {
         scannerRef.current.stop().catch(err => {
+            // It's possible the scanner is already stopped or in the process of stopping.
+            // Log this as a warning instead of an error to avoid console noise.
             console.warn("Failed to stop scanner on cleanup, possibly because it was already stopped.", err)
         });
       }

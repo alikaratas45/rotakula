@@ -53,6 +53,7 @@ function ContentForm({ contentItem, onFinished }: { contentItem?: Content; onFin
   });
 
   const onSubmit = async (data: ContentFormValues) => {
+    if (!firestore) return;
     setIsSubmitting(true);
     try {
       if (contentItem) {
@@ -144,13 +145,12 @@ function ContentCard({ contentItem }: { contentItem: Content }) {
   const { toast } = useToast();
   const [isFormOpen, setIsFormOpen] = useState(false);
 
-  // KESİN ÇÖZÜM: QR Kod linki artık tam URL yerine sadece yolu içerecek.
-  // Bu, uygulama içi tarayıcının doğru yönlendirme yapmasını sağlar.
   const qrCodePath = useMemo(() => {
     return `/content/${contentItem.id}`;
   }, [contentItem.id]);
 
   const handleDelete = async () => {
+    if (!firestore) return;
     setIsDeleting(true);
     try {
       await deleteDoc(doc(firestore, 'content', contentItem.id));
@@ -184,7 +184,7 @@ function ContentCard({ contentItem }: { contentItem: Content }) {
         <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" onClick={copyToClipboard}>
                 {copied ? <Check className="mr-2 h-4 w-4 text-green-500"/> : <LinkIcon className="mr-2 h-4 w-4"/>}
-                {copied ? "Kopyalandı!" : "QR Yolu"}
+                {copied ? "Yol Kopyalandı!" : "QR Yolu"}
             </Button>
         </div>
         <div className="flex items-center gap-2">
