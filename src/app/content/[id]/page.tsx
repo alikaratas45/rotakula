@@ -10,10 +10,12 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { useApp } from '@/context/app-context';
 import { useToast } from '@/hooks/use-toast';
+import { useSearchParams } from 'next/navigation';
 
 type Content = {
   id: string;
   title: string;
+  slug: string;
   body: string;
   imageUrl?: string;
   createdAt: { seconds: number; nanoseconds: number };
@@ -36,16 +38,17 @@ const MarkdownRenderer = ({ text }: { text: string | undefined | null }) => {
 };
 
 
-export default function ContentPage({ params }: { params: { id: string } }) {
-  const contentId = params.id;
+export default function ContentPage({ params }: { params: { slug: string } }) {
+  const contentSlug = params.slug;
   const firestore = useFirestore();
   const { language, translations } = useApp();
   const { toast } = useToast();
+  const searchParams = useSearchParams();
 
   const contentRef = useMemoFirebase(() => {
-    if (!firestore || !contentId) return null;
-    return doc(firestore, 'content', contentId);
-  }, [firestore, contentId]);
+    if (!firestore || !contentSlug) return null;
+    return doc(firestore, 'content', contentSlug);
+  }, [firestore, contentSlug]);
 
   const { data: content, isLoading, error } = useDoc<Content>(contentRef);
 
@@ -54,6 +57,7 @@ export default function ContentPage({ params }: { params: { id: string } }) {
   
   const synthRef = useRef<SpeechSynthesis | null>(null);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  
   const narrationText = content?.body || '';
   const [remainingText, setRemainingText] = useState(narrationText);
   const charIndexRef = useRef(0);
@@ -147,18 +151,27 @@ export default function ContentPage({ params }: { params: { id: string } }) {
         setRemainingText(content.body);
         charIndexRef.current = 0;
     }
+    
+    const shouldAutoplay = searchParams.get('autoplay') === 'true';
+    if (shouldAutoplay && content?.body) {
+        const synth = synthRef.current;
+        if (synth && synth.getVoices().length > 0) {
+            startPlayback(content.body);
+        } else if (synth) {
+            synth.onvoiceschanged = () => startPlayback(content.body);
+        }
+    }
 
     return () => {
         if (synthRef.current?.speaking) {
             synthRef.current.cancel();
         }
     };
-  }, [content]);
+  }, [content, language, searchParams, startPlayback]);
 
 
   useEffect(() => {
-    // If there's a Firestore error or if loading is finished and there's no content
-    if (error || (!isLoading && !content)) {
+    if (!isLoading && !content) {
       notFound();
     }
   }, [error, isLoading, content]);

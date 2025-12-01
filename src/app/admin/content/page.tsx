@@ -1,11 +1,11 @@
 
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
-import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp, query, orderBy, Query } from 'firebase/firestore';
+import { collection, doc, setDoc, updateDoc, deleteDoc, serverTimestamp, query, orderBy, Query } from 'firebase/firestore';
 import { useApp } from '@/context/app-context';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -22,6 +22,16 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { formatDistanceToNow } from 'date-fns';
 import { tr } from 'date-fns/locale';
 
+const slugify = (text: string) => {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-') // Replace spaces with -
+    .replace(/[^\w\-]+/g, '') // Remove all non-word chars
+    .replace(/\-\-+/g, '-'); // Replace multiple - with single -
+};
+
 const contentSchema = z.object({
   title: z.string().min(3, { message: 'Başlık en az 3 karakter olmalıdır.' }),
   body: z.string().min(10, { message: 'İçerik en az 10 karakter olmalıdır.' }),
@@ -32,6 +42,7 @@ type ContentFormValues = z.infer<typeof contentSchema>;
 
 type Content = {
   id: string;
+  slug: string;
   title: string;
   body: string;
   imageUrl?: string;
@@ -58,18 +69,22 @@ function ContentForm({ contentItem, onFinished }: { contentItem?: Content; onFin
     setIsSubmitting(true);
     try {
       if (contentItem) {
-        // Update existing content
+        // Update existing content - slug/ID does not change
         const contentRef = doc(firestore, 'content', contentItem.id);
         await updateDoc(contentRef, {
-          ...data,
+          title: data.title, // Allow title updates
+          body: data.body,
+          imageUrl: data.imageUrl,
           updatedAt: serverTimestamp(),
         });
         toast({ title: 'Başarılı', description: 'İçerik güncellendi.' });
       } else {
         // Create new content
-        const contentCollection = collection(firestore, 'content');
-        await addDoc(contentCollection, {
+        const slug = slugify(data.title);
+        const newContentRef = doc(firestore, 'content', slug);
+        await setDoc(newContentRef, {
           ...data,
+          slug: slug,
           createdAt: serverTimestamp(),
           updatedAt: serverTimestamp(),
         });
@@ -78,7 +93,7 @@ function ContentForm({ contentItem, onFinished }: { contentItem?: Content; onFin
       onFinished();
     } catch (error) {
       console.error("Error saving content:", error);
-      toast({ variant: 'destructive', title: 'Hata', description: 'İçerik kaydedilemedi.' });
+      toast({ variant: 'destructive', title: 'Hata', description: 'İçerik kaydedilemedi. Bu başlıkla bir içerik zaten var olabilir.' });
     } finally {
       setIsSubmitting(false);
     }
@@ -94,8 +109,9 @@ function ContentForm({ contentItem, onFinished }: { contentItem?: Content; onFin
             <FormItem>
               <FormLabel>Başlık</FormLabel>
               <FormControl>
-                <Input placeholder="İçerik başlığı..." {...field} />
+                <Input placeholder="İçerik başlığı..." {...field} disabled={!!contentItem} />
               </FormControl>
+              {!!contentItem && <p className="text-xs text-muted-foreground">İçerik yolu değişmemesi için başlık düzenlenemez.</p>}
               <FormMessage />
             </FormItem>
           )}
@@ -146,7 +162,7 @@ function ContentCard({ contentItem }: { contentItem: Content }) {
   const { toast } = useToast();
   const [isFormOpen, setIsFormOpen] = useState(false);
 
-  const qrCodePath = `/content/${contentItem.id}`;
+  const contentPath = `/content/${contentItem.slug}`;
 
   const handleDelete = async () => {
     if (!firestore) return;
@@ -163,7 +179,8 @@ function ContentCard({ contentItem }: { contentItem: Content }) {
   };
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(qrCodePath);
+    const fullUrl = `${window.location.origin}${contentPath}`;
+    navigator.clipboard.writeText(fullUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -177,19 +194,18 @@ function ContentCard({ contentItem }: { contentItem: Content }) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <p className="line-clamp-3 text-sm text-muted-foreground">{contentItem.body}</p>
-      </CardContent>
-      <CardFooter className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
          <div className="flex items-center gap-2 bg-muted p-2 rounded-md w-full sm:w-auto">
             <span className="text-sm font-semibold">Yol:</span>
-            <code className="text-sm font-semibold break-all">{qrCodePath}</code>
-            <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0" onClick={copyToClipboard} title="Yolu Kopyala">
+            <code className="text-sm font-semibold break-all">{contentPath}</code>
+            <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0" onClick={copyToClipboard} title="QR kod için tam linki kopyala">
                 {copied ? <Check className="h-4 w-4 text-green-500"/> : <Copy className="h-4 w-4"/>}
             </Button>
         </div>
+      </CardContent>
+      <CardFooter className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex items-center gap-2 self-end">
           <Button asChild variant="secondary" size="sm">
-            <Link href={qrCodePath} target="_blank">
+            <Link href={contentPath} target="_blank">
                 <ExternalLink className="mr-2 h-4 w-4" />
                 Sayfaya Git
             </Link>

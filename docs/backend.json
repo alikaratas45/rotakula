@@ -93,6 +93,10 @@
       "type": "object",
       "description": "Represents a piece of dynamic content for QR codes.",
       "properties": {
+        "slug": {
+          "type": "string",
+          "description": "The URL-friendly identifier for the content, derived from the title."
+        },
         "title": {
           "type": "string",
           "description": "The title of the content."
@@ -117,6 +121,7 @@
         }
       },
       "required": [
+        "slug",
         "title",
         "body",
         "createdAt",
@@ -143,11 +148,11 @@
       },
       "description": "Stores survey responses for POIs. Publicly writable, but only readable by admins."
     },
-    "/content/{contentId}": {
+    "/content/{contentSlug}": {
       "schema": {
         "$ref": "#/entities/Content"
       },
-      "description": "Stores dynamic content for QR codes. Publicly readable, admin-only writable."
+      "description": "Stores dynamic content for QR codes, identified by a URL-friendly slug. Publicly readable, admin-only writable."
     }
   }
 }
