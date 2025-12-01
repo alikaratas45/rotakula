@@ -109,23 +109,25 @@ export default function Home() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="flex flex-col items-center gap-2 group animate-fade-in-up"
-                   style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <Button
-                    variant="secondary"
-                    size="icon"
-                    className={cn(
-                      "h-16 w-16 md:h-20 md:w-20 rounded-full group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 transform group-hover:scale-110",
-                      item.colorClass
-                    )}
-                    aria-label={item.label}
-                  >
-                    <item.icon className="h-7 w-7 md:h-8 md:w-8" />
-                  </Button>
-                  <span className="text-center text-sm font-semibold text-muted-foreground dark:text-white group-hover:text-primary transition-colors">
-                    {item.label}
-                  </span>
+                  passHref
+                  legacyBehavior>
+                  <a className="flex flex-col items-center gap-2 group animate-fade-in-up"
+                   style={{ animationDelay: `${index * 100}ms` }}>
+                    <Button
+                      variant="secondary"
+                      size="icon"
+                      className={cn(
+                        "h-16 w-16 md:h-20 md:w-20 rounded-full group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 transform group-hover:scale-110",
+                        item.colorClass
+                      )}
+                      aria-label={item.label}
+                    >
+                      <item.icon className="h-7 w-7 md:h-8 md:w-8" />
+                    </Button>
+                    <span className="text-center text-sm font-semibold text-muted-foreground dark:text-white group-hover:text-primary transition-colors">
+                      {item.label}
+                    </span>
+                  </a>
                 </Link>
               ))}
                <div className="flex flex-col items-center gap-2 group animate-fade-in-up" style={{ animationDelay: `${iconNavItems.length * 100}ms` }}>
