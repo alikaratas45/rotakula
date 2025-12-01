@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useApp } from '@/context/app-context';
@@ -20,7 +19,7 @@ export default function NarMotifiPage() {
     const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
     const narrationText = translations.narMotifi.content.join(' ') + ' ' + translations.narMotifi.poem.join(' ');
-    const [remainingText, setRemainingText] = useState('');
+    const [remainingText, setRemainingText] = useState(narrationText);
     const charIndexRef = useRef(0);
     
     // Initialize Speech Synthesis
@@ -39,7 +38,6 @@ export default function NarMotifiPage() {
     // Update text when language changes
     useEffect(() => {
         const newNarrationText = translations.narMotifi.content.join(' ') + ' ' + translations.narMotifi.poem.join(' ');
-        setNarrationText(newNarrationText);
         setRemainingText(newNarrationText);
         charIndexRef.current = 0;
         // Stop any ongoing speech when language changes
@@ -204,3 +202,4 @@ export default function NarMotifiPage() {
         </article>
     );
 }
+    
