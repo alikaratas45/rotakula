@@ -87,6 +87,41 @@
         "userId",
         "createdAt"
       ]
+    },
+    "Content": {
+      "title": "Content",
+      "type": "object",
+      "description": "Represents a piece of dynamic content for QR codes.",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "The title of the content."
+        },
+        "body": {
+          "type": "string",
+          "description": "The main body of the content, can be long text or markdown."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "URL of an optional image for the content."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of creation."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of the last update."
+        }
+      },
+      "required": [
+        "title",
+        "body",
+        "createdAt",
+        "updatedAt"
+      ]
     }
   },
   "auth": {
@@ -106,6 +141,12 @@
         "$ref": "#/entities/SurveyResponse"
       },
       "description": "Stores survey responses for POIs. Publicly writable, but only readable by admins."
+    },
+    "/content/{contentId}": {
+      "schema": {
+        "$ref": "#/entities/Content"
+      },
+      "description": "Stores dynamic content for QR codes. Publicly readable, admin-only writable."
     }
   }
 }
