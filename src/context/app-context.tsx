@@ -104,30 +104,20 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     try {
         await signInWithEmailAndPassword(auth, email, password);
         router.push('/admin/surveys');
-    } catch (error) {
-        const authError = error as AuthError;
-        if (authError.code === 'auth/user-not-found') {
-            // If admin user does not exist, create it
-            try {
-                await createUserWithEmailAndPassword(auth, email, password);
-                router.push('/admin/surveys');
-            } catch (createError) {
-                 toast({
-                    title: "Admin Oluşturma Hatası",
-                    description: "Admin kullanıcısı oluşturulurken bir hata oluştu.",
-                    variant: "destructive"
-                });
-            }
-        } else if (authError.code === 'auth/wrong-password') {
-             toast({
-                title: "Hatalı Şifre",
-                description: "E-posta veya şifre hatalı.",
-                variant: "destructive"
-            });
-        } else {
-             toast({
-                title: "Giriş Hatası",
-                description: authError.message,
+    } catch (signInError) {
+        // If signIn fails (likely because the user doesn't exist), try to create the user.
+        // Firebase consolidates 'auth/user-not-found' and 'auth/wrong-password' into 'auth/invalid-credential'
+        // for security reasons. So, we attempt creation upon any auth error during sign-in.
+        try {
+            await createUserWithEmailAndPassword(auth, email, password);
+            // signInWithEmailAndPassword is not needed here as createUserWithEmailAndPassword also signs the user in.
+            router.push('/admin/surveys');
+        } catch (createError: any) {
+            // If creation also fails, then there's a more fundamental issue.
+            const authError = createError as AuthError;
+            toast({
+                title: "Giriş/Kayıt Hatası",
+                description: "Giriş yapılamadı veya admin kullanıcısı oluşturulamadı. Lütfen şifrenizin en az 6 karakter olduğundan emin olun veya daha sonra tekrar deneyin.",
                 variant: "destructive"
             });
         }
