@@ -3,6 +3,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { collection, doc, addDoc, updateDoc, deleteDoc, serverTimestamp, query, orderBy, Query } from 'firebase/firestore';
 import { useApp } from '@/context/app-context';
@@ -11,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
-import { Loader2, PlusCircle, Edit, Trash2, Link as LinkIcon, Copy, Check } from 'lucide-react';
+import { Loader2, PlusCircle, Edit, Trash2, Link as LinkIcon, Copy, Check, ExternalLink } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -146,7 +147,10 @@ function ContentCard({ contentItem }: { contentItem: Content }) {
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   const qrCodePath = useMemo(() => {
-    return `/content/${contentItem.id}`;
+    if (typeof window === 'undefined') {
+        return `/content/${contentItem.id}`;
+    }
+    return `${window.location.origin}/content/${contentItem.id}`;
   }, [contentItem.id]);
 
   const handleDelete = async () => {
@@ -182,12 +186,18 @@ function ContentCard({ contentItem }: { contentItem: Content }) {
       </CardContent>
       <CardFooter className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex items-center gap-2 bg-muted p-2 rounded-md w-full sm:w-auto">
-            <code className="text-sm font-semibold break-all">{qrCodePath}</code>
+            <code className="text-sm font-semibold break-all">{`/content/${contentItem.id}`}</code>
             <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0" onClick={copyToClipboard}>
                 {copied ? <Check className="h-4 w-4 text-green-500"/> : <Copy className="h-4 w-4"/>}
             </Button>
         </div>
         <div className="flex items-center gap-2 self-end">
+          <Button asChild variant="secondary" size="sm">
+            <Link href={`/content/${contentItem.id}`} target="_blank">
+                <ExternalLink className="mr-2 h-4 w-4" />
+                Sayfaya Git
+            </Link>
+          </Button>
           <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
             <DialogTrigger asChild>
               <Button variant="outline" size="sm"><Edit className="mr-2 h-4 w-4" /> Düzenle</Button>
