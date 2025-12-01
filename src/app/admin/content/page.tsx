@@ -144,7 +144,12 @@ function ContentCard({ contentItem }: { contentItem: Content }) {
   const { toast } = useToast();
   const [isFormOpen, setIsFormOpen] = useState(false);
 
-  const qrCodeUrl = `${window.location.origin}/content/${contentItem.id}`;
+  const qrCodeUrl = useMemo(() => {
+    if (typeof window === 'undefined') {
+      return '';
+    }
+    return `${window.location.origin}/content/${contentItem.id}`;
+  }, [contentItem.id]);
 
   const handleDelete = async () => {
     setIsDeleting(true);
