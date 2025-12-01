@@ -21,6 +21,12 @@ service cloud.firestore {
       allow read, list, delete: if isAdmin();
       allow update: if false;
     }
+
+    // Content for QR codes: Publicly readable, admin-only write access.
+    match /content/{contentId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
     
     // Default-deny all other reads and writes for security.
     match /{document=**} {
