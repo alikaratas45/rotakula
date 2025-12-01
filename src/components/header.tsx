@@ -125,12 +125,6 @@ export function Header() {
                             <span>Anket Sonuçları</span>
                         </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                        <Link href="/admin/content">
-                            <QrCode className="mr-2 h-4 w-4" />
-                            <span>İçerik Yönetimi</span>
-                        </Link>
-                    </DropdownMenuItem>
                 </DropdownMenuContent>
            </DropdownMenu>
         )
