@@ -172,7 +172,7 @@ export default function ContentPage({ params }: { params: { id: string } }) {
         }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [content, startPlayback]);
+  }, [content]);
 
 
   useEffect(() => {
@@ -226,3 +226,5 @@ export default function ContentPage({ params }: { params: { id: string } }) {
     </article>
   );
 }
+
+    
