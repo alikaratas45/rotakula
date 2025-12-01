@@ -1,4 +1,3 @@
-
 "use client"
 
 import { getStoryBySlug } from '@/lib/kula-data';
@@ -142,7 +141,7 @@ export default function StoryPage({ params }: { params: Promise<{ slug: string }
                 startPlayback(remainingText);
             }
         }
-    }, [isPaused, remainingText, narrationText, toast, translations, language]);
+    }, [isPaused, remainingText, narrationText, toast, translations, startPlayback]);
 
 
     if (loading) {
