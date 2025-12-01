@@ -248,8 +248,8 @@
     },
     {
       "id": "story-sofa",
-      "description": "Tarihi Beyler Evi'nin içindeki ahşap işlemeli sofa.",
-      "imageUrl": "/beyler.jpg",
+      "description": "Tarihi bir konakta yer alan ve sofa olarak bilinen hayat bölümü.",
+      "imageUrl": "/sofa.jpg",
       "imageHint": "ottoman house interior"
     }
   ]
