@@ -73,7 +73,7 @@ export default function Home() {
     { href: "/routes/kula-flavor-tour", label: translations.nav.food, icon: Utensils, colorClass: "bg-orange-200 dark:bg-orange-900" },
     { href: "/accommodation", label: translations.nav.accommodation, icon: BedIcon, colorClass: "bg-teal-200 dark:bg-teal-900" },
     { href: "/selfie-spot", label: translations.nav.selfieSpot, icon: Smile, colorClass: "bg-cyan-200 dark:bg-cyan-900" },
-    { href: "/qr-scanner", label: translations.nav.qrScanner, icon: QrCode, colorClass: "bg-indigo-200 dark:bg-indigo-900" },
+    { href: "/qr-okuyucu", label: translations.nav.qrScanner, icon: QrCode, colorClass: "bg-indigo-200 dark:bg-indigo-900" },
     { href: "/nearby", label: translations.nav.nearby, icon: Pin, colorClass: "bg-red-200 dark:bg-red-900" },
     { href: "/my-badges", label: translations.nav.myBadges, icon: Award, colorClass: "bg-yellow-200 dark:bg-yellow-900" },
   ];
