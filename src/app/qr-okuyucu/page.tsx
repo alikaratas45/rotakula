@@ -41,8 +41,9 @@ export default function QRScannerPage() {
             scannerRef.current.stop().then(() => {
                 console.log(`Scan result: ${decodedText}`, decodedResult);
                 
-                // Check if the scanned text is a valid path for the app
-                if (decodedText && decodedText.startsWith("/content/")) {
+                // Check if the scanned text is a valid relative path for the app
+                // It should start with a '/' and not contain a full domain.
+                if (decodedText && decodedText.startsWith("/") && !decodedText.includes('//')) {
                     const destinationPath = `${decodedText}?autoplay=true`;
                     router.push(destinationPath);
                 } else {
