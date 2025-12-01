@@ -1,4 +1,3 @@
-
 "use client"
 
 import { getRouteBySlug, getPoisByIds } from '@/lib/kula-data';
@@ -8,11 +7,11 @@ import Image from 'next/image';
 import RouteDetailsClient from './route-details-client';
 import type { ThematicRoute, PointOfInterest } from '@/lib/types';
 import { useApp } from '@/context/app-context';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import { Loader2 } from 'lucide-react';
 
-export default function RoutePage({ params }: { params: { slug: string } }) {
-    const { slug } = params;
+export default function RoutePage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = use(params);
     const { language } = useApp();
     const [route, setRoute] = useState<ThematicRoute | null>(null);
     const [pois, setPois] = useState<PointOfInterest[]>([]);
