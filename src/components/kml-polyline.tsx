@@ -42,10 +42,16 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
                     return;
                 }
 
-                const coordinates = coordsString.trim().split(/\s+/).map(coordStr => {
-                    const [lng, lat] = coordStr.split(',').map(Number);
-                    return { lat, lng };
-                });
+                const coordinates = coordsString
+                    .trim()
+                    .split(/\s+/) // Use regex to handle one or more whitespace characters
+                    .map(coordStr => {
+                        const [lng, lat] = coordStr.split(',').map(Number);
+                        if (!isNaN(lat) && !isNaN(lng)) {
+                            return { lat, lng };
+                        }
+                        return null;
+                    }).filter((c): c is { lat: number; lng: number } => c !== null);
 
                 if (coordinates.length > 0) {
                      newPolyline = new google.maps.Polyline({
@@ -56,6 +62,8 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
                         map: map,
                     });
                     setPolyline(newPolyline);
+                } else {
+                    console.warn(`No valid coordinates found in KML file: ${kmlPath}`);
                 }
                 
             } catch (error) {
@@ -76,6 +84,9 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
             }
         };
 
+    // Disabled exhaustive-deps because we only want this to re-run for kmlPath or map.
+    // Polyline state change should not trigger a re-run.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [kmlPath, map]);
 
     return null;
