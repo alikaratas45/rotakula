@@ -122,7 +122,7 @@ export default function Home() {
                     )}
                     aria-label={item.label}
                   >
-                    <item.icon className="h-7 w-7 md:h-8 md:w-8" />
+                    <item.icon className="h-14 w-14 md:h-16 md:w-16" />
                   </Button>
                   <span className="text-center text-sm font-semibold text-muted-foreground dark:text-white group-hover:text-primary transition-colors">
                     {item.label}
@@ -140,7 +140,7 @@ export default function Home() {
                     aria-label={translations.tour.howToUse}
                     onClick={() => setIsTourActive(true)}
                   >
-                    <HelpCircle className="h-7 w-7 md:h-8 md:w-8" />
+                    <HelpCircle className="h-14 w-14 md:h-16 md:w-16" />
                   </Button>
                   <span className="text-center text-sm font-semibold text-muted-foreground dark:text-white group-hover:text-primary transition-colors">
                     {translations.tour.howToUse}
