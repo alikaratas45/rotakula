@@ -44,20 +44,6 @@
       "description_de": "Eine friedliche Fahrt in der spirituellen Atmosphäre von Yunus Emre und Tabduk Emre."
     },
     {
-      "id": "bike-route-4",
-      "slug": "peribacalari-cakirca-parkuru",
-      "name": "Peribacaları - Çakırca Parkuru",
-      "description": "Eşsiz peri bacalarından başlayıp bazalt sütunlarına uzanan macera dolu bir rota.",
-      "distance": "Yaklaşık 30 km",
-      "kmlPath": "/routes/Peribacalari_cakirca.kml",
-      "name_en": "Fairy Chimneys - Çakırca Trail",
-      "description_en": "An adventurous route starting from the unique fairy chimneys and extending to the basalt columns.",
-      "name_fr": "Piste des Cheminées de Fées - Çakırca",
-      "description_fr": "Un itinéraire aventureux partant des cheminées de fées uniques et s'étendant jusqu'aux colonnes de basalte.",
-      "name_de": "Feenkamine - Çakırca Strecke",
-      "description_de": "Eine abenteuerliche Route, die von den einzigartigen Feenkaminen ausgeht und sich bis zu den Basaltsäulen erstreckt."
-    },
-    {
       "id": "bike-route-5",
       "slug": "peribacalari-kula-parkuru",
       "name": "Peribacaları - Kula Parkuru",
