@@ -154,8 +154,6 @@ export default function StoryPage({ params }: { params: Promise<{ slug: string }
 
     const storyImage = getImageById(story.imageId);
     
-    const displayDate = story.date;
-
     return (
         <article>
             <section className="relative h-[40vh] md:h-[50vh] w-full flex items-end text-white">
@@ -179,17 +177,6 @@ export default function StoryPage({ params }: { params: Promise<{ slug: string }
             
             <div className="container px-4 py-8 md:py-12">
                 <div className="max-w-3xl mx-auto">
-                    <div className="flex items-center gap-6 text-sm text-muted-foreground mb-6">
-                        <div className="flex items-center gap-2">
-                            <User className="h-4 w-4" />
-                            <span>{story.author}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Calendar className="h-4 w-4" />
-                            <time dateTime={story.date}>{displayDate}</time>
-                        </div>
-                    </div>
-
                     <div className="flex items-center gap-4 mb-6">
                         <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
                          <Button
