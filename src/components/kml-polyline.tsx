@@ -57,3 +57,4 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
 
     return <Polyline path={path} strokeColor="#FF0000" strokeOpacity={0.8} strokeWeight={4} />;
 }
+
