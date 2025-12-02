@@ -13,23 +13,22 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
     const [polyline, setPolyline] = useState<google.maps.Polyline | null>(null);
 
     useEffect(() => {
-        // 1. Clean up any existing polyline from the map when the component re-renders or kmlPath changes.
+        // Clean up the old polyline when a new path is selected or component unmounts
         if (polyline) {
             polyline.setMap(null);
         }
 
-        // If map is not ready or kmlPath is not provided, do nothing.
         if (!map || !kmlPath) {
             return;
         }
 
-        // 2. Fetch and draw the new KML data.
         let newPolyline: google.maps.Polyline;
+
         async function fetchAndDrawKml() {
             try {
                 const response = await fetch(kmlPath);
                 if (!response.ok) {
-                    throw new Error(`Failed to fetch KML file: ${response.statusText} for path: ${kmlPath}`);
+                    throw new Error(`Failed to fetch KML file: ${response.status} ${response.statusText} for path: ${kmlPath}`);
                 }
                 const kmlText = await response.text();
                 
@@ -56,7 +55,6 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
                         strokeWeight: 4,
                         map: map,
                     });
-                    // 3. Store the newly created polyline in state for future cleanup.
                     setPolyline(newPolyline);
                 }
                 
@@ -67,14 +65,18 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
 
         fetchAndDrawKml();
 
-        // 4. Return a cleanup function for this effect.
-        // This is crucial for when the component unmounts.
+        // This return function handles cleanup when the component unmounts
+        // or when kmlPath changes before the next effect runs.
         return () => {
-            // Note: `newPolyline` is not accessible here. The cleanup is handled by the `if (polyline)` block at the start of the effect.
+            if (newPolyline) {
+                newPolyline.setMap(null);
+            }
+             if (polyline) {
+                polyline.setMap(null);
+            }
         };
 
-    }, [kmlPath, map]); // The effect re-runs whenever kmlPath or the map instance changes.
+    }, [kmlPath, map]);
 
-    // This component does not render anything itself, it just manipulates the map.
     return null;
 }

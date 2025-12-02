@@ -4,12 +4,37 @@
 	<name>Peribacaları_çakırca_bisiklet.kmz</name>
 	<Snippet maxLines="0"></Snippet>
 	<atom:link rel="app" href="https://www.google.com/earth/about/versions/#earth-pro" title="Google Earth Pro 7.3.6.10441"></atom:link>
-	<Style id="LineStyle00">
+	<StyleMap id="LineStyle00">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#LineStyle000</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#LineStyle001</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="LineStyle000">
 		<LabelStyle>
 			<color>00000000</color>
 			<scale>0</scale>
 		</LabelStyle>
 		<LineStyle>
+			<color>ff0000ff</color>
+			<width>4</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>00000000</color>
+			<outline>0</outline>
+		</PolyStyle>
+	</Style>
+	<Style id="LineStyle001">
+		<LabelStyle>
+			<color>00000000</color>
+			<scale>0</scale>
+		</LabelStyle>
+		<LineStyle>
+			<color>ff0000ff</color>
 			<width>4</width>
 		</LineStyle>
 		<PolyStyle>
