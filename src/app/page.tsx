@@ -10,7 +10,7 @@ import { getImageById } from '@/lib/placeholder-images';
 import { useEffect, useState, useMemo } from 'react';
 import { useApp } from '@/context/app-context';
 import { Button } from '@/components/ui/button';
-import { Utensils, Map, Pin, Route, Info, BookOpen, QrCode, Landmark, HelpCircle, Camera, Smile, Award } from 'lucide-react';
+import { Utensils, Map, Pin, Route, Info, BookOpen, QrCode, Landmark, HelpCircle, Camera, Smile, Award, DraftingCompass } from 'lucide-react';
 import { BedIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { FeedbackSection } from '@/components/feedback';
@@ -68,6 +68,7 @@ export default function Home() {
   
   const iconNavItems = [
     { href: "/places", label: translations.nav.places, icon: Landmark, colorClass: "bg-blue-200 dark:bg-blue-900" },
+    { href: "/bike-routes", label: translations.nav.bikeRoutes, icon: DraftingCompass, colorClass: "bg-yellow-200 dark:bg-yellow-800" },
     { href: "/create-route", label: translations.nav.createRoute, icon: Route, colorClass: "bg-green-200 dark:bg-green-900" },
     { href: "/stories", label: translations.nav.stories, icon: BookOpen, colorClass: "bg-purple-200 dark:bg-purple-900" },
     { href: "/routes/kula-flavor-tour", label: translations.nav.food, icon: Utensils, colorClass: "bg-orange-200 dark:bg-orange-900" },

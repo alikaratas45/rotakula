@@ -71,6 +71,21 @@ export type Story = {
   content_de?: string;
 };
 
+export type BikeRoute = {
+  id: string;
+  slug: string;
+  name: string;
+  description: string;
+  distance: string;
+  kmlPath: string;
+  name_en?: string;
+  description_en?: string;
+  name_fr?: string;
+  description_fr?: string;
+  name_de?: string;
+  description_de?: string;
+}
+
 export interface SurveyState {
   isOpen: boolean;
   poi: PointOfInterest | null;
