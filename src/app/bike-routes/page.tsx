@@ -62,7 +62,7 @@ export default function BikeRoutesPage() {
                 setIsLoading(false);
             }
         }
-        fetchPois();
+        fetchRoutes();
     }, [language]);
 
     if (isLoading) {
