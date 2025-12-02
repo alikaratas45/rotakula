@@ -1,4 +1,3 @@
-
 {
   "bikeRoutes": [
     {
@@ -6,7 +5,6 @@
       "slug": "kula-divlit-parkuru",
       "name": "Kula Divlit Parkuru",
       "description": "Kula'nın en etkileyici volkanik oluşumlarından biri olan Divlit konisi çevresinde bir bisiklet turu.",
-      "distance": "Yaklaşık 15 km",
       "kmlPath": "/routes/Kula_divlit.kml",
       "name_en": "Kula Divlit Trail",
       "description_en": "A bike tour around the Divlit cone, one of Kula's most impressive volcanic formations.",
@@ -14,6 +12,48 @@
       "description_fr": "Un tour à vélo autour du cône de Divlit, l'une des formations volcaniques les plus impressionnantes de Kula.",
       "name_de": "Kula Divlit Strecke",
       "description_de": "Eine Radtour um den Divlit-Kegel, eine der beeindruckendsten Vulkanformationen von Kula."
+    },
+    {
+      "id": "bike-route-2",
+      "slug": "tarihi-koyler-parkuru",
+      "name": "Tarihi Köyler Parkuru",
+      "description": "Kula'nın tarihi köylerini birbirine bağlayan, doğa ve tarihle iç içe bir rota.",
+      "distance": "Yaklaşık 25 km",
+      "kmlPath": "/routes/kula-parkur-2.kml",
+      "name_en": "Historic Villages Trail",
+      "description_en": "A route intertwined with nature and history, connecting the historic villages of Kula.",
+      "name_fr": "Piste des Villages Historiques",
+      "description_fr": "Un itinéraire mêlant nature et histoire, reliant les villages historiques de Kula.",
+      "name_de": "Historische Dörfer Strecke",
+      "description_de": "Eine Route, die Natur und Geschichte verbindet und die historischen Dörfer von Kula miteinander verbindet."
+    },
+    {
+      "id": "bike-route-3",
+      "slug": "gediz-nehri-takip-rotasi",
+      "name": "Gediz Nehri Takip Rotası",
+      "description": "Gediz nehrinin sakin kıyılarını takip ederek huzurlu bir sürüş deneyimi yaşayın.",
+      "distance": "Yaklaşık 20 km",
+      "kmlPath": "/routes/kula-parkur-3.kml",
+      "name_en": "Gediz River Follow-up Route",
+      "description_en": "Enjoy a peaceful ride following the calm banks of the Gediz river.",
+      "name_fr": "Route de Suivi de la Rivière Gediz",
+      "description_fr": "Profitez d'une balade paisible en suivant les rives calmes de la rivière Gediz.",
+      "name_de": "Gediz-Fluss-Verfolgungsroute",
+      "description_de": "Genießen Sie eine friedliche Fahrt entlang der ruhigen Ufer des Gediz-Flusses."
+    },
+    {
+      "id": "bike-route-4",
+      "slug": "jeopark-macera-parkuru",
+      "name": "Jeopark Macera Parkuru",
+      "description": "Jeopark'ın daha az bilinen patikalarında zorlu ve macera dolu bir bisiklet turu.",
+      "distance": "Yaklaşık 30 km",
+      "kmlPath": "/routes/kula-parkur-4.kml",
+      "name_en": "Geopark Adventure Trail",
+      "description_en": "A challenging and adventurous bike tour on the lesser-known trails of the Geopark.",
+      "name_fr": "Piste d'Aventure du Géoparc",
+      "description_fr": "Un tour à vélo difficile et aventureux sur les sentiers moins connus du Géoparc.",
+      "name_de": "Geopark-Abenteuerstrecke",
+      "description_de": "Eine anspruchsvolle und abenteuerliche Radtour auf den weniger bekannten Wegen des Geoparks."
     }
   ]
 }
