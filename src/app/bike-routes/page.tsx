@@ -7,7 +7,7 @@ import { getBikeRoutes } from '@/lib/kula-data';
 import type { BikeRoute } from '@/lib/types';
 import { useApp } from '@/context/app-context';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, DraftingCompass } from 'lucide-react';
+import { Loader2, Bike } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { UserLocationMarker } from '@/components/map';
 
@@ -141,7 +141,7 @@ export default function BikeRoutesPage() {
             <div className="container px-4 py-8 md:py-12">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
                     <div className="flex items-center gap-4">
-                         <DraftingCompass className="h-8 w-8 text-primary" />
+                         <Bike className="h-8 w-8 text-primary" />
                          <h1 className="text-3xl md:text-4xl font-headline font-bold">{translations.nav.bikeRoutes}</h1>
                     </div>
                 </div>
