@@ -22,7 +22,8 @@
         "toggleTheme": "Toggle theme"
     },
     "footer": {
-        "copyright": "All rights reserved."
+        "copyright": "All rights reserved.",
+        "credits": "The information and images on this site have been obtained from the archives of Kula Municipality and the Geopark. Additionally, books by authors who have contributed to Kula, such as Hasan Malay, Hüseyin Şahin, Avni Ataş, İsmail Tosun, Rüstem Bozer, etc., have been utilized. Some images were generated with artificial intelligence."
     },
     "home": {
         "heroTitle": "Discover the Hidden Treasures of Kula",

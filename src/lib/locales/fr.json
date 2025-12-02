@@ -22,7 +22,8 @@
         "toggleTheme": "Changer de thème"
     },
     "footer": {
-        "copyright": "Tous droits réservés."
+        "copyright": "Tous droits réservés.",
+        "credits": "Les informations et les images de ce site proviennent des archives de la municipalité de Kula et du Géoparc. De plus, des livres d'auteurs ayant contribué à Kula, tels que Hasan Malay, Hüseyin Şahin, Avni Ataş, İsmail Tosun, Rüstem Bozer, etc., ont été utilisés. Certaines images ont été générées par intelligence artificielle."
     },
     "home": {
         "heroTitle": "Découvrez les trésors cachés de Kula",
