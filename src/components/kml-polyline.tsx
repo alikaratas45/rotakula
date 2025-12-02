@@ -13,38 +13,40 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
     const [polyline, setPolyline] = useState<google.maps.Polyline | null>(null);
 
     useEffect(() => {
-        // Clean up the old polyline when a new path is selected or component unmounts
-        if (polyline) {
-            polyline.setMap(null);
-        }
+        // 1. Cleanup function: This will run when the component unmounts OR before the effect runs again.
+        // This ensures the previous polyline is always removed.
+        return () => {
+            if (polyline) {
+                polyline.setMap(null);
+            }
+        };
+    }, [polyline]); // Only depends on the polyline state itself.
 
+    useEffect(() => {
         if (!map || !kmlPath) {
             return;
         }
-
-        let newPolyline: google.maps.Polyline;
 
         async function fetchAndDrawKml() {
             try {
                 const response = await fetch(kmlPath);
                 if (!response.ok) {
-                    throw new Error(`Failed to fetch KML file: ${response.status} ${response.statusText} for path: ${kmlPath}`);
+                    throw new Error(`Failed to fetch KML file: ${response.statusText}`);
                 }
                 const kmlText = await response.text();
                 
                 const parser = new DOMParser();
                 const kml = parser.parseFromString(kmlText, "application/xml");
 
-                const coordsString = kml.getElementsByTagName('coordinates')[0]?.textContent;
-
-                if (!coordsString) {
-                    console.warn(`No <coordinates> tag found in KML file: ${kmlPath}`);
+                const coordsStringNode = kml.getElementsByTagName('coordinates')[0];
+                if (!coordsStringNode || !coordsStringNode.textContent) {
+                    console.warn(`No valid <coordinates> tag found in KML file: ${kmlPath}`);
                     return;
                 }
 
-                const coordinates = coordsString
+                const coordinates = coordsStringNode.textContent
                     .trim()
-                    .split(/\s+/) // Use regex to handle one or more whitespace characters
+                    .split(/\s+/) // Handles spaces, newlines, tabs
                     .map(coordStr => {
                         const [lng, lat] = coordStr.split(',').map(Number);
                         if (!isNaN(lat) && !isNaN(lng)) {
@@ -53,41 +55,30 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
                         return null;
                     }).filter((c): c is { lat: number; lng: number } => c !== null);
 
-                if (coordinates.length > 0) {
-                     newPolyline = new google.maps.Polyline({
-                        path: coordinates,
-                        strokeColor: "#FF0000", // Red color
-                        strokeOpacity: 0.8,
-                        strokeWeight: 4,
-                        map: map,
-                    });
-                    setPolyline(newPolyline);
-                } else {
-                    console.warn(`No valid coordinates found in KML file: ${kmlPath}`);
+                if (coordinates.length === 0) {
+                     console.warn(`No valid coordinates parsed from KML file: ${kmlPath}`);
+                     return;
                 }
+
+                const newPolyline = new google.maps.Polyline({
+                    path: coordinates,
+                    strokeColor: "#FF0000",
+                    strokeOpacity: 0.8,
+                    strokeWeight: 4,
+                    map: map,
+                });
+                
+                // 2. Set the new polyline to state. The cleanup effect will handle removing it next time.
+                setPolyline(newPolyline);
                 
             } catch (error) {
-                console.error("Error fetching or parsing KML file:", error);
+                console.error(`Error processing KML file ${kmlPath}:`, error);
             }
         }
 
         fetchAndDrawKml();
+        
+    }, [kmlPath, map]); // This effect re-runs ONLY when the map or kmlPath changes.
 
-        // This return function handles cleanup when the component unmounts
-        // or when kmlPath changes before the next effect runs.
-        return () => {
-            if (newPolyline) {
-                newPolyline.setMap(null);
-            }
-             if (polyline) {
-                polyline.setMap(null);
-            }
-        };
-
-    // Disabled exhaustive-deps because we only want this to re-run for kmlPath or map.
-    // Polyline state change should not trigger a re-run.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [kmlPath, map]);
-
-    return null;
+    return null; // This component does not render anything itself.
 }
