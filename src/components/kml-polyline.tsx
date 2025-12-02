@@ -28,7 +28,7 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
             try {
                 const response = await fetch(kmlPath);
                 if (!response.ok) {
-                    throw new Error(`Failed to fetch KML file: ${response.statusText}`);
+                    throw new Error(`Failed to fetch KML file: ${response.statusText} for path: ${kmlPath}`);
                 }
                 const kmlText = await response.text();
                 
@@ -38,7 +38,7 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
                 const coordsString = kml.getElementsByTagName('coordinates')[0]?.textContent;
 
                 if (!coordsString) {
-                    console.warn("No <coordinates> tag found in KML file.");
+                    console.warn(`No <coordinates> tag found in KML file: ${kmlPath}`);
                     return;
                 }
 
@@ -59,7 +59,7 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
                 }
                 
             } catch (error) {
-                console.error("Error parsing KML file:", error);
+                console.error("Error fetching or parsing KML file:", error);
             }
         }
 
