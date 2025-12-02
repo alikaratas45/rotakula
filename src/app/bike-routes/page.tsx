@@ -2,13 +2,12 @@
 "use client"
 
 import { useEffect, useState } from 'react';
-import { APIProvider, Map, KmlLayer } from "@vis.gl/react-google-maps";
+import { APIProvider, Map } from "@vis.gl/react-google-maps";
 import { getBikeRoutes } from '@/lib/kula-data';
 import type { BikeRoute } from '@/lib/types';
 import { useApp } from '@/context/app-context';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, Zap, Map as MapIcon, DraftingCompass } from 'lucide-react';
+import { Loader2, DraftingCompass } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function BikeRoutesPage() {
@@ -57,6 +56,7 @@ export default function BikeRoutesPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Routes List */}
                     <div className="lg:col-span-1 space-y-4">
+                        <h2 className="text-2xl font-headline font-bold">Rotalar</h2>
                         {routes.map(route => (
                              <Card 
                                 key={route.id}
@@ -85,13 +85,18 @@ export default function BikeRoutesPage() {
                                     disableDefaultUI={false}
                                     mapId="rotakula-bike-map"
                                 >
-                                    {selectedRoute && (
-                                        <KmlLayer
-                                            url={selectedRoute.kmlPath}
-                                            options={{ preserveViewport: false }}
-                                        />
-                                    )}
+                                    {/* KmlLayer kaldırıldı. Rota gösterimi için alternatif bir yöntem gerekecektir. */}
                                 </Map>
+                            </div>
+                            <div className="mt-4 p-4 border rounded-lg bg-muted">
+                                <h3 className="font-headline font-bold text-lg">Rota Detayları</h3>
+                                {selectedRoute ? (
+                                    <p className="text-muted-foreground mt-2">
+                                        Şu anda seçili olan rota: <strong>{selectedRoute.name}</strong>. Harita üzerinde rota çizimi bir sonraki adımda eklenecektir.
+                                    </p>
+                                ) : (
+                                    <p className="text-muted-foreground mt-2">Haritada görmek için bir rota seçin.</p>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -100,4 +105,3 @@ export default function BikeRoutesPage() {
         </APIProvider>
     );
 }
-
