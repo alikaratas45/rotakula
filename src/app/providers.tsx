@@ -12,8 +12,17 @@ import { ThemeProvider } from 'next-themes';
 
 function SplashScreen() {
     return (
-        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background text-foreground">
-            <div className="flex flex-col items-center gap-4 perspective-1000">
+        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background text-foreground overflow-hidden">
+            <video
+                src="/rotakula.mp4"
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="absolute top-0 left-0 w-full h-full object-cover z-0"
+            />
+            <div className="absolute inset-0 bg-black/30 z-10" />
+            <div className="relative z-20 flex flex-col items-center gap-4 perspective-1000">
                  <Image 
                     src="/belediye.png" 
                     alt="Kula Belediyesi Logo" 
@@ -21,9 +30,8 @@ function SplashScreen() {
                     height={400} 
                     priority
                     unoptimized
-                    className="h-96 w-96 mb-4 animate-spin-slow preserve-3d" 
+                    className="h-96 w-96 animate-spin-slow preserve-3d" 
                   />
-                 <p className="text-2xl text-foreground text-center">Kula'nın dijital rehberine hoş geldiniz.</p>
             </div>
         </div>
     )
