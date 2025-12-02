@@ -14,9 +14,6 @@ import { KmlPolyline } from '@/components/kml-polyline';
 function MapBoundsUpdater({ kmlPath }: { kmlPath: string | null }) {
     const map = useMap();
 
-    // This is a dummy component that just gets access to the map instance
-    // and updates the bounds. We can't do this directly in KmlPolyline
-    // because useMap() must be a child of <Map>
     useEffect(() => {
         if (!map || !kmlPath) return;
 

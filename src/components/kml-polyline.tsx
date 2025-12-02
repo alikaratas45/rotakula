@@ -2,15 +2,13 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { Polyline, useMap } from '@vis.gl/react-google-maps';
-import { convert, type Element } from 'xml-js';
+import { Polyline } from '@vis.gl/react-google-maps';
 
 interface KmlPolylineProps {
     kmlPath: string;
 }
 
 export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
-    const map = useMap();
     const [path, setPath] = useState<google.maps.LatLngLiteral[]>([]);
     
     useEffect(() => {
@@ -21,25 +19,11 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
                     throw new Error(`Failed to fetch KML file: ${response.statusText}`);
                 }
                 const kmlText = await response.text();
-
-                // Using xml-js to parse KML
-                const result = convert.xml2js(kmlText, { compact: false }) as Element;
                 
-                // Find coordinates element recursively
-                let coordsString: string | undefined;
-                function findCoordinates(element: Element) {
-                    if (element.name === 'coordinates') {
-                        coordsString = element.elements?.[0]?.text as string;
-                        return;
-                    }
-                    if (element.elements) {
-                        for (const child of element.elements) {
-                            findCoordinates(child);
-                            if (coordsString) return;
-                        }
-                    }
-                }
-                findCoordinates(result);
+                const parser = new DOMParser();
+                const kml = parser.parseFromString(kmlText, "application/xml");
+
+                const coordsString = kml.getElementsByTagName('coordinates')[0]?.textContent;
 
                 if (!coordsString) {
                     console.warn("No <coordinates> tag found in KML file.");
@@ -65,7 +49,7 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
         } else {
             setPath([]);
         }
-    }, [kmlPath, map]);
+    }, [kmlPath]);
 
     if (path.length === 0) {
         return null;
