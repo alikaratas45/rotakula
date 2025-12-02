@@ -14,7 +14,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { cn } from "@/lib/utils";
 
 // --- User Location Marker ---
-function UserLocationMarker() {
+export function UserLocationMarker() {
   const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
   const { translations } = useApp();
   useEffect(() => {

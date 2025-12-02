@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Loader2, DraftingCompass } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { KmlPolyline } from '@/components/kml-polyline';
+import { UserLocationMarker } from '@/components/map';
 
 function MapBoundsUpdater({ kmlPath }: { kmlPath: string | null }) {
     const map = useMap();
@@ -132,6 +133,7 @@ export default function BikeRoutesPage() {
                                 >
                                    {selectedRoute && <KmlPolyline kmlPath={selectedRoute.kmlPath} />}
                                    <MapBoundsUpdater kmlPath={selectedRoute?.kmlPath || null} />
+                                   <UserLocationMarker />
                                 </Map>
                             </div>
                         </div>
