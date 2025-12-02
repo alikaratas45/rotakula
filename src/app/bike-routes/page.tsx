@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { APIProvider, Map, useMap } from "@vis.gl/react-google-maps";
 import { getBikeRoutes } from '@/lib/kula-data';
 import type { BikeRoute } from '@/lib/types';
@@ -9,15 +9,28 @@ import { useApp } from '@/context/app-context';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, DraftingCompass } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { KmlPolyline } from '@/components/kml-polyline';
 import { UserLocationMarker } from '@/components/map';
 
 function MapController({ selectedRoute }: { selectedRoute: BikeRoute | null }) {
     const map = useMap();
+    const polylineRef = useRef<google.maps.Polyline | null>(null);
 
     useEffect(() => {
-        if (!map || !selectedRoute) return;
+        if (!map) return;
+
+        // Clean up previous polyline
+        if (polylineRef.current) {
+            polylineRef.current.setMap(null);
+            polylineRef.current = null;
+        }
         
+        if (!selectedRoute) {
+             map.panTo({ lat: 38.547, lng: 28.65 });
+             map.setZoom(11);
+             return;
+        };
+
+        // --- Pan Map to Route ---
         let center = { lat: 38.547, lng: 28.65 }; // Default Kula center
         let zoom = 13;
 
@@ -27,7 +40,7 @@ function MapController({ selectedRoute }: { selectedRoute: BikeRoute | null }) {
         } else if (selectedRoute.slug.includes('emre')) {
             center = { lat: 38.623, lng: 28.523 };
         } else if (selectedRoute.slug.includes('peribacalari-kula')) {
-            center = { lat: 38.607, lng: 28.808 };
+             center = { lat: 38.607, lng: 28.808 };
         } else if (selectedRoute.slug.includes('evciler')) {
             center = { lat: 38.538, lng: 28.765 };
         }
@@ -35,6 +48,57 @@ function MapController({ selectedRoute }: { selectedRoute: BikeRoute | null }) {
         map.panTo(center);
         map.setZoom(zoom);
 
+        // --- Draw KML Polyline ---
+        async function fetchAndDrawKml() {
+            try {
+                const response = await fetch(selectedRoute!.kmlPath);
+                if (!response.ok) {
+                    throw new Error(`KML dosyası getirilemedi: ${response.status} ${response.statusText}`);
+                }
+                const kmlText = await response.text();
+                
+                const parser = new DOMParser();
+                const kml = parser.parseFromString(kmlText, "application/xml");
+
+                const coordsStringNode = kml.getElementsByTagName('coordinates')[0];
+                if (!coordsStringNode || !coordsStringNode.textContent) {
+                    console.warn(`KML dosyasında <coordinates> etiketi bulunamadı: ${selectedRoute!.kmlPath}`);
+                    return;
+                }
+
+                const coordinates = coordsStringNode.textContent
+                    .trim()
+                    .split(/\s+/)
+                    .map(coordStr => {
+                        const [lng, lat] = coordStr.split(',').map(Number);
+                        if (!isNaN(lat) && !isNaN(lng)) {
+                            return { lat, lng };
+                        }
+                        return null;
+                    }).filter((c): c is { lat: number; lng: number } => c !== null);
+
+                if (coordinates.length === 0) {
+                     console.warn(`KML dosyasından geçerli koordinat ayrıştırılamadı: ${selectedRoute!.kmlPath}`);
+                     return;
+                }
+                
+                const newPolyline = new google.maps.Polyline({
+                    path: coordinates,
+                    strokeColor: "#FF0000",
+                    strokeOpacity: 0.8,
+                    strokeWeight: 4,
+                    map: map,
+                });
+                
+                polylineRef.current = newPolyline;
+                
+            } catch (error) {
+                console.error(`KML dosyası işlenirken bir hata oluştu (${selectedRoute!.kmlPath}):`, error);
+            }
+        }
+
+        fetchAndDrawKml();
+        
     }, [map, selectedRoute]);
 
     return null;
@@ -54,7 +118,6 @@ export default function BikeRoutesPage() {
                 setIsLoading(true);
                 const bikeRoutes = await getBikeRoutes(language);
                 setRoutes(bikeRoutes);
-                // Do not select a default route anymore
                 setSelectedRoute(null); 
             } catch (error) {
                 console.error("Failed to fetch bike routes", error);
@@ -115,7 +178,6 @@ export default function BikeRoutesPage() {
                                     disableDefaultUI={false}
                                     mapId="rotakula-bike-map"
                                 >
-                                   {selectedRoute && <KmlPolyline kmlPath={selectedRoute.kmlPath} />}
                                    <MapController selectedRoute={selectedRoute} />
                                    <UserLocationMarker />
                                 </Map>
