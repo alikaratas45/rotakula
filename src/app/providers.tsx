@@ -1,5 +1,4 @@
 
-
 "use client"
 
 import { type PropsWithChildren, useState, useEffect } from 'react';
@@ -9,6 +8,7 @@ import { Footer } from '@/components/footer';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import IntroTour from '@/components/intro-tour';
+import { ThemeProvider } from 'next-themes';
 
 function SplashScreen() {
     return (
@@ -29,7 +29,7 @@ function SplashScreen() {
     )
 }
 
-export function Providers({ children }: PropsWithChildren) {
+function AppContent({ children }: PropsWithChildren) {
   const [loading, setLoading] = useState(true);
   const [animationClass, setAnimationClass] = useState('');
 
@@ -59,5 +59,19 @@ export function Providers({ children }: PropsWithChildren) {
         <Footer />
         <Toaster />
     </>
+  );
+}
+
+
+export function Providers({ children }: PropsWithChildren) {
+  return (
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="light"
+      enableSystem
+      disableTransitionOnChange
+    >
+      <AppContent>{children}</AppContent>
+    </ThemeProvider>
   );
 }
