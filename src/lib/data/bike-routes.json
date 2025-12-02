@@ -49,13 +49,27 @@
       "name": "Peribacaları - Çakırca Parkuru",
       "description": "Eşsiz peri bacalarından başlayıp bazalt sütunlarına uzanan macera dolu bir rota.",
       "distance": "Yaklaşık 30 km",
-      "kmlPath": "/routes/Peribacalari_cakirca_bisiklet.kml",
+      "kmlPath": "/routes/Peribacalari_cakirca.kml",
       "name_en": "Fairy Chimneys - Çakırca Trail",
       "description_en": "An adventurous route starting from the unique fairy chimneys and extending to the basalt columns.",
       "name_fr": "Piste des Cheminées de Fées - Çakırca",
       "description_fr": "Un itinéraire aventureux partant des cheminées de fées uniques et s'étendant jusqu'aux colonnes de basalte.",
       "name_de": "Feenkamine - Çakırca Strecke",
       "description_de": "Eine abenteuerliche Route, die von den einzigartigen Feenkaminen ausgeht und sich bis zu den Basaltsäulen erstreckt."
+    },
+    {
+      "id": "bike-route-5",
+      "slug": "peribacalari-kula-parkuru",
+      "name": "Peribacaları - Kula Parkuru",
+      "description": "Peri bacalarından başlayarak Kula merkeze uzanan keyifli bir iniş rotası.",
+      "distance": "Yaklaşık 22 km",
+      "kmlPath": "/routes/Peribacalari_kula.kml",
+      "name_en": "Fairy Chimneys - Kula Trail",
+      "description_en": "A pleasant downhill route starting from the fairy chimneys and extending to the center of Kula.",
+      "name_fr": "Piste des Cheminées de Fées - Kula",
+      "description_fr": "Un agréable parcours de descente partant des cheminées de fées et s'étendant jusqu'au centre de Kula.",
+      "name_de": "Feenkamine - Kula Strecke",
+      "description_de": "Eine angenehme Abfahrtsroute, die von den Feenkaminen ausgeht und sich bis ins Zentrum von Kula erstreckt."
     }
   ]
 }
