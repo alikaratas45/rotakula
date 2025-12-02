@@ -2,13 +2,61 @@
 "use client"
 
 import { useEffect, useState } from 'react';
-import { APIProvider, Map } from "@vis.gl/react-google-maps";
+import { APIProvider, Map, useMap } from "@vis.gl/react-google-maps";
 import { getBikeRoutes } from '@/lib/kula-data';
 import type { BikeRoute } from '@/lib/types';
 import { useApp } from '@/context/app-context';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, DraftingCompass } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { KmlPolyline } from '@/components/kml-polyline';
+
+function MapBoundsUpdater({ kmlPath }: { kmlPath: string | null }) {
+    const map = useMap();
+
+    // This is a dummy component that just gets access to the map instance
+    // and updates the bounds. We can't do this directly in KmlPolyline
+    // because useMap() must be a child of <Map>
+    useEffect(() => {
+        if (!map || !kmlPath) return;
+
+        async function updateBounds() {
+            try {
+                const response = await fetch(kmlPath);
+                if (!response.ok) return;
+                
+                const kmlText = await response.text();
+                const parser = new DOMParser();
+                const kml = parser.parseFromString(kmlText, "application/xml");
+                
+                const coordsString = kml.getElementsByTagName('coordinates')[0]?.textContent;
+                if (!coordsString) return;
+
+                const coordinates = coordsString.trim().split(/\s+/).map(coord => {
+                    const [lng, lat] = coord.split(',').map(Number);
+                    return { lat, lng };
+                });
+
+                if (coordinates.length > 0) {
+                    const bounds = new google.maps.LatLngBounds();
+                    coordinates.forEach(coord => {
+                        bounds.extend(coord);
+                    });
+                    map.fitBounds(bounds, 100);
+                }
+
+            } catch (error) {
+                console.error("Error updating map bounds:", error);
+            }
+        }
+
+        updateBounds();
+
+    }, [map, kmlPath]);
+
+    return null;
+}
+
 
 export default function BikeRoutesPage() {
     const { language, translations } = useApp();
@@ -85,18 +133,9 @@ export default function BikeRoutesPage() {
                                     disableDefaultUI={false}
                                     mapId="rotakula-bike-map"
                                 >
-                                    {/* KmlLayer kaldırıldı. Rota gösterimi için alternatif bir yöntem gerekecektir. */}
+                                   {selectedRoute && <KmlPolyline kmlPath={selectedRoute.kmlPath} />}
+                                   <MapBoundsUpdater kmlPath={selectedRoute?.kmlPath || null} />
                                 </Map>
-                            </div>
-                            <div className="mt-4 p-4 border rounded-lg bg-muted">
-                                <h3 className="font-headline font-bold text-lg">Rota Detayları</h3>
-                                {selectedRoute ? (
-                                    <p className="text-muted-foreground mt-2">
-                                        Şu anda seçili olan rota: <strong>{selectedRoute.name}</strong>. Harita üzerinde rota çizimi bir sonraki adımda eklenecektir.
-                                    </p>
-                                ) : (
-                                    <p className="text-muted-foreground mt-2">Haritada görmek için bir rota seçin.</p>
-                                )}
                             </div>
                         </div>
                     </div>
