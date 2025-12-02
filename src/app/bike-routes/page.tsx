@@ -12,45 +12,31 @@ import { cn } from '@/lib/utils';
 import { KmlPolyline } from '@/components/kml-polyline';
 import { UserLocationMarker } from '@/components/map';
 
-function MapBoundsUpdater({ kmlPath }: { kmlPath: string | null }) {
+function MapController({ selectedRoute }: { selectedRoute: BikeRoute | null }) {
     const map = useMap();
 
     useEffect(() => {
-        if (!map || !kmlPath) return;
+        if (!map || !selectedRoute) return;
+        
+        // A simple logic to pan to a general area based on route slug
+        // This avoids dependency on parsing KML for bounds, which can fail.
+        let center = { lat: 38.547, lng: 28.65 }; // Default Kula center
+        const zoom = 13;
 
-        async function updateBounds() {
-            try {
-                const response = await fetch(kmlPath);
-                if (!response.ok) return;
-                
-                const kmlText = await response.text();
-                const parser = new DOMParser();
-                const kml = parser.parseFromString(kmlText, "application/xml");
-                
-                const coordsString = kml.getElementsByTagName('coordinates')[0]?.textContent;
-                if (!coordsString) return;
-
-                const coordinates = coordsString.trim().split(/\s+/).map(coord => {
-                    const [lng, lat] = coord.split(',').map(Number);
-                    return { lat, lng };
-                });
-
-                if (coordinates.length > 0) {
-                    const bounds = new google.maps.LatLngBounds();
-                    coordinates.forEach(coord => {
-                        bounds.extend(coord);
-                    });
-                    map.fitBounds(bounds, 100);
-                }
-
-            } catch (error) {
-                console.error("Error updating map bounds:", error);
-            }
+        if (selectedRoute.slug.includes('divlit')) {
+            center = { lat: 38.577, lng: 28.553 };
+        } else if (selectedRoute.slug.includes('emre')) {
+            center = { lat: 38.623, lng: 28.523 };
+        } else if (selectedRoute.slug.includes('peribacalari')) {
+            center = { lat: 38.607, lng: 28.808 };
+        } else if (selectedRoute.slug.includes('evciler')) {
+            center = { lat: 38.538, lng: 28.765 };
         }
 
-        updateBounds();
+        map.panTo(center);
+        map.setZoom(zoom);
 
-    }, [map, kmlPath]);
+    }, [map, selectedRoute]);
 
     return null;
 }
@@ -69,9 +55,8 @@ export default function BikeRoutesPage() {
                 setIsLoading(true);
                 const bikeRoutes = await getBikeRoutes(language);
                 setRoutes(bikeRoutes);
-                if (bikeRoutes.length > 0) {
-                    setSelectedRoute(bikeRoutes[0]);
-                }
+                // Do not select a default route anymore
+                // setSelectedRoute(bikeRoutes[0]); 
             } catch (error) {
                 console.error("Failed to fetch bike routes", error);
             } finally {
@@ -132,7 +117,7 @@ export default function BikeRoutesPage() {
                                     mapId="rotakula-bike-map"
                                 >
                                    {selectedRoute && <KmlPolyline kmlPath={selectedRoute.kmlPath} />}
-                                   <MapBoundsUpdater kmlPath={selectedRoute?.kmlPath || null} />
+                                   <MapController selectedRoute={selectedRoute} />
                                    <UserLocationMarker />
                                 </Map>
                             </div>
