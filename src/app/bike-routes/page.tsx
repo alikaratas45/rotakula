@@ -27,10 +27,12 @@ function MapController({ selectedRoute }: { selectedRoute: BikeRoute | null }) {
             center = { lat: 38.577, lng: 28.553 };
         } else if (selectedRoute.slug.includes('emre')) {
             center = { lat: 38.623, lng: 28.523 };
-        } else if (selectedRoute.slug.includes('peribacalari')) {
+        } else if (selectedRoute.slug.includes('peribacalari-kula')) {
             center = { lat: 38.607, lng: 28.808 };
         } else if (selectedRoute.slug.includes('evciler')) {
             center = { lat: 38.538, lng: 28.765 };
+        } else if (selectedRoute.slug.includes('peribacalari-cakirca')){
+            center = { lat: 38.615, lng: 28.77 }; // Approx center between peribacaları and çakırca
         }
 
         map.panTo(center);
@@ -56,7 +58,7 @@ export default function BikeRoutesPage() {
                 const bikeRoutes = await getBikeRoutes(language);
                 setRoutes(bikeRoutes);
                 // Do not select a default route anymore
-                // setSelectedRoute(bikeRoutes[0]); 
+                setSelectedRoute(null); 
             } catch (error) {
                 console.error("Failed to fetch bike routes", error);
             } finally {
