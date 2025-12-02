@@ -3,17 +3,17 @@
   "bikeRoutes": [
     {
       "id": "bike-route-1",
-      "slug": "geopark-explorer",
-      "name": "Jeopark Kaşifi Rotası",
-      "description": "Kula merkezinden başlayıp, volkanik arazinin kalbine uzanan, orta zorlukta bir rota.",
+      "slug": "kula-divlit-parkuru",
+      "name": "Kula Divlit Parkuru",
+      "description": "Kula'nın en etkileyici volkanik oluşumlarından biri olan Divlit konisi çevresinde bir bisiklet turu.",
       "distance": "Yaklaşık 15 km",
-      "kmlPath": "/routes/sample-route.kml",
-      "name_en": "Geopark Explorer Route",
-      "description_en": "A medium-difficulty route starting from the center of Kula and extending to the heart of the volcanic terrain.",
-      "name_fr": "Itinéraire de l'Explorateur du Géoparc",
-      "description_fr": "Un itinéraire de difficulté moyenne partant du centre de Kula et s'étendant jusqu'au cœur du terrain volcanique.",
-      "name_de": "Geopark-Entdeckerroute",
-      "description_de": "Eine mittelschwere Route, die im Zentrum von Kula beginnt und ins Herz des Vulkangebiets führt."
+      "kmlPath": "/routes/Kula_divlit.kml",
+      "name_en": "Kula Divlit Trail",
+      "description_en": "A bike tour around the Divlit cone, one of Kula's most impressive volcanic formations.",
+      "name_fr": "Piste de Kula Divlit",
+      "description_fr": "Un tour à vélo autour du cône de Divlit, l'une des formations volcaniques les plus impressionnantes de Kula.",
+      "name_de": "Kula Divlit Strecke",
+      "description_de": "Eine Radtour um den Divlit-Kegel, eine der beeindruckendsten Vulkanformationen von Kula."
     }
   ]
 }
