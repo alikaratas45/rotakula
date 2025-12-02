@@ -257,6 +257,12 @@
       "description": "Hoca Seyfeddin Köprüsü",
       "imageUrl": "/hoca.jpg",
       "imageHint": "stone bridge"
+    },
+    {
+      "id": "story-mezalim",
+      "description": "Milli mücadele döneminden tarihi bir sokak.",
+      "imageUrl": "/korez.jpg",
+      "imageHint": "historic village street"
     }
   ]
 }
