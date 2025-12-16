@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { Map, AdvancedMarker, useMap } from "@vis.gl/react-google-maps";
@@ -227,17 +228,14 @@ export const NearbySearch = () => {
     const { translations } = useApp();
     const [places, setPlaces] = useState<google.maps.places.PlaceResult[]>([]);
     const [selectedPlace, setSelectedPlace] = useState<google.maps.places.PlaceResult | null>(null);
-    const [userPosition, setUserPosition] = useState<{ lat: number; lng: number } | null>(null);
+    const [userPosition, setUserPosition] = useState<{ lat: number; lng: number } | null>({ lat: 38.544928799703115, lng: 28.644873680043112 });
     const [error, setError] = useState<string | null>(null);
-
-    // Use Kula Municipality as the location for nearby search
-    useEffect(() => {
-        setUserPosition({ lat: 38.544928799703115, lng: 28.644873680043112 });
-    }, []);
+    const [isLoading, setIsLoading] = useState(true);
 
     // Perform nearby search
     useEffect(() => {
         if (!map || !userPosition) return;
+        setIsLoading(true);
 
         const request: google.maps.places.TextSearchRequest = {
             query: "Kula'daki restoran, lokanta veya kafeler",
@@ -267,6 +265,7 @@ export const NearbySearch = () => {
                  map.setCenter(userPosition);
                  map.setZoom(13);
             }
+            setIsLoading(false);
         });
     }, [map, userPosition, translations]);
     
@@ -295,20 +294,16 @@ export const NearbySearch = () => {
         );
     }
 
-    if (!userPosition && !error) {
-         return (
-            <div className="h-80 flex items-center justify-center bg-muted/50 rounded-lg">
-                <div className="flex items-center gap-2 text-muted-foreground">
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    <span>{translations.map.loading}</span>
-                </div>
-            </div>
-        );
-    }
-    
-
     return (
         <div className="h-80 w-full rounded-lg overflow-hidden relative">
+            {isLoading && (
+                 <div className="absolute inset-0 bg-muted/50 flex items-center justify-center z-10">
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <span>{translations.map.loading}</span>
+                    </div>
+                </div>
+            )}
             <Map
                 center={userPosition || { lat: 38.547, lng: 28.52 }}
                 zoom={14}
