@@ -1,4 +1,5 @@
 
+
 "use client"
 
 import { getRoutes } from '@/lib/kula-data';
@@ -67,16 +68,16 @@ export default function Home() {
   const heroImage = getImageById('hero-home');
   
   const iconNavItems = [
-    { href: "/places", label: translations.nav.places, icon: Landmark, colorClass: "bg-blue-200 dark:bg-blue-900" },
-    { href: "/bike-routes", label: translations.nav.bikeRoutes, icon: Bike, colorClass: "bg-yellow-200 dark:bg-yellow-800" },
-    { href: "/create-route", label: translations.nav.createRoute, icon: Route, colorClass: "bg-green-200 dark:bg-green-900" },
-    { href: "/stories", label: translations.nav.stories, icon: BookOpen, colorClass: "bg-purple-200 dark:bg-purple-900" },
-    { href: "/routes/kula-flavor-tour", label: translations.nav.food, icon: Utensils, colorClass: "bg-orange-200 dark:bg-orange-900" },
-    { href: "/accommodation", label: translations.nav.accommodation, icon: BedIcon, colorClass: "bg-teal-200 dark:bg-teal-900" },
-    { href: "/selfie-spot", label: translations.nav.selfieSpot, icon: Smile, colorClass: "bg-cyan-200 dark:bg-cyan-900" },
-    { href: "/qr-okuyucu", label: translations.nav.qrScanner, icon: QrCode, colorClass: "bg-indigo-200 dark:bg-indigo-900" },
-    { href: "/nearby", label: translations.nav.nearby, icon: Pin, colorClass: "bg-red-200 dark:bg-red-900" },
-    { href: "/my-badges", label: translations.nav.myBadges, icon: Award, colorClass: "bg-yellow-200 dark:bg-yellow-900" },
+    { href: "/places", label: translations.nav.places, icon: Landmark, color: "border-blue-500" },
+    { href: "/bike-routes", label: translations.nav.bikeRoutes, icon: Bike, color: "border-yellow-500" },
+    { href: "/create-route", label: translations.nav.createRoute, icon: Route, color: "border-green-500" },
+    { href: "/stories", label: translations.nav.stories, icon: BookOpen, color: "border-purple-500" },
+    { href: "/routes/kula-flavor-tour", label: translations.nav.food, icon: Utensils, color: "border-orange-500" },
+    { href: "/accommodation", label: translations.nav.accommodation, icon: BedIcon, color: "border-teal-500" },
+    { href: "/selfie-spot", label: translations.nav.selfieSpot, icon: Smile, color: "border-cyan-500" },
+    { href: "/qr-okuyucu", label: translations.nav.qrScanner, icon: QrCode, color: "border-indigo-500" },
+    { href: "/nearby", label: translations.nav.nearby, icon: Pin, color: "border-red-500" },
+    { href: "/my-badges", label: translations.nav.myBadges, icon: Award, color: "border-amber-500" },
   ];
 
   return (
@@ -105,46 +106,40 @@ export default function Home() {
 
       <section className="py-12 px-4 md:px-8 bg-background relative z-20">
          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-4 md:grid-cols-5 lg:grid-cols-10 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
               {iconNavItems.map((item, index) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="flex flex-col items-center gap-2 group animate-fade-in-up"
+                  className="group animate-fade-in-up"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <Button
-                    variant="secondary"
-                    size="icon"
-                    className={cn(
-                      "h-16 w-16 md:h-20 md:w-20 rounded-full group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 transform group-hover:scale-110",
-                      item.colorClass
-                    )}
-                    aria-label={item.label}
-                  >
-                    <item.icon className="h-14 w-14 md:h-16 md:w-16" />
-                  </Button>
-                  <span className="text-center text-sm font-semibold text-muted-foreground dark:text-white group-hover:text-primary transition-colors">
-                    {item.label}
-                  </span>
+                  <div className={cn(
+                      "relative p-4 bg-card rounded-2xl border-b-4 border-r-4 transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-lg",
+                      item.color
+                  )}>
+                      <div className="flex flex-col items-center justify-center h-28">
+                          <item.icon className="h-12 w-12 text-foreground/80 mb-3 transition-colors group-hover:text-primary" />
+                          <span className="text-center text-sm font-semibold text-foreground/90 group-hover:text-primary transition-colors">
+                              {item.label}
+                          </span>
+                      </div>
+                  </div>
                 </Link>
               ))}
-               <div className="flex flex-col items-center gap-2 group animate-fade-in-up" style={{ animationDelay: `${iconNavItems.length * 100}ms` }}>
-                  <Button
-                    variant="secondary"
-                    size="icon"
-                    className={cn(
-                      "h-16 w-16 md:h-20 md:w-20 rounded-full group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 transform group-hover:scale-110",
-                      "bg-gray-200 dark:bg-gray-800"
-                    )}
-                    aria-label={translations.tour.howToUse}
-                    onClick={() => setIsTourActive(true)}
-                  >
-                    <HelpCircle className="h-14 w-14 md:h-16 md:w-16" />
-                  </Button>
-                  <span className="text-center text-sm font-semibold text-muted-foreground dark:text-white group-hover:text-primary transition-colors">
-                    {translations.tour.howToUse}
-                  </span>
+               <div
+                  className="group animate-fade-in-up cursor-pointer"
+                  style={{ animationDelay: `${iconNavItems.length * 100}ms` }}
+                  onClick={() => setIsTourActive(true)}
+                >
+                  <div className="relative p-4 bg-card rounded-2xl border-b-4 border-r-4 border-gray-500 transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-lg">
+                      <div className="flex flex-col items-center justify-center h-28">
+                          <HelpCircle className="h-12 w-12 text-foreground/80 mb-3 transition-colors group-hover:text-primary" />
+                          <span className="text-center text-sm font-semibold text-foreground/90 group-hover:text-primary transition-colors">
+                              {translations.tour.howToUse}
+                          </span>
+                      </div>
+                  </div>
                 </div>
             </div>
           </div>
