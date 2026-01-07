@@ -4,12 +4,12 @@ import { useApp } from '@/context/app-context';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Gem, PlayIcon, PauseIcon } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, Suspense } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useSearchParams } from 'next/navigation';
 import { getImageById } from '@/lib/placeholder-images';
 
-export default function SofaPage() {
+function SofaContent() {
     const { language, translations } = useApp();
     const { toast } = useToast();
     const searchParams = useSearchParams();
@@ -199,6 +199,14 @@ export default function SofaPage() {
                 </div>
             </div>
         </article>
+    );
+}
+
+export default function SofaPage() {
+    return (
+        <Suspense fallback={<div>{/* Or a loading spinner */}</div>}>
+            <SofaContent />
+        </Suspense>
     );
 }
     

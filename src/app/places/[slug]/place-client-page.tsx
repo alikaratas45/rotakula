@@ -6,7 +6,7 @@ import { APIProvider } from '@vis.gl/react-google-maps';
 import EmbeddedMap from '@/components/map';
 import { getImageById } from '@/lib/placeholder-images';
 import type { PointOfInterest } from '@/lib/types';
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import { PlayIcon, PauseIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -16,7 +16,7 @@ import { Separator } from '@/components/ui/separator';
 import { Survey } from '@/components/survey';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
+function PlaceContent({ poi }: { poi: PointOfInterest }) {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
     const heroImage = getImageById(poi.imageId);
     const { language, translations } = useApp();
@@ -230,5 +230,13 @@ export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
                 )}
             </article>
         </APIProvider>
+    );
+}
+
+export default function PlaceClientPage({ poi }: { poi: PointOfInterest }) {
+    return (
+        <Suspense fallback={<div>{/* Or a loading spinner */}</div>}>
+            <PlaceContent poi={poi} />
+        </Suspense>
     );
 }

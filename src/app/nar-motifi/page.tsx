@@ -4,12 +4,12 @@ import { useApp } from '@/context/app-context';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Gem, PlayIcon, PauseIcon } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, Suspense } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useSearchParams } from 'next/navigation';
 import { getImageById } from '@/lib/placeholder-images';
 
-export default function NarMotifiPage() {
+function NarMotifiContent() {
     const { language, translations } = useApp();
     const { toast } = useToast();
     const searchParams = useSearchParams();
@@ -204,6 +204,14 @@ export default function NarMotifiPage() {
                 </div>
             </div>
         </article>
+    );
+}
+
+export default function NarMotifiPage() {
+    return (
+        <Suspense fallback={<div>{/* Or a loading spinner */}</div>}>
+            <NarMotifiContent />
+        </Suspense>
     );
 }
     
