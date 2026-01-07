@@ -23,15 +23,7 @@ function SplashScreen() {
             />
             <div className="absolute inset-0 bg-black/30 z-10" />
             <div className="relative z-20 flex flex-col items-center gap-4 perspective-1000">
-                 <Image 
-                    src="/belediye.png" 
-                    alt="Kula Belediyesi Logo" 
-                    width={400} 
-                    height={400} 
-                    priority
-                    unoptimized
-                    className="h-96 w-96 animate-spin-slow preserve-3d" 
-                  />
+                 
             </div>
         </div>
     )
