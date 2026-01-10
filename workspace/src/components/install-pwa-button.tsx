@@ -33,29 +33,37 @@ export const InstallPwaButton = () => {
   }, []);
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) {
+    if (isAppInstalled) {
+      // You can add a toast notification here to inform the user
+      // that the app is already installed.
+      console.log("Uygulama zaten yüklü.");
       return;
     }
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === "accepted") {
-      setDeferredPrompt(null);
-      setIsAppInstalled(true);
+
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === "accepted") {
+        setDeferredPrompt(null);
+        setIsAppInstalled(true);
+      }
+    } else {
+       // You can add a toast notification here to inform the user
+       // that the app cannot be installed right now.
+       console.log("Uygulama şu anda yüklenemiyor.");
     }
   };
-
-  if (isAppInstalled || !deferredPrompt) {
-    return null;
-  }
 
   return (
     <div
       className="group animate-fade-in-up cursor-pointer"
       onClick={handleInstallClick}
+      title={isAppInstalled ? "Uygulama zaten yüklü" : "Uygulamayı ana ekrana yükle"}
     >
       <div className={cn(
         "relative p-4 bg-card rounded-2xl border-b-4 border-r-4 transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-lg",
-        "border-pink-500"
+        "border-pink-500",
+        isAppInstalled ? "opacity-50 cursor-not-allowed" : ""
       )}>
         <div className="flex flex-col items-center justify-center h-28">
           <Download className="h-12 w-12 text-foreground/80 mb-3 transition-colors group-hover:text-primary" />
