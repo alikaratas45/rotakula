@@ -24,7 +24,7 @@ export const InstallPwaButton = () => {
     };
 
     // Check if running in standalone mode (PWA)
-    if (window.matchMedia("(display-mode: standalone)").matches) {
+    if (typeof window !== "undefined" && window.matchMedia("(display-mode: standalone)").matches) {
       setIsAppInstalled(true);
     }
 
@@ -70,8 +70,7 @@ export const InstallPwaButton = () => {
     >
       <div className={cn(
         "relative p-4 bg-card rounded-2xl border-b-4 border-r-4 transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-lg",
-        "border-pink-500",
-        isAppInstalled ? "opacity-60" : "" // Keep it visible but slightly faded if installed
+        "border-pink-500"
       )}>
         <div className="flex flex-col items-center justify-center h-28">
           <Download className="h-12 w-12 text-foreground/80 mb-3 transition-colors group-hover:text-primary" />
