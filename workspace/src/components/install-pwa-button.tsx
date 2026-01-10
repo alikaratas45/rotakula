@@ -3,8 +3,12 @@
 import { useState, useEffect } from "react";
 import { Download } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
+import { useApp } from "@/context/app-context";
 
 export const InstallPwaButton = () => {
+  const { toast } = useToast();
+  const { translations } = useApp();
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isAppInstalled, setIsAppInstalled] = useState(false);
 
@@ -19,12 +23,13 @@ export const InstallPwaButton = () => {
       setDeferredPrompt(null);
     };
 
-    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-    window.addEventListener("appinstalled", handleAppInstalled);
-
+    // Check if running in standalone mode (PWA)
     if (window.matchMedia("(display-mode: standalone)").matches) {
       setIsAppInstalled(true);
     }
+
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    window.addEventListener("appinstalled", handleAppInstalled);
 
     return () => {
       window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
@@ -34,9 +39,10 @@ export const InstallPwaButton = () => {
 
   const handleInstallClick = async () => {
     if (isAppInstalled) {
-      // You can add a toast notification here to inform the user
-      // that the app is already installed.
-      console.log("Uygulama zaten yüklü.");
+      toast({
+        title: "Uygulama Zaten Yüklü",
+        description: "RotaKula uygulaması cihazınızda zaten yüklü.",
+      });
       return;
     }
 
@@ -48,9 +54,11 @@ export const InstallPwaButton = () => {
         setIsAppInstalled(true);
       }
     } else {
-       // You can add a toast notification here to inform the user
-       // that the app cannot be installed right now.
-       console.log("Uygulama şu anda yüklenemiyor.");
+       toast({
+        title: "Yükleme Başlatılamadı",
+        description: "Uygulama zaten yüklü olabilir veya tarayıcınız bu özelliği desteklemiyor olabilir.",
+        variant: "destructive"
+       });
     }
   };
 
@@ -63,7 +71,7 @@ export const InstallPwaButton = () => {
       <div className={cn(
         "relative p-4 bg-card rounded-2xl border-b-4 border-r-4 transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-lg",
         "border-pink-500",
-        isAppInstalled ? "opacity-50 cursor-not-allowed" : ""
+        isAppInstalled ? "opacity-60" : "" // Keep it visible but slightly faded if installed
       )}>
         <div className="flex flex-col items-center justify-center h-28">
           <Download className="h-12 w-12 text-foreground/80 mb-3 transition-colors group-hover:text-primary" />
