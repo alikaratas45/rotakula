@@ -4,9 +4,11 @@ import { useState, useEffect } from "react";
 import { Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { useApp } from "@/context/app-context";
 
 export const InstallPwaButton = () => {
   const { toast } = useToast();
+  const { translations } = useApp();
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isAppInstalled, setIsAppInstalled] = useState(false);
 
@@ -21,8 +23,7 @@ export const InstallPwaButton = () => {
       setDeferredPrompt(null);
     };
 
-    // Check if running in standalone mode (PWA)
-    if (window.matchMedia("(display-mode: standalone)").matches) {
+    if (typeof window !== "undefined" && window.matchMedia("(display-mode: standalone)").matches) {
       setIsAppInstalled(true);
     }
 
@@ -54,7 +55,7 @@ export const InstallPwaButton = () => {
     } else {
        toast({
         title: "Yükleme Başlatılamadı",
-        description: "Uygulama şu anda yüklenemiyor. Tarayıcınız bu özelliği desteklemiyor olabilir.",
+        description: "Uygulama zaten yüklü olabilir veya tarayıcınız bu özelliği desteklemiyor olabilir.",
         variant: "destructive"
        });
     }
@@ -68,8 +69,7 @@ export const InstallPwaButton = () => {
     >
       <div className={cn(
         "relative p-4 bg-card rounded-2xl border-b-4 border-r-4 transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-lg",
-        "border-pink-500",
-        isAppInstalled ? "opacity-60" : "" // Keep it visible but slightly faded if installed
+        "border-pink-500"
       )}>
         <div className="flex flex-col items-center justify-center h-28">
           <Download className="h-12 w-12 text-foreground/80 mb-3 transition-colors group-hover:text-primary" />
