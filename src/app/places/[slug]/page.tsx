@@ -16,8 +16,9 @@ export default function PlaceDetailPage({ params }: { params: Promise<{ slug: st
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        setPoi(null); // Clear previous data on language change
+        setLoading(true);
         async function fetchPoi() {
-            setLoading(true);
             const poiData = await getPoiBySlug(slug, language);
             if (poiData) {
                 setPoi(poiData);
