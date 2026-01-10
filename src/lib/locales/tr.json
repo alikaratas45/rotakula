@@ -15,7 +15,13 @@
         "digitalMemory": "Dijital Hatıra",
         "selfieSpot": "Selfie Noktası",
         "myBadges": "Rozetlerim",
-        "bikeRoutes": "Bisiklet Rotaları"
+        "bikeRoutes": "Bisiklet Rotaları",
+        "installApp": "Uygulamayı Yükle",
+        "installAppTitle": "Uygulamayı ana ekrana yükle",
+        "installAppAlready": "Uygulama Zaten Yüklü",
+        "installAppAlreadyDesc": "RotaKula uygulaması cihazınızda zaten yüklü.",
+        "installAppNotPossible": "Yükleme Başlatılamadı",
+        "installAppNotPossibleDesc": "Uygulama zaten yüklü olabilir veya tarayıcınız bu özelliği desteklemiyor olabilir."
     },
     "header": {
         "menu": "Menü",

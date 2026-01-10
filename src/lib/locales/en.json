@@ -15,7 +15,13 @@
         "digitalMemory": "Digital Memory",
         "selfieSpot": "Selfie Spot",
         "myBadges": "My Badges",
-        "bikeRoutes": "Bike Routes"
+        "bikeRoutes": "Bike Routes",
+        "installApp": "Install App",
+        "installAppTitle": "Install the app on your home screen",
+        "installAppAlready": "App Already Installed",
+        "installAppAlreadyDesc": "The RotaKula application is already installed on your device.",
+        "installAppNotPossible": "Installation Not Possible",
+        "installAppNotPossibleDesc": "The application may already be installed or your browser may not support this feature."
     },
     "header": {
         "menu": "Menu",
