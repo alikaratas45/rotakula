@@ -15,6 +15,7 @@ import { Utensils, Map, Pin, Route, Info, BookOpen, QrCode, Landmark, HelpCircle
 import { BedIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { FeedbackSection } from '@/components/feedback';
+import { InstallPwaButton } from '@/components/install-pwa-button';
 
 
 const RouteCard = ({ route, delay }: { route: ThematicRoute, delay: number }) => {
@@ -141,6 +142,7 @@ export default function Home() {
                       </div>
                   </div>
                 </div>
+                <InstallPwaButton />
             </div>
           </div>
       </section>
