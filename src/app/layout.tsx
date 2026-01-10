@@ -9,7 +9,10 @@ import { FirebaseClientProvider } from '@/firebase';
 export const metadata = {
   title: 'RotaKula - Kula Gezi Rehberi',
   description: "Manisa'nın Kula ilçesine özel tematik seyahat rotalarını, tarihi yerleri, doğal güzellikleri ve yöresel lezzetleri keşfedin.",
-  manifest: '/manifest.json'
+  manifest: '/manifest.json',
+  icons: {
+    icon: '/logo.png?v=2',
+  },
 };
 
 export default function RootLayout({
