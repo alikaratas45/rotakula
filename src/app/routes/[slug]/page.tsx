@@ -1,3 +1,4 @@
+
 "use client"
 
 import { getRouteBySlug, getPoisByIds } from '@/lib/kula-data';
@@ -42,13 +43,35 @@ function getCategoryIcon(category: PointOfInterest['category']) {
     }
 }
 
-function RouteDetailsClient({ route, pois }: { route: ThematicRoute; pois: PointOfInterest[] }) {
-    const { translations } = useApp();
+export default function RoutePage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = use(params);
+    const { language, translations } = useApp();
     const { toast } = useToast();
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
+    
+    const [route, setRoute] = useState<ThematicRoute | null>(null);
+    const [pois, setPois] = useState<PointOfInterest[]>([]);
+    const [loading, setLoading] = useState(true);
     const [isStartingRoute, setIsStartingRoute] = useState(false);
 
-    const isFlavorTour = route.slug === 'kula-flavor-tour';
+    useEffect(() => {
+        setRoute(null);
+        setPois([]);
+        async function fetchRouteData() {
+            setLoading(true);
+            const routeData = await getRouteBySlug(slug, language);
+            if (routeData) {
+                setRoute(routeData);
+                const poisData = await getPoisByIds(routeData.poiIds, language);
+                setPois(poisData);
+            } else {
+                setRoute(null);
+                setPois([]);
+            }
+            setLoading(false);
+        }
+        fetchRouteData();
+    }, [slug, language]);
 
     const handleFlavorTourClick = () => {
         const query = encodeURIComponent('Kula\'daki lokanta ve restoranlar');
@@ -71,7 +94,7 @@ function RouteDetailsClient({ route, pois }: { route: ThematicRoute; pois: Point
             return;
         }
 
-        if (pois.length < 1) return;
+        if (!pois || pois.length < 1) return;
 
         setIsStartingRoute(true);
 
@@ -100,188 +123,10 @@ function RouteDetailsClient({ route, pois }: { route: ThematicRoute; pois: Point
             { enableHighAccuracy: true }
         );
     };
-    
-    return (
-        <APIProvider apiKey={apiKey} libraries={['places']}>
-            <div className="container px-4 py-8 md:py-12">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
-                    <div className="lg:col-span-2">
-                        <div className="text-lg text-foreground/80 mb-8 prose prose-lg max-w-none">
-                            {route.longDescription.split('\n').map((paragraph, index) => {
-                                const trimmedParagraph = paragraph.trim();
-                                if (trimmedParagraph === '') return null;
-                                
-                                const isTitle = trimmedParagraph.endsWith(':');
-                                
-                                return (
-                                     <p key={index}>
-                                        {isTitle ? <strong>{trimmedParagraph}</strong> : trimmedParagraph}
-                                    </p>
-                                )
-                            })}
-                        </div>
-
-                        {!isFlavorTour && pois.length > 0 && (
-                            <div className="mb-8">
-                                 <h2 className="text-2xl font-headline font-bold mb-4">{translations.route.mapTitle}</h2>
-                                <EmbeddedMap pois={pois} />
-                            </div>
-                        )}
-                        
-                        <h2 className="text-2xl font-headline font-bold mb-6">{isFlavorTour ? translations.food.title : translations.route.whatsOnThisRoute}</h2>
-
-                        {isFlavorTour ? (
-                            <div>
-                                <p className="text-muted-foreground mb-4">{translations.food.nearbyDescription}</p>
-                                <NearbySearch />
-                            </div>
-                        ) : (
-                            <div className="space-y-6">
-                                {pois.map((poi, index) => {
-                                    const image = getImageById(poi.imageId);
-                                    return (
-                                        <Card key={poi.id} className="overflow-hidden">
-                                            <div className="flex flex-col md:flex-row">
-                                                <div className="md:w-1/3 relative h-48 md:h-auto">
-                                                    {image && (
-                                                        <Image 
-                                                            src={image.imageUrl} 
-                                                            alt={image.description} 
-                                                            fill 
-                                                            className="object-cover"
-                                                            data-ai-hint={image.imageHint}
-                                                        />
-                                                    )}
-                                                </div>
-                                                <div className="md:w-2/3">
-                                                    <CardHeader className="flex flex-row items-start gap-4">
-                                                        <div className="flex-shrink-0 bg-accent rounded-full p-3">
-                                                            {getCategoryIcon(poi.category)}
-                                                        </div>
-                                                        <div>
-                                                            <CardTitle className="font-headline text-xl">{index + 1}. {poi.name}</CardTitle>
-                                                            <CardDescription className="capitalize">
-                                                                {translations.category[poi.category as keyof typeof translations.category] || poi.category}
-                                                            </CardDescription>
-                                                        </div>
-                                                    </CardHeader>
-                                                    <CardContent>
-                                                        <p className="text-foreground/80 mb-4">{poi.description}</p>
-                                                         <div className="flex items-center gap-2">
-                                                            <Button asChild variant="secondary" size="sm">
-                                                                <Link href={`/places/${poi.slug}`}>
-                                                                    <Info className="mr-2 h-4 w-4" />
-                                                                    {translations.common.moreInfo}
-                                                                </Link>
-                                                            </Button>
-                                                            <Button variant="outline" size="sm" onClick={() => handleGetDirections(poi)}>
-                                                                <Navigation className="mr-2 h-4 w-4" />
-                                                                {translations.map.getDirections}
-                                                            </Button>
-                                                        </div>
-                                                    </CardContent>
-                                                </div>
-                                            </div>
-                                        </Card>
-                                    );
-                                })}
-                            </div>
-                        )}
-                    </div>
-
-                    <aside className="lg:col-span-1">
-                        <div className="sticky top-24">
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle className="font-headline text-xl">{translations.route.routeInfo}</CardTitle>
-                                </CardHeader>
-                                <CardContent className="space-y-4">
-                                    {isFlavorTour ? (
-                                        <Button
-                                            onClick={handleFlavorTourClick}
-                                            className="w-full"
-                                        >
-                                            <UtensilsCrossed className="mr-2 h-4 w-4" />
-                                            {translations.food.nearbyRestaurants}
-                                        </Button>
-                                    ) : (
-                                        <AlertDialog>
-                                            <AlertDialogTrigger asChild>
-                                                <Button className="w-full" disabled={isStartingRoute}>
-                                                    {isStartingRoute ? (
-                                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                                    ) : (
-                                                        route.slug === 'geopark-discovery-route' ? <Car className="mr-2 h-4 w-4" /> : <Footprints className="mr-2 h-4 w-4" />
-                                                    )}
-                                                    {isStartingRoute ? translations.nearby.gettingLocation : "Rotayı Haritada Başlat"}
-                                                </Button>
-                                            </AlertDialogTrigger>
-                                            <AlertDialogContent>
-                                                <AlertDialogHeader>
-                                                <AlertDialogTitle>Harita Uygulamasına Yönlendiriliyorsunuz</AlertDialogTitle>
-                                                <AlertDialogDescription>
-                                                    En iyi yol tarifi deneyimi için Google Haritalar uygulaması açılacaktır. Bu işlem sırasında sesli rehber duraklatılacaktır. Uygulamaya geri döndüğünüzde sesli rehberi yeniden başlatabilirsiniz.
-                                                </AlertDialogDescription>
-                                                </AlertDialogHeader>
-                                                <AlertDialogFooter>
-                                                <AlertDialogCancel>İptal</AlertDialogCancel>
-                                                <AlertDialogAction onClick={handleStartRoute}>
-                                                    Yine de Başlat
-                                                </AlertDialogAction>
-                                                </AlertDialogFooter>
-                                            </AlertDialogContent>
-                                        </AlertDialog>
-                                    )}
-                                    {!isFlavorTour && (
-                                        <>
-                                            <Separator />
-                                            <div className="space-y-2">
-                                                 <h4 className="font-semibold">{translations.route.stops}</h4>
-                                                 <ul className="list-disc list-inside text-muted-foreground text-sm space-y-1">
-                                                     {pois.map(poi => <li key={poi.id}>{poi.name}</li>)}
-                                                 </ul>
-                                            </div>
-                                        </>
-                                    )}
-                                </CardContent>
-                            </Card>
-                        </div>
-                    </aside>
-                </div>
-            </div>
-        </APIProvider>
-    );
-}
-
-export default function RoutePage({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = use(params);
-    const { language } = useApp();
-    const [route, setRoute] = useState<ThematicRoute | null>(null);
-    const [pois, setPois] = useState<PointOfInterest[] | null>(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        setRoute(null);
-        setPois(null);
-        async function fetchRouteData() {
-            setLoading(true);
-            const routeData = await getRouteBySlug(slug, language);
-            if (routeData) {
-                setRoute(routeData);
-                const poisData = await getPoisByIds(routeData.poiIds, language);
-                setPois(poisData);
-            } else {
-                setRoute(null);
-                setPois([]);
-            }
-            setLoading(false);
-        }
-        fetchRouteData();
-    }, [slug, language]);
 
     const heroImage = route ? getImageById(route.imageId) : null;
     
-    if (loading || !route || !pois) {
+    if (loading) {
         return (
              <div className="flex justify-center items-center h-screen">
                 <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
@@ -292,6 +137,8 @@ export default function RoutePage({ params }: { params: Promise<{ slug: string }
     if (!route) {
         notFound();
     }
+    
+    const isFlavorTour = route.slug === 'kula-flavor-tour';
 
     return (
         <div>
@@ -314,7 +161,152 @@ export default function RoutePage({ params }: { params: Promise<{ slug: string }
                 </div>
             </section>
             
-            <RouteDetailsClient route={route} pois={pois} />
+            <APIProvider apiKey={apiKey} libraries={['places']}>
+                <div className="container px-4 py-8 md:py-12">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+                        <div className="lg:col-span-2">
+                            <div className="text-lg text-foreground/80 mb-8 prose prose-lg max-w-none">
+                                {route.longDescription.split('\n').map((paragraph, index) => {
+                                    const trimmedParagraph = paragraph.trim();
+                                    if (trimmedParagraph === '') return null;
+                                    const isTitle = trimmedParagraph.endsWith(':');
+                                    return (
+                                        <p key={index}>
+                                            {isTitle ? <strong>{trimmedParagraph}</strong> : trimmedParagraph}
+                                        </p>
+                                    )
+                                })}
+                            </div>
+
+                            {!isFlavorTour && pois.length > 0 && (
+                                <div className="mb-8">
+                                    <h2 className="text-2xl font-headline font-bold mb-4">{translations.route.mapTitle}</h2>
+                                    <EmbeddedMap pois={pois} />
+                                </div>
+                            )}
+                            
+                            <h2 className="text-2xl font-headline font-bold mb-6">{isFlavorTour ? translations.food.title : translations.route.whatsOnThisRoute}</h2>
+
+                            {isFlavorTour ? (
+                                <div>
+                                    <p className="text-muted-foreground mb-4">{translations.food.nearbyDescription}</p>
+                                    <NearbySearch />
+                                </div>
+                            ) : (
+                                <div className="space-y-6">
+                                    {pois.map((poi, index) => {
+                                        const image = getImageById(poi.imageId);
+                                        return (
+                                            <Card key={poi.id} className="overflow-hidden">
+                                                <div className="flex flex-col md:flex-row">
+                                                    <div className="md:w-1/3 relative h-48 md:h-auto">
+                                                        {image && (
+                                                            <Image 
+                                                                src={image.imageUrl} 
+                                                                alt={image.description} 
+                                                                fill 
+                                                                className="object-cover"
+                                                                data-ai-hint={image.imageHint}
+                                                            />
+                                                        )}
+                                                    </div>
+                                                    <div className="md:w-2/3">
+                                                        <CardHeader className="flex flex-row items-start gap-4">
+                                                            <div className="flex-shrink-0 bg-accent rounded-full p-3">
+                                                                {getCategoryIcon(poi.category)}
+                                                            </div>
+                                                            <div>
+                                                                <CardTitle className="font-headline text-xl">{index + 1}. {poi.name}</CardTitle>
+                                                                <CardDescription className="capitalize">
+                                                                    {translations.category[poi.category as keyof typeof translations.category] || poi.category}
+                                                                </CardDescription>
+                                                            </div>
+                                                        </CardHeader>
+                                                        <CardContent>
+                                                            <p className="text-foreground/80 mb-4">{poi.description}</p>
+                                                            <div className="flex items-center gap-2">
+                                                                <Button asChild variant="secondary" size="sm">
+                                                                    <Link href={`/places/${poi.slug}`}>
+                                                                        <Info className="mr-2 h-4 w-4" />
+                                                                        {translations.common.moreInfo}
+                                                                    </Link>
+                                                                </Button>
+                                                                <Button variant="outline" size="sm" onClick={() => handleGetDirections(poi)}>
+                                                                    <Navigation className="mr-2 h-4 w-4" />
+                                                                    {translations.map.getDirections}
+                                                                </Button>
+                                                            </div>
+                                                        </CardContent>
+                                                    </div>
+                                                </div>
+                                            </Card>
+                                        );
+                                    })}
+                                </div>
+                            )}
+                        </div>
+
+                        <aside className="lg:col-span-1">
+                            <div className="sticky top-24">
+                                <Card>
+                                    <CardHeader>
+                                        <CardTitle className="font-headline text-xl">{translations.route.routeInfo}</CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="space-y-4">
+                                        {isFlavorTour ? (
+                                            <Button
+                                                onClick={handleFlavorTourClick}
+                                                className="w-full"
+                                            >
+                                                <UtensilsCrossed className="mr-2 h-4 w-4" />
+                                                {translations.food.nearbyRestaurants}
+                                            </Button>
+                                        ) : (
+                                            <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                    <Button className="w-full" disabled={isStartingRoute}>
+                                                        {isStartingRoute ? (
+                                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                                        ) : (
+                                                            route.slug === 'geopark-discovery-route' ? <Car className="mr-2 h-4 w-4" /> : <Footprints className="mr-2 h-4 w-4" />
+                                                        )}
+                                                        {isStartingRoute ? translations.nearby.gettingLocation : "Rotayı Haritada Başlat"}
+                                                    </Button>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                    <AlertDialogTitle>Harita Uygulamasına Yönlendiriliyorsunuz</AlertDialogTitle>
+                                                    <AlertDialogDescription>
+                                                        En iyi yol tarifi deneyimi için Google Haritalar uygulaması açılacaktır. Bu işlem sırasında sesli rehber duraklatılacaktır. Uygulamaya geri döndüğünüzde sesli rehberi yeniden başlatabilirsiniz.
+                                                    </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                    <AlertDialogCancel>İptal</AlertDialogCancel>
+                                                    <AlertDialogAction onClick={handleStartRoute}>
+                                                        Yine de Başlat
+                                                    </AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
+                                        )}
+                                        {!isFlavorTour && (
+                                            <>
+                                                <Separator />
+                                                <div className="space-y-2">
+                                                    <h4 className="font-semibold">{translations.route.stops}</h4>
+                                                    <ul className="list-disc list-inside text-muted-foreground text-sm space-y-1">
+                                                        {pois.map(poi => <li key={poi.id}>{poi.name}</li>)}
+                                                    </ul>
+                                                </div>
+                                            </>
+                                        )}
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        </aside>
+                    </div>
+                </div>
+            </APIProvider>
         </div>
     );
 }

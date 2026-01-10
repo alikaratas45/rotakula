@@ -1,27 +1,27 @@
+
 "use client"
 
 import { getPoiBySlug } from '@/lib/kula-data';
-import { notFound } from 'next/navigation';
+import { notFound, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { APIProvider } from '@vis.gl/react-google-maps';
 import EmbeddedMap from '@/components/map';
 import { getImageById } from '@/lib/placeholder-images';
 import type { PointOfInterest } from '@/lib/types';
-import { useState, useRef, useCallback, useEffect, Suspense, use } from 'react';
+import { useState, useRef, useCallback, useEffect, use } from 'react';
 import { Button } from '@/components/ui/button';
-import { PlayIcon, PauseIcon } from 'lucide-react';
+import { PlayIcon, PauseIcon, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useApp } from '@/context/app-context';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Separator } from '@/components/ui/separator';
 import { Survey } from '@/components/survey';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2 } from 'lucide-react';
 
-function PlaceContent({ poi }: { poi: PointOfInterest }) {
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
-    const heroImage = getImageById(poi.imageId);
-    const { language, translations } = useApp();
+export default function PlaceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = use(params);
+    const { language, translations, addBadge } = useApp();
+    const [poi, setPoi] = useState<PointOfInterest | null>(null);
+    const [loading, setLoading] = useState(true);
+
     const router = useRouter();
     const searchParams = useSearchParams();
     const [showSurvey, setShowSurvey] = useState(false);
@@ -33,9 +33,42 @@ function PlaceContent({ poi }: { poi: PointOfInterest }) {
     const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
     const { toast } = useToast();
     
-    const narrationText = poi.longDescription;
-    const [remainingText, setRemainingText] = useState(narrationText);
+    const [narrationText, setNarrationText] = useState('');
+    const [remainingText, setRemainingText] = useState('');
     const charIndexRef = useRef(0);
+
+    useEffect(() => {
+        setPoi(null);
+        setNarrationText('');
+        setRemainingText('');
+        setIsPlaying(false);
+        setIsPaused(false);
+        
+        async function fetchPoi() {
+            setLoading(true);
+            const poiData = await getPoiBySlug(slug, language);
+            if (poiData) {
+                setPoi(poiData);
+                const fullText = poiData.longDescription || '';
+                setNarrationText(fullText);
+                setRemainingText(fullText);
+                if (poiData.badgeId) {
+                    addBadge(poiData.id);
+                }
+            } else {
+                setPoi(null);
+            }
+            setLoading(false);
+        }
+        fetchPoi();
+
+        return () => {
+            if (synthRef.current?.speaking) {
+                synthRef.current.cancel();
+            }
+        };
+    }, [slug, language, addBadge]);
+
 
     const startPlayback = useCallback((textToSpeak: string) => {
         const synth = synthRef.current;
@@ -112,9 +145,9 @@ function PlaceContent({ poi }: { poi: PointOfInterest }) {
 
         } else { 
              if (synth.getVoices().length === 0) {
-                 synth.onvoiceschanged = () => startPlayback(remainingText);
+                 synth.onvoiceschanged = () => startPlayback(remainingText || narrationText);
             } else {
-                startPlayback(remainingText);
+                startPlayback(remainingText || narrationText);
             }
         }
     }, [isPaused, remainingText, narrationText, toast, translations, startPlayback]);
@@ -123,20 +156,21 @@ function PlaceContent({ poi }: { poi: PointOfInterest }) {
         if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
             synthRef.current = window.speechSynthesis;
         }
-        setRemainingText(narrationText);
-        charIndexRef.current = 0;
         
         const shouldAutoplay = searchParams.get('autoplay') === 'true';
-        if (shouldAutoplay) {
+        if (shouldAutoplay && poi) {
             setShowSurvey(true);
             const newPath = `/places/${poi.slug}`;
             router.replace(newPath, { scroll: false });
+            
+            const safeStartPlayback = () => startPlayback(poi.longDescription);
+
             setTimeout(() => {
                 const synth = synthRef.current;
                 if (synth && synth.getVoices().length > 0) {
-                    startPlayback(narrationText);
+                    safeStartPlayback();
                 } else if (synth) {
-                    synth.onvoiceschanged = () => startPlayback(narrationText);
+                    synth.onvoiceschanged = safeStartPlayback;
                 }
             }, 500); 
         }
@@ -147,8 +181,22 @@ function PlaceContent({ poi }: { poi: PointOfInterest }) {
             }
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [poi.id, narrationText, startPlayback]);
+    }, [poi, searchParams]);
 
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>
+        );
+    }
+    
+    if (!poi) {
+        notFound();
+    }
+    
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
+    const heroImage = getImageById(poi.imageId);
 
     return (
         <APIProvider apiKey={apiKey}>
@@ -232,41 +280,5 @@ function PlaceContent({ poi }: { poi: PointOfInterest }) {
                 )}
             </article>
         </APIProvider>
-    );
-}
-
-export default function PlaceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = use(params);
-    const { language } = useApp();
-    const [poi, setPoi] = useState<PointOfInterest | null>(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        setPoi(null);
-        async function fetchPoi() {
-            setLoading(true);
-            const poiData = await getPoiBySlug(slug, language);
-            if (poiData) {
-                setPoi(poiData);
-            } else {
-                setPoi(null);
-            }
-            setLoading(false);
-        }
-        fetchPoi();
-    }, [slug, language]);
-
-    if (loading || !poi) {
-        return (
-            <div className="flex justify-center items-center h-screen">
-                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-            </div>
-        );
-    }
-
-    return (
-        <Suspense fallback={<div className="flex justify-center items-center h-screen"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /></div>}>
-            <PlaceContent poi={poi} />
-        </Suspense>
     );
 }
