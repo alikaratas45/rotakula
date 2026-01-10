@@ -9,7 +9,7 @@ import { useApp } from '@/context/app-context';
 import { useEffect, useState, use } from 'react';
 import { Loader2, MapPin, Mountain, Info, Footprints, Car, UtensilsCrossed, Navigation } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import { FoodIcon, HistoricHouseIcon } from '@/components/icons';
 import { Separator } from '@/components/ui/separator';
