@@ -10,7 +10,6 @@ export const InstallPwaButton = () => {
   const { toast } = useToast();
   const { translations } = useApp();
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [isAppInstalled, setIsAppInstalled] = useState(false);
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e: Event) => {
@@ -18,46 +17,33 @@ export const InstallPwaButton = () => {
       setDeferredPrompt(e);
     };
 
-    const handleAppInstalled = () => {
-      setIsAppInstalled(true);
-      setDeferredPrompt(null);
-    };
-
-    if (typeof window !== "undefined" && window.matchMedia("(display-mode: standalone)").matches) {
-      setIsAppInstalled(true);
-    }
-
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-    window.addEventListener("appinstalled", handleAppInstalled);
 
     return () => {
       window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-      window.removeEventListener("appinstalled", handleAppInstalled);
     };
   }, []);
 
   const handleInstallClick = async () => {
-    if (isAppInstalled) {
-      toast({
-        title: translations.nav.installAppAlready,
-        description: translations.nav.installAppAlreadyDesc,
-      });
-      return;
-    }
-
+    // Always try to show the prompt if it's available.
     if (deferredPrompt) {
       deferredPrompt.prompt();
+      // The userChoice property returns a Promise that resolves to an object
+      // with an 'outcome' property, either 'accepted' or 'dismissed'.
       const { outcome } = await deferredPrompt.userChoice;
       if (outcome === "accepted") {
+        // The prompt will not be shown again until the user dismisses the app.
+        // We can clear our saved prompt.
         setDeferredPrompt(null);
-        setIsAppInstalled(true);
       }
     } else {
-       toast({
+      // If deferredPrompt is null, the browser hasn't fired the event.
+      // This could be because the app is already installed, the browser doesn't support it,
+      // or the PWA criteria haven't been met yet.
+      toast({
         title: translations.nav.installAppNotPossible,
         description: translations.nav.installAppNotPossibleDesc,
-        variant: "destructive"
-       });
+      });
     }
   };
 
@@ -65,7 +51,7 @@ export const InstallPwaButton = () => {
     <div
       className="group animate-fade-in-up cursor-pointer"
       onClick={handleInstallClick}
-      title={isAppInstalled ? translations.nav.installAppAlready : translations.nav.installAppTitle}
+      title={translations.nav.installAppTitle}
     >
       <div className={cn(
         "relative p-4 bg-card rounded-2xl border-b-4 border-r-4 transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-lg",
