@@ -7,6 +7,7 @@ import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import IntroTour from '@/components/intro-tour';
 import { ThemeProvider } from 'next-themes';
+import { useApp } from '@/context/app-context';
 
 
 function AppContent({ children }: PropsWithChildren) {
@@ -23,6 +24,8 @@ function AppContent({ children }: PropsWithChildren) {
 
 
 export function Providers({ children }: PropsWithChildren) {
+  const { language } = useApp();
+  
   return (
     <ThemeProvider
       attribute="class"
@@ -30,7 +33,7 @@ export function Providers({ children }: PropsWithChildren) {
       enableSystem
       disableTransitionOnChange
     >
-      <AppContent>{children}</AppContent>
+      <AppContent key={language}>{children}</AppContent>
     </ThemeProvider>
   );
 }

@@ -1,3 +1,4 @@
+
 "use client"
 
 import { getPoiBySlug } from '@/lib/kula-data';
@@ -20,6 +21,8 @@ export default function PlaceDetailPage({ params }: { params: Promise<{ slug: st
             const poiData = await getPoiBySlug(slug, language);
             if (poiData) {
                 setPoi(poiData);
+            } else {
+                setPoi(null);
             }
             setLoading(false);
         }

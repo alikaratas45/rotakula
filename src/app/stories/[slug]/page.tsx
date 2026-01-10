@@ -1,3 +1,4 @@
+
 "use client"
 
 import { getStoryBySlug } from '@/lib/kula-data';
@@ -10,6 +11,7 @@ import { notFound } from 'next/navigation';
 import { getImageById } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { Loader2 } from 'lucide-react';
 
 export default function StoryPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = use(params);
@@ -36,6 +38,10 @@ export default function StoryPage({ params }: { params: Promise<{ slug: string }
           const fullText = storyData.content || '';
           setNarrationText(fullText);
           setRemainingText(fullText);
+        } else {
+          setStory(null);
+          setNarrationText('');
+          setRemainingText('');
         }
         setLoading(false);
       }
@@ -145,7 +151,9 @@ export default function StoryPage({ params }: { params: Promise<{ slug: string }
 
 
     if (loading) {
-      return <div className="container px-4 py-8">{translations.common.loading}...</div>;
+      return <div className="flex justify-center items-center h-screen">
+                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>;
     }
 
     if (!story) {

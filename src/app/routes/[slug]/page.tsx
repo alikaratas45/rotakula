@@ -1,3 +1,4 @@
+
 "use client"
 
 import { getRouteBySlug, getPoisByIds } from '@/lib/kula-data';
@@ -25,6 +26,9 @@ export default function RoutePage({ params }: { params: Promise<{ slug: string }
                 setRoute(routeData);
                 const poisData = await getPoisByIds(routeData.poiIds, language);
                 setPois(poisData);
+            } else {
+                setRoute(null);
+                setPois([]);
             }
             setLoading(false);
         }
