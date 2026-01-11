@@ -11,7 +11,7 @@ import { getImageById } from '@/lib/placeholder-images';
 import { useEffect, useState, useMemo } from 'react';
 import { useApp } from '@/context/app-context';
 import { Button } from '@/components/ui/button';
-import { Utensils, Map, Pin, Route, Info, BookOpen, QrCode, Landmark, HelpCircle, Camera, Smile, Award, Bike } from 'lucide-react';
+import { Utensils, Map, Pin, Route, Info, BookOpen, QrCode, Landmark, Camera, Smile, Award, Bike } from 'lucide-react';
 import { BedIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { FeedbackSection } from '@/components/feedback';
@@ -51,7 +51,7 @@ const RouteCard = ({ route, delay }: { route: ThematicRoute, delay: number }) =>
 };
 
 export default function Home() {
-  const { language, translations, setIsTourActive } = useApp();
+  const { language, translations } = useApp();
   const [allRoutes, setAllRoutes] = useState<ThematicRoute[]>([]);
   
   useEffect(() => {
@@ -70,8 +70,8 @@ export default function Home() {
   
   const iconNavItems = [
     { href: "/places", label: translations.nav.places, icon: Landmark, color: "border-blue-500" },
-    { href: "/bike-routes", label: translations.nav.bikeRoutes, icon: Bike, color: "border-yellow-500" },
     { href: "/create-route", label: translations.nav.createRoute, icon: Route, color: "border-green-500" },
+    { href: "/bike-routes", label: translations.nav.bikeRoutes, icon: Bike, color: "border-yellow-500" },
     { href: "/stories", label: translations.nav.stories, icon: BookOpen, color: "border-purple-500" },
     { href: "/routes/kula-flavor-tour", label: translations.nav.food, icon: Utensils, color: "border-orange-500" },
     { href: "/accommodation", label: translations.nav.accommodation, icon: BedIcon, color: "border-teal-500" },
@@ -128,21 +128,7 @@ export default function Home() {
                   </div>
                 </Link>
               ))}
-               <div
-                  className="group animate-fade-in-up cursor-pointer"
-                  style={{ animationDelay: `${iconNavItems.length * 100}ms` }}
-                  onClick={() => setIsTourActive(true)}
-                >
-                  <div className="relative p-4 bg-card rounded-2xl border-b-4 border-r-4 border-gray-500 transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-lg">
-                      <div className="flex flex-col items-center justify-center h-28">
-                          <HelpCircle className="h-12 w-12 text-foreground/80 mb-3 transition-colors group-hover:text-primary" />
-                          <span className="text-center text-sm font-semibold text-foreground/90 group-hover:text-primary transition-colors">
-                              {translations.tour.howToUse}
-                          </span>
-                      </div>
-                  </div>
-                </div>
-                <InstallPwaButton />
+              <InstallPwaButton />
             </div>
           </div>
       </section>

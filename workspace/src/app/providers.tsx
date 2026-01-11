@@ -1,10 +1,10 @@
+
 "use client"
 
 import { type PropsWithChildren } from 'react';
 import { Toaster } from '@/components/ui/toaster';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
-import IntroTour from '@/components/intro-tour';
 import { ThemeProvider } from 'next-themes';
 import { useApp } from '@/context/app-context';
 
@@ -12,7 +12,6 @@ import { useApp } from '@/context/app-context';
 function AppContent({ children }: PropsWithChildren) {
   return (
     <>
-        <IntroTour />
         <Header />
         <main className="flex-grow">{children}</main>
         <Footer />
