@@ -15,10 +15,7 @@ export default function AboutPage() {
     const { toast } = useToast();
     const heroImage = getImageById('hero-home');
 
-    const narrationText = Array.isArray(translations.about.content)
-        ? translations.about.content.join(' ')
-        : translations.about.content;
-
+    const [narrationText, setNarrationText] = useState("");
     const [isPlaying, setIsPlaying] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
     
@@ -30,10 +27,10 @@ export default function AboutPage() {
     useEffect(() => {
         const newNarrationText = Array.isArray(translations.about.content)
             ? translations.about.content.join(' ')
-            : translations.about.content;
+            : translations.about.content || "";
             
-        setRemainingText(newNarrationText);
         setNarrationText(newNarrationText);
+        setRemainingText(newNarrationText);
         charIndexRef.current = 0;
         
         if (synthRef.current?.speaking) {
@@ -55,7 +52,7 @@ export default function AboutPage() {
         };
     }, []);
     
-    const startPlayback = (textToSpeak: string) => {
+    const startPlayback = useCallback((textToSpeak: string) => {
         const synth = synthRef.current;
         if (!synth || !textToSpeak) return;
 
@@ -105,7 +102,7 @@ export default function AboutPage() {
             setIsPlaying(true);
             setIsPaused(false);
         }, 100);
-    };
+    }, [language, narrationText, toast, translations]);
 
     const handlePlayPause = useCallback(() => {
         const synth = synthRef.current;
@@ -215,3 +212,5 @@ export default function AboutPage() {
         </div>
     );
 }
+
+    

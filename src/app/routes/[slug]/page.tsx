@@ -7,7 +7,7 @@ import { getImageById } from '@/lib/placeholder-images';
 import Image from 'next/image';
 import type { ThematicRoute, PointOfInterest } from '@/lib/types';
 import { useApp } from '@/context/app-context';
-import { useEffect, useState, use } from 'react';
+import { useEffect, useState } from 'react';
 import { Loader2, MapPin, Mountain, Info, Footprints, Car, UtensilsCrossed, Navigation } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -57,8 +57,8 @@ export default function RoutePage({ params }: { params: { slug: string } }) {
     useEffect(() => {
         setRoute(null);
         setPois([]);
+        setLoading(true);
         async function fetchRouteData() {
-            setLoading(true);
             const routeData = await getRouteBySlug(slug, language);
             if (routeData) {
                 setRoute(routeData);
@@ -310,3 +310,5 @@ export default function RoutePage({ params }: { params: { slug: string } }) {
         </div>
     );
 }
+
+    

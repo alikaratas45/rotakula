@@ -1,8 +1,9 @@
+
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { type PropsWithChildren } from 'react';
 import { AppProvider } from '@/context/app-context';
-import { Providers } from './providers';
+import { Providers } from '@/app/providers';
 import { FirebaseClientProvider } from '@/firebase';
 
 
@@ -43,3 +44,5 @@ export default function RootLayout({
     </html>
   );
 }
+
+    
