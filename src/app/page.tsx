@@ -70,8 +70,8 @@ export default function Home() {
   
   const iconNavItems = [
     { href: "/places", label: translations.nav.places, icon: Landmark, color: "border-blue-500" },
-    { href: "/bike-routes", label: translations.nav.bikeRoutes, icon: Bike, color: "border-yellow-500" },
     { href: "/create-route", label: translations.nav.createRoute, icon: Route, color: "border-green-500" },
+    { href: "/bike-routes", label: translations.nav.bikeRoutes, icon: Bike, color: "border-yellow-500" },
     { href: "/stories", label: translations.nav.stories, icon: BookOpen, color: "border-purple-500" },
     { href: "/routes/kula-flavor-tour", label: translations.nav.food, icon: Utensils, color: "border-orange-500" },
     { href: "/accommodation", label: translations.nav.accommodation, icon: BedIcon, color: "border-teal-500" },
