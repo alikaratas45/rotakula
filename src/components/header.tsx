@@ -5,7 +5,7 @@ import Link from "next/link";
 import * as React from "react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
-import { Moon, Sun, Home, UserCog, ClipboardList, QrCode } from "lucide-react";
+import { Moon, Sun, Home, UserCog, ClipboardList, Check } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -93,12 +93,11 @@ export function Header() {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align={isMobile ? "end" : "end"}>
-                {Object.entries(languageOptions)
-                    .filter(([langCode]) => langCode !== language)
-                    .map(([langCode, { name, Icon }]) => (
+                {Object.entries(languageOptions).map(([langCode, { name, Icon }]) => (
                     <DropdownMenuItem key={langCode} onClick={() => setLanguage(langCode as 'tr' | 'en' | 'fr' | 'de')}>
                         <Icon className="mr-2 h-4 w-4 rounded-sm" />
                         <span>{name}</span>
+                        {language === langCode && <Check className="ml-auto h-4 w-4" />}
                     </DropdownMenuItem>
                 ))}
             </DropdownMenuContent>
