@@ -24,22 +24,36 @@ export default function AboutPage() {
     
     const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
     const synthRef = useRef<SpeechSynthesis | null>(null);
-    const [remainingText, setRemainingText] = useState(narrationText);
+    const [remainingText, setRemainingText] = useState("");
     const charIndexRef = useRef(0);
+
+    useEffect(() => {
+        const newNarrationText = Array.isArray(translations.about.content)
+            ? translations.about.content.join(' ')
+            : translations.about.content;
+            
+        setRemainingText(newNarrationText);
+        setNarrationText(newNarrationText);
+        charIndexRef.current = 0;
+        
+        if (synthRef.current?.speaking) {
+            synthRef.current.cancel();
+            setIsPlaying(false);
+            setIsPaused(false);
+        }
+    }, [translations.about.content]);
 
     useEffect(() => {
         if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
             synthRef.current = window.speechSynthesis;
         }
-        setRemainingText(narrationText);
-        charIndexRef.current = 0;
-        // Clean up on narration text change
+        // Clean up on component unmount
         return () => {
             if (synthRef.current?.speaking) {
                 synthRef.current.cancel();
             }
         };
-    }, [narrationText]);
+    }, []);
     
     const startPlayback = (textToSpeak: string) => {
         const synth = synthRef.current;
@@ -49,7 +63,6 @@ export default function AboutPage() {
             synth.cancel();
         }
 
-        // Replace UNESCO for Turkish pronunciation only for speech
         const textForSpeech = language === 'tr' ? textToSpeak.replace(/UNESCO/g, 'Unesko') : textToSpeak;
 
         const utterance = new SpeechSynthesisUtterance(textForSpeech);
@@ -70,7 +83,7 @@ export default function AboutPage() {
             setIsPlaying(false);
             setIsPaused(false);
             charIndexRef.current = 0;
-            setRemainingText(narrationText); // Reset for next play
+            setRemainingText(narrationText); 
         };
 
         utterance.onerror = (event) => {
@@ -84,7 +97,7 @@ export default function AboutPage() {
             setIsPlaying(false);
             setIsPaused(false);
             charIndexRef.current = 0;
-            setRemainingText(narrationText); // Reset on error
+            setRemainingText(narrationText); 
         };
         
         setTimeout(() => {
@@ -105,37 +118,24 @@ export default function AboutPage() {
             return;
         }
 
-        if (synth.speaking && !isPaused) { // Is playing, so pause it
-            // Calculate remaining text based on the original full text
+        if (synth.speaking && !isPaused) { 
             const fullText = utteranceRef.current?.text || narrationText;
             const spokenTextLength = charIndexRef.current;
             const remaining = fullText.substring(spokenTextLength);
             
-            synth.cancel(); // Use cancel() which is more reliable
+            synth.cancel(); 
             setRemainingText(remaining);
             setIsPaused(true);
             setIsPlaying(false);
 
-        } else { // Is paused or not started, so play
+        } else { 
              if (synth.getVoices().length === 0) {
-                 synth.onvoiceschanged = () => startPlayback(remainingText);
+                 synth.onvoiceschanged = () => startPlayback(remainingText || narrationText);
             } else {
-                startPlayback(remainingText);
+                startPlayback(remainingText || narrationText);
             }
         }
     }, [isPaused, remainingText, narrationText, toast, translations, startPlayback]);
-
-
-     useEffect(() => {
-        // Cleanup function to cancel speech synthesis when the component unmounts
-        // or when dependencies change, which triggers a re-run of this effect.
-        return () => {
-            if (synthRef.current?.speaking) {
-                synthRef.current.cancel();
-            }
-        };
-    }, [language]);
-
 
     const contentParagraphs = Array.isArray(translations.about.content)
         ? translations.about.content
