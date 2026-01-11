@@ -51,7 +51,7 @@ const RouteCard = ({ route, delay }: { route: ThematicRoute, delay: number }) =>
 };
 
 export default function Home() {
-  const { language, translations, setIsTourActive } = useApp();
+  const { language, translations } = useApp();
   const [allRoutes, setAllRoutes] = useState<ThematicRoute[]>([]);
   
   useEffect(() => {

@@ -28,8 +28,6 @@ interface AppContextType {
   language: Language;
   setLanguage: (language: Language) => void;
   translations: typeof tr;
-  isTourActive: boolean;
-  setIsTourActive: React.Dispatch<React.SetStateAction<boolean>>;
   isAudioGuideActive: boolean;
   setIsAudioGuideActive: React.Dispatch<React.SetStateAction<boolean>>;
   earnedBadges: Badge[];
@@ -48,7 +46,6 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<Language>('tr');
-  const [isTourActive, setIsTourActive] = useState(false);
   const [isAudioGuideActive, setIsAudioGuideActive] = useState(false);
   const [earnedBadges, setEarnedBadges] = useState<Badge[]>([]);
   const [allPois, setAllPois] = useState<any[]>([]);
@@ -68,7 +65,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     fetchPois();
   }, []);
 
-  // Load language and badges from localStorage
+  // Load language and badges from localStorage, and register service worker
   useEffect(() => {
     const storedLang = localStorage.getItem('rota-kula-language') as Language;
     if (storedLang && ['tr', 'en', 'fr', 'de'].includes(storedLang)) {
@@ -84,6 +81,18 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     if (storedBadges) {
         setEarnedBadges(JSON.parse(storedBadges));
     }
+
+    // Register Service Worker for PWA capabilities
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').then(registration => {
+          console.log('Service Worker registered with scope:', registration.scope);
+        }).catch(error => {
+          console.log('Service Worker registration failed:', error);
+        });
+      });
+    }
+
   }, []);
 
   const handleSetLanguage = (lang: Language) => {
@@ -167,8 +176,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     language, 
     setLanguage: handleSetLanguage, 
     translations: currentTranslations,
-    isTourActive,
-    setIsTourActive,
     isAudioGuideActive,
     setIsAudioGuideActive,
     earnedBadges,

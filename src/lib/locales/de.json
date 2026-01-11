@@ -225,21 +225,6 @@
         "narrationTitle": "Die Geschichte und Bedeutung von Kula",
         "continueNarration": "Fortsetzen"
     },
-    "tour": {
-        "title": "Willkommen bei RotaKula!",
-        "description": "Entdecken Sie die Anwendung mit einer kurzen Einführungstour, die wir für Sie vorbereitet haben.",
-        "skip": "Tour Überspringen",
-        "howToUse": "Wie benutzt man es?",
-        "narration": [
-            "Hallo und willkommen bei RotaKula, dem digitalen Reiseführer für Kula. In dieser kurzen Tour zeige ich Ihnen, wie Sie die Anwendung am effektivsten nutzen können.",
-            "Im Moment sehen Sie eine der thematischen Routen, die die reiche Geschichte und Kultur von Kula widerspiegeln. Indem Sie diesen Routen folgen, können Sie die verschiedenen Gesichter der Stadt entdecken.",
-            "Wenn Sie Ihr eigenes Abenteuer gestalten möchten, können Sie Ihren persönlichen Reiseplan erstellen, indem Sie auf der Seite 'Route erstellen' die Orte auswählen, die Sie interessieren.",
-            "Nicht nur die Orte, auch die Geschichten von Kula sind faszinierend. Im Bereich 'Geschichten' können Sie die Legenden und Lebenserfahrungen dieser Länder lesen.",
-            "Für sofortige Entdeckungen können Sie mit der Funktion 'Was ist um mich herum?' die nahegelegenen historischen und natürlichen Schönheiten sofort auf der Karte sehen.",
-            "Außerdem können Sie durch Aktivieren der Funktion 'Audioguide' auf der Hauptseite automatische Audioerzählungen anhören, wenn Sie sich den von Ihnen besuchten Orten nähern.",
-            "Wenn Sie bereit sind zu erkunden, endet unsere Tour hier. Ich wünsche Ihnen angenehme Reisen mit RotaKula!"
-        ]
-    },
     "badges": {
         "title": "Meine Abzeichen",
         "totalPoints": "Gesamtpunkte",

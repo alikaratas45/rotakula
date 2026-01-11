@@ -224,21 +224,6 @@
         "narrationTitle": "Kula'nın Tarihi ve Önemi",
         "continueNarration": "Devam Et"
     },
-    "tour": {
-        "title": "RotaKula'ya Hoş Geldiniz!",
-        "description": "Sizin için hazırladığımız hızlı tanıtım turu ile uygulamayı keşfedin.",
-        "skip": "Turu Atla",
-        "howToUse": "Nasıl Kullanılır?",
-        "narration": [
-            "Merhaba, Kula'nın dijital gezi rehberi RotaKula'ya hoş geldiniz. Bu kısa turda size uygulamayı nasıl en verimli şekilde kullanabileceğinizi göstereceğim.",
-            "Şu an, Kula'nın zengin tarihini ve kültürünü yansıtan tematik rotalardan birini görüyorsunuz. Bu rotaları takip ederek şehrin farklı yüzlerini keşfedebilirsiniz.",
-            "Kendi maceranızı yaratmak isterseniz, 'Rota Oluştur' sayfasından ilgilendiğiniz yerleri seçerek kişisel gezi planınızı hazırlayabilirsiniz.",
-            "Kula'nın sadece yerleri değil, hikayeleri de bir o kadar büyüleyici. 'Hikayeler' bölümünde, bu toprakların efsanelerini ve yaşanmışlıklarını okuyabilirsiniz.",
-            "Anlık keşifler için 'Çevremde Ne Var?' özelliği ile yakınınızdaki tarihi ve doğal güzellikleri anında haritada görebilirsiniz.",
-            "Ayrıca, ana sayfadaki 'Sesli Rehber' özelliğini aktive ederek, gezdiğiniz yerlere yaklaştığınızda otomatik sesli anlatımları dinleyebilirsiniz.",
-            "Keşfetmeye hazırsanız, turumuz burada sona eriyor. RotaKula ile keyifli geziler dilerim!"
-        ]
-    },
     "badges": {
         "title": "Rozetlerim",
         "totalPoints": "Toplam Puan",
