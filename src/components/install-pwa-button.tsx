@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -25,21 +26,13 @@ export const InstallPwaButton = () => {
   }, []);
 
   const handleInstallClick = async () => {
-    // Always try to show the prompt if it's available.
     if (deferredPrompt) {
       deferredPrompt.prompt();
-      // The userChoice property returns a Promise that resolves to an object
-      // with an 'outcome' property, either 'accepted' or 'dismissed'.
       const { outcome } = await deferredPrompt.userChoice;
       if (outcome === "accepted") {
-        // The prompt will not be shown again until the user dismisses the app.
-        // We can clear our saved prompt.
         setDeferredPrompt(null);
       }
     } else {
-      // If deferredPrompt is null, the browser hasn't fired the event.
-      // This could be because the app is already installed, the browser doesn't support it,
-      // or the PWA criteria haven't been met yet.
       toast({
         title: translations.nav.installAppNotPossible,
         description: translations.nav.installAppNotPossibleDesc,

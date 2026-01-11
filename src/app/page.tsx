@@ -128,21 +128,7 @@ export default function Home() {
                   </div>
                 </Link>
               ))}
-               <div
-                  className="group animate-fade-in-up cursor-pointer"
-                  style={{ animationDelay: `${iconNavItems.length * 100}ms` }}
-                  onClick={() => setIsTourActive(true)}
-                >
-                  <div className="relative p-4 bg-card rounded-2xl border-b-4 border-r-4 border-gray-500 transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-lg">
-                      <div className="flex flex-col items-center justify-center h-28">
-                          <HelpCircle className="h-12 w-12 text-foreground/80 mb-3 transition-colors group-hover:text-primary" />
-                          <span className="text-center text-sm font-semibold text-foreground/90 group-hover:text-primary transition-colors">
-                              {translations.tour.howToUse}
-                          </span>
-                      </div>
-                  </div>
-                </div>
-                <InstallPwaButton />
+              <InstallPwaButton />
             </div>
           </div>
       </section>
