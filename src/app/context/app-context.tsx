@@ -28,8 +28,6 @@ interface AppContextType {
   language: Language;
   setLanguage: (language: Language) => void;
   translations: typeof tr;
-  isTourActive: boolean;
-  setIsTourActive: React.Dispatch<React.SetStateAction<boolean>>;
   isAudioGuideActive: boolean;
   setIsAudioGuideActive: React.Dispatch<React.SetStateAction<boolean>>;
   earnedBadges: Badge[];
@@ -48,7 +46,6 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<Language>('tr');
-  const [isTourActive, setIsTourActive] = useState(false);
   const [isAudioGuideActive, setIsAudioGuideActive] = useState(false);
   const [earnedBadges, setEarnedBadges] = useState<Badge[]>([]);
   const [allPois, setAllPois] = useState<any[]>([]);
@@ -179,8 +176,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     language, 
     setLanguage: handleSetLanguage, 
     translations: currentTranslations,
-    isTourActive,
-    setIsTourActive,
     isAudioGuideActive,
     setIsAudioGuideActive,
     earnedBadges,
