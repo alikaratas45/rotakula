@@ -1,4 +1,5 @@
 
+
 "use client"
 
 import { getStoryBySlug } from '@/lib/kula-data';
@@ -13,8 +14,8 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 
-export default function StoryPage({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = use(params);
+export default function StoryPage({ params }: { params: { slug: string } }) {
+    const { slug } = params;
     const { language, translations } = useApp();
     const { toast } = useToast();
     const [story, setStory] = useState<Story | null>(null);
@@ -211,5 +212,7 @@ export default function StoryPage({ params }: { params: Promise<{ slug: string }
         </article>
     );
 }
+
+    
 
     

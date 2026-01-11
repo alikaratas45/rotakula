@@ -16,8 +16,8 @@ import { useApp } from '@/context/app-context';
 import { Survey } from '@/components/survey';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-export default function PlaceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = use(params);
+export default function PlaceDetailPage({ params }: { params: { slug: string } }) {
+    const { slug } = params;
     const { language, translations, addBadge } = useApp();
     const [poi, setPoi] = useState<PointOfInterest | null>(null);
     const [loading, setLoading] = useState(true);
@@ -282,5 +282,7 @@ export default function PlaceDetailPage({ params }: { params: Promise<{ slug: st
         </APIProvider>
     );
 }
+
+    
 
     

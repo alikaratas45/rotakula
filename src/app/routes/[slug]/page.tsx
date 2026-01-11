@@ -1,4 +1,5 @@
 
+
 "use client"
 
 import { getRouteBySlug, getPoisByIds } from '@/lib/kula-data';
@@ -43,8 +44,8 @@ function getCategoryIcon(category: PointOfInterest['category']) {
     }
 }
 
-export default function RoutePage({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = use(params);
+export default function RoutePage({ params }: { params: { slug: string } }) {
+    const { slug } = params;
     const { language, translations } = useApp();
     const { toast } = useToast();
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
@@ -310,5 +311,7 @@ export default function RoutePage({ params }: { params: Promise<{ slug: string }
         </div>
     );
 }
+
+    
 
     
