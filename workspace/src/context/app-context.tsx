@@ -71,9 +71,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     if (storedLang && ['tr', 'en', 'fr', 'de'].includes(storedLang)) {
       setLanguage(storedLang);
     } else {
-        const browserLang = navigator.language.split('-')[0];
-        if (['en', 'fr', 'de'].includes(browserLang)) {
-            setLanguage(browserLang as Language);
+        if (typeof navigator !== 'undefined') {
+            const browserLang = navigator.language.split('-')[0];
+            if (['en', 'fr', 'de'].includes(browserLang)) {
+                setLanguage(browserLang as Language);
+            }
         }
     }
 
@@ -83,7 +85,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
 
     // Register Service Worker for PWA capabilities
-    if ('serviceWorker' in navigator) {
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js').then(registration => {
           console.log('Service Worker registered with scope:', registration.scope);
@@ -98,7 +100,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const handleSetLanguage = (lang: Language) => {
     setLanguage(lang);
     localStorage.setItem('rota-kula-language', lang);
-    document.documentElement.lang = lang;
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = lang;
+    }
   };
   
   const handleAdminLogin = async (email: string, password: string) => {
@@ -139,7 +143,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }
   
   useEffect(() => {
-      document.documentElement.lang = language;
+      if (typeof document !== 'undefined') {
+        document.documentElement.lang = language;
+      }
   }, [language]);
 
   const addBadge = useCallback((poiId: string) => {

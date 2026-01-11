@@ -1,4 +1,5 @@
 
+
 "use client"
 
 import { getPoiBySlug } from '@/lib/kula-data';
@@ -8,7 +9,7 @@ import { APIProvider } from '@vis.gl/react-google-maps';
 import EmbeddedMap from '@/components/map';
 import { getImageById } from '@/lib/placeholder-images';
 import type { PointOfInterest } from '@/lib/types';
-import { useState, useRef, useCallback, useEffect, use } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { PlayIcon, PauseIcon, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -16,8 +17,8 @@ import { useApp } from '@/context/app-context';
 import { Survey } from '@/components/survey';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-export default function PlaceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = use(params);
+export default function PlaceDetailPage({ params }: { params: { slug: string } }) {
+    const { slug } = params;
     const { language, translations, addBadge } = useApp();
     const [poi, setPoi] = useState<PointOfInterest | null>(null);
     const [loading, setLoading] = useState(true);
@@ -282,3 +283,5 @@ export default function PlaceDetailPage({ params }: { params: Promise<{ slug: st
         </APIProvider>
     );
 }
+
+    

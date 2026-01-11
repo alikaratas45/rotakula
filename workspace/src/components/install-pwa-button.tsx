@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -40,8 +41,8 @@ export const InstallPwaButton = () => {
   const handleInstallClick = async () => {
     if (isAppInstalled) {
       toast({
-        title: "Uygulama Zaten Yüklü",
-        description: "RotaKula uygulaması cihazınızda zaten yüklü.",
+        title: translations.nav.installAppAlready,
+        description: translations.nav.installAppAlreadyDesc,
       });
       return;
     }
@@ -55,8 +56,8 @@ export const InstallPwaButton = () => {
       }
     } else {
        toast({
-        title: "Yükleme Başlatılamadı",
-        description: "Uygulama zaten yüklü olabilir veya tarayıcınız bu özelliği desteklemiyor olabilir.",
+        title: translations.nav.installAppNotPossible,
+        description: translations.nav.installAppNotPossibleDesc,
         variant: "destructive"
        });
     }
@@ -66,7 +67,7 @@ export const InstallPwaButton = () => {
     <div
       className="group animate-fade-in-up cursor-pointer"
       onClick={handleInstallClick}
-      title={isAppInstalled ? "Uygulama zaten yüklü" : "Uygulamayı ana ekrana yükle"}
+      title={isAppInstalled ? translations.nav.installAppAlready : translations.nav.installAppTitle}
     >
       <div className={cn(
         "relative p-4 bg-card rounded-2xl border-b-4 border-r-4 transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-lg",
@@ -75,7 +76,7 @@ export const InstallPwaButton = () => {
         <div className="flex flex-col items-center justify-center h-28">
           <Download className="h-12 w-12 text-foreground/80 mb-3 transition-colors group-hover:text-primary" />
           <span className="text-center text-sm font-semibold text-foreground/90 group-hover:text-primary transition-colors">
-            Uygulamayı Yükle
+            {translations.nav.installApp}
           </span>
         </div>
       </div>
