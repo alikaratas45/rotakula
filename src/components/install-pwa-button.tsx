@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -11,12 +10,20 @@ export const InstallPwaButton = () => {
   const { toast } = useToast();
   const { translations } = useApp();
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e);
+      setIsVisible(true);
     };
+
+    // Check if running in standalone mode (already installed)
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setIsVisible(false);
+      return;
+    }
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
@@ -30,6 +37,7 @@ export const InstallPwaButton = () => {
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       if (outcome === "accepted") {
+        setIsVisible(false);
         setDeferredPrompt(null);
       }
     } else {
@@ -39,6 +47,10 @@ export const InstallPwaButton = () => {
       });
     }
   };
+
+  if (!isVisible) {
+    return null;
+  }
 
   return (
     <div
