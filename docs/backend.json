@@ -1,3 +1,4 @@
+
 {
   "entities": {
     "Feedback": {
@@ -127,6 +128,18 @@
         "createdAt",
         "updatedAt"
       ]
+    },
+    "VisitorCount": {
+      "title": "Visitor Count",
+      "type": "object",
+      "description": "Stores the total number of unique visitors.",
+      "properties": {
+        "count": {
+          "type": "number",
+          "description": "The total count of unique visitors."
+        }
+      },
+      "required": ["count"]
     }
   },
   "auth": {
@@ -153,6 +166,14 @@
         "$ref": "#/entities/Content"
       },
       "description": "Stores dynamic content for QR codes, identified by a URL-friendly slug. Publicly readable, admin-only writable."
+    },
+    "/visitors/counter": {
+      "schema": {
+        "$ref": "#/entities/VisitorCount"
+      },
+      "description": "A single document to store the unique visitor count. Publicly readable and writable for increments."
     }
   }
 }
+
+    

@@ -27,9 +27,16 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
     
+    // Visitor Counter: Anyone can read and update the counter document.
+    match /visitors/counter {
+      allow read, write: if true;
+    }
+
     // Default-deny all other reads and writes for security.
     match /{document=**} {
       allow read, write: if false;
     }
   }
 }
+
+    
