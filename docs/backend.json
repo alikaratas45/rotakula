@@ -1,7 +1,7 @@
+
 {
   "entities": {
     "AdminUser": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "AdminUser",
       "type": "object",
       "description": "Represents an administrative user for the RotaKula application.",
@@ -26,26 +26,71 @@
         "lastName": {
           "type": "string",
           "description": "Last name of the admin user."
-        },
-        "createdAt": {
-          "type": "string",
-          "description": "Timestamp indicating when the admin user account was created.",
-          "format": "date-time"
-        },
-        "updatedAt": {
-          "type": "string",
-          "description": "Timestamp indicating when the admin user account was last updated.",
-          "format": "date-time"
         }
       },
       "required": [
         "id",
         "username",
-        "email",
-        "firstName",
-        "lastName",
-        "createdAt",
-        "updatedAt"
+        "email"
+      ]
+    },
+    "Survey": {
+      "title": "Survey",
+      "type": "object",
+      "description": "Represents a survey response from a user.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the survey response."
+        },
+        "poiId": {
+          "type": "string",
+          "description": "The ID of the Point of Interest the survey is for."
+        },
+        "poiName": {
+          "type": "string",
+          "description": "The name of the Point of Interest."
+        },
+        "guidance": {
+          "type": "boolean",
+          "description": "Whether the user received guidance service."
+        },
+        "staffing": {
+          "type": "boolean",
+          "description": "Whether a staff member attended to the user."
+        },
+        "cleanliness": {
+          "type": "number",
+          "description": "Rating for the cleanliness of the area (1-5)."
+        },
+        "transportation": {
+          "type": "number",
+          "description": "Rating for the ease of transportation (1-5)."
+        },
+        "overall": {
+          "type": "number",
+          "description": "Overall rating for the visit (1-5)."
+        },
+        "comment": {
+          "type": "string",
+          "description": "Additional comments from the user."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of when the survey was submitted."
+        }
+      },
+      "required": [
+        "id",
+        "poiId",
+        "poiName",
+        "guidance",
+        "staffing",
+        "cleanliness",
+        "transportation",
+        "overall",
+        "createdAt"
       ]
     }
   },
@@ -56,24 +101,11 @@
     ]
   },
   "firestore": {
-    "structure": [
-      {
-        "path": "/roles_admin/{adminId}",
-        "definition": {
-          "entityName": "AdminUser",
-          "schema": {
-            "$ref": "#/backend/entities/AdminUser"
-          },
-          "description": "Collection to store admin users. Existence of a document for a user ID in this collection grants admin privileges. Uses Existence over Content for role verification.",
-          "params": [
-            {
-              "name": "adminId",
-              "description": "The Firebase Auth UID of the admin user."
-            }
-          ]
-        }
-      }
-    ],
-    "reasoning": "Given the requirement to enable admin login, I am creating a database structure that supports authentication and authorization. The core principle is Authorization Independence, which means avoiding `get()` calls in security rules by denormalizing authorization data. Since the application focuses on Kula and requires an admin user, I will set up a dedicated collection for admin roles. This structure supports QAPs by allowing secure listing based on role membership. The application's data, such as POIs and routes, can be stored in JSON files as specified, eliminating the need for Firestore data storage for these elements. The admin user functionality will primarily use Firestore for authentication and potentially for managing application configuration or content in the future, although the initial implementation focuses on static data."
+    "surveys": {
+      "schema": {
+        "$ref": "#/entities/Survey"
+      },
+      "description": "Collection to store user survey responses."
+    }
   }
 }
