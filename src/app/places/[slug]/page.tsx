@@ -74,61 +74,49 @@ export default function PlaceDetailPage({ params }: { params: { slug: string } }
         const synth = synthRef.current;
         if (!synth || !textToSpeak) return;
 
-        const start = (text: string) => {
-            if (synth.speaking) {
-                synth.cancel();
-            }
-
-            const textForSpeech = language === 'tr' ? text.replace(/UNESCO/g, 'Unesko') : text;
-
-            const utterance = new SpeechSynthesisUtterance(textForSpeech);
-            utteranceRef.current = utterance;
-            
-            const voices = synth.getVoices();
-            const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
-            if (voice) {
-                utterance.voice = voice;
-            }
-            utterance.lang = language;
-
-            utterance.onboundary = (event) => {
-                charIndexRef.current = event.charIndex;
-            };
-
-            utterance.onend = () => {
-                setIsPlaying(false);
-                setIsPaused(false);
-                charIndexRef.current = 0;
-                setRemainingText(narrationText); 
-            };
-
-            utterance.onerror = (event) => {
-                 if (event.error !== 'interrupted') {
-                     toast({
-                        title: translations.toast.audioErrorTitle,
-                        description: `${translations.toast.audioErrorDescription} (${event.error})`,
-                        variant: "destructive"
-                    });
-                }
-                setIsPlaying(false);
-                setIsPaused(false);
-                charIndexRef.current = 0;
-                setRemainingText(narrationText); 
-            };
-            
-            setTimeout(() => {
-                synth.speak(utterance);
-                setIsPlaying(true);
-                setIsPaused(false);
-            }, 100);
+        if (synth.speaking) {
+            synth.cancel();
         }
+
+        const textForSpeech = language === 'tr' ? textToSpeak.replace(/UNESCO/g, 'Unesko') : textToSpeak;
+        const utterance = new SpeechSynthesisUtterance(textForSpeech);
+        utteranceRef.current = utterance;
         
-        if (synth.getVoices().length > 0) {
-            start(textToSpeak);
-        } else {
-            synth.onvoiceschanged = () => start(textToSpeak);
+        const voices = synth.getVoices();
+        const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
+        if (voice) {
+            utterance.voice = voice;
         }
+        utterance.lang = language;
 
+        utterance.onboundary = (event) => {
+            charIndexRef.current = event.charIndex;
+        };
+
+        utterance.onend = () => {
+            setIsPlaying(false);
+            setIsPaused(false);
+            charIndexRef.current = 0;
+            setRemainingText(narrationText); 
+        };
+
+        utterance.onerror = (event) => {
+             if (event.error !== 'interrupted') {
+                 toast({
+                    title: translations.toast.audioErrorTitle,
+                    description: `${translations.toast.audioErrorDescription} (${event.error})`,
+                    variant: "destructive"
+                });
+            }
+            setIsPlaying(false);
+            setIsPaused(false);
+            charIndexRef.current = 0;
+            setRemainingText(narrationText); 
+        };
+        
+        synth.speak(utterance);
+        setIsPlaying(true);
+        setIsPaused(false);
     }, [language, narrationText, toast, translations]);
 
     const handlePlayPause = useCallback(() => {
@@ -168,7 +156,10 @@ export default function PlaceDetailPage({ params }: { params: { slug: string } }
             const newPath = `/places/${poi.slug}`;
             router.replace(newPath, { scroll: false });
             
-            startPlayback(poi.longDescription);
+            // Use a small timeout to ensure the synth is ready
+            setTimeout(() => {
+                startPlayback(poi.longDescription);
+            }, 100);
         }
 
         return () => {

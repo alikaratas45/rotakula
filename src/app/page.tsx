@@ -13,9 +13,19 @@ import { Button } from '@/components/ui/button';
 import { Utensils, Map, Pin, Route, Info, BookOpen, QrCode, Landmark, HelpCircle, Camera, Smile, Award, Bike, Users } from 'lucide-react';
 import { BedIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
-import { FeedbackSection } from '@/components/feedback';
 import { InstallPwaButton } from '@/components/install-pwa-button';
+import dynamic from 'next/dynamic';
+import { Loader2 } from 'lucide-react';
 
+
+const FeedbackSection = dynamic(() => import('@/components/feedback').then(mod => mod.FeedbackSection), {
+    loading: () => <div className="flex justify-center py-8"><Loader2 className="h-8 w-8 animate-spin" /></div>,
+    ssr: false
+});
+
+const VideoSection = dynamic(() => Promise.resolve(({children}: {children: React.ReactNode}) => <>{children}</>), {
+    ssr: false
+});
 
 const RouteCard = ({ route, delay }: { route: ThematicRoute, delay: number }) => {
   const image = getImageById(route.imageId);
@@ -144,22 +154,24 @@ export default function Home() {
         </div>
       </section>
       
-      <section className="py-16 bg-background px-4 md:px-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="aspect-w-16 aspect-h-9 w-full">
-            <iframe 
-              className="w-full h-full"
-              src="https://www.youtube.com/embed/_ARn-XIt0RE?si=37dKY5kQwhbA26hf&vq=hd1080" 
-              title="YouTube video player" 
-              frameBorder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-              referrerPolicy="strict-origin-when-cross-origin" 
-              allowFullScreen>
-            </iframe>
-          </div>
-        </div>
-      </section>
-
+      <VideoSection>
+          <section className="py-16 bg-background px-4 md:px-8">
+            <div className="max-w-4xl mx-auto">
+              <div className="aspect-w-16 aspect-h-9 w-full">
+                <iframe 
+                  className="w-full h-full"
+                  src="https://www.youtube.com/embed/_ARn-XIt0RE?si=37dKY5kQwhbA26hf&vq=hd1080" 
+                  title="YouTube video player" 
+                  frameBorder="0" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                  referrerPolicy="strict-origin-when-cross-origin" 
+                  allowFullScreen>
+                </iframe>
+              </div>
+            </div>
+          </section>
+      </VideoSection>
+      
       <section className="py-16 px-4 md:px-8 bg-background">
         <div className="max-w-4xl mx-auto">
           <FeedbackSection isLimited={true} />

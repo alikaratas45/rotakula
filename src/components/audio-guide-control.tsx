@@ -12,7 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useApp } from '@/context/app-context';
 import { PlayIcon } from 'lucide-react';
 
-const PROXIMITY_THRESHOLD_ENTER = 50; // meters to consider a POI 'visited'
+const PROXIMITY_THRESHOLD_ENTER = 75; // meters to consider a POI 'visited'
 const PROXIMITY_THRESHOLD_EXIT = 150; // meters to consider 'left' the POI
 
 export function AudioGuideControl() {
@@ -77,7 +77,7 @@ export function AudioGuideControl() {
                 });
                 setIsAudioGuideActive(false);
             },
-            { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+            { enableHighAccuracy: true } // Optimized settings
         );
     };
 
@@ -95,10 +95,14 @@ export function AudioGuideControl() {
         utterance.lang = language;
         
         const voices = synth.getVoices();
-        const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
-        if (voice) utterance.voice = voice;
-
-        synth.speak(utterance);
+        if (voices.length > 0) {
+            const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
+            if (voice) utterance.voice = voice;
+            synth.speak(utterance);
+        } else {
+            // Fallback if voices are not ready, though less likely for a short alert
+            synth.speak(utterance);
+        }
     }, [language, translations]);
 
 
