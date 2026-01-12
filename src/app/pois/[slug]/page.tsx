@@ -2,13 +2,13 @@
 "use client";
 
 import { getPoiBySlug } from '@/lib/kula-data';
-import { notFound, useRouter, useSearchParams } from 'next/navigation';
+import { notFound, useRouter, useSearchParams, useParams } from 'next/navigation';
 import Image from 'next/image';
 import { APIProvider } from '@vis.gl/react-google-maps';
 import EmbeddedMap from '@/components/map';
 import { getImageById } from '@/lib/placeholder-images';
 import type { PointOfInterest } from '@/lib/types';
-import { useState, useRef, useCallback, useEffect, use } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { PlayIcon, PauseIcon, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -16,8 +16,9 @@ import { useApp } from '@/context/app-context';
 import { Survey } from '@/components/survey';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-export default function PoiDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = use(params);
+export default function PoiDetailPage() {
+    const params = useParams();
+    const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
     const { language, translations, addBadge } = useApp();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -36,6 +37,8 @@ export default function PoiDetailPage({ params }: { params: Promise<{ slug: stri
     const [remainingText, setRemainingText] = useState('');
 
     useEffect(() => {
+        if (!slug) return;
+
         setPoi(null);
         setNarrationText('');
         setRemainingText('');
@@ -79,15 +82,7 @@ export default function PoiDetailPage({ params }: { params: Promise<{ slug: stri
             const newPath = `/pois/${slug}`;
             router.replace(newPath, { scroll: false });
             
-            const safeStartPlayback = () => startPlayback(narrationText);
-            setTimeout(() => {
-                const synth = synthRef.current;
-                if (synth && synth.getVoices().length > 0) {
-                    safeStartPlayback();
-                } else if (synth) {
-                    synth.onvoiceschanged = safeStartPlayback;
-                }
-            }, 500);
+            startPlayback(narrationText);
         }
 
         return () => {
@@ -102,51 +97,59 @@ export default function PoiDetailPage({ params }: { params: Promise<{ slug: stri
         const synth = synthRef.current;
         if (!synth || !textToSpeak) return;
 
-        if (synth.speaking) {
-            synth.cancel();
-        }
-
-        const textForSpeech = language === 'tr' ? textToSpeak.replace(/UNESCO/g, 'Unesko') : textToSpeak;
-        const utterance = new SpeechSynthesisUtterance(textForSpeech);
-        utteranceRef.current = utterance;
-
-        const voices = synth.getVoices();
-        const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
-        if (voice) {
-            utterance.voice = voice;
-        }
-        utterance.lang = language;
-
-        utterance.onboundary = (event) => {
-            charIndexRef.current = event.charIndex;
-        };
-
-        utterance.onend = () => {
-            setIsPlaying(false);
-            setIsPaused(false);
-            charIndexRef.current = 0;
-            setRemainingText(narrationText);
-        };
-
-        utterance.onerror = (event) => {
-            if (event.error !== 'interrupted') {
-                toast({
-                    title: translations.toast.audioErrorTitle,
-                    description: `${translations.toast.audioErrorDescription} (${event.error})`,
-                    variant: "destructive"
-                });
+        const start = (text: string) => {
+            if (synth.speaking) {
+                synth.cancel();
             }
-            setIsPlaying(false);
-            setIsPaused(false);
-            charIndexRef.current = 0;
-            setRemainingText(narrationText);
-        };
 
-        setTimeout(() => {
-            synth.speak(utterance);
-            setIsPlaying(true);
-            setIsPaused(false);
-        }, 100);
+            const textForSpeech = language === 'tr' ? text.replace(/UNESCO/g, 'Unesko') : text;
+            const utterance = new SpeechSynthesisUtterance(textForSpeech);
+            utteranceRef.current = utterance;
+
+            const voices = synth.getVoices();
+            const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
+            if (voice) {
+                utterance.voice = voice;
+            }
+            utterance.lang = language;
+
+            utterance.onboundary = (event) => {
+                charIndexRef.current = event.charIndex;
+            };
+
+            utterance.onend = () => {
+                setIsPlaying(false);
+                setIsPaused(false);
+                charIndexRef.current = 0;
+                setRemainingText(narrationText);
+            };
+
+            utterance.onerror = (event) => {
+                if (event.error !== 'interrupted') {
+                    toast({
+                        title: translations.toast.audioErrorTitle,
+                        description: `${translations.toast.audioErrorDescription} (${event.error})`,
+                        variant: "destructive"
+                    });
+                }
+                setIsPlaying(false);
+                setIsPaused(false);
+                charIndexRef.current = 0;
+                setRemainingText(narrationText);
+            };
+
+            setTimeout(() => {
+                synth.speak(utterance);
+                setIsPlaying(true);
+                setIsPaused(false);
+            }, 100);
+        }
+
+        if (synth.getVoices().length > 0) {
+            start(textToSpeak);
+        } else {
+            synth.onvoiceschanged = () => start(textToSpeak);
+        }
     }, [language, narrationText, toast, translations]);
 
     const handlePlayPause = useCallback(() => {
@@ -169,11 +172,7 @@ export default function PoiDetailPage({ params }: { params: Promise<{ slug: stri
             setIsPaused(true);
             setIsPlaying(false);
         } else {
-            if (synth.getVoices().length === 0) {
-                synth.onvoiceschanged = () => startPlayback(remainingText || narrationText);
-            } else {
-                startPlayback(remainingText || narrationText);
-            }
+            startPlayback(remainingText || narrationText);
         }
     }, [isPaused, remainingText, narrationText, toast, translations, startPlayback]);
 
@@ -276,5 +275,3 @@ export default function PoiDetailPage({ params }: { params: Promise<{ slug: stri
         </APIProvider>
     );
 }
-
-    

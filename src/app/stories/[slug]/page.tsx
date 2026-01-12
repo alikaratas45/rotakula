@@ -6,16 +6,17 @@ import { getStoryBySlug } from '@/lib/kula-data';
 import Image from 'next/image';
 import { Calendar, User, PlayIcon, PauseIcon } from 'lucide-react';
 import { useApp } from '@/context/app-context';
-import { useEffect, useState, useRef, useCallback, use } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import type { Story } from '@/lib/types';
-import { notFound } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
 import { getImageById } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 
-export default function StoryPage({ params }: { params: { slug: string } }) {
-    const { slug } = params;
+export default function StoryPage() {
+    const params = useParams();
+    const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
     const { language, translations } = useApp();
     const { toast } = useToast();
     const [story, setStory] = useState<Story | null>(null);
@@ -31,6 +32,7 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
     const charIndexRef = useRef(0);
 
     useEffect(() => {
+      if (!slug) return;
       async function fetchData() {
         setLoading(true);
         const storyData = await getStoryBySlug(slug, language);
@@ -48,7 +50,6 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
       }
       fetchData();
 
-      // Clean up synth on slug/language change
        return () => {
             if (synthRef.current?.speaking) {
                 synthRef.current.cancel();
@@ -61,7 +62,6 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
         if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
             synthRef.current = window.speechSynthesis;
         }
-        // General cleanup
         return () => {
             if (synthRef.current?.speaking) {
                 synthRef.current.cancel();
@@ -69,55 +69,63 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
         };
     }, []);
 
-    const startPlayback = (textToSpeak: string) => {
+    const startPlayback = useCallback((textToSpeak: string) => {
         const synth = synthRef.current;
         if (!synth || !textToSpeak) return;
 
-        if (synth.speaking) {
-            synth.cancel();
-        }
-
-        const utterance = new SpeechSynthesisUtterance(textToSpeak);
-        utteranceRef.current = utterance;
-        
-        const voices = synth.getVoices();
-        const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
-        if (voice) {
-            utterance.voice = voice;
-        }
-        utterance.lang = language;
-
-        utterance.onboundary = (event) => {
-            charIndexRef.current = event.charIndex;
-        };
-
-        utterance.onend = () => {
-            setIsPlaying(false);
-            setIsPaused(false);
-            charIndexRef.current = 0;
-            setRemainingText(narrationText); // Reset for next play
-        };
-
-        utterance.onerror = (event) => {
-             if (event.error !== 'interrupted') {
-                 toast({
-                    title: translations.toast.audioErrorTitle,
-                    description: `${translations.toast.audioErrorDescription} (${event.error})`,
-                    variant: "destructive"
-                });
+        const start = (text: string) => {
+            if (synth.speaking) {
+                synth.cancel();
             }
-            setIsPlaying(false);
-            setIsPaused(false);
-            charIndexRef.current = 0;
-            setRemainingText(narrationText); // Reset on error
-        };
-        
-        setTimeout(() => {
-            synth.speak(utterance);
-            setIsPlaying(true);
-            setIsPaused(false);
-        }, 100);
-    };
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utteranceRef.current = utterance;
+            
+            const voices = synth.getVoices();
+            const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
+            if (voice) {
+                utterance.voice = voice;
+            }
+            utterance.lang = language;
+
+            utterance.onboundary = (event) => {
+                charIndexRef.current = event.charIndex;
+            };
+
+            utterance.onend = () => {
+                setIsPlaying(false);
+                setIsPaused(false);
+                charIndexRef.current = 0;
+                setRemainingText(narrationText); 
+            };
+
+            utterance.onerror = (event) => {
+                if (event.error !== 'interrupted') {
+                    toast({
+                        title: translations.toast.audioErrorTitle,
+                        description: `${translations.toast.audioErrorDescription} (${event.error})`,
+                        variant: "destructive"
+                    });
+                }
+                setIsPlaying(false);
+                setIsPaused(false);
+                charIndexRef.current = 0;
+                setRemainingText(narrationText); 
+            };
+            
+            setTimeout(() => {
+                synth.speak(utterance);
+                setIsPlaying(true);
+                setIsPaused(false);
+            }, 100);
+        }
+
+        if (synth.getVoices().length > 0) {
+            start(textToSpeak);
+        } else {
+            synth.onvoiceschanged = () => start(textToSpeak);
+        }
+    }, [language, narrationText, toast, translations]);
 
     const handlePlayPause = useCallback(() => {
         const synth = synthRef.current;
@@ -130,23 +138,18 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
             return;
         }
 
-        if (synth.speaking && !isPaused) { // Is playing, so pause it
-            // Calculate remaining text based on the original full text
+        if (synth.speaking && !isPaused) { 
             const fullText = utteranceRef.current?.text || narrationText;
             const spokenTextLength = charIndexRef.current;
             const remaining = fullText.substring(spokenTextLength);
             
-            synth.cancel(); // Use cancel() which is more reliable
+            synth.cancel(); 
             setRemainingText(remaining);
             setIsPaused(true);
             setIsPlaying(false);
 
-        } else { // Is paused or not started, so play
-             if (synth.getVoices().length === 0) {
-                 synth.onvoiceschanged = () => startPlayback(remainingText);
-            } else {
-                startPlayback(remainingText);
-            }
+        } else { 
+            startPlayback(remainingText || narrationText);
         }
     }, [isPaused, remainingText, narrationText, toast, translations, startPlayback]);
 
@@ -212,7 +215,5 @@ export default function StoryPage({ params }: { params: { slug: string } }) {
         </article>
     );
 }
-
-    
 
     

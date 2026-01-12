@@ -24,12 +24,10 @@ function NarMotifiContent() {
     const charIndexRef = useRef(0);
     const heroImage = getImageById('story-nar-motifi');
     
-    // Initialize Speech Synthesis
     useEffect(() => {
         if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
             synthRef.current = window.speechSynthesis;
         }
-         // General cleanup
         return () => {
             if (synthRef.current?.speaking) {
                 synthRef.current.cancel();
@@ -37,12 +35,10 @@ function NarMotifiContent() {
         };
     }, []);
 
-    // Update text when language changes
     useEffect(() => {
         const newNarrationText = translations.narMotifi.content.join(' ') + ' ' + translations.narMotifi.poem.join(' ');
         setRemainingText(newNarrationText);
         charIndexRef.current = 0;
-        // Stop any ongoing speech when language changes
         if (synthRef.current?.speaking) {
             synthRef.current.cancel();
             setIsPlaying(false);
@@ -55,50 +51,58 @@ function NarMotifiContent() {
         const synth = synthRef.current;
         if (!synth || !textToSpeak) return;
 
-        if (synth.speaking) {
-            synth.cancel();
-        }
-
-        const utterance = new SpeechSynthesisUtterance(textToSpeak);
-        utteranceRef.current = utterance;
-        
-        const voices = synth.getVoices();
-        const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
-        if (voice) {
-            utterance.voice = voice;
-        }
-        utterance.lang = language;
-
-        utterance.onboundary = (event) => {
-            charIndexRef.current = event.charIndex;
-        };
-
-        utterance.onend = () => {
-            setIsPlaying(false);
-            setIsPaused(false);
-            charIndexRef.current = 0;
-            setRemainingText(narrationText); 
-        };
-
-        utterance.onerror = (event) => {
-             if (event.error !== 'interrupted') {
-                 toast({
-                    title: translations.toast.audioErrorTitle,
-                    description: `${translations.toast.audioErrorDescription} (${event.error})`,
-                    variant: "destructive"
-                });
+        const start = (text: string) => {
+            if (synth.speaking) {
+                synth.cancel();
             }
-            setIsPlaying(false);
-            setIsPaused(false);
-            charIndexRef.current = 0;
-            setRemainingText(narrationText); 
-        };
-        
-        setTimeout(() => {
-            synth.speak(utterance);
-            setIsPlaying(true);
-            setIsPaused(false);
-        }, 100);
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utteranceRef.current = utterance;
+            
+            const voices = synth.getVoices();
+            const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
+            if (voice) {
+                utterance.voice = voice;
+            }
+            utterance.lang = language;
+
+            utterance.onboundary = (event) => {
+                charIndexRef.current = event.charIndex;
+            };
+
+            utterance.onend = () => {
+                setIsPlaying(false);
+                setIsPaused(false);
+                charIndexRef.current = 0;
+                setRemainingText(narrationText); 
+            };
+
+            utterance.onerror = (event) => {
+                 if (event.error !== 'interrupted') {
+                     toast({
+                        title: translations.toast.audioErrorTitle,
+                        description: `${translations.toast.audioErrorDescription} (${event.error})`,
+                        variant: "destructive"
+                    });
+                }
+                setIsPlaying(false);
+                setIsPaused(false);
+                charIndexRef.current = 0;
+                setRemainingText(narrationText); 
+            };
+            
+            setTimeout(() => {
+                synth.speak(utterance);
+                setIsPlaying(true);
+                setIsPaused(false);
+            }, 100);
+        }
+
+        if (synth.getVoices().length > 0) {
+            start(textToSpeak);
+        } else {
+            synth.onvoiceschanged = () => start(textToSpeak);
+        }
     }, [language, narrationText, toast, translations]);
 
 
@@ -124,26 +128,14 @@ function NarMotifiContent() {
             setIsPlaying(false);
 
         } else { 
-             if (synth.getVoices().length === 0) {
-                 synth.onvoiceschanged = () => startPlayback(remainingText || narrationText);
-            } else {
-                startPlayback(remainingText || narrationText);
-            }
+            startPlayback(remainingText || narrationText);
         }
     }, [isPaused, remainingText, narrationText, toast, translations, startPlayback]);
 
-    // Autoplay effect
     useEffect(() => {
         const shouldAutoplay = searchParams.get('autoplay') === 'true';
         if (shouldAutoplay && narrationText) {
-             const synth = synthRef.current;
-             const safeStartPlayback = () => startPlayback(narrationText);
-
-             if (synth && synth.getVoices().length > 0) {
-                 safeStartPlayback();
-             } else if (synth) {
-                 synth.onvoiceschanged = safeStartPlayback;
-             }
+             startPlayback(narrationText);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchParams, narrationText]);
