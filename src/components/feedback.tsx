@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useMemo } from 'react';
@@ -29,6 +28,8 @@ import { Loader2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { tr, enUS } from 'date-fns/locale';
 import { useApp } from '@/context/app-context';
+import { addDocumentNonBlocking, useCollection, useFirestore, useMemoFirebase } from '@/firebase';
+import { collection, query, orderBy, limit } from 'firebase/firestore';
 
 const locales: { [key: string]: Locale } = { tr, en: enUS };
 
@@ -74,8 +75,17 @@ function FeedbackItem({ feedback }: { feedback: Feedback }) {
 
 function FeedbackList({ isLimited }: { isLimited?: boolean }) {
   const { translations } = useApp();
-  const [feedback, setFeedback] = useState<Feedback[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const firestore = useFirestore();
+
+  const feedbackQuery = useMemoFirebase(() => {
+    let q = query(collection(firestore, 'feedback'), orderBy('createdAt', 'desc'));
+    if (isLimited) {
+      q = query(q, limit(3));
+    }
+    return q;
+  }, [firestore, isLimited]);
+
+  const { data: feedback, isLoading } = useCollection<Feedback>(feedbackQuery);
 
   if (isLoading) {
     return (
@@ -100,6 +110,7 @@ function FeedbackList({ isLimited }: { isLimited?: boolean }) {
 
 function FeedbackForm() {
   const { translations } = useApp();
+  const firestore = useFirestore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   
@@ -113,9 +124,13 @@ function FeedbackForm() {
 
   const onSubmit: SubmitHandler<FeedbackFormValues> = async (data) => {
     setIsSubmitting(true);
-    // Firebase is removed, so we just simulate the submission
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    console.log("Simulated feedback submission:", data);
+    
+    const feedbackCollection = collection(firestore, 'feedback');
+    addDocumentNonBlocking(feedbackCollection, {
+      ...data,
+      createdAt: new Date(),
+    });
+
     setIsSubmitting(false);
     setIsSubmitted(true);
     form.reset();
@@ -182,10 +197,7 @@ export function FeedbackSection({ isLimited = false }: { isLimited?: boolean }) 
     return (
         <div className="space-y-8">
             {!isLimited && <FeedbackForm />}
-            <div className="text-center p-8 border-2 border-dashed rounded-lg">
-              <h3 className="text-lg font-semibold">Yorumlar Geçici Olarak Devre Dışı</h3>
-              <p className="text-muted-foreground">Bu bölümdeki çalışmaları tamamladığımızda yorumlar yeniden aktif olacaktır.</p>
-            </div>
+            <FeedbackList isLimited={isLimited} />
              {isLimited && (
                 <div className="flex justify-center pt-4">
                   <Button asChild>

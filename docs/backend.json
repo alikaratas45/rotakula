@@ -92,6 +92,35 @@
         "overall",
         "createdAt"
       ]
+    },
+    "Feedback": {
+      "title": "Feedback",
+      "type": "object",
+      "description": "Represents a feedback submission from a user about the application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the feedback."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the user providing feedback (optional)."
+        },
+        "message": {
+          "type": "string",
+          "description": "The feedback message."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of when the feedback was submitted."
+        }
+      },
+      "required": [
+        "id",
+        "message",
+        "createdAt"
+      ]
     }
   },
   "auth": {
@@ -106,6 +135,12 @@
         "$ref": "#/entities/Survey"
       },
       "description": "Collection to store user survey responses."
+    },
+    "feedback": {
+      "schema": {
+        "$ref": "#/entities/Feedback"
+      },
+      "description": "Collection to store user feedback about the application."
     }
   }
 }
