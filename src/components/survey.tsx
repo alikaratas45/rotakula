@@ -11,8 +11,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Loader2, Star } from 'lucide-react';
-import { useUser, useFirestore, addDocumentNonBlocking } from '@/firebase';
-import { collection } from 'firebase/firestore';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from './ui/separator';
@@ -37,8 +35,6 @@ export const Survey = ({ poiId, poiName, onSubmitted }: { poiId: string; poiName
 
   type SurveyFormValues = z.infer<typeof surveySchema>;
 
-  const { user } = useUser();
-  const firestore = useFirestore();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -54,43 +50,34 @@ export const Survey = ({ poiId, poiName, onSubmitted }: { poiId: string; poiName
   });
 
   useEffect(() => {
-    const submittedSurveys = JSON.parse(localStorage.getItem('kula-submitted-surveys') || '{}');
-    if (submittedSurveys[poiId]) {
-      setIsSubmitted(true);
+    if (typeof window !== 'undefined') {
+        const submittedSurveys = JSON.parse(localStorage.getItem('kula-submitted-surveys') || '{}');
+        if (submittedSurveys[poiId]) {
+          setIsSubmitted(true);
+        }
     }
   }, [poiId]);
 
 
   const onSubmit: SubmitHandler<SurveyFormValues> = async (data) => {
-    if (!user) {
-      toast({
-        variant: 'destructive',
-        title: 'Hata',
-        description: 'Anketi göndermek için anonim olarak oturum açmış olmanız gerekir.',
-      });
-      return;
-    }
     setIsSubmitting(true);
-    const surveysCollection = collection(firestore, 'surveys');
-    
-    const newSurveyData = {
-      ...data,
-      guidance: data.guidance === 'yes',
-      staffing: data.staffing === 'yes',
-      poiId,
-      poiName,
-      userId: user.uid,
-      createdAt: new Date(),
-    };
-    
-    await addDocumentNonBlocking(surveysCollection, newSurveyData);
+    // Firebase is removed, so we just simulate the submission
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    console.log("Simulated survey submission:", data);
+
+    toast({
+        title: translations.survey.thanksTitle,
+        description: "Geri bildiriminiz için teşekkür ederiz."
+    });
 
     setIsSubmitting(false);
     setIsSubmitted(true);
 
-    const submittedSurveys = JSON.parse(localStorage.getItem('kula-submitted-surveys') || '{}');
-    submittedSurveys[poiId] = true;
-    localStorage.setItem('kula-submitted-surveys', JSON.stringify(submittedSurveys));
+    if (typeof window !== 'undefined') {
+        const submittedSurveys = JSON.parse(localStorage.getItem('kula-submitted-surveys') || '{}');
+        submittedSurveys[poiId] = true;
+        localStorage.setItem('kula-submitted-surveys', JSON.stringify(submittedSurveys));
+    }
     
     form.reset();
     if(onSubmitted) {

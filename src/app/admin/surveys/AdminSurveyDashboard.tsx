@@ -1,8 +1,7 @@
+
 'use client';
 
 import { useMemo, useState, useEffect } from 'react';
-import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
-import { collection, query, orderBy, where, Query, doc, deleteDoc } from 'firebase/firestore';
 import { Loader2, Star, LogOut, Filter, X, Smile, ThumbsUp, Users, Bus, Sparkles, Trash2, Check, Hand, FileSpreadsheet } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -99,12 +98,15 @@ const YesNoStatCard = ({ title, yesPercent, noPercent, icon: Icon }: { title: st
 
 export default function AdminSurveyDashboard() {
   const { handleAdminLogout } = useApp();
-  const firestore = useFirestore();
   const { toast } = useToast();
   
   const [pois, setPois] = useState<PointOfInterest[]>([]);
   const [filters, setFilters] = useState<{ poiId: string; rating: number }>({ poiId: 'all', rating: 0 });
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
+
+  const [surveys, setSurveys] = useState<SurveyResponse[]>([]);
+  const [isLoadingSurveys, setIsLoadingSurveys] = useState(false);
+
 
   useEffect(() => {
     async function fetchPois() {
@@ -113,21 +115,6 @@ export default function AdminSurveyDashboard() {
     }
     fetchPois();
   }, []);
-
-  const surveysQuery = useMemoFirebase(() => {
-    if (!firestore) return null;
-    
-    let q: Query = query(collection(firestore, 'surveys'));
-    if (filters.poiId !== 'all') {
-        q = query(q, where('poiId', '==', filters.poiId));
-    }
-    if (filters.rating > 0) {
-        q = query(q, where('overall', '==', filters.rating));
-    }
-    return q;
-  }, [firestore, filters.poiId, filters.rating]);
-
-  const { data: surveys, isLoading: isLoadingSurveys, error } = useCollection<SurveyResponse>(surveysQuery);
 
   const averageRatings = useMemo(() => {
     if (!surveys || surveys.length === 0) {
@@ -171,22 +158,12 @@ export default function AdminSurveyDashboard() {
 
   const handleDeleteSurvey = async (surveyId: string) => {
     setIsDeleting(surveyId);
-    try {
-      const surveyRef = doc(firestore, 'surveys', surveyId);
-      await deleteDoc(surveyRef);
-      toast({
-        title: "Başarılı",
-        description: "Anket başarıyla silindi.",
-      });
-    } catch (error: any) {
-       toast({
-          title: "Hata",
-          description: "Anket silinirken bir sorun oluştu.",
-          variant: "destructive",
-      });
-    } finally {
-      setIsDeleting(null);
-    }
+     toast({
+        title: "Devre Dışı",
+        description: "Firebase devre dışı bırakıldığı için bu özellik geçici olarak kullanılamıyor.",
+        variant: "destructive",
+    });
+    setIsDeleting(null);
   };
 
   const handleExportToExcel = () => {
@@ -242,7 +219,7 @@ export default function AdminSurveyDashboard() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
         <div>
             <h1 className="text-3xl font-bold font-headline">Anket Sonuçları</h1>
-            <p className="text-muted-foreground">Ziyaretçi deneyimlerini ve geri bildirimlerini inceleyin.</p>
+            <p className="text-muted-foreground">Bu bölüm, Firebase yeniden etkinleştirildiğinde aktif olacaktır.</p>
         </div>
         <Button onClick={handleAdminLogout} variant="outline">
             <LogOut className="mr-2 h-4 w-4" />
@@ -250,148 +227,10 @@ export default function AdminSurveyDashboard() {
         </Button>
       </div>
       
-      <div className="mb-8">
-         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card>
-                <CardHeader>
-                    <CardTitle>Toplam Anket</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <p className="text-3xl font-bold">{surveys?.length || 0}</p>
-                </CardContent>
-            </Card>
-            <YesNoStatCard title="Rehberlik Hizmeti Memnuniyeti" yesPercent={averageRatings.guidanceYes} noPercent={averageRatings.guidanceNo} icon={ThumbsUp} />
-            <YesNoStatCard title="Personel İlgisi Memnuniyeti" yesPercent={averageRatings.staffingYes} noPercent={averageRatings.staffingNo} icon={Users} />
-            <AverageRatingCard title="Temizlik Ortalaması" value={averageRatings.cleanliness} icon={Smile} />
-            <AverageRatingCard title="Ulaşım Kolaylığı Ortalaması" value={averageRatings.transportation} icon={Bus} />
-            <AverageRatingCard title="Genel Değerlendirme Ortalaması" value={averageRatings.overall} icon={Sparkles} />
-         </div>
-      </div>
-      
-      <Card className="mb-8">
-        <CardHeader className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-           <div className="flex items-center gap-4">
-             <Filter className="h-5 w-5" />
-             <CardTitle>Filtreler</CardTitle>
-           </div>
-            <Button onClick={handleExportToExcel} disabled={!surveys || surveys.length === 0}>
-              <FileSpreadsheet className="mr-2 h-4 w-4" />
-              Excel Olarak Dışa Aktar
-            </Button>
-        </CardHeader>
-        <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-           <div>
-            <label className="text-sm font-medium mb-2 block">Yere Göre Filtrele</label>
-             <Select value={filters.poiId} onValueChange={(value) => handleFilterChange('poiId', value)}>
-                <SelectTrigger>
-                    <SelectValue placeholder="Tüm Yerler" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="all">Tüm Yerler</SelectItem>
-                    {pois.map(poi => (
-                        <SelectItem key={poi.id} value={poi.id}>{poi.name}</SelectItem>
-                    ))}
-                </SelectContent>
-            </Select>
-           </div>
-           <div>
-            <label className="text-sm font-medium mb-2 block">Genel Puana Göre Filtrele</label>
-             <Select value={String(filters.rating)} onValueChange={(value) => handleFilterChange('rating', Number(value))}>
-                <SelectTrigger>
-                    <SelectValue placeholder="Tüm Puanlar" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="0">Tüm Puanlar</SelectItem>
-                    <SelectItem value="5">5 Yıldız</SelectItem>
-                    <SelectItem value="4">4 Yıldız</SelectItem>
-                    <SelectItem value="3">3 Yıldız</SelectItem>
-                    <SelectItem value="2">2 Yıldız</SelectItem>
-                    <SelectItem value="1">1 Yıldız</SelectItem>
-                </SelectContent>
-            </Select>
-           </div>
-           <div className="flex items-end">
-             <Button onClick={clearFilters} variant="ghost" disabled={filters.poiId === 'all' && filters.rating === 0}>
-                <X className="mr-2 h-4 w-4" />
-                Filtreleri Temizle
-            </Button>
-           </div>
-        </CardContent>
-      </Card>
-
-
-      {isLoadingSurveys && !surveys ? (
-        <div className="flex justify-center py-16">
-          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {sortedSurveys && sortedSurveys.length > 0 ? (
-            sortedSurveys.map((survey) => (
-              <Card key={survey.id}>
-                <CardHeader>
-                  <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
-                    <div>
-                        <CardTitle className="text-lg">{survey.poiName}</CardTitle>
-                        <CardDescription>
-                            {formatDistanceToNow(new Date(survey.createdAt.seconds * 1000), {
-                            addSuffix: true,
-                            locale: tr,
-                            })}
-                        </CardDescription>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="flex-shrink-0 pt-1">
-                          <StarDisplay rating={survey.overall} label="Genel" />
-                      </div>
-                       <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive/70 hover:text-destructive hover:bg-destructive/10">
-                              {isDeleting === survey.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Anketi Silmek Üzeresiniz</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                Bu işlem geri alınamaz. "{survey.poiName}" için gönderilen bu anket sonucunu kalıcı olarak silmek istediğinizden emin misiniz?
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>İptal</AlertDialogCancel>
-                              <AlertDialogAction onClick={() => handleDeleteSurvey(survey.id)} className="bg-destructive hover:bg-destructive/90 text-destructive-foreground">
-                                Evet, Sil
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3 text-sm">
-                        <YesNoDisplay value={survey.guidance} label="Rehberlik Hizmeti"/>
-                        <YesNoDisplay value={survey.staffing} label="Personel İlgisi"/>
-                        <StarDisplay rating={survey.cleanliness} label="Temizlik"/>
-                        <StarDisplay rating={survey.transportation} label="Ulaşım Kolaylığı"/>
-                    </div>
-                    {survey.comment && (
-                        <>
-                            <Separator />
-                            <div>
-                                <p className="text-sm font-semibold mb-1">Ziyaretçi Yorumu:</p>
-                                <p className="text-muted-foreground italic">"{survey.comment}"</p>
-                            </div>
-                        </>
-                    )}
-                </CardContent>
-              </Card>
-            ))
-          ) : (
-            <p className="text-center text-muted-foreground py-16">Seçilen filtrelere uygun anket sonucu bulunamadı.</p>
-          )}
-        </div>
-      )}
+       <div className="text-center py-16 border-2 border-dashed rounded-lg">
+          <h2 className="text-xl font-semibold text-muted-foreground">Anket Verileri Geçici Olarak Kullanılamıyor</h2>
+          <p className="text-muted-foreground mt-2">Firebase bağlantısı yeniden kurulduğunda anket sonuçları burada görüntülenecektir.</p>
+       </div>
     </div>
   )
 }
