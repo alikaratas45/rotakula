@@ -5,7 +5,7 @@ import Link from "next/link";
 import * as React from "react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
-import { Moon, Sun, Home, UserCog, ClipboardList, Check } from "lucide-react";
+import { Moon, Sun, Home, UserCog, ClipboardList, Check, MessageSquare } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -122,6 +122,12 @@ export function Header() {
                         <Link href="/admin/surveys">
                             <ClipboardList className="mr-2 h-4 w-4" />
                             <span>Anket Sonuçları</span>
+                        </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <Link href="/admin/feedback">
+                            <MessageSquare className="mr-2 h-4 w-4" />
+                            <span>Yorumları Yönet</span>
                         </Link>
                     </DropdownMenuItem>
                 </DropdownMenuContent>
