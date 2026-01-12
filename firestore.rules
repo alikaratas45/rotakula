@@ -1,97 +1,36 @@
-/**
- * @file firestore.rules
- * @description Security rules for the RotaKula Firestore database.
- *
- * ## Core Philosophy
- * This ruleset implements a strict Role-Based Access Control (RBAC) model centered
- * around a dedicated 'admin' role. The primary security goal is to ensure that only
- * authenticated administrators can view or manage the list of other administrators.
- * This creates a secure, self-contained management system for application privileges.
- *
- * ## Data Structure
- * A single top-level collection, `/roles_admin`, is used to manage administrative
- * privileges. The existence of a document in this collection, where the document ID
- * is a user's Firebase Auth UID, grants that user admin rights. This is an
- * "Existence over Content" pattern, meaning the content of the admin document is
- * not used for authorization checks, only its presence.
- *
- * ## Key Security Decisions
- * - Admin Management: Only existing admins can grant, view, or revoke admin
- *   privileges for other users. Non-admins have no access to this collection.
- * - No Self-Promotion: A user cannot grant themselves the admin role.
- * - Secure by Default: Any path not explicitly defined in these rules is inaccessible,
- *   enforcing a default-deny security posture.
- * - Bootstrapping: The first administrator document must be created manually
- *   through the Firebase Console or a trusted server-side script, as there are no
- *   rules that allow a non-admin to create the first one.
- *
- * ## Prototyping Mode
- * These rules are configured for prototyping. They strictly enforce *who* can
- * access data (authorization) but are flexible on the *shape* of that data
- * (schema validation). Validation is limited to fields critical for maintaining
- * relational integrity and ownership, such as document IDs.
- */
+
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // -------------------------------------------------------------------------
-    // Helper Functions
-    // -------------------------------------------------------------------------
-
-    /**
-     * Checks if the user is authenticated.
-     */
-    function isSignedIn() {
-      return request.auth != null;
-    }
-
-    /**
-     * Checks if the requesting user has an admin role.
-     * Admin status is granted by the existence of a document in the 'roles_admin'
-     * collection with the user's UID as the document ID.
-     */
+    
     function isAdmin() {
-      return isSignedIn() && exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+      // Ensure the user is authenticated and their email matches the admin email.
+      return request.auth != null && request.auth.token.email == "alikarataskula@gmail.com";
     }
 
-    /**
-     * On create, validates that the document's internal `id` field matches the
-     * document ID in the path. This enforces data consistency.
-     */
-    function isConsistentAdminIdOnCreate(adminId) {
-      return request.resource.data.id == adminId;
+    // Feedback Collection: Anyone can read and create. No one can update or delete.
+    match /feedback/{feedbackId} {
+      allow read, create: if true;
+      allow update, delete: if false;
     }
 
-    /**
-     * On update, ensures the document's internal `id` field is immutable and
-     * cannot be changed after creation.
-     */
-    function isAdminIdImmutable() {
-      return request.resource.data.id == resource.data.id;
+    // Survey responses: Anyone can create a response. Admin can read, list, and delete.
+    match /surveys/{surveyId} {
+      allow create: if true;
+      allow read, list, delete: if isAdmin();
+      allow update: if false;
     }
 
-    // -------------------------------------------------------------------------
-    // Collection Rules
-    // -------------------------------------------------------------------------
-
-    /**
-     * @description Secures the admin roles collection. Only existing admins can read,
-     *              list, create, update, or delete other admin documents.
-     * @path        /roles_admin/{adminId}
-     * @allow       (create) An existing admin (auth.uid='admin_abc') can create a new
-     *              admin document at `/roles_admin/new_user_xyz`.
-     * @deny        (list) A non-admin signed-in user is denied from listing documents
-     *              in the `/roles_admin` collection.
-     * @principle   Enforces Role-Based Access Control (RBAC) where administrative
-     *              privileges are required to manage the list of administrators.
-     */
-    match /roles_admin/{adminId} {
-      allow get: if isAdmin();
-      allow list: if isAdmin();
-      allow create: if isAdmin() && isConsistentAdminIdOnCreate(adminId);
-      allow update: if isAdmin() && resource != null && isAdminIdImmutable();
-      allow delete: if isAdmin() && resource != null;
+    // Content for QR codes: Publicly readable, admin-only write access.
+    match /content/{contentId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // Default-deny all other reads and writes for security.
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }
