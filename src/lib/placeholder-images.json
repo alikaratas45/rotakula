@@ -263,6 +263,12 @@
       "description": "Milli mücadele döneminden tarihi bir sokak.",
       "imageUrl": "/hikaye.jpg",
       "imageHint": "historic village street"
+    },
+    {
+      "id": "kula-tanitim-video",
+      "description": "Kula tanıtım videosu için bir kapak görseli",
+      "imageUrl": "/kula-video-thumb.jpg",
+      "imageHint": "landscape aerial view"
     }
   ]
 }
