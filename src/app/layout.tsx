@@ -12,12 +12,8 @@ export const metadata = {
   description: "Manisa'nın Kula ilçesine özel tematik seyahat rotalarını, tarihi yerleri, doğal güzellikleri ve yöresel lezzetleri keşfedin.",
   manifest: '/manifest.json',
   icons: {
-    icon: [
-      { url: '/logo.png?v=2', sizes: 'any', type: 'image/png' },
-    ],
-    apple: [
-      { url: '/logo.png?v=2', sizes: '180x180', type: 'image/png' },
-    ],
+    icon: '/logo.png?v=2',
+    apple: '/logo.png?v=2',
   },
 };
 
@@ -29,6 +25,7 @@ export default function RootLayout({
   return (
     <html lang="tr" suppressHydrationWarning>
       <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
@@ -44,3 +41,4 @@ export default function RootLayout({
     </html>
   );
 }
+
