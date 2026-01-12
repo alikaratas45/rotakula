@@ -1,179 +1,79 @@
-
 {
   "entities": {
-    "Feedback": {
-      "title": "Feedback",
+    "AdminUser": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "AdminUser",
       "type": "object",
-      "description": "Represents user feedback and suggestions.",
+      "description": "Represents an administrative user for the RotaKula application.",
       "properties": {
-        "name": {
+        "id": {
           "type": "string",
-          "description": "The name of the user providing the feedback."
+          "description": "Unique identifier for the admin user."
         },
-        "message": {
+        "username": {
           "type": "string",
-          "description": "The feedback or suggestion provided by the user."
+          "description": "Username of the admin user."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the admin user.",
+          "format": "email"
+        },
+        "firstName": {
+          "type": "string",
+          "description": "First name of the admin user."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "Last name of the admin user."
         },
         "createdAt": {
           "type": "string",
-          "format": "date-time",
-          "description": "The timestamp indicating when the feedback was submitted."
-        },
-        "poiId": {
-          "type": "string",
-          "description": "The ID of the Point of Interest the feedback is about, if applicable."
-        }
-      },
-      "required": [
-        "name",
-        "message",
-        "createdAt"
-      ]
-    },
-    "SurveyResponse": {
-      "title": "Survey Response",
-      "type": "object",
-      "description": "Represents a user's survey response for a Point of Interest.",
-      "properties": {
-        "poiId": {
-          "type": "string",
-          "description": "The ID of the Point of Interest being surveyed."
-        },
-        "poiName": {
-          "type": "string",
-          "description": "The name of the Point of Interest."
-        },
-        "guidance": {
-          "type": "boolean",
-          "description": "Did the user receive guidance service? (true for Yes, false for No)"
-        },
-        "staffing": {
-          "type": "boolean",
-          "description": "Was there a staff member who attended to the user? (true for Yes, false for No)"
-        },
-        "cleanliness": {
-          "type": "number",
-          "description": "User rating for cleanliness, from 1 to 5."
-        },
-        "transportation": {
-          "type": "number",
-          "description": "User rating for ease of transportation, from 1 to 5."
-        },
-        "overall": {
-          "type": "number",
-          "description": "User's overall rating, from 1 to 5."
-        },
-        "comment": {
-          "type": "string",
-          "description": "The user's optional comment."
-        },
-        "userId": {
-          "type": "string",
-          "description": "The anonymous user ID of the respondent."
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time",
-          "description": "The timestamp of the submission."
-        }
-      },
-      "required": [
-        "poiId",
-        "poiName",
-        "guidance",
-        "staffing",
-        "cleanliness",
-        "transportation",
-        "overall",
-        "userId",
-        "createdAt"
-      ]
-    },
-    "Content": {
-      "title": "Content",
-      "type": "object",
-      "description": "Represents a piece of dynamic content for QR codes.",
-      "properties": {
-        "slug": {
-          "type": "string",
-          "description": "The URL-friendly identifier for the content, derived from the title."
-        },
-        "title": {
-          "type": "string",
-          "description": "The title of the content."
-        },
-        "body": {
-          "type": "string",
-          "description": "The main body of the content, can be long text or markdown."
-        },
-        "imageUrl": {
-          "type": "string",
-          "description": "URL of an optional image for the content."
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "date-time",
-          "description": "Timestamp of creation."
+          "description": "Timestamp indicating when the admin user account was created.",
+          "format": "date-time"
         },
         "updatedAt": {
           "type": "string",
-          "format": "date-time",
-          "description": "Timestamp of the last update."
+          "description": "Timestamp indicating when the admin user account was last updated.",
+          "format": "date-time"
         }
       },
       "required": [
-        "slug",
-        "title",
-        "body",
+        "id",
+        "username",
+        "email",
+        "firstName",
+        "lastName",
         "createdAt",
         "updatedAt"
       ]
-    },
-    "VisitorCount": {
-      "title": "Visitor Count",
-      "type": "object",
-      "description": "Stores the total number of unique visitors.",
-      "properties": {
-        "count": {
-          "type": "number",
-          "description": "The total count of unique visitors."
-        }
-      },
-      "required": ["count"]
     }
   },
   "auth": {
     "providers": [
-      "anonymous",
-      "email_password"
+      "password",
+      "anonymous"
     ]
   },
   "firestore": {
-    "/feedback/{feedbackId}": {
-      "schema": {
-        "$ref": "#/entities/Feedback"
-      },
-      "description": "Stores user feedback and suggestions. Publicly readable and writable."
-    },
-    "/surveys/{surveyId}": {
-      "schema": {
-        "$ref": "#/entities/SurveyResponse"
-      },
-      "description": "Stores survey responses for POIs. Publicly writable, but only readable by admins."
-    },
-    "/content/{contentSlug}": {
-      "schema": {
-        "$ref": "#/entities/Content"
-      },
-      "description": "Stores dynamic content for QR codes, identified by a URL-friendly slug. Publicly readable, admin-only writable."
-    },
-    "/visitors/counter": {
-      "schema": {
-        "$ref": "#/entities/VisitorCount"
-      },
-      "description": "A single document to store the unique visitor count. Publicly readable and writable for increments."
-    }
+    "structure": [
+      {
+        "path": "/roles_admin/{adminId}",
+        "definition": {
+          "entityName": "AdminUser",
+          "schema": {
+            "$ref": "#/backend/entities/AdminUser"
+          },
+          "description": "Collection to store admin users. Existence of a document for a user ID in this collection grants admin privileges. Uses Existence over Content for role verification.",
+          "params": [
+            {
+              "name": "adminId",
+              "description": "The Firebase Auth UID of the admin user."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "Given the requirement to enable admin login, I am creating a database structure that supports authentication and authorization. The core principle is Authorization Independence, which means avoiding `get()` calls in security rules by denormalizing authorization data. Since the application focuses on Kula and requires an admin user, I will set up a dedicated collection for admin roles. This structure supports QAPs by allowing secure listing based on role membership. The application's data, such as POIs and routes, can be stored in JSON files as specified, eliminating the need for Firestore data storage for these elements. The admin user functionality will primarily use Firestore for authentication and potentially for managing application configuration or content in the future, although the initial implementation focuses on static data."
   }
 }
-
-    
