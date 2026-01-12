@@ -24,10 +24,11 @@ export default function SurveyResultsPage() {
   const { isAdmin, isUserLoading } = useApp();
   
   useEffect(() => {
-    if (!isUserLoading && !isAdmin) {
+    // Since admin functionality is disabled, always redirect.
+    if (!isUserLoading) {
         router.push('/');
     }
-  }, [isAdmin, isUserLoading, router]);
+  }, [isUserLoading, router]);
 
   if (isUserLoading || !isAdmin) {
     return (

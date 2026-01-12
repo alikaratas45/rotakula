@@ -221,7 +221,7 @@ export default function AdminSurveyDashboard() {
             <h1 className="text-3xl font-bold font-headline">Anket Sonuçları</h1>
             <p className="text-muted-foreground">Bu bölüm, Firebase yeniden etkinleştirildiğinde aktif olacaktır.</p>
         </div>
-        <Button onClick={handleAdminLogout} variant="outline">
+        <Button onClick={() => handleAdminLogout()} variant="outline">
             <LogOut className="mr-2 h-4 w-4" />
             Çıkış Yap
         </Button>
