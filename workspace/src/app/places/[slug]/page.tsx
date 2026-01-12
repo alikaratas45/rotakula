@@ -1,9 +1,8 @@
 
-
 "use client"
 
 import { getPoiBySlug } from '@/lib/kula-data';
-import { notFound, useRouter, useSearchParams } from 'next/navigation';
+import { notFound, useRouter, useSearchParams, useParams } from 'next/navigation';
 import Image from 'next/image';
 import { APIProvider } from '@vis.gl/react-google-maps';
 import EmbeddedMap from '@/components/map';
@@ -17,8 +16,9 @@ import { useApp } from '@/context/app-context';
 import { Survey } from '@/components/survey';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-export default function PlaceDetailPage({ params }: { params: { slug: string } }) {
-    const { slug } = params;
+export default function PlaceDetailPage() {
+    const params = useParams();
+    const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
     const { language, translations, addBadge } = useApp();
     const [poi, setPoi] = useState<PointOfInterest | null>(null);
     const [loading, setLoading] = useState(true);
@@ -39,6 +39,7 @@ export default function PlaceDetailPage({ params }: { params: { slug: string } }
     const charIndexRef = useRef(0);
 
     useEffect(() => {
+        if (!slug) return;
         setPoi(null);
         setNarrationText('');
         setRemainingText('');
@@ -284,4 +285,7 @@ export default function PlaceDetailPage({ params }: { params: { slug: string } }
     );
 }
 
+    
+
+    
     

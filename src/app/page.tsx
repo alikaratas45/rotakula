@@ -15,8 +15,6 @@ import { BedIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { FeedbackSection } from '@/components/feedback';
 import { InstallPwaButton } from '@/components/install-pwa-button';
-import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
-import { doc, setDoc, getDoc, increment } from 'firebase/firestore';
 
 
 const RouteCard = ({ route, delay }: { route: ThematicRoute, delay: number }) => {
@@ -49,50 +47,6 @@ const RouteCard = ({ route, delay }: { route: ThematicRoute, delay: number }) =>
       </Card>
     </Link>
   );
-};
-
-const VisitorCounter = () => {
-    const firestore = useFirestore();
-    
-    const counterRef = useMemoFirebase(() => {
-        if (!firestore) return null;
-        return doc(firestore, 'visitors', 'counter');
-    }, [firestore]);
-
-    const { data: visitorData } = useDoc<{ count: number }>(counterRef);
-
-    useEffect(() => {
-        if (!firestore) return;
-
-        const checkAndIncrementVisitor = async () => {
-            const visitorId = localStorage.getItem('rota-kula-visitor-id');
-            if (!visitorId) {
-                const newVisitorId = `visitor_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-                localStorage.setItem('rota-kula-visitor-id', newVisitorId);
-                
-                try {
-                    // This is an 'upsert' operation
-                    await setDoc(counterRef, { count: increment(1) }, { merge: true });
-                } catch (error) {
-                    console.error("Error incrementing visitor count: ", error);
-                }
-            }
-        };
-
-        checkAndIncrementVisitor();
-    }, [firestore, counterRef]);
-
-    return (
-        <Card className="flex flex-col items-center justify-center py-4">
-          <CardHeader className="p-0 pb-2 flex items-center justify-center">
-             <Users className="h-8 w-8 text-primary" />
-          </CardHeader>
-          <CardContent className="p-0 flex flex-col items-center">
-            <p className="text-3xl font-bold font-headline">{visitorData?.count ?? 0}</p>
-            <p className="text-sm font-semibold text-muted-foreground">Toplam Ziyaretçi</p>
-          </CardContent>
-        </Card>
-    );
 };
 
 
@@ -190,13 +144,6 @@ export default function Home() {
         </div>
       </section>
       
-      <section className="py-8 bg-background">
-        <div className="max-w-xs mx-auto">
-          <VisitorCounter />
-        </div>
-      </section>
-
-
       <section className="py-16 bg-background px-4 md:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="aspect-w-16 aspect-h-9 w-full">
@@ -222,5 +169,3 @@ export default function Home() {
     </div>
   );
 }
-
-    

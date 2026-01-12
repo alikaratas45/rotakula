@@ -1,7 +1,7 @@
 
 "use client"
 
-import { type PropsWithChildren, useEffect } from 'react';
+import { type PropsWithChildren } from 'react';
 import { Toaster } from '@/components/ui/toaster';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
@@ -24,14 +24,6 @@ function AppContent({ children }: PropsWithChildren) {
 export function Providers({ children }: PropsWithChildren) {
   const { language } = useApp();
   
-  // Force a re-render when the language changes to update the entire component tree
-  // with the new translations. This is a workaround for Next.js app router behavior.
-  const [key, setKey] = useEffect(String(Date.now()));
-  useEffect(() => {
-    setKey(String(Date.now()));
-  }, [language]);
-
-
   return (
     <ThemeProvider
       attribute="class"
@@ -39,7 +31,9 @@ export function Providers({ children }: PropsWithChildren) {
       enableSystem
       disableTransitionOnChange
     >
-      <AppContent key={key}>{children}</AppContent>
+      <AppContent key={language}>{children}</AppContent>
     </ThemeProvider>
   );
 }
+
+    
