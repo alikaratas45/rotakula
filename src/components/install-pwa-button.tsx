@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -10,31 +11,54 @@ export const InstallPwaButton = () => {
   const { toast } = useToast();
   const { translations } = useApp();
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  
+  const [isAppInstalled, setIsAppInstalled] = useState(false);
+
   useEffect(() => {
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e);
     };
 
+    const handleAppInstalled = () => {
+      setIsAppInstalled(true);
+      setDeferredPrompt(null);
+    };
+
+    // Check if running in standalone mode (PWA)
+    if (typeof window !== "undefined" && window.matchMedia("(display-mode: standalone)").matches) {
+      setIsAppInstalled(true);
+    }
+
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    window.addEventListener("appinstalled", handleAppInstalled);
 
     return () => {
       window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+      window.removeEventListener("appinstalled", handleAppInstalled);
     };
   }, []);
 
   const handleInstallClick = async () => {
+    if (isAppInstalled) {
+      toast({
+        title: translations.nav.installAppAlready,
+        description: translations.nav.installAppAlreadyDesc,
+      });
+      return;
+    }
+
     if (deferredPrompt) {
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       if (outcome === "accepted") {
         setDeferredPrompt(null);
+        setIsAppInstalled(true);
       }
     } else {
        toast({
         title: translations.nav.installAppNotPossible,
         description: translations.nav.installAppNotPossibleDesc,
+        variant: "destructive"
        });
     }
   };
@@ -43,7 +67,7 @@ export const InstallPwaButton = () => {
     <div
       className="group animate-fade-in-up cursor-pointer"
       onClick={handleInstallClick}
-      title={translations.nav.installAppTitle}
+      title={isAppInstalled ? translations.nav.installAppAlready : translations.nav.installAppTitle}
     >
       <div className={cn(
         "relative p-4 bg-card rounded-2xl border-b-4 border-r-4 transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-lg",
