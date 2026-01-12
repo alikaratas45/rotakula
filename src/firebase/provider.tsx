@@ -4,20 +4,22 @@ import React, { DependencyList, createContext, useContext, ReactNode, useMemo } 
 
 // This file has been modified to remove Firebase dependencies.
 
-export const FirebaseContext = createContext<any>(undefined);
+const emptyContext = {
+    areServicesAvailable: false,
+    firebaseApp: null,
+    firestore: null,
+    auth: null,
+    user: null,
+    isUserLoading: false,
+    userError: null,
+};
+
+export const FirebaseContext = createContext<any>(emptyContext);
 
 export const FirebaseProvider: React.FC<{children: ReactNode}> = ({
   children,
 }) => {
-  const contextValue = useMemo(() => ({
-      areServicesAvailable: false,
-      firebaseApp: null,
-      firestore: null,
-      auth: null,
-      user: null,
-      isUserLoading: false,
-      userError: null,
-  }), []);
+  const contextValue = useMemo(() => (emptyContext), []);
 
   return (
     <FirebaseContext.Provider value={contextValue}>
@@ -28,7 +30,7 @@ export const FirebaseProvider: React.FC<{children: ReactNode}> = ({
 
 
 export const useFirebase = (): any => {
-  return useContext(FirebaseContext);
+  return useContext(FirebaseContext) || emptyContext;
 };
 
 export const useAuth = (): any => {
@@ -46,6 +48,8 @@ export const useFirebaseApp = (): any => {
 export function useMemoFirebase<T>(factory: () => T, deps: DependencyList): T {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const memoized = useMemo(factory, deps);
+  // @ts-ignore
+  memoized.__memo = true;
   return memoized;
 }
 

@@ -21,22 +21,16 @@ const AdminSurveyDashboard = dynamic(
 
 export default function SurveyResultsPage() {
   const router = useRouter();
-  const { isAdmin, isUserLoading } = useApp();
   
   useEffect(() => {
     // Since admin functionality is disabled, always redirect.
-    if (!isUserLoading) {
-        router.push('/');
-    }
-  }, [isUserLoading, router]);
+    router.push('/');
+  }, [router]);
 
-  if (isUserLoading || !isAdmin) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    );
-  }
-  
-  return <AdminSurveyDashboard />;
+  // This return is for the brief moment before redirection.
+  return (
+    <div className="flex h-screen items-center justify-center">
+      <Loader2 className="h-8 w-8 animate-spin" />
+    </div>
+  );
 }
