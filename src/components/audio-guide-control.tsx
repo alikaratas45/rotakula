@@ -22,6 +22,7 @@ export function AudioGuideControl() {
     const [pois, setPois] = useState<PointOfInterest[]>([]);
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
     const [visitedPoiId, setVisitedPoiId] = useState<string | null>(null);
+    const notifiedPoiRef = useRef<string | null>(null);
 
     const watchIdRef = useRef<number | null>(null);
     const synthRef = useRef<SpeechSynthesis | null>(null);
@@ -45,12 +46,12 @@ export function AudioGuideControl() {
         }
         setUserLocation(null);
         setVisitedPoiId(null);
+        notifiedPoiRef.current = null;
         dismiss();
     }, [dismiss]);
 
     const startLocationTracking = useCallback(() => {
         if (!('geolocation' in navigator)) {
-            // Silently fail if not supported, don't bother the user if they can't use the feature.
             console.warn("Geolocation is not supported by this browser.");
             return;
         }
@@ -66,16 +67,11 @@ export function AudioGuideControl() {
             },
             (error) => {
                 console.warn("Could not get user location:", error.message);
-                // Don't toast on every error, it can be annoying.
             },
             { enableHighAccuracy: true }
         );
     }, []);
 
-    const handleNavigateAndSurvey = useCallback((poi: PointOfInterest) => {
-        router.push(`/places/${poi.slug}?survey=true`);
-    }, [router]);
-    
     const playProximityAlert = useCallback((poiName: string) => {
         const synth = synthRef.current;
         if (!isAudioGuideActive || !synth || synth.speaking) return;
@@ -88,13 +84,10 @@ export function AudioGuideControl() {
         if (voices.length > 0) {
             const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
             if (voice) utterance.voice = voice;
-            synth.speak(utterance);
-        } else {
-            synth.speak(utterance);
         }
+        synth.speak(utterance);
     }, [language, translations, isAudioGuideActive]);
 
-    // This effect starts and stops location tracking for the entire app session
     useEffect(() => {
         startLocationTracking();
         return () => {
@@ -102,8 +95,6 @@ export function AudioGuideControl() {
         };
     }, [startLocationTracking, stopLocationTracking]);
 
-
-    // This effect handles all proximity logic (badges, surveys, audio guide notifications)
     useEffect(() => {
         if (!userLocation || pois.length === 0) {
             return;
@@ -121,11 +112,10 @@ export function AudioGuideControl() {
 
         const closestPoi = sortedPoisByDistance[0];
 
-        // LOGIC FOR ENTERING A POI's GEOFENCE
-        if (closestPoi && closestPoi.distance < PROXIMITY_THRESHOLD_ENTER && visitedPoiId !== closestPoi.id) {
+        if (closestPoi && closestPoi.distance < PROXIMITY_THRESHOLD_ENTER && notifiedPoiRef.current !== closestPoi.id) {
             setVisitedPoiId(closestPoi.id);
+            notifiedPoiRef.current = closestPoi.id; // Mark as notified to prevent loop
             
-            // 1. Earn Badge
             const isBadgeAlreadyEarned = earnedBadges.some(b => b.id === closestPoi.badgeId);
             if (closestPoi.badgeId && !isBadgeAlreadyEarned) {
                 addBadge(closestPoi.id);
@@ -136,7 +126,6 @@ export function AudioGuideControl() {
                 });
             }
 
-            // 2. Play Audio Guide Alert (if active)
             if (isAudioGuideActive) {
                  playProximityAlert(closestPoi.name);
                  const { id: toastId } = toast({
@@ -150,16 +139,12 @@ export function AudioGuideControl() {
                     )
                 });
             } else {
-                 // 3. Show Survey Toast (if audio guide is NOT active)
                  const { id: toastId } = toast({
                     title: `📍 ${closestPoi.name}`,
                     description: "Bu mekanı değerlendirmek ister misiniz?",
                     duration: 15000, 
                     action: (
-                        <Button onClick={() => {
-                            handleNavigateAndSurvey(closestPoi);
-                            dismiss(toastId);
-                        }}>
+                        <Button onClick={() => router.push(`/places/${closestPoi.slug}?survey=true`)}>
                            Anketi Doldur
                         </Button>
                     )
@@ -167,7 +152,6 @@ export function AudioGuideControl() {
             }
         }
         
-        // LOGIC FOR EXITING A POI's GEOFENCE
         if (visitedPoiId) {
              const visitedPoi = pois.find(p => p.id === visitedPoiId);
              if (!visitedPoi) return;
@@ -179,10 +163,11 @@ export function AudioGuideControl() {
 
             if (distanceToVisitedPoi > PROXIMITY_THRESHOLD_EXIT) {
                 setVisitedPoiId(null); 
+                notifiedPoiRef.current = null; // Allow notification for this POI again if re-entered
             }
         }
 
-    }, [userLocation, pois, visitedPoiId, toast, translations, playProximityAlert, addBadge, earnedBadges, router, isAudioGuideActive, handleNavigateAndSurvey, dismiss]);
+    }, [userLocation, pois, visitedPoiId, toast, translations, playProximityAlert, addBadge, earnedBadges, router, isAudioGuideActive, dismiss]);
 
 
     const toggleGuide = () => {
