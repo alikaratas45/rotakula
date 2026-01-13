@@ -32,9 +32,15 @@
     },
     {
       "id": "poi-divlit-volcano",
-      "description": "Kula Divlit Volkanik Parkı",
-      "imageUrl": "/doga.jpg",
-      "imageHint": "volcanic park"
+      "description": "Kula Divlit Volkan Konisi",
+      "imageUrl": "/divlit-koni.jpg",
+      "imageHint": "cinder cone volcano"
+    },
+    {
+      "id": "poi-divlit-park",
+      "description": "Kula Divlit Volkanik Parkı yürüyüş yolu",
+      "imageUrl": "/divlit-park.jpg",
+      "imageHint": "volcanic park boardwalk"
     },
     {
       "id": "poi-fairy-chimneys",
