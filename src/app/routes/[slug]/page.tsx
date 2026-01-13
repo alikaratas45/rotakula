@@ -311,7 +311,3 @@ export default function RoutePage({ params }: { params: { slug: string } }) {
         </div>
     );
 }
-
-    
-
-    
