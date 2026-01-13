@@ -3,12 +3,13 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { getPois } from '@/lib/kula-data';
 import type { PointOfInterest } from '@/lib/types';
 import { getImageById } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, MapPin, Navigation } from 'lucide-react';
+import { Loader2, Navigation, Info } from 'lucide-react';
 import { BedIcon } from '@/components/icons';
 import EmbeddedMap from '@/components/map';
 import { APIProvider } from '@vis.gl/react-google-maps';
@@ -93,7 +94,13 @@ export default function AccommodationPage() {
                                 <CardContent className="flex-grow">
                                     <p className="text-foreground/80 mb-4">{poi.description}</p>
                                 </CardContent>
-                                <div className="p-4 pt-0 mt-auto">
+                                <div className="p-4 pt-0 mt-auto flex gap-2">
+                                    <Button asChild variant="secondary" size="sm">
+                                        <Link href={`/places/${poi.slug}`}>
+                                            <Info className="mr-2 h-4 w-4" />
+                                            {translations.common.moreInfo}
+                                        </Link>
+                                    </Button>
                                     <Button variant="outline" size="sm" onClick={() => handleGetDirections(poi)}>
                                         <Navigation className="mr-2 h-4 w-4" />
                                         {translations.map.getDirections}

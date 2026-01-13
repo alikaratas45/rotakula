@@ -10,7 +10,7 @@ import { getImageById } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Loader2, MapPin, Mountain, Info, Navigation } from 'lucide-react';
-import { HistoricHouseIcon, FoodIcon } from '@/components/icons';
+import { HistoricHouseIcon, FoodIcon, BedIcon } from '@/components/icons';
 import EmbeddedMap from '@/components/map';
 import { APIProvider } from '@vis.gl/react-google-maps';
 import { useApp } from '@/context/app-context';
@@ -45,6 +45,8 @@ function getCategoryIcon(category: PointOfInterest['category']) {
             return <HistoricHouseIcon className="h-6 w-6 text-accent-foreground" />;
         case 'food':
             return <FoodIcon className="h-6 w-6 text-accent-foreground" />;
+        case 'accommodation':
+            return <BedIcon className="h-6 w-6 text-accent-foreground" />;
         default:
             return <MapPin className="h-6 w-6 text-accent-foreground" />;
     }
@@ -63,9 +65,7 @@ export default function PlacesPage() {
                 setIsLoading(true);
                 const allPois = await getPois(language);
                 
-                const filteredPois = allPois.filter(p => p.category !== 'accommodation' && p.category !== 'food');
-
-                const sortedPois = filteredPois.sort((a, b) => {
+                const sortedPois = allPois.sort((a, b) => {
                     const aIndex = customPoiOrder.indexOf(a.id);
                     const bIndex = customPoiOrder.indexOf(b.id);
                     const aIsNeighborhood = neighborhoodSlugs.includes(a.slug);
