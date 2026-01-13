@@ -20,7 +20,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 function PlaceDetailContent() {
     const params = useParams();
     const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
-    const { language, translations, addBadge } = useApp();
+    const { language, translations } = useApp();
     const [poi, setPoi] = useState<PointOfInterest | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -55,9 +55,6 @@ function PlaceDetailContent() {
                 const fullText = poiData.longDescription || '';
                 setNarrationText(fullText);
                 setRemainingText(fullText);
-                if (poiData.badgeId) {
-                    addBadge(poiData.id);
-                }
             } else {
                 setPoi(null);
             }
@@ -70,7 +67,7 @@ function PlaceDetailContent() {
                 synthRef.current.cancel();
             }
         };
-    }, [slug, language, addBadge]);
+    }, [slug, language]);
 
 
     const startPlayback = useCallback((textToSpeak: string) => {
