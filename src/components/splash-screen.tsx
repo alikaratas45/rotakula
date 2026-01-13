@@ -6,8 +6,8 @@ import { cn } from '@/lib/utils';
 const SplashScreen = ({ isVisible }: { isVisible: boolean }) => {
   return (
     <div className={cn(
-        "fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background transition-opacity duration-500",
-        isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
+        "fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background transition-opacity",
+        isVisible ? 'animate-fade-out' : 'opacity-0 pointer-events-none'
     )}>
       <div className="relative perspective-1000">
         <div className="preserve-3d animate-spin-slow">

@@ -1,4 +1,3 @@
-
 "use client"
 
 import { type PropsWithChildren, useState, useEffect } from 'react';
@@ -11,20 +10,6 @@ import SplashScreen from '@/components/splash-screen';
 
 
 function AppContent({ children }: PropsWithChildren) {
-  const [showSplash, setShowSplash] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowSplash(false);
-    }, 2000); 
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (showSplash) {
-    return <SplashScreen isVisible={true} />;
-  }
-
   return (
     <>
       <Header />
@@ -38,7 +23,19 @@ function AppContent({ children }: PropsWithChildren) {
 
 export function Providers({ children }: PropsWithChildren) {
   const { language } = useApp();
-  
+  const [isSplashVisible, setIsSplashVisible] = useState(true);
+
+  // This will only run on the client, after hydration.
+  useEffect(() => {
+    // The CSS animation will handle the timing, but we'll remove the component
+    // from the DOM after the animation is well and truly over to be safe.
+    const timer = setTimeout(() => {
+      setIsSplashVisible(false);
+    }, 2800); // Animation is 2.5s total, 3s gives a buffer.
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <ThemeProvider
       attribute="class"
@@ -46,6 +43,7 @@ export function Providers({ children }: PropsWithChildren) {
       enableSystem
       disableTransitionOnChange
     >
+      {isSplashVisible && <SplashScreen isVisible={true} />}
       <AppContent key={language}>{children}</AppContent>
     </ThemeProvider>
   );
