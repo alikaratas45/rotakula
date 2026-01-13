@@ -8,7 +8,7 @@ import { APIProvider } from '@vis.gl/react-google-maps';
 import EmbeddedMap from '@/components/map';
 import { getImageById } from '@/lib/placeholder-images';
 import type { PointOfInterest } from '@/lib/types';
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import { PlayIcon, PauseIcon, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -16,7 +16,8 @@ import { useApp } from '@/context/app-context';
 import { Survey } from '@/components/survey';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-export default function PlaceDetailPage() {
+
+function PlaceDetailContent() {
     const params = useParams();
     const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
     const { language, translations, addBadge } = useApp();
@@ -162,7 +163,6 @@ export default function PlaceDetailPage() {
         
         const shouldAutoplay = searchParams.get('autoplay') === 'true';
         if (shouldAutoplay && poi) {
-            setShowSurvey(true);
             const newPath = `/places/${poi.slug}`;
             router.replace(newPath, { scroll: false });
             
@@ -185,6 +185,15 @@ export default function PlaceDetailPage() {
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [poi, searchParams]);
+
+     useEffect(() => {
+        const surveyParam = searchParams.get('survey');
+        if (surveyParam === 'true') {
+            setShowSurvey(true);
+            // URL'den parametreyi temizle
+            router.replace(`/places/${slug}`, { scroll: false });
+        }
+    }, [searchParams, slug, router]);
 
     if (loading) {
         return (
@@ -285,3 +294,13 @@ export default function PlaceDetailPage() {
         </APIProvider>
     );
 }
+
+
+export default function PlaceDetailPage() {
+    return (
+        <Suspense fallback={<div className="flex justify-center items-center h-screen"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /></div>}>
+            <PlaceDetailContent />
+        </Suspense>
+    );
+}
+
