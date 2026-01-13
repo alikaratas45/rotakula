@@ -7,15 +7,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import Image from 'next/image';
 import Link from 'next/link';
 import { getImageById } from '@/lib/placeholder-images';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, Suspense } from 'react';
 import { useApp } from '@/context/app-context';
-import { Utensils, Map, Pin, Route, BookOpen, QrCode, Landmark, Smile, Award, Bike } from 'lucide-react';
+import { Utensils, Map, Pin, Route, BookOpen, QrCode, Landmark, Smile, Award, Bike, Loader2 } from 'lucide-react';
 import { BedIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { InstallPwaButton } from '@/components/install-pwa-button';
 import dynamic from 'next/dynamic';
-import { Loader2 } from 'lucide-react';
-
+import VisitorCounter from '@/components/VisitorCounter';
 
 const FeedbackSection = dynamic(() => import('@/components/feedback').then(mod => mod.FeedbackSection), {
     loading: () => <div className="flex justify-center py-8"><Loader2 className="h-8 w-8 animate-spin" /></div>,
@@ -147,6 +146,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <Suspense fallback={<div className="flex justify-center py-8"><Loader2 className="h-8 w-8 animate-spin" /></div>}>
+        <VisitorCounter />
+      </Suspense>
       
       <section className="py-16 bg-background px-4 md:px-8">
         <div className="max-w-4xl mx-auto">

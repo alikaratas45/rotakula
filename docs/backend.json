@@ -121,6 +121,26 @@
         "message",
         "createdAt"
       ]
+    },
+    "SiteStats": {
+      "title": "SiteStats",
+      "type": "object",
+      "description": "Represents statistics for the website, like visitor counts.",
+      "properties": {
+        "count": {
+          "type": "number",
+          "description": "Total visitor count."
+        },
+        "lastUpdated": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of the last update."
+        }
+      },
+      "required": [
+        "count",
+        "lastUpdated"
+      ]
     }
   },
   "auth": {
@@ -141,6 +161,12 @@
         "$ref": "#/entities/Feedback"
       },
       "description": "Collection to store user feedback about the application."
+    },
+    "stats/visitors": {
+      "schema": {
+        "$ref": "#/entities/SiteStats"
+      },
+      "description": "Document to store site visitor statistics."
     }
   }
 }

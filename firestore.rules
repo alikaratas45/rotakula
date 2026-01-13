@@ -29,6 +29,12 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
     
+    // Stats collection: Anyone can read, but only authenticated users can write (to increment count).
+    match /stats/{statId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
     // Default-deny all other reads and writes for security.
     match /{document=**} {
       allow read, write: if false;
