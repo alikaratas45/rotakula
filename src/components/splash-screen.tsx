@@ -1,14 +1,11 @@
+
 'use client';
 
 import Image from 'next/image';
-import { cn } from '@/lib/utils';
 
-const SplashScreen = ({ isVisible }: { isVisible: boolean }) => {
+const SplashScreen = () => {
   return (
-    <div className={cn(
-        "fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background transition-opacity duration-500",
-        isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
-    )}>
+    <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background animate-fade-out">
       <div className="relative perspective-1000">
         <div className="preserve-3d animate-spin-slow">
             <Image
