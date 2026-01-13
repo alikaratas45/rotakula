@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -58,7 +57,6 @@ export const InstallPwaButton = () => {
        toast({
         title: translations.nav.installAppNotPossible,
         description: translations.nav.installAppNotPossibleDesc,
-        variant: "destructive"
        });
     }
   };

@@ -235,38 +235,49 @@ export const NearbySearch = () => {
     // Perform nearby search
     useEffect(() => {
         if (!map || !userPosition) return;
-        setIsLoading(true);
-
-        const request: google.maps.places.TextSearchRequest = {
-            query: "Kula'daki restoran, lokanta veya kafeler",
-            location: userPosition,
-            radius: 20000, // 20km radius to cover the whole town
-        };
 
         const placesService = new google.maps.places.PlacesService(map);
         
-        placesService.textSearch(request, (results, status) => {
-            if (status === google.maps.places.PlacesServiceStatus.OK && results) {
-                setPlaces(results);
-                
-                const bounds = new google.maps.LatLngBounds();
-                results.forEach(place => {
-                    if (place.geometry?.location) {
-                        bounds.extend(place.geometry.location);
-                    }
-                });
-                map.fitBounds(bounds);
-            } else if (status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
-                setError(translations.map.noRestaurantsFound);
-                 map.setCenter(userPosition);
-                 map.setZoom(13);
-            } else {
-                 setError(translations.map.searchError);
-                 map.setCenter(userPosition);
-                 map.setZoom(13);
-            }
-            setIsLoading(false);
+        // Wait for the map to be idle before performing the search
+        const idleListener = map.addListener('idle', () => {
+            setIsLoading(true);
+            const request: google.maps.places.TextSearchRequest = {
+                query: "Kula'daki restoran, lokanta veya kafeler",
+                location: userPosition,
+                radius: 20000, // 20km radius to cover the whole town
+            };
+
+            placesService.textSearch(request, (results, status) => {
+                if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+                    setPlaces(results);
+                    const bounds = new google.maps.LatLngBounds();
+                    results.forEach(place => {
+                        if (place.geometry?.location) {
+                            bounds.extend(place.geometry.location);
+                        }
+                    });
+                    map.fitBounds(bounds);
+                } else if (status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
+                    setError(translations.map.noRestaurantsFound);
+                    map.setCenter(userPosition);
+                    map.setZoom(13);
+                } else {
+                    setError(translations.map.searchError);
+                    map.setCenter(userPosition);
+                    map.setZoom(13);
+                }
+                setIsLoading(false);
+            });
+            // Remove the listener after the first successful search to avoid re-searching on every map move
+            google.maps.event.removeListener(idleListener);
         });
+
+        return () => {
+            if (idleListener) {
+                google.maps.event.removeListener(idleListener);
+            }
+        };
+
     }, [map, userPosition, translations]);
     
     
