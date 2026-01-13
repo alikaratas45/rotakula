@@ -112,7 +112,7 @@ export function AudioGuideControl() {
 
         // Check if user has entered a new POI zone
         if (closestPoi && closestPoi.distance < PROXIMITY_THRESHOLD_ENTER && notifiedPoiRef.current !== closestPoi.id) {
-            notifiedPoiRef.current = closestPoi.id; // Mark as notified to prevent loop
+            notifiedPoiRef.current = closestPoi.id; 
 
             const isBadgeAlreadyEarned = earnedBadges.some(b => b.id === closestPoi.badgeId);
             if (closestPoi.badgeId && !isBadgeAlreadyEarned) {
@@ -150,7 +150,6 @@ export function AudioGuideControl() {
             }
         }
         
-        // Check if user has left the notified POI zone
         if (notifiedPoiRef.current) {
              const notifiedPoi = pois.find(p => p.id === notifiedPoiRef.current);
              if (!notifiedPoi) return;
@@ -161,11 +160,10 @@ export function AudioGuideControl() {
             );
 
             if (distanceToNotifiedPoi > PROXIMITY_THRESHOLD_EXIT) {
-                notifiedPoiRef.current = null; // Allow notification for this POI again if re-entered
+                notifiedPoiRef.current = null;
             }
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [userLocation, pois]);
+    }, [userLocation, pois, addBadge, earnedBadges, isAudioGuideActive, playProximityAlert, router, toast, translations]);
 
 
     const toggleGuide = () => {
