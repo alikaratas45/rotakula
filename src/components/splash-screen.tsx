@@ -11,16 +11,16 @@ export function SplashScreen({ isActive }: { isActive: boolean }) {
         isActive ? "opacity-100" : "opacity-0 pointer-events-none"
       )}
     >
-      <div className="relative">
+      <div className="relative animate-spin-slow">
         <Image
           src="/belediye.png"
           alt="Kula Belediyesi Logosu"
-          width={200}
-          height={200}
+          width={500}
+          height={500}
           priority
         />
       </div>
-      <h2 className="mt-8 text-2xl font-semibold text-foreground">
+      <h2 className="mt-8 text-3xl font-semibold text-foreground">
         Kula Belediyesi hizmetidir.
       </h2>
     </div>
