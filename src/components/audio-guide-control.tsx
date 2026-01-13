@@ -48,14 +48,10 @@ export function AudioGuideControl() {
         dismiss();
     }, [dismiss]);
 
-    const startLocationTracking = () => {
+    const startLocationTracking = useCallback(() => {
         if (!('geolocation' in navigator)) {
-            toast({
-                title: translations.toast.unsupportedTitle,
-                description: translations.toast.audioGuideUnsupported,
-                variant: "destructive"
-            });
-            setIsAudioGuideActive(false);
+            // Silently fail if not supported, don't bother the user if they can't use the feature.
+            console.warn("Geolocation is not supported by this browser.");
             return;
         }
 
@@ -70,26 +66,19 @@ export function AudioGuideControl() {
             },
             (error) => {
                 console.warn("Could not get user location:", error.message);
-                toast({
-                    title: translations.toast.locationErrorTitle,
-                    description: translations.toast.locationErrorDescription,
-                    variant: "destructive"
-                });
-                setIsAudioGuideActive(false);
+                // Don't toast on every error, it can be annoying.
             },
-            { enableHighAccuracy: true } // Optimized settings
+            { enableHighAccuracy: true }
         );
-    };
+    }, []);
 
-    const handlePlayAudioForPoi = useCallback((poi: PointOfInterest, toastId?: string) => {
-        if (toastId) dismiss(toastId);
-        // Add survey=true to show the survey when navigating
-        router.push(`/places/${poi.slug}?autoplay=true&survey=true`);
-    }, [router, dismiss]);
+    const handleNavigateAndSurvey = useCallback((poi: PointOfInterest) => {
+        router.push(`/places/${poi.slug}?survey=true`);
+    }, [router]);
     
     const playProximityAlert = useCallback((poiName: string) => {
         const synth = synthRef.current;
-        if (!synth || synth.speaking) return;
+        if (!isAudioGuideActive || !synth || synth.speaking) return;
 
         const notificationText = translations.audioGuide.proximityPrompt.replace('{poiName}', poiName);
         const utterance = new SpeechSynthesisUtterance(notificationText);
@@ -101,14 +90,22 @@ export function AudioGuideControl() {
             if (voice) utterance.voice = voice;
             synth.speak(utterance);
         } else {
-            // Fallback if voices are not ready, though less likely for a short alert
             synth.speak(utterance);
         }
-    }, [language, translations]);
+    }, [language, translations, isAudioGuideActive]);
 
-
+    // This effect starts and stops location tracking for the entire app session
     useEffect(() => {
-        if (!isAudioGuideActive || !userLocation || pois.length === 0) {
+        startLocationTracking();
+        return () => {
+            stopLocationTracking();
+        };
+    }, [startLocationTracking, stopLocationTracking]);
+
+
+    // This effect handles all proximity logic (badges, surveys, audio guide notifications)
+    useEffect(() => {
+        if (!userLocation || pois.length === 0) {
             return;
         }
 
@@ -126,9 +123,9 @@ export function AudioGuideControl() {
 
         // LOGIC FOR ENTERING A POI's GEOFENCE
         if (closestPoi && closestPoi.distance < PROXIMITY_THRESHOLD_ENTER && visitedPoiId !== closestPoi.id) {
-            setVisitedPoiId(closestPoi.id); // Mark as currently visiting
+            setVisitedPoiId(closestPoi.id);
             
-            // Badge earning logic
+            // 1. Earn Badge
             const isBadgeAlreadyEarned = earnedBadges.some(b => b.id === closestPoi.badgeId);
             if (closestPoi.badgeId && !isBadgeAlreadyEarned) {
                 addBadge(closestPoi.id);
@@ -137,15 +134,33 @@ export function AudioGuideControl() {
                     description: translations.badges.earnedDescription.replace('{poiName}', closestPoi.name),
                     duration: 8000,
                 });
-            } else {
+            }
+
+            // 2. Play Audio Guide Alert (if active)
+            if (isAudioGuideActive) {
                  playProximityAlert(closestPoi.name);
                  const { id: toastId } = toast({
                     title: `${translations.audioGuide.nearby}: ${closestPoi.name}`,
                     description: translations.audioGuide.nearbyDescription,
                     duration: 15000, 
                     action: (
-                        <Button onClick={() => handlePlayAudioForPoi(closestPoi, toastId)}>
+                        <Button onClick={() => router.push(`/places/${closestPoi.slug}?autoplay=true&survey=true`)}>
                            <PlayIcon className="mr-2 h-4 w-4" /> {translations.pois.listen}
+                        </Button>
+                    )
+                });
+            } else {
+                 // 3. Show Survey Toast (if audio guide is NOT active)
+                 const { id: toastId } = toast({
+                    title: `📍 ${closestPoi.name}`,
+                    description: "Bu mekanı değerlendirmek ister misiniz?",
+                    duration: 15000, 
+                    action: (
+                        <Button onClick={() => {
+                            handleNavigateAndSurvey(closestPoi);
+                            dismiss(toastId);
+                        }}>
+                           Anketi Doldur
                         </Button>
                     )
                 });
@@ -163,34 +178,29 @@ export function AudioGuideControl() {
             );
 
             if (distanceToVisitedPoi > PROXIMITY_THRESHOLD_EXIT) {
-                setVisitedPoiId(null); // Reset visited POI, ready for the next one
+                setVisitedPoiId(null); 
             }
         }
 
-    }, [userLocation, pois, isAudioGuideActive, visitedPoiId, handlePlayAudioForPoi, toast, translations, playProximityAlert, addBadge, earnedBadges]);
+    }, [userLocation, pois, visitedPoiId, toast, translations, playProximityAlert, addBadge, earnedBadges, router, isAudioGuideActive, handleNavigateAndSurvey, dismiss]);
 
 
     const toggleGuide = () => {
-       setIsAudioGuideActive(prev => !prev);
-    };
-
-    useEffect(() => {
-        if (isAudioGuideActive) {
-            startLocationTracking();
+        const newState = !isAudioGuideActive;
+        setIsAudioGuideActive(newState);
+        if (newState) {
             toast({
                 title: translations.audioGuide.started,
                 description: translations.audioGuide.startedDescription,
                 duration: 5000,
             });
         } else {
-            stopLocationTracking();
+             toast({
+                title: translations.audioGuide.stopped,
+                duration: 3000,
+            });
         }
-
-        return () => {
-            stopLocationTracking();
-        };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isAudioGuideActive]);
+    };
 
     return (
         <div className="flex items-center gap-1">
