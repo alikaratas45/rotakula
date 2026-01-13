@@ -169,7 +169,7 @@ export default function SelfieSpotPage() {
                 </div>
 
                 <div className="relative w-full aspect-square max-w-md mx-auto bg-muted rounded-lg overflow-hidden border">
-                    {selfie ? (
+                    {selfie && isPreview ? (
                         <Image src={selfie} alt={translations.selfieSpot.selfieAlt} layout="fill" objectFit="contain" />
                     ) : (
                         <>
@@ -196,7 +196,7 @@ export default function SelfieSpotPage() {
                     <div className="space-y-6">
                         {isPreview ? (
                             <div className="grid grid-cols-2 gap-4">
-                                <Button size="lg" onClick={retakeSelfie}>
+                                <Button size="lg" variant="outline" onClick={retakeSelfie}>
                                     <RefreshCw className="mr-2 h-4 w-4" />
                                     {translations.selfieSpot.retake}
                                 </Button>
