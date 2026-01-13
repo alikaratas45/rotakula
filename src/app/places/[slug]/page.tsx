@@ -2,7 +2,7 @@
 "use client"
 
 import { getPoiBySlug } from '@/lib/kula-data';
-import { notFound, useRouter, useSearchParams } from 'next/navigation';
+import { notFound, useRouter, useSearchParams, useParams } from 'next/navigation';
 import Image from 'next/image';
 import { APIProvider } from '@vis.gl/react-google-maps';
 import EmbeddedMap from '@/components/map';
@@ -16,8 +16,9 @@ import { useApp } from '@/context/app-context';
 import { Survey } from '@/components/survey';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-export default function PlaceDetailPage({ params }: { params: { slug: string } }) {
-    const { slug } = params;
+export default function PlaceDetailPage() {
+    const params = useParams();
+    const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
     const { language, translations, addBadge } = useApp();
     const [poi, setPoi] = useState<PointOfInterest | null>(null);
     const [loading, setLoading] = useState(true);
@@ -38,6 +39,7 @@ export default function PlaceDetailPage({ params }: { params: { slug: string } }
     const charIndexRef = useRef(0);
 
     useEffect(() => {
+        if (!slug) return;
         setPoi(null);
         setNarrationText('');
         setRemainingText('');
@@ -69,14 +71,6 @@ export default function PlaceDetailPage({ params }: { params: { slug: string } }
         };
     }, [slug, language, addBadge]);
 
-    // This effect handles showing the survey based on URL params
-    useEffect(() => {
-        const shouldShowSurvey = searchParams.get('survey') === 'true';
-        if (shouldShowSurvey) {
-            setShowSurvey(true);
-        }
-    }, [searchParams]);
-
 
     const startPlayback = useCallback((textToSpeak: string) => {
         const synth = synthRef.current;
@@ -86,16 +80,15 @@ export default function PlaceDetailPage({ params }: { params: { slug: string } }
             synth.cancel();
         }
 
-        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        const textForSpeech = language === 'tr' ? textToSpeak.replace(/UNESCO/g, 'Unesko') : textToSpeak;
+
+        const utterance = new SpeechSynthesisUtterance(textForSpeech);
         utteranceRef.current = utterance;
         
         const voices = synth.getVoices();
         const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
         if (voice) {
             utterance.voice = voice;
-        } else if (voices.length > 0) {
-            // Fallback to the first available voice if no language match
-            utterance.voice = voices[0];
         }
         utterance.lang = language;
 
@@ -124,9 +117,11 @@ export default function PlaceDetailPage({ params }: { params: { slug: string } }
             setRemainingText(narrationText); 
         };
         
-        synth.speak(utterance);
-        setIsPlaying(true);
-        setIsPaused(false);
+        setTimeout(() => {
+            synth.speak(utterance);
+            setIsPlaying(true);
+            setIsPaused(false);
+        }, 100);
     }, [language, narrationText, toast, translations]);
 
     const handlePlayPause = useCallback(() => {
@@ -151,7 +146,11 @@ export default function PlaceDetailPage({ params }: { params: { slug: string } }
             setIsPlaying(false);
 
         } else { 
-            startPlayback(remainingText || narrationText);
+             if (synth.getVoices().length === 0) {
+                 synth.onvoiceschanged = () => startPlayback(remainingText || narrationText);
+            } else {
+                startPlayback(remainingText || narrationText);
+            }
         }
     }, [isPaused, remainingText, narrationText, toast, translations, startPlayback]);
 
@@ -162,27 +161,30 @@ export default function PlaceDetailPage({ params }: { params: { slug: string } }
         }
         
         const shouldAutoplay = searchParams.get('autoplay') === 'true';
-        if (shouldAutoplay && poi && narrationText) {
-             const safeStartPlayback = () => startPlayback(narrationText);
+        if (shouldAutoplay && poi) {
+            setShowSurvey(true);
+            const newPath = `/places/${poi.slug}`;
+            router.replace(newPath, { scroll: false });
+            
+            const safeStartPlayback = () => startPlayback(poi.longDescription);
 
-             // Voices load asynchronously. We need to wait for them.
-            if (synthRef.current?.getVoices().length === 0) {
-                synthRef.current.onvoiceschanged = safeStartPlayback;
-            } else {
-                safeStartPlayback();
-            }
+            setTimeout(() => {
+                const synth = synthRef.current;
+                if (synth && synth.getVoices().length > 0) {
+                    safeStartPlayback();
+                } else if (synth) {
+                    synth.onvoiceschanged = safeStartPlayback;
+                }
+            }, 500); 
         }
 
         return () => {
             if (synthRef.current?.speaking) {
                 synthRef.current.cancel();
             }
-            if(synthRef.current) {
-                synthRef.current.onvoiceschanged = null;
-            }
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [poi, searchParams, narrationText]);
+    }, [poi, searchParams]);
 
     if (loading) {
         return (

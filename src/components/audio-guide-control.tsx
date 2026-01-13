@@ -103,17 +103,6 @@ export function AudioGuideControl() {
                             </Button>
                         )
                     });
-                } else {
-                     appStateRef.current.toast({
-                        title: `📍 ${closestPoi.name}`,
-                        description: "Bu mekanı değerlendirmek ister misiniz?",
-                        duration: 15000, 
-                        action: (
-                            <Button onClick={() => appStateRef.current.router.push(`/places/${closestPoi.slug}?survey=true`)}>
-                               Anketi Doldur
-                            </Button>
-                        )
-                    });
                 }
             } else if (notifiedPoiIdRef.current) {
                 const notifiedPoi = currentPois.find(p => p.id === notifiedPoiIdRef.current);
