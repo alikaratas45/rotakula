@@ -13,7 +13,7 @@ export function Footer() {
                 <div className="flex items-center gap-2">
                     <Image src="/logo.png?v=2" alt="RotaKula Logo" width={24} height={24} className="h-6 w-6" />
                     <p className="text-sm leading-loose text-muted-foreground">
-                        © {currentYear} RotaKula. {translations.footer.copyright}
+                       © {currentYear} Tüm hakları Kula Belediyesi'ne aittir.
                     </p>
                 </div>
                  <p className="text-xs text-muted-foreground/80 max-w-2xl">
