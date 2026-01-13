@@ -141,7 +141,11 @@ export default function SelfieSpotPage() {
     const downloadSelfie = () => {
         if (!selfie) return;
         const link = document.createElement('a');
-        link.download = 'rota-kula-selfie.png';
+        
+        const now = new Date();
+        const timestamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;
+        link.download = `rotakula-selfie-${timestamp}.png`;
+        
         link.href = selfie;
         link.click();
     };
