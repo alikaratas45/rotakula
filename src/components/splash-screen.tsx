@@ -1,4 +1,3 @@
-
 'use client';
 
 import Image from 'next/image';
@@ -9,7 +8,7 @@ const SplashScreen = () => {
       <div className="relative perspective-1000 animate-fade-in">
         <div className="preserve-3d animate-spin-slow">
             <Image
-              src="/logo.png?v=2"
+              src="/belediye.png"
               alt="Kula Belediyesi Logosu"
               width={128}
               height={128}
@@ -18,7 +17,7 @@ const SplashScreen = () => {
         </div>
       </div>
       <h2 className="mt-6 text-xl font-semibold text-foreground animate-fade-in-up" style={{ animationDelay: '500ms' }}>
-        Sardes'in Mirası, Gediz'in İncisi
+        Yanık Ülke Katakekaumene
       </h2>
     </div>
   );
