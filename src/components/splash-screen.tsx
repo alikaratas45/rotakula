@@ -10,14 +10,14 @@ const SplashScreen = () => {
             <Image
               src="/belediye.png"
               alt="Kula Belediyesi Logosu"
-              width={200}
-              height={200}
+              width={400}
+              height={400}
               priority
             />
         </div>
       </div>
       <h2 className="mt-8 text-3xl font-semibold text-foreground animate-fade-in-up" style={{ animationDelay: '500ms' }}>
-        Yanık Ülke Katakekaumene
+        Kula Belediyesi hizmetidir.
       </h2>
     </div>
   );
