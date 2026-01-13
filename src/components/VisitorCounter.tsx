@@ -1,16 +1,19 @@
-
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useFirestore, useDoc, useMemoFirebase, setDocumentNonBlocking } from '@/firebase';
-import { doc, serverTimestamp, increment } from 'firebase/firestore';
+import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
+import { doc, serverTimestamp, increment, setDoc } from 'firebase/firestore';
 import { Users } from 'lucide-react';
 
 const VisitorCounter = () => {
     const firestore = useFirestore();
     const [visitorCount, setVisitorCount] = useState<number | null>(null);
 
-    const statsRef = useMemoFirebase(() => doc(firestore, 'stats', 'visitors'), [firestore]);
+    const statsRef = useMemoFirebase(() => {
+        if (!firestore) return null;
+        return doc(firestore, 'stats', 'visitors');
+    }, [firestore]);
+
     const { data: statsData, isLoading } = useDoc<{ count: number }>(statsRef);
 
     useEffect(() => {
@@ -20,27 +23,32 @@ const VisitorCounter = () => {
     }, [statsData]);
 
     useEffect(() => {
-        if (isLoading) return;
+        // Sadece firestore hazır olduğunda ve yükleme bittiğinde çalış
+        if (!firestore || !statsRef || isLoading) {
+            return;
+        }
 
         try {
+            // Ziyaretçinin daha önce ziyaret edip etmediğini kontrol et
             const hasVisited = localStorage.getItem('rota-kula-visited');
-            if (!hasVisited && firestore) {
-                // Use setDoc with merge:true to either create the doc or update it.
-                // increment(1) atomically increases the counter on the server.
-                // This is a non-blocking update.
-                setDocumentNonBlocking(statsRef, {
+            if (!hasVisited) {
+                // setDoc'u merge:true ile kullanarak belge yoksa oluştur, varsa güncelle.
+                // Bu, "No document to update" hatasını önler.
+                setDoc(statsRef, {
                     count: increment(1),
                     lastUpdated: serverTimestamp()
-                }, { merge: true });
+                }, { merge: true })
+                .catch(error => console.error("Error incrementing visitor count:", error));
 
                 localStorage.setItem('rota-kula-visited', 'true');
             }
         } catch (error) {
-            console.error("Error managing visitor count:", error);
+            // localStorage hatalarını yakala
+            console.error("Error managing visitor count in localStorage:", error);
         }
-    }, [isLoading, firestore, statsRef]);
+    }, [firestore, statsRef, isLoading]); // isLoading'i bağımlılığa ekle
     
-    if (isLoading || visitorCount === null) {
+    if (visitorCount === null) {
         return (
             <section className="py-12 bg-muted">
                 <div className="container mx-auto px-4 md:px-8 text-center">
