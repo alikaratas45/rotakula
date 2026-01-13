@@ -156,7 +156,15 @@ export default function Home() {
           <FeedbackSection isLimited={true} />
         </div>
       </section>
-
+      
+      <section className="py-12 bg-muted/50">
+        <div className="container mx-auto px-4 text-center">
+            <Image src="/belediye.png" alt="Kula Belediyesi Logosu" width={80} height={80} className="mx-auto mb-4" />
+            <p className="text-lg font-semibold text-foreground">
+                Bu site, ziyaretçilerimizin ücretsiz olarak faydalanması için Kula Belediyesi tarafından oluşturulmuştur.
+            </p>
+        </div>
+      </section>
     </div>
   );
 }
