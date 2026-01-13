@@ -23,7 +23,7 @@ function AppContent({ children }: PropsWithChildren) {
 
   return (
     <>
-        {showSplash && <SplashScreen />}
+        <SplashScreen isVisible={showSplash} />
         <div className={showSplash ? 'opacity-0' : 'opacity-100 transition-opacity duration-500'}>
             <Header />
             <main className="flex-grow">{children}</main>
