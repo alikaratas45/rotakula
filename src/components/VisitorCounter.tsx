@@ -12,28 +12,35 @@ const VisitorCounter = () => {
 
     const statsRef = useMemoFirebase(() => doc(firestore, 'stats', 'visitors'), [firestore]);
 
-    const { data, isLoading } = useDoc<{ count: number }>(statsRef);
+    const { data: initialData, isLoading } = useDoc<{ count: number }>(statsRef);
 
     useEffect(() => {
-        if (data) {
-            setVisitorCount(data.count);
+        if (initialData !== undefined) {
+             setVisitorCount(initialData ? initialData.count : 0);
         }
-    }, [data]);
+    }, [initialData]);
 
     useEffect(() => {
+        // Don't do anything until Firebase has loaded the initial data.
+        if (isLoading) {
+            return;
+        }
+
         const hasVisited = localStorage.getItem('rota-kula-visited');
-        if (!hasVisited && !isLoading && firestore) {
+        if (!hasVisited && firestore) {
             const incrementCount = async () => {
                 try {
-                    // Check if the document exists before trying to update it
+                    // First, check if the document exists.
                     const docSnap = await getDoc(statsRef);
+                    
                     if (docSnap.exists()) {
+                        // If it exists, increment the count.
                         await setDoc(statsRef, { 
                             count: increment(1),
                             lastUpdated: serverTimestamp() 
                         }, { merge: true });
                     } else {
-                        // If the document doesn't exist, create it.
+                        // If it doesn't exist, create it with a count of 1.
                         await setDoc(statsRef, { 
                             count: 1,
                             lastUpdated: serverTimestamp() 
@@ -41,7 +48,7 @@ const VisitorCounter = () => {
                     }
                     localStorage.setItem('rota-kula-visited', 'true');
                 } catch (error) {
-                    console.error("Error incrementing visitor count:", error);
+                    console.error("Error updating visitor count:", error);
                 }
             };
             incrementCount();
