@@ -72,17 +72,27 @@ export default function PoiDetailPage() {
     }, [slug, language, addBadge]);
 
     useEffect(() => {
+        const shouldShowSurvey = searchParams.get('survey') === 'true';
+        if (shouldShowSurvey) {
+            setShowSurvey(true);
+        }
+
         if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
             synthRef.current = window.speechSynthesis;
         }
 
         const shouldAutoplay = searchParams.get('autoplay') === 'true';
         if (shouldAutoplay && poi && narrationText) {
-            setShowSurvey(true);
+            if (shouldShowSurvey) setShowSurvey(true);
             const newPath = `/pois/${slug}`;
             router.replace(newPath, { scroll: false });
             
-            startPlayback(narrationText);
+            const safeStartPlayback = () => startPlayback(narrationText);
+            if (synthRef.current && synthRef.current.getVoices().length > 0) {
+                safeStartPlayback();
+            } else if(synthRef.current) {
+                synthRef.current.onvoiceschanged = safeStartPlayback;
+            }
         }
 
         return () => {
@@ -97,59 +107,51 @@ export default function PoiDetailPage() {
         const synth = synthRef.current;
         if (!synth || !textToSpeak) return;
 
-        const start = (text: string) => {
-            if (synth.speaking) {
-                synth.cancel();
-            }
-
-            const textForSpeech = language === 'tr' ? text.replace(/UNESCO/g, 'Unesko') : text;
-            const utterance = new SpeechSynthesisUtterance(textForSpeech);
-            utteranceRef.current = utterance;
-
-            const voices = synth.getVoices();
-            const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
-            if (voice) {
-                utterance.voice = voice;
-            }
-            utterance.lang = language;
-
-            utterance.onboundary = (event) => {
-                charIndexRef.current = event.charIndex;
-            };
-
-            utterance.onend = () => {
-                setIsPlaying(false);
-                setIsPaused(false);
-                charIndexRef.current = 0;
-                setRemainingText(narrationText);
-            };
-
-            utterance.onerror = (event) => {
-                if (event.error !== 'interrupted') {
-                    toast({
-                        title: translations.toast.audioErrorTitle,
-                        description: `${translations.toast.audioErrorDescription} (${event.error})`,
-                        variant: "destructive"
-                    });
-                }
-                setIsPlaying(false);
-                setIsPaused(false);
-                charIndexRef.current = 0;
-                setRemainingText(narrationText);
-            };
-
-            setTimeout(() => {
-                synth.speak(utterance);
-                setIsPlaying(true);
-                setIsPaused(false);
-            }, 100);
+        if (synth.speaking) {
+            synth.cancel();
         }
 
-        if (synth.getVoices().length > 0) {
-            start(textToSpeak);
-        } else {
-            synth.onvoiceschanged = () => start(textToSpeak);
+        const textForSpeech = language === 'tr' ? textToSpeak.replace(/UNESCO/g, 'Unesko') : textToSpeak;
+        const utterance = new SpeechSynthesisUtterance(textForSpeech);
+        utteranceRef.current = utterance;
+
+        const voices = synth.getVoices();
+        const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
+        if (voice) {
+            utterance.voice = voice;
         }
+        utterance.lang = language;
+
+        utterance.onboundary = (event) => {
+            charIndexRef.current = event.charIndex;
+        };
+
+        utterance.onend = () => {
+            setIsPlaying(false);
+            setIsPaused(false);
+            charIndexRef.current = 0;
+            setRemainingText(narrationText);
+        };
+
+        utterance.onerror = (event) => {
+            if (event.error !== 'interrupted') {
+                toast({
+                    title: translations.toast.audioErrorTitle,
+                    description: `${translations.toast.audioErrorDescription} (${event.error})`,
+                    variant: "destructive"
+                });
+            }
+            setIsPlaying(false);
+            setIsPaused(false);
+            charIndexRef.current = 0;
+            setRemainingText(narrationText);
+        };
+
+        setTimeout(() => {
+            synth.speak(utterance);
+            setIsPlaying(true);
+            setIsPaused(false);
+        }, 100);
     }, [language, narrationText, toast, translations]);
 
     const handlePlayPause = useCallback(() => {
@@ -172,7 +174,11 @@ export default function PoiDetailPage() {
             setIsPaused(true);
             setIsPlaying(false);
         } else {
-            startPlayback(remainingText || narrationText);
+            if (synth.getVoices().length === 0) {
+                synth.onvoiceschanged = () => startPlayback(remainingText || narrationText);
+            } else {
+                startPlayback(remainingText || narrationText);
+            }
         }
     }, [isPaused, remainingText, narrationText, toast, translations, startPlayback]);
 
@@ -275,3 +281,4 @@ export default function PoiDetailPage() {
         </APIProvider>
     );
 }
+

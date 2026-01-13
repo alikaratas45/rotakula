@@ -83,7 +83,8 @@ export function AudioGuideControl() {
 
     const handlePlayAudioForPoi = useCallback((poi: PointOfInterest, toastId?: string) => {
         if (toastId) dismiss(toastId);
-        router.push(`/places/${poi.slug}?autoplay=true`);
+        // Add survey=true to show the survey when navigating
+        router.push(`/places/${poi.slug}?autoplay=true&survey=true`);
     }, [router, dismiss]);
     
     const playProximityAlert = useCallback((poiName: string) => {

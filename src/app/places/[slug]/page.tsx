@@ -69,6 +69,22 @@ export default function PlaceDetailPage({ params }: { params: { slug: string } }
         };
     }, [slug, language, addBadge]);
 
+    // This effect handles showing the survey based on URL params
+    useEffect(() => {
+        const shouldShowSurvey = searchParams.get('survey') === 'true';
+        const shouldAutoplay = searchParams.get('autoplay') === 'true';
+
+        if (shouldShowSurvey || shouldAutoplay) {
+            setShowSurvey(true);
+        }
+
+        if (shouldAutoplay && poi) {
+             const newPath = `/places/${poi.slug}`;
+             router.replace(newPath, { scroll: false });
+            // The playback logic is now handled in its own dedicated effect
+        }
+    }, [searchParams, poi, router]);
+
 
     const startPlayback = useCallback((textToSpeak: string) => {
         const synth = synthRef.current;
@@ -78,14 +94,16 @@ export default function PlaceDetailPage({ params }: { params: { slug: string } }
             synth.cancel();
         }
 
-        const textForSpeech = language === 'tr' ? textToSpeak.replace(/UNESCO/g, 'Unesko') : textToSpeak;
-        const utterance = new SpeechSynthesisUtterance(textForSpeech);
+        const utterance = new SpeechSynthesisUtterance(textToSpeak);
         utteranceRef.current = utterance;
         
         const voices = synth.getVoices();
         const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
         if (voice) {
             utterance.voice = voice;
+        } else if (voices.length > 0) {
+            // Fallback to the first available voice if no language match
+            utterance.voice = voices[0];
         }
         utterance.lang = language;
 
@@ -145,30 +163,34 @@ export default function PlaceDetailPage({ params }: { params: { slug: string } }
         }
     }, [isPaused, remainingText, narrationText, toast, translations, startPlayback]);
 
+     // This effect specifically handles the autoplay functionality
      useEffect(() => {
         if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
             synthRef.current = window.speechSynthesis;
         }
         
         const shouldAutoplay = searchParams.get('autoplay') === 'true';
-        if (shouldAutoplay && poi) {
-            setShowSurvey(true);
-            const newPath = `/places/${poi.slug}`;
-            router.replace(newPath, { scroll: false });
-            
-            // Use a small timeout to ensure the synth is ready
-            setTimeout(() => {
-                startPlayback(poi.longDescription);
-            }, 100);
+        if (shouldAutoplay && poi && narrationText) {
+             const safeStartPlayback = () => startPlayback(narrationText);
+
+             // Voices load asynchronously. We need to wait for them.
+            if (synthRef.current?.getVoices().length === 0) {
+                synthRef.current.onvoiceschanged = safeStartPlayback;
+            } else {
+                safeStartPlayback();
+            }
         }
 
         return () => {
             if (synthRef.current?.speaking) {
                 synthRef.current.cancel();
             }
+            if(synthRef.current) {
+                synthRef.current.onvoiceschanged = null;
+            }
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [poi, searchParams]);
+    }, [poi, searchParams, narrationText]); // Only depends on these to trigger autoplay
 
     if (loading) {
         return (
@@ -273,3 +295,4 @@ export default function PlaceDetailPage({ params }: { params: { slug: string } }
     
 
     
+
