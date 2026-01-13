@@ -129,18 +129,6 @@
       opacity: 1;
     }
   }
-  @keyframes fade-out {
-    0% {
-      opacity: 1;
-    }
-    80% { /* Start fading out after 2 seconds (2s / 2.5s total duration) */
-      opacity: 1;
-    }
-    100% {
-      opacity: 0;
-      pointer-events: none;
-    }
-  }
   @keyframes fade-in-up {
     from {
       opacity: 0;
@@ -163,9 +151,6 @@
   }
   .animate-fade-in {
     animation: fade-in 1s ease-out both;
-  }
-  .animate-fade-out {
-    animation: fade-out 2.5s ease-out forwards;
   }
   .animate-fade-in-up {
     animation: fade-in-up 0.8s cubic-bezier(0.25, 1, 0.5, 1) both;
