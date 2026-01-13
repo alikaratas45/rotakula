@@ -99,7 +99,7 @@ export default function StoryPage() {
         };
 
         utterance.onerror = (event) => {
-            if (event.error !== 'interrupted') {
+            if (event.error !== 'interrupted' && event.error !== 'canceled') {
                 toast({
                     title: translations.toast.audioErrorTitle,
                     description: `${translations.toast.audioErrorDescription} (${event.error})`,
@@ -207,4 +207,5 @@ export default function StoryPage() {
 }
 
     
+
 

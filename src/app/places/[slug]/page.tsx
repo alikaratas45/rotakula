@@ -104,7 +104,7 @@ export default function PlaceDetailPage() {
         };
 
         utterance.onerror = (event) => {
-             if (event.error !== 'interrupted') {
+            if (event.error !== 'interrupted' && event.error !== 'canceled') {
                  toast({
                     title: translations.toast.audioErrorTitle,
                     description: `${translations.toast.audioErrorDescription} (${event.error})`,
