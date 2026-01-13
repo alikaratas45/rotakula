@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { getImageById } from '@/lib/placeholder-images';
 import { useEffect, useState, useMemo, Suspense } from 'react';
 import { useApp } from '@/context/app-context';
-import { Utensils, Map, Pin, Route, BookOpen, QrCode, Landmark, Smile, Award, Bike, Loader2, PlayCircle } from 'lucide-react';
+import { Utensils, Map, Pin, Route, BookOpen, QrCode, Landmark, Smile, Award, Bike, Loader2 } from 'lucide-react';
 import { BedIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { InstallPwaButton } from '@/components/install-pwa-button';
@@ -73,7 +73,6 @@ export default function Home() {
   }, [allRoutes]);
   
   const heroImage = getImageById('hero-home');
-  const videoThumbnail = getImageById('kula-tanitim-video');
   
   const iconNavItems = [
     { href: "/places", label: translations.nav.places, icon: Landmark, color: "border-blue-500" },
@@ -154,46 +153,6 @@ export default function Home() {
       <Suspense fallback={<div className="flex justify-center py-8"><Loader2 className="h-8 w-8 animate-spin" /></div>}>
         <VisitorCounter />
       </Suspense>
-      
-      <section className="py-16 bg-background px-4 md:px-8">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-headline font-bold text-center mb-12 animate-fade-in-up">Kula Tanıtım Filmi</h2>
-           
-            {isMobile ? (
-                 <a 
-                    href="https://www.youtube.com/watch?v=_ARn-XIt0RE" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="group block relative aspect-video w-full rounded-lg overflow-hidden shadow-2xl"
-                >
-                        {videoThumbnail && (
-                            <Image
-                                src={videoThumbnail.imageUrl}
-                                alt={videoThumbnail.description}
-                                fill
-                                className="object-cover transition-transform duration-500 group-hover:scale-105"
-                                data-ai-hint={videoThumbnail.imageHint}
-                            />
-                        )}
-                        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors flex items-center justify-center">
-                            <PlayCircle className="h-20 w-20 text-white/80 group-hover:text-white group-hover:scale-110 transition-all" />
-                        </div>
-                </a>
-            ) : (
-                <div className="aspect-w-16 aspect-h-9 w-full rounded-lg overflow-hidden shadow-2xl">
-                    <iframe 
-                        className="w-full h-full"
-                        src="https://www.youtube.com/embed/_ARn-XIt0RE?si=37dKY5kQwhbA26hf&vq=hd1080" 
-                        title="YouTube video player" 
-                        frameBorder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                        referrerPolicy="strict-origin-when-cross-origin" 
-                        allowFullScreen>
-                    </iframe>
-                </div>
-            )}
-        </div>
-      </section>
       
       <section className="py-16 px-4 md:px-8 bg-background">
         <div className="max-w-4xl mx-auto">
