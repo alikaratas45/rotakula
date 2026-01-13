@@ -15,8 +15,6 @@ import { cn } from '@/lib/utils';
 import { InstallPwaButton } from '@/components/install-pwa-button';
 import dynamic from 'next/dynamic';
 import VisitorCounter from '@/components/VisitorCounter';
-import { useIsMobile } from '@/hooks/use-mobile';
-
 
 const FeedbackSection = dynamic(() => import('@/components/feedback').then(mod => mod.FeedbackSection), {
     loading: () => <div className="flex justify-center py-8"><Loader2 className="h-8 w-8 animate-spin" /></div>,
@@ -58,7 +56,6 @@ const RouteCard = ({ route, delay }: { route: ThematicRoute, delay: number }) =>
 export default function Home() {
   const { language, translations } = useApp();
   const [allRoutes, setAllRoutes] = useState<ThematicRoute[]>([]);
-  const isMobile = useIsMobile();
   
   useEffect(() => {
     async function fetchData() {

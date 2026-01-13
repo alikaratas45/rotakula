@@ -98,7 +98,7 @@ export function AudioGuideControl() {
                         description: appStateRef.current.translations.audioGuide.nearbyDescription,
                         duration: 15000, 
                         action: (
-                            <Button onClick={() => appStateRef.current.router.push(`/places/${closestPoi.slug}?autoplay=true&survey=true`)}>
+                            <Button onClick={() => appStateRef.current.router.push(`/places/${closestPoi.slug}?autoplay=true`)}>
                                <PlayIcon className="mr-2 h-4 w-4" /> {appStateRef.current.translations.pois.listen}
                             </Button>
                         )

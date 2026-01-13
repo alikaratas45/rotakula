@@ -283,9 +283,3 @@ export default function PlaceDetailPage({ params }: { params: { slug: string } }
         </APIProvider>
     );
 }
-
-    
-
-    
-
-
