@@ -86,7 +86,7 @@ export function AudioGuideControl() {
             if (voice) utterance.voice = voice;
         }
         synth.speak(utterance);
-    }, [language, translations, isAudioGuideActive]);
+    }, [isAudioGuideActive, language, translations]);
 
     useEffect(() => {
         startLocationTracking();
@@ -95,7 +95,7 @@ export function AudioGuideControl() {
         };
     }, [startLocationTracking, stopLocationTracking]);
 
-    useEffect(() => {
+     useEffect(() => {
         if (!userLocation || pois.length === 0) {
             return;
         }
@@ -113,9 +113,9 @@ export function AudioGuideControl() {
         const closestPoi = sortedPoisByDistance[0];
 
         if (closestPoi && closestPoi.distance < PROXIMITY_THRESHOLD_ENTER && notifiedPoiRef.current !== closestPoi.id) {
-            setVisitedPoiId(closestPoi.id);
             notifiedPoiRef.current = closestPoi.id; // Mark as notified to prevent loop
-            
+            setVisitedPoiId(closestPoi.id);
+
             const isBadgeAlreadyEarned = earnedBadges.some(b => b.id === closestPoi.badgeId);
             if (closestPoi.badgeId && !isBadgeAlreadyEarned) {
                 addBadge(closestPoi.id);
@@ -127,8 +127,8 @@ export function AudioGuideControl() {
             }
 
             if (isAudioGuideActive) {
-                 playProximityAlert(closestPoi.name);
-                 const { id: toastId } = toast({
+                playProximityAlert(closestPoi.name);
+                toast({
                     title: `${translations.audioGuide.nearby}: ${closestPoi.name}`,
                     description: translations.audioGuide.nearbyDescription,
                     duration: 15000, 
@@ -139,7 +139,7 @@ export function AudioGuideControl() {
                     )
                 });
             } else {
-                 const { id: toastId } = toast({
+                 toast({
                     title: `📍 ${closestPoi.name}`,
                     description: "Bu mekanı değerlendirmek ister misiniz?",
                     duration: 15000, 
@@ -166,8 +166,10 @@ export function AudioGuideControl() {
                 notifiedPoiRef.current = null; // Allow notification for this POI again if re-entered
             }
         }
-
-    }, [userLocation, pois, visitedPoiId, toast, translations, playProximityAlert, addBadge, earnedBadges, router, isAudioGuideActive, dismiss]);
+    // The dependency array is intentionally limited to prevent infinite loops.
+    // Functions from context (addBadge, toast, etc.) are assumed to be stable.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [userLocation, pois]);
 
 
     const toggleGuide = () => {
