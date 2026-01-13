@@ -21,7 +21,6 @@ export function AudioGuideControl() {
 
     const [pois, setPois] = useState<PointOfInterest[]>([]);
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-    const [visitedPoiId, setVisitedPoiId] = useState<string | null>(null);
     const notifiedPoiRef = useRef<string | null>(null);
 
     const watchIdRef = useRef<number | null>(null);
@@ -45,7 +44,6 @@ export function AudioGuideControl() {
             watchIdRef.current = null;
         }
         setUserLocation(null);
-        setVisitedPoiId(null);
         notifiedPoiRef.current = null;
         dismiss();
     }, [dismiss]);
@@ -112,9 +110,9 @@ export function AudioGuideControl() {
 
         const closestPoi = sortedPoisByDistance[0];
 
+        // Check if user has entered a new POI zone
         if (closestPoi && closestPoi.distance < PROXIMITY_THRESHOLD_ENTER && notifiedPoiRef.current !== closestPoi.id) {
             notifiedPoiRef.current = closestPoi.id; // Mark as notified to prevent loop
-            setVisitedPoiId(closestPoi.id);
 
             const isBadgeAlreadyEarned = earnedBadges.some(b => b.id === closestPoi.badgeId);
             if (closestPoi.badgeId && !isBadgeAlreadyEarned) {
@@ -152,22 +150,20 @@ export function AudioGuideControl() {
             }
         }
         
-        if (visitedPoiId) {
-             const visitedPoi = pois.find(p => p.id === visitedPoiId);
-             if (!visitedPoi) return;
+        // Check if user has left the notified POI zone
+        if (notifiedPoiRef.current) {
+             const notifiedPoi = pois.find(p => p.id === notifiedPoiRef.current);
+             if (!notifiedPoi) return;
 
-             const distanceToVisitedPoi = haversineDistance(
+             const distanceToNotifiedPoi = haversineDistance(
                 { lat: userLocation.lat, lon: userLocation.lng },
-                { lat: visitedPoi.latitude, lon: visitedPoi.longitude }
+                { lat: notifiedPoi.latitude, lon: notifiedPoi.longitude }
             );
 
-            if (distanceToVisitedPoi > PROXIMITY_THRESHOLD_EXIT) {
-                setVisitedPoiId(null); 
+            if (distanceToNotifiedPoi > PROXIMITY_THRESHOLD_EXIT) {
                 notifiedPoiRef.current = null; // Allow notification for this POI again if re-entered
             }
         }
-    // The dependency array is intentionally limited to prevent infinite loops.
-    // Functions from context (addBadge, toast, etc.) are assumed to be stable.
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userLocation, pois]);
 
