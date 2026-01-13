@@ -72,18 +72,10 @@ export default function PlaceDetailPage({ params }: { params: { slug: string } }
     // This effect handles showing the survey based on URL params
     useEffect(() => {
         const shouldShowSurvey = searchParams.get('survey') === 'true';
-        const shouldAutoplay = searchParams.get('autoplay') === 'true';
-
-        if (shouldShowSurvey || shouldAutoplay) {
+        if (shouldShowSurvey) {
             setShowSurvey(true);
         }
-
-        if (shouldAutoplay && poi) {
-             const newPath = `/places/${poi.slug}`;
-             router.replace(newPath, { scroll: false });
-            // The playback logic is now handled in its own dedicated effect
-        }
-    }, [searchParams, poi, router]);
+    }, [searchParams]);
 
 
     const startPlayback = useCallback((textToSpeak: string) => {
@@ -190,7 +182,7 @@ export default function PlaceDetailPage({ params }: { params: { slug: string } }
             }
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [poi, searchParams, narrationText]); // Only depends on these to trigger autoplay
+    }, [poi, searchParams, narrationText]);
 
     if (loading) {
         return (
@@ -295,4 +287,5 @@ export default function PlaceDetailPage({ params }: { params: { slug: string } }
     
 
     
+
 
