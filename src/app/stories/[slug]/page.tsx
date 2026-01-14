@@ -5,7 +5,7 @@ import { getStoryBySlug } from '@/lib/kula-data';
 import Image from 'next/image';
 import { Calendar, User, PlayIcon, PauseIcon } from 'lucide-react';
 import { useApp } from '@/context/app-context';
-import { useEffect, useState, useRef, useCallback, Suspense } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import type { Story } from '@/lib/types';
 import { notFound, useParams } from 'next/navigation';
 import { getImageById } from '@/lib/placeholder-images';
@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 
-function StoryContent() {
+export default function StoryPage() {
     const params = useParams();
     const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
     const { language, translations } = useApp();
@@ -206,14 +206,5 @@ function StoryContent() {
                 </div>
             </div>
         </article>
-    );
-}
-
-
-export default function StoryPage() {
-    return (
-        <Suspense fallback={<div className="flex justify-center items-center h-screen"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /></div>}>
-            <StoryContent />
-        </Suspense>
     );
 }

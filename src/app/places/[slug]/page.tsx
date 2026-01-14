@@ -8,7 +8,7 @@ import { APIProvider } from '@vis.gl/react-google-maps';
 import EmbeddedMap from '@/components/map';
 import { getImageById } from '@/lib/placeholder-images';
 import type { PointOfInterest } from '@/lib/types';
-import { useState, useRef, useCallback, useEffect, Suspense } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { PlayIcon, PauseIcon, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -17,7 +17,7 @@ import { Survey } from '@/components/survey';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 
-function PlaceDetailContent() {
+export default function PlaceDetailPage() {
     const params = useParams();
     const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
     const { language, translations } = useApp();
@@ -288,11 +288,3 @@ function PlaceDetailContent() {
     );
 }
 
-
-export default function PlaceDetailPage() {
-    return (
-        <Suspense fallback={<div className="flex justify-center items-center h-screen"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /></div>}>
-            <PlaceDetailContent />
-        </Suspense>
-    );
-}
