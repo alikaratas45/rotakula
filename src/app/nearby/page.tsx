@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getPois } from '@/lib/kula-data';
@@ -9,12 +9,13 @@ import type { PointOfInterest } from '@/lib/types';
 import { getImageById } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, MapPin, Mountain, Info, Compass, Navigation } from 'lucide-react';
+import { Loader2, MapPin, Mountain, Info, Compass, Navigation, LocateFixed, ShieldAlert } from 'lucide-react';
 import { HistoricHouseIcon, FoodIcon, BedIcon } from '@/components/icons';
 import EmbeddedMap from '@/components/map';
 import { APIProvider } from '@vis.gl/react-google-maps';
 import { useApp } from '@/context/app-context';
 import { haversineDistance } from '@/lib/utils';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const NEARBY_RADIUS_KM = 10;
 
@@ -40,51 +41,61 @@ export default function NearbyPage() {
     const { language, translations } = useApp();
     const [nearbyPois, setNearbyPois] = useState<PoiWithDistance[]>([]);
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-    const [status, setStatus] = useState<'loading' | 'error' | 'success' | 'no_results'>('loading');
+    const [status, setStatus] = useState<'idle' | 'loading' | 'error' | 'success' | 'no_results'>('idle');
     const [error, setError] = useState<string | null>(null);
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
 
-    useEffect(() => {
+    const requestLocation = useCallback(async () => {
+        setStatus('loading');
+        setError(null);
+
         if (!navigator.geolocation) {
             setError(translations.map.locationError);
             setStatus('error');
             return;
         }
 
-        navigator.geolocation.getCurrentPosition(
-            async (position) => {
-                const currentLocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude,
-                };
-                setUserLocation(currentLocation);
+        try {
+            const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject, {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0,
+                });
+            });
 
-                try {
-                    const allPois = await getPois(language);
-                    const poisWithDistances: PoiWithDistance[] = allPois.map(poi => {
-                        const distance = haversineDistance(
-                            { lat: currentLocation.lat, lon: currentLocation.lng },
-                            { lat: poi.latitude, lon: poi.longitude }
-                        ) / 1000; // convert to km
-                        return { ...poi, distance };
-                    }).filter(poi => poi.distance <= NEARBY_RADIUS_KM);
+            const currentLocation = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+            };
+            setUserLocation(currentLocation);
 
-                    poisWithDistances.sort((a, b) => a.distance - b.distance);
-                    
-                    setNearbyPois(poisWithDistances);
-                    setStatus(poisWithDistances.length > 0 ? 'success' : 'no_results');
+            const allPois = await getPois(language);
+            const poisWithDistances: PoiWithDistance[] = allPois.map(poi => ({
+                ...poi,
+                distance: haversineDistance(
+                    { lat: currentLocation.lat, lon: currentLocation.lng },
+                    { lat: poi.latitude, lon: poi.longitude }
+                ) / 1000,
+            })).filter(poi => poi.distance <= NEARBY_RADIUS_KM);
 
-                } catch (fetchError) {
-                    setError('Failed to fetch points of interest.');
-                    setStatus('error');
-                }
-            },
-            () => {
-                setError(translations.nearby.locationError);
-                setStatus('error');
-            },
-            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-        );
+            poisWithDistances.sort((a, b) => a.distance - b.distance);
+            
+            setNearbyPois(poisWithDistances);
+            setStatus(poisWithDistances.length > 0 ? 'success' : 'no_results');
+
+        } catch (err: any) {
+            let errorMessage = translations.map.locationError;
+            if (err.code === 1) { // PERMISSION_DENIED
+                errorMessage = "Konum erişimine izin vermeniz gerekiyor.";
+            } else if (err.code === 2) { // POSITION_UNAVAILABLE
+                errorMessage = "Konum bilgisi şu anda alınamıyor.";
+            } else if (err.code === 3) { // TIMEOUT
+                errorMessage = "Konum bilgisi alınırken zaman aşımı oluştu.";
+            }
+            setError(errorMessage);
+            setStatus('error');
+        }
     }, [language, translations]);
     
     const poisForMap = userLocation ? nearbyPois : [];
@@ -96,6 +107,18 @@ export default function NearbyPage() {
 
     const renderContent = () => {
         switch (status) {
+            case 'idle':
+                return (
+                    <div className="text-center py-16 border-2 border-dashed rounded-lg flex flex-col items-center gap-4">
+                        <LocateFixed className="h-10 w-10 text-muted-foreground" />
+                        <h2 className="text-xl font-semibold text-muted-foreground">Yakınınızdaki yerleri keşfedin</h2>
+                        <p className="text-muted-foreground max-w-md">Yakınınızdaki turistik noktaları görmek için konum izni vermeniz gerekmektedir.</p>
+                        <Button onClick={requestLocation}>
+                            <MapPin className="mr-2 h-4 w-4" />
+                            Yakınımdakileri Bul
+                        </Button>
+                    </div>
+                );
             case 'loading':
                 return (
                     <div className="flex flex-col justify-center items-center h-64 text-center">
@@ -105,15 +128,23 @@ export default function NearbyPage() {
                 );
             case 'error':
                  return (
-                    <div className="text-center py-16 border-2 border-dashed border-destructive/50 rounded-lg bg-destructive/10">
-                        <h2 className="text-xl font-semibold text-destructive">{translations.toast.errorTitle}</h2>
-                        <p className="text-destructive/80 mt-2">{error}</p>
-                    </div>
+                    <Alert variant="destructive" className="mt-6">
+                        <ShieldAlert className="h-4 w-4" />
+                        <AlertTitle>{translations.toast.errorTitle}</AlertTitle>
+                        <AlertDescription className="flex items-center justify-between">
+                           {error}
+                           <Button variant="secondary" size="sm" onClick={requestLocation}>Tekrar Dene</Button>
+                        </AlertDescription>
+                    </Alert>
                 );
             case 'no_results':
                 return (
                     <div className="text-center py-16 border-2 border-dashed rounded-lg">
                         <h2 className="text-xl font-semibold text-muted-foreground">{translations.nearby.noPoisFound}</h2>
+                         <p className="text-muted-foreground mt-2 mb-4">Yakınlarda bir yer bulamadık ama tüm yerlere göz atabilirsiniz.</p>
+                        <Button asChild>
+                          <Link href="/places">{translations.nav.places}</Link>
+                        </Button>
                     </div>
                 );
             case 'success':
