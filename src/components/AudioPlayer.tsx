@@ -170,6 +170,7 @@ export default function AudioPlayer({ text, autoPlay = false }: AudioPlayerProps
                     onClick={handlePlayPause}
                     disabled={!text}
                     size="lg"
+                    variant="secondary"
                     aria-label={isPlaying ? translations.pois.pause : translations.pois.listen}
                 >
                     {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
