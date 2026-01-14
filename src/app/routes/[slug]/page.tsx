@@ -87,7 +87,16 @@ export default function RoutePage() {
         window.open(url, '_blank');
     };
 
-    const handleStartRoute = () => {
+    const handleStartRoute = (travelMode: 'driving' | 'walking') => {
+        if (!pois || pois.length < 1) {
+             toast({
+                title: translations.toast.errorTitle,
+                description: "Bu rota için durak bulunamadı.",
+                variant: 'destructive',
+            });
+            return;
+        }
+
         if (!navigator.geolocation) {
             toast({
                 title: translations.toast.locationErrorTitle,
@@ -96,35 +105,19 @@ export default function RoutePage() {
             });
             return;
         }
-
-        if (!pois || pois.length < 1) return;
-
+        
         setIsStartingRoute(true);
 
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const { latitude, longitude } = position.coords;
-                const origin = `${latitude},${longitude}`;
-                
-                const waypointsString = pois
-                    .map(p => `${p.latitude},${p.longitude}`)
-                    .join('/');
-                
-                const googleMapsUrl = `https://www.google.com/maps/dir/${origin}/${waypointsString}`;
+        const destination = `${pois[pois.length - 1].latitude},${pois[pois.length - 1].longitude}`;
+        const waypoints = pois
+            .slice(0, pois.length - 1)
+            .map(p => `${p.latitude},${p.longitude}`)
+            .join('|');
 
-                window.open(googleMapsUrl, '_blank');
-                setIsStartingRoute(false);
-            },
-            (error) => {
-                toast({
-                    title: translations.toast.locationErrorTitle,
-                    description: translations.nearby.locationError,
-                    variant: 'destructive',
-                });
-                setIsStartingRoute(false);
-            },
-            { enableHighAccuracy: true }
-        );
+        const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${destination}&waypoints=${waypoints}&travelmode=${travelMode}`;
+        
+        window.open(googleMapsUrl, '_blank');
+        setIsStartingRoute(false);
     };
 
     const heroImage = route ? getImageById(route.imageId) : null;
@@ -142,6 +135,7 @@ export default function RoutePage() {
     }
     
     const isFlavorTour = route.slug === 'kula-flavor-tour';
+    const isDrivingRoute = route.slug === 'geopark-discovery-route';
 
     return (
         <div>
@@ -271,7 +265,7 @@ export default function RoutePage() {
                                                         {isStartingRoute ? (
                                                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                                         ) : (
-                                                            route.slug === 'geopark-discovery-route' ? <Car className="mr-2 h-4 w-4" /> : <Footprints className="mr-2 h-4 w-4" />
+                                                            isDrivingRoute ? <Car className="mr-2 h-4 w-4" /> : <Footprints className="mr-2 h-4 w-4" />
                                                         )}
                                                         {isStartingRoute ? translations.nearby.gettingLocation : "Rotayı Haritada Başlat"}
                                                     </Button>
@@ -285,7 +279,7 @@ export default function RoutePage() {
                                                     </AlertDialogHeader>
                                                     <AlertDialogFooter>
                                                     <AlertDialogCancel>İptal</AlertDialogCancel>
-                                                    <AlertDialogAction onClick={handleStartRoute}>
+                                                    <AlertDialogAction onClick={() => handleStartRoute(isDrivingRoute ? 'driving' : 'walking')}>
                                                         Yine de Başlat
                                                     </AlertDialogAction>
                                                     </AlertDialogFooter>
@@ -313,4 +307,3 @@ export default function RoutePage() {
         </div>
     );
 }
-
