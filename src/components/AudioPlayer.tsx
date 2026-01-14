@@ -4,7 +4,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Play, Pause } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
 import { useApp } from '@/context/app-context';
 
 interface AudioPlayerProps {
@@ -13,7 +12,6 @@ interface AudioPlayerProps {
 }
 
 export default function AudioPlayer({ text, autoPlay = false }: AudioPlayerProps) {
-    const { toast } = useToast();
     const { translations, language } = useApp();
 
     const [isPlaying, setIsPlaying] = useState(false);
@@ -76,9 +74,7 @@ export default function AudioPlayer({ text, autoPlay = false }: AudioPlayerProps
         };
 
         utterance.onerror = (event) => {
-             if (event.error !== 'interrupted') {
-                console.warn("Speech synthesis error:", event.error);
-            }
+            console.warn("Speech synthesis error (silently handled):", event.error);
             setIsPlaying(false);
             textToSpeakRef.current = text; 
             charIndexRef.current = 0;
@@ -88,17 +84,12 @@ export default function AudioPlayer({ text, autoPlay = false }: AudioPlayerProps
             synth.speak(utterance);
             setIsPlaying(true);
         }, 100);
-    }, [language, text, translations, toast]);
+    }, [language, text]);
 
 
     const handlePlayPause = useCallback(() => {
         const synth = synthRef.current;
         if (!synth) {
-            toast({
-                title: translations.toast.unsupportedTitle,
-                description: translations.toast.unsupportedDescription,
-                variant: "destructive"
-            });
             return;
         }
 
@@ -116,7 +107,7 @@ export default function AudioPlayer({ text, autoPlay = false }: AudioPlayerProps
                 startPlayback(textToSpeakRef.current);
             }
         }
-    }, [toast, translations, startPlayback, text]);
+    }, [startPlayback, text]);
 
     useEffect(() => {
         if (autoPlay && text) {
@@ -136,8 +127,8 @@ export default function AudioPlayer({ text, autoPlay = false }: AudioPlayerProps
                 <Button
                     onClick={handlePlayPause}
                     disabled={!text}
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
                     size="lg"
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground"
                     aria-label={isPlaying ? translations.pois.pause : translations.pois.listen}
                 >
                     {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
@@ -152,4 +143,3 @@ export default function AudioPlayer({ text, autoPlay = false }: AudioPlayerProps
         </div>
     );
 }
-
