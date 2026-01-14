@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
@@ -10,9 +9,7 @@ import fr from '@/lib/locales/fr.json';
 import de from '@/lib/locales/de.json';
 import { getPois } from '@/lib/kula-data';
 import type { PointOfInterest, SurveyState } from '@/lib/types';
-import { useFirebase, useUser } from '@/firebase';
 import { useToast } from '@/hooks/use-toast';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, AuthError } from 'firebase/auth';
 
 
 type Language = 'tr' | 'en' | 'fr' | 'de';
@@ -49,12 +46,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isAudioGuideActive, setIsAudioGuideActive] = useState(false);
   const [earnedBadges, setEarnedBadges] = useState<Badge[]>([]);
   const [allPois, setAllPois] = useState<any[]>([]);
-  const { auth } = useFirebase();
-  const { user, isUserLoading } = useUser();
   const router = useRouter();
   const { toast } = useToast();
   
-  const isAdmin = useMemo(() => user?.email === ADMIN_EMAIL, [user]);
+  const isAdmin = false;
+  const isUserLoading = false;
 
   // Fetch all POIs on mount to map badge IDs to badge data
   useEffect(() => {
@@ -106,40 +102,19 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   };
   
   const handleAdminLogin = async (email: string, password: string) => {
-    if (email !== ADMIN_EMAIL) {
-         toast({
-            title: "Geçersiz E-posta",
-            description: "Admin girişi için yalnızca yetkili e-posta adresi kullanılabilir.",
-            variant: "destructive"
-        });
-        return;
-    }
-    try {
-        await signInWithEmailAndPassword(auth, email, password);
-        router.push('/admin/surveys');
-    } catch (signInError) {
-        // If signIn fails (likely because the user doesn't exist), try to create the user.
-        // Firebase consolidates 'auth/user-not-found' and 'auth/wrong-password' into 'auth/invalid-credential'
-        // for security reasons. So, we attempt creation upon any auth error during sign-in.
-        try {
-            await createUserWithEmailAndPassword(auth, email, password);
-            // signInWithEmailAndPassword is not needed here as createUserWithEmailAndPassword also signs the user in.
-            router.push('/admin/surveys');
-        } catch (createError: any) {
-            // If creation also fails, then there's a more fundamental issue.
-            const authError = createError as AuthError;
-            toast({
-                title: "Giriş/Kayıt Hatası",
-                description: "Giriş yapılamadı veya admin kullanıcısı oluşturulamadı. Lütfen şifrenizin en az 6 karakter olduğundan emin olun veya daha sonra tekrar deneyin.",
-                variant: "destructive"
-            });
-        }
-    }
+    toast({
+        title: "Giriş Devre Dışı",
+        description: "Firebase bağlantısı geçici olarak kaldırıldığı için admin girişi yapılamıyor.",
+        variant: "destructive"
+    });
   };
 
   const handleAdminLogout = () => {
-    signOut(auth);
-    router.push('/');
+    toast({
+        title: "Giriş Devre Dışı",
+        description: "Firebase bağlantısı geçici olarak kaldırıldığı için admin çıkışı yapılamıyor.",
+        variant: "destructive"
+    });
   }
   
   useEffect(() => {
