@@ -9,51 +9,41 @@ import EmbeddedMap from '@/components/map';
 import { getImageById } from '@/lib/placeholder-images';
 import type { PointOfInterest } from '@/lib/types';
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { PlayIcon, PauseIcon, Loader2 } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { Loader2 } from 'lucide-react';
 import { useApp } from '@/context/app-context';
 import { Survey } from '@/components/survey';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import AudioPlayer from '@/components/AudioPlayer';
 
 export default function PlaceDetailPage() {
     const params = useParams();
     const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
-    const { language, translations } = useApp();
+    const { language, translations, addBadge } = useApp();
     const [poi, setPoi] = useState<PointOfInterest | null>(null);
     const [loading, setLoading] = useState(true);
 
     const router = useRouter();
     const searchParams = useSearchParams();
     const [showSurvey, setShowSurvey] = useState(false);
-
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [isPaused, setIsPaused] = useState(false);
-    
-    const synthRef = useRef<SpeechSynthesis | null>(null);
-    const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-    const { toast } = useToast();
     
     const [narrationText, setNarrationText] = useState('');
-    const [remainingText, setRemainingText] = useState('');
-    const charIndexRef = useRef(0);
+    const [shouldAutoplay, setShouldAutoplay] = useState(false);
 
     useEffect(() => {
         if (!slug) return;
         setPoi(null);
         setNarrationText('');
-        setRemainingText('');
-        setIsPlaying(false);
-        setIsPaused(false);
         
         async function fetchPoi() {
             setLoading(true);
-            const poiData = await getPoiBySlug(slug as string, language);
+            const poiData = await getPoiBySlug(slug, language);
             if (poiData) {
                 setPoi(poiData);
                 const fullText = poiData.longDescription || '';
                 setNarrationText(fullText);
-                setRemainingText(fullText);
+                if (poiData.badgeId) {
+                    addBadge(poiData.id);
+                }
             } else {
                 setPoi(null);
             }
@@ -61,121 +51,16 @@ export default function PlaceDetailPage() {
         }
         fetchPoi();
 
-        return () => {
-            if (synthRef.current?.speaking) {
-                synthRef.current.cancel();
-            }
-        };
-    }, [slug, language]);
+    }, [slug, language, addBadge]);
 
-
-    const startPlayback = useCallback((textToSpeak: string) => {
-        const synth = synthRef.current;
-        if (!synth || !textToSpeak) return;
-
-        if (synth.speaking) {
-            synth.cancel();
-        }
-
-        const textForSpeech = language === 'tr' ? textToSpeak.replace(/UNESCO/g, 'Unesko') : textToSpeak;
-
-        const utterance = new SpeechSynthesisUtterance(textForSpeech);
-        utteranceRef.current = utterance;
-        
-        const voices = synth.getVoices();
-        const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
-        if (voice) {
-            utterance.voice = voice;
-        }
-        utterance.lang = language;
-
-        utterance.onboundary = (event) => {
-            charIndexRef.current = event.charIndex;
-        };
-
-        utterance.onend = () => {
-            setIsPlaying(false);
-            setIsPaused(false);
-            charIndexRef.current = 0;
-            setRemainingText(narrationText); 
-        };
-
-        utterance.onerror = (event) => {
-            if (event.error !== 'interrupted' && event.error !== 'canceled') {
-                 toast({
-                    title: translations.toast.audioErrorTitle,
-                    description: `${translations.toast.audioErrorDescription} (${event.error})`,
-                    variant: "destructive"
-                });
-            }
-            setIsPlaying(false);
-            setIsPaused(false);
-            charIndexRef.current = 0;
-            setRemainingText(narrationText); 
-        };
-        
-        setTimeout(() => {
-            synth.speak(utterance);
-            setIsPlaying(true);
-            setIsPaused(false);
-        }, 100);
-    }, [language, narrationText, toast, translations]);
-
-    const handlePlayPause = useCallback(() => {
-        const synth = synthRef.current;
-        if (!synth) {
-            toast({
-                title: translations.toast.unsupportedTitle,
-                description: translations.toast.unsupportedDescription,
-                variant: "destructive"
-            });
-            return;
-        }
-
-        if (synth.speaking && !isPaused) { 
-            const fullText = utteranceRef.current?.text || narrationText;
-            const spokenTextLength = charIndexRef.current;
-            const remaining = fullText.substring(spokenTextLength);
-            
-            synth.cancel(); 
-            setRemainingText(remaining);
-            setIsPaused(true);
-            setIsPlaying(false);
-
-        } else { 
-            startPlayback(remainingText || narrationText);
-        }
-    }, [isPaused, remainingText, narrationText, toast, translations, startPlayback]);
-
-     // This effect specifically handles the autoplay functionality
      useEffect(() => {
-        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-            synthRef.current = window.speechSynthesis;
-        }
-        
-        const shouldAutoplay = searchParams.get('autoplay') === 'true';
-        if (shouldAutoplay && poi) {
+        const autoplay = searchParams.get('autoplay') === 'true';
+        if (autoplay && poi) {
             setShowSurvey(true);
+            setShouldAutoplay(true);
             const newPath = `/places/${poi.slug}`;
             router.replace(newPath, { scroll: false });
-            
-            const safeStartPlayback = () => startPlayback(poi.longDescription);
-             
-            setTimeout(() => {
-                const synth = synthRef.current;
-                if (synth && synth.getVoices().length > 0) {
-                    safeStartPlayback();
-                } else if (synth) {
-                    synth.onvoiceschanged = safeStartPlayback;
-                }
-            }, 500); 
         }
-
-        return () => {
-            if (synthRef.current?.speaking) {
-                synthRef.current.cancel();
-            }
-        };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [poi, searchParams]);
 
@@ -222,20 +107,9 @@ export default function PlaceDetailPage() {
                 <div className="container px-4 py-8 md:py-12">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
                          <div className="lg:col-span-2">
-                             <div className="flex items-center gap-4 mb-6">
+                             <div className="flex flex-col gap-4 mb-6">
                                 <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
-                                <Button
-                                    variant="outline"
-                                    onClick={handlePlayPause}
-                                    aria-label={isPlaying ? translations.pois.pauseNarration : translations.pois.listenNarration}
-                                >
-                                    {isPlaying ? (
-                                        <PauseIcon className="mr-2 h-4 w-4" />
-                                    ) : (
-                                        <PlayIcon className="mr-2 h-4 w-4" />
-                                    )}
-                                    {isPlaying ? translations.pois.pause : (isPaused ? translations.famous.continueNarration : translations.pois.listen)}
-                                </Button>
+                                <AudioPlayer text={narrationText} autoPlay={shouldAutoplay} />
                              </div>
                              <div className="prose prose-lg max-w-none text-foreground/90">
                                 {poi.longDescription.split('\n').map((paragraph, index) => (
@@ -278,4 +152,3 @@ export default function PlaceDetailPage() {
         </APIProvider>
     );
 }
-

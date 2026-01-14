@@ -3,145 +3,20 @@
 
 import { useApp } from '@/context/app-context';
 import Image from 'next/image';
-import { Button } from '@/components/ui/button';
-import { Gem, PlayIcon, PauseIcon } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState, Suspense } from 'react';
-import { useToast } from '@/hooks/use-toast';
-import { useSearchParams } from 'next/navigation';
+import { Gem } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { getImageById } from '@/lib/placeholder-images';
+import AudioPlayer from '@/components/AudioPlayer';
 
-function NarMotifiContent() {
-    const { language, translations } = useApp();
-    const { toast } = useToast();
-    const searchParams = useSearchParams();
-
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [isPaused, setIsPaused] = useState(false);
-    const synthRef = useRef<SpeechSynthesis | null>(null);
-    const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-
-    const narrationText = translations.narMotifi.content.join(' ') + ' ' + translations.narMotifi.poem.join(' ');
-    const [remainingText, setRemainingText] = useState(narrationText);
-    const charIndexRef = useRef(0);
+export default function NarMotifiPage() {
+    const { translations } = useApp();
     const heroImage = getImageById('story-nar-motifi');
-    
-    useEffect(() => {
-        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-            synthRef.current = window.speechSynthesis;
-        }
-        return () => {
-            if (synthRef.current?.speaking) {
-                synthRef.current.cancel();
-            }
-        };
-    }, []);
+    const [narrationText, setNarrationText] = useState("");
 
     useEffect(() => {
         const newNarrationText = translations.narMotifi.content.join(' ') + ' ' + translations.narMotifi.poem.join(' ');
-        setRemainingText(newNarrationText);
-        charIndexRef.current = 0;
-        if (synthRef.current?.speaking) {
-            synthRef.current.cancel();
-            setIsPlaying(false);
-            setIsPaused(false);
-        }
+        setNarrationText(newNarrationText);
     }, [translations]);
-
-
-    const startPlayback = useCallback((textToSpeak: string) => {
-        const synth = synthRef.current;
-        if (!synth || !textToSpeak) return;
-
-        if (synth.speaking) {
-            synth.cancel();
-        }
-
-        const utterance = new SpeechSynthesisUtterance(textToSpeak);
-        utteranceRef.current = utterance;
-        
-        const voices = synth.getVoices();
-        const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
-        if (voice) {
-            utterance.voice = voice;
-        }
-        utterance.lang = language;
-
-        utterance.onboundary = (event) => {
-            charIndexRef.current = event.charIndex;
-        };
-
-        utterance.onend = () => {
-            setIsPlaying(false);
-            setIsPaused(false);
-            charIndexRef.current = 0;
-            setRemainingText(narrationText); 
-        };
-
-        utterance.onerror = (event) => {
-             if (event.error !== 'interrupted' && event.error !== 'canceled') {
-                 toast({
-                    title: translations.toast.audioErrorTitle,
-                    description: `${translations.toast.audioErrorDescription} (${event.error})`,
-                    variant: "destructive"
-                });
-            }
-            setIsPlaying(false);
-            setIsPaused(false);
-            charIndexRef.current = 0;
-            setRemainingText(narrationText); 
-        };
-        
-        setTimeout(() => {
-            synth.speak(utterance);
-            setIsPlaying(true);
-            setIsPaused(false);
-        }, 100);
-
-    }, [language, narrationText, toast, translations]);
-
-
-    const handlePlayPause = useCallback(() => {
-        const synth = synthRef.current;
-        if (!synth) {
-            toast({
-                title: translations.toast.unsupportedTitle,
-                description: translations.toast.unsupportedDescription,
-                variant: "destructive"
-            });
-            return;
-        }
-
-        if (synth.speaking && !isPaused) { 
-            const fullText = utteranceRef.current?.text || narrationText;
-            const spokenTextLength = charIndexRef.current;
-            const remaining = fullText.substring(spokenTextLength);
-            
-            synth.cancel(); 
-            setRemainingText(remaining);
-            setIsPaused(true);
-            setIsPlaying(false);
-
-        } else { 
-            startPlayback(remainingText || narrationText);
-        }
-    }, [isPaused, remainingText, narrationText, toast, translations, startPlayback]);
-
-    useEffect(() => {
-        const shouldAutoplay = searchParams.get('autoplay') === 'true';
-        if (shouldAutoplay && narrationText) {
-             const safeStartPlayback = () => startPlayback(narrationText);
-             setTimeout(() => {
-                const synth = synthRef.current;
-                if (synth && synth.getVoices().length > 0) {
-                    safeStartPlayback();
-                } else if (synth) {
-                    synth.onvoiceschanged = safeStartPlayback;
-                }
-            }, 100);
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchParams, narrationText]);
-
 
     return (
         <article>
@@ -169,20 +44,9 @@ function NarMotifiContent() {
                     <div className="flex items-center gap-4 mb-6">
                         <Gem className="h-6 w-6 text-primary" />
                         <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
-                         {narrationText && (
-                            <Button
-                                variant="outline"
-                                onClick={handlePlayPause}
-                                aria-label={isPlaying ? translations.pois.pauseNarration : translations.pois.listenNarration}
-                            >
-                                {isPlaying ? (
-                                    <PauseIcon className="mr-2 h-4 w-4" />
-                                ) : (
-                                    <PlayIcon className="mr-2 h-4 w-4" />
-                                )}
-                                {isPlaying ? translations.pois.pause : (isPaused ? translations.famous.continueNarration : translations.pois.listen)}
-                            </Button>
-                        )}
+                    </div>
+                    <div className='mb-6'>
+                      <AudioPlayer text={narrationText} />
                     </div>
                     
                     <div className="prose prose-lg max-w-none text-foreground/90 space-y-4">
@@ -198,13 +62,5 @@ function NarMotifiContent() {
                 </div>
             </div>
         </article>
-    );
-}
-
-export default function NarMotifiPage() {
-    return (
-        <Suspense fallback={<div>{/* Or a loading spinner */}</div>}>
-            <NarMotifiContent />
-        </Suspense>
     );
 }
