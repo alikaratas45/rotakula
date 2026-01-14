@@ -79,15 +79,12 @@ function StoryContent() {
         const utterance = new SpeechSynthesisUtterance(textToSpeak);
         utteranceRef.current = utterance;
         
-        const doSpeak = () => {
-            const voices = synth.getVoices();
-            const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
-            if (voice) {
-                utterance.voice = voice;
-            }
-            utterance.lang = language;
-            synth.speak(utterance);
+        const voices = synth.getVoices();
+        const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
+        if (voice) {
+            utterance.voice = voice;
         }
+        utterance.lang = language;
 
 
         utterance.onboundary = (event) => {
@@ -115,14 +112,12 @@ function StoryContent() {
             setRemainingText(narrationText); 
         };
         
-        if (synth.getVoices().length > 0) {
-            doSpeak();
-        } else {
-            synth.onvoiceschanged = doSpeak;
-        }
+        setTimeout(() => {
+            synth.speak(utterance);
+            setIsPlaying(true);
+            setIsPaused(false);
+        }, 100);
 
-        setIsPlaying(true);
-        setIsPaused(false);
     }, [language, narrationText, toast, translations]);
 
     const handlePlayPause = useCallback(() => {

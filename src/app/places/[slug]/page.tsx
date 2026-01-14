@@ -83,16 +83,12 @@ function PlaceDetailContent() {
         const utterance = new SpeechSynthesisUtterance(textForSpeech);
         utteranceRef.current = utterance;
         
-        // This function will find the voice and speak
-        const doSpeak = () => {
-            const voices = synth.getVoices();
-            const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
-            if (voice) {
-                utterance.voice = voice;
-            }
-            utterance.lang = language;
-            synth.speak(utterance);
+        const voices = synth.getVoices();
+        const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
+        if (voice) {
+            utterance.voice = voice;
         }
+        utterance.lang = language;
 
         utterance.onboundary = (event) => {
             charIndexRef.current = event.charIndex;
@@ -119,14 +115,11 @@ function PlaceDetailContent() {
             setRemainingText(narrationText); 
         };
         
-        if (synth.getVoices().length > 0) {
-            doSpeak();
-        } else {
-            synth.onvoiceschanged = doSpeak;
-        }
-
-        setIsPlaying(true);
-        setIsPaused(false);
+        setTimeout(() => {
+            synth.speak(utterance);
+            setIsPlaying(true);
+            setIsPaused(false);
+        }, 100);
     }, [language, narrationText, toast, translations]);
 
     const handlePlayPause = useCallback(() => {
@@ -166,9 +159,15 @@ function PlaceDetailContent() {
             const newPath = `/places/${poi.slug}`;
             router.replace(newPath, { scroll: false });
             
-             // A slight delay to ensure everything is ready before autoplaying
+            const safeStartPlayback = () => startPlayback(poi.longDescription);
+             
             setTimeout(() => {
-                startPlayback(poi.longDescription);
+                const synth = synthRef.current;
+                if (synth && synth.getVoices().length > 0) {
+                    safeStartPlayback();
+                } else if (synth) {
+                    synth.onvoiceschanged = safeStartPlayback;
+                }
             }, 500); 
         }
 
