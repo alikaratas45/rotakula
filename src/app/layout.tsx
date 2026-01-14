@@ -12,8 +12,8 @@ export const metadata = {
   description: "Manisa'nın Kula ilçesine özel tematik seyahat rotalarını, tarihi yerleri, doğal güzellikleri ve yöresel lezzetleri keşfedin.",
   manifest: '/manifest.json',
   icons: {
-    icon: '/logo.png?v=2',
-    apple: '/logo.png?v=2',
+    icon: '/logo.png?v=3',
+    apple: '/logo.png?v=3',
   },
 };
 
@@ -38,4 +38,3 @@ export default function RootLayout({
     </html>
   );
 }
-
