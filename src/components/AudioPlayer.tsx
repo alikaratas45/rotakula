@@ -77,11 +77,7 @@ export default function AudioPlayer({ text, autoPlay = false }: AudioPlayerProps
 
         utterance.onerror = (event) => {
              if (event.error !== 'interrupted') {
-                 toast({
-                    title: translations.toast.audioErrorTitle,
-                    description: `${translations.toast.audioErrorDescription} (${event.error})`,
-                    variant: "destructive"
-                });
+                console.warn("Speech synthesis error:", event.error);
             }
             setIsPlaying(false);
             textToSpeakRef.current = text; 
@@ -141,7 +137,7 @@ export default function AudioPlayer({ text, autoPlay = false }: AudioPlayerProps
                     onClick={handlePlayPause}
                     disabled={!text}
                     size="lg"
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground"
                     aria-label={isPlaying ? translations.pois.pause : translations.pois.listen}
                 >
                     {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
