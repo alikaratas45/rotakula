@@ -81,10 +81,10 @@ export default function SelectedPoisSidebar({ selectedPois, setSelectedPois }: {
             </div>
             
              
-            <div className="flex-shrink-0 flex md:flex-col gap-2 w-full md:w-auto">
+            <div className="flex-shrink-0 flex md:flex-row gap-2 w-full md:w-auto">
                  <AlertDialog>
                     <AlertDialogTrigger asChild>
-                        <Button className="w-full" disabled={isStartingRoute || selectedPois.length === 0}>
+                        <Button className="w-full" disabled={isStartingRoute || selectedPois.length < 2}>
                             {isStartingRoute ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Map className="mr-2 h-4 w-4" />}
                             {translations.createRoute.createRoute}
                         </Button>

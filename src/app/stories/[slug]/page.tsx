@@ -1,4 +1,5 @@
 
+
 "use client"
 
 import { getStoryBySlug } from '@/lib/kula-data';
@@ -34,7 +35,7 @@ export default function StoryPage() {
       if (!slug) return;
       async function fetchData() {
         setLoading(true);
-        const storyData = await getStoryBySlug(slug, language);
+        const storyData = await getStoryBySlug(slug as string, language);
         if (storyData) {
           setStory(storyData);
           const fullText = storyData.content || '';
@@ -208,3 +209,4 @@ export default function StoryPage() {
         </article>
     );
 }
+

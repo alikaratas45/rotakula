@@ -3,12 +3,12 @@
 "use client"
 
 import { getRouteBySlug, getPoisByIds } from '@/lib/kula-data';
-import { notFound } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
 import { getImageById } from '@/lib/placeholder-images';
 import Image from 'next/image';
 import type { ThematicRoute, PointOfInterest } from '@/lib/types';
 import { useApp } from '@/context/app-context';
-import { useEffect, useState, use } from 'react';
+import { useEffect, useState } from 'react';
 import { Loader2, MapPin, Mountain, Info, Footprints, Car, UtensilsCrossed, Navigation } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -44,8 +44,9 @@ function getCategoryIcon(category: PointOfInterest['category']) {
     }
 }
 
-export default function RoutePage({ params }: { params: { slug: string } }) {
-    const { slug } = params;
+export default function RoutePage() {
+    const params = useParams();
+    const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
     const { language, translations } = useApp();
     const { toast } = useToast();
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
@@ -56,11 +57,12 @@ export default function RoutePage({ params }: { params: { slug: string } }) {
     const [isStartingRoute, setIsStartingRoute] = useState(false);
 
     useEffect(() => {
+        if (!slug) return;
         setRoute(null);
         setPois([]);
         async function fetchRouteData() {
             setLoading(true);
-            const routeData = await getRouteBySlug(slug, language);
+            const routeData = await getRouteBySlug(slug as string, language);
             if (routeData) {
                 setRoute(routeData);
                 const poisData = await getPoisByIds(routeData.poiIds, language);
@@ -311,3 +313,4 @@ export default function RoutePage({ params }: { params: { slug: string } }) {
         </div>
     );
 }
+

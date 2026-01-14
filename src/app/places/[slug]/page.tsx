@@ -16,7 +16,6 @@ import { useApp } from '@/context/app-context';
 import { Survey } from '@/components/survey';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-
 export default function PlaceDetailPage() {
     const params = useParams();
     const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
@@ -49,7 +48,7 @@ export default function PlaceDetailPage() {
         
         async function fetchPoi() {
             setLoading(true);
-            const poiData = await getPoiBySlug(slug, language);
+            const poiData = await getPoiBySlug(slug as string, language);
             if (poiData) {
                 setPoi(poiData);
                 const fullText = poiData.longDescription || '';
@@ -156,6 +155,7 @@ export default function PlaceDetailPage() {
         
         const shouldAutoplay = searchParams.get('autoplay') === 'true';
         if (shouldAutoplay && poi) {
+            setShowSurvey(true);
             const newPath = `/places/${poi.slug}`;
             router.replace(newPath, { scroll: false });
             
@@ -178,15 +178,6 @@ export default function PlaceDetailPage() {
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [poi, searchParams]);
-
-     useEffect(() => {
-        const surveyParam = searchParams.get('survey');
-        if (surveyParam === 'true') {
-            setShowSurvey(true);
-            // URL'den parametreyi temizle
-            router.replace(`/places/${slug}`, { scroll: false });
-        }
-    }, [searchParams, slug, router]);
 
     if (loading) {
         return (
