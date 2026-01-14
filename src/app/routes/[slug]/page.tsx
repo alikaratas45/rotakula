@@ -175,17 +175,7 @@ export default function RoutePage() {
                                 )
                             })}
                         </div>
-                        {isFlavorTour ? (
-                             <div className="mt-8">
-                                <Button size="lg" onClick={handleFlavorTourClick}>
-                                    <MapPin className="mr-2 h-5 w-5" />
-                                    {translations.food.nearbyRestaurants}
-                                </Button>
-                                <p className="text-sm text-muted-foreground mt-2">
-                                    {translations.food.nearbyDescription}
-                                </p>
-                            </div>
-                        ) : (
+                        {isFlavorTour ? null : (
                             <>
                                 {pois.length > 0 && (
                                      <div className="mb-8">
