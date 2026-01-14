@@ -64,13 +64,15 @@ export default function AboutPage() {
         const utterance = new SpeechSynthesisUtterance(textForSpeech);
         utteranceRef.current = utterance;
         
-        // Attempt to find a matching voice, but don't wait for it.
-        const voices = synth.getVoices();
-        const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
-        if (voice) {
-            utterance.voice = voice;
-        }
-        utterance.lang = language;
+        const doSpeak = () => {
+            const voices = synth.getVoices();
+            const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
+            if (voice) {
+                utterance.voice = voice;
+            }
+            utterance.lang = language;
+            synth.speak(utterance);
+        };
 
         utterance.onboundary = (event) => {
             charIndexRef.current = event.charIndex;
@@ -97,7 +99,12 @@ export default function AboutPage() {
             setRemainingText(narrationText); 
         };
         
-        synth.speak(utterance);
+        if (synth.getVoices().length > 0) {
+            doSpeak();
+        } else {
+            synth.onvoiceschanged = doSpeak;
+        }
+
         setIsPlaying(true);
         setIsPaused(false);
 
@@ -207,5 +214,3 @@ export default function AboutPage() {
         </div>
     );
 }
-
-    
