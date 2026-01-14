@@ -14,7 +14,7 @@ const VisitorCounter = () => {
         return doc(firestore, 'stats', 'visitors');
     }, [firestore]);
 
-    const { data: statsData, isLoading } = useDoc<{ count: number }>(statsRef);
+    const { data: statsData } = useDoc<{ count: number }>(statsRef);
 
     useEffect(() => {
         if (statsData) {
@@ -23,17 +23,13 @@ const VisitorCounter = () => {
     }, [statsData]);
 
     useEffect(() => {
-        // Sadece firestore hazır olduğunda ve yükleme bittiğinde çalış
-        if (!firestore || !statsRef || isLoading) {
+        if (!firestore || !statsRef) {
             return;
         }
 
         try {
-            // Ziyaretçinin daha önce ziyaret edip etmediğini kontrol et
             const hasVisited = localStorage.getItem('rota-kula-visited');
             if (!hasVisited) {
-                // setDoc'u merge:true ile kullanarak belge yoksa oluştur, varsa güncelle.
-                // Bu, "No document to update" hatasını önler.
                 setDoc(statsRef, {
                     count: increment(1),
                     lastUpdated: serverTimestamp()
@@ -43,10 +39,9 @@ const VisitorCounter = () => {
                 localStorage.setItem('rota-kula-visited', 'true');
             }
         } catch (error) {
-            // localStorage hatalarını yakala
             console.error("Error managing visitor count in localStorage:", error);
         }
-    }, [firestore, statsRef, isLoading]); // isLoading'i bağımlılığa ekle
+    }, [firestore, statsRef]); 
     
     if (visitorCount === null) {
         return (
