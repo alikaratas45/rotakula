@@ -1,5 +1,4 @@
 
-
 "use client"
 
 import { getStoryBySlug } from '@/lib/kula-data';
