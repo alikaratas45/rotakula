@@ -27,19 +27,20 @@ const VisitorCounter = () => {
             return;
         }
 
-        try {
-            const hasVisited = localStorage.getItem('rota-kula-visited');
-            if (!hasVisited) {
-                setDoc(statsRef, {
-                    count: increment(1),
-                    lastUpdated: serverTimestamp()
-                }, { merge: true })
-                .catch(error => console.error("Error incrementing visitor count:", error));
-
-                localStorage.setItem('rota-kula-visited', 'true');
-            }
-        } catch (error) {
-            console.error("Error managing visitor count in localStorage:", error);
+        const hasVisited = localStorage.getItem('rota-kula-visited');
+        if (!hasVisited) {
+            const updateCounter = async () => {
+                try {
+                    await setDoc(statsRef, {
+                        count: increment(1),
+                        lastUpdated: serverTimestamp()
+                    }, { merge: true });
+                    localStorage.setItem('rota-kula-visited', 'true');
+                } catch (error) {
+                    console.error("Error incrementing visitor count:", error);
+                }
+            };
+            updateCounter();
         }
     }, [firestore, statsRef]); 
     

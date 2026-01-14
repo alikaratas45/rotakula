@@ -29,9 +29,11 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
     
-    // Stats collection: Anyone can read and write to increment the counter.
-    match /stats/{statId} {
-      allow read, write: if true;
+    // Stats collection: Anyone can read and update the counter.
+    match /stats/visitors {
+      allow read: if true;
+      allow update: if true; 
+      allow create, delete: if false;
     }
     
     // Default-deny all other reads and writes for security.
