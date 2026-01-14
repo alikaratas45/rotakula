@@ -27,6 +27,19 @@ const VisitorCounter = () => {
             return;
         }
 
+        // --- Sayaç Sıfırlama Kodu (GEÇİCİ) ---
+        // Bu kod sayacı bir kereliğine sıfırlayacak.
+        const hasBeenReset = sessionStorage.getItem('counter_reset');
+        if (!hasBeenReset) {
+            setDoc(statsRef, { count: 0 }, { merge: true })
+                .then(() => {
+                    console.log("Ziyaretçi sayacı başarıyla sıfırlandı.");
+                    sessionStorage.setItem('counter_reset', 'true');
+                })
+                .catch(error => console.error("Sayaç sıfırlanırken hata oluştu:", error));
+        }
+        // --- GEÇİCİ KOD SONU ---
+
         try {
             const hasVisited = localStorage.getItem('rota-kula-visited');
             if (!hasVisited) {
