@@ -228,9 +228,24 @@ export const NearbySearch = () => {
     const { translations } = useApp();
     const [places, setPlaces] = useState<google.maps.places.PlaceResult[]>([]);
     const [selectedPlace, setSelectedPlace] = useState<google.maps.places.PlaceResult | null>(null);
-    const [userPosition, setUserPosition] = useState<{ lat: number; lng: number } | null>({ lat: 38.544928799703115, lng: 28.644873680043112 });
+    const [userPosition, setUserPosition] = useState<{ lat: number; lng: number } | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                setUserPosition({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                });
+            },
+            () => {
+                // If user denies or an error occurs, fall back to Kula center
+                setUserPosition({ lat: 38.547, lng: 28.65 });
+            }
+        );
+    }, []);
 
     // Perform nearby search
     useEffect(() => {
@@ -238,45 +253,34 @@ export const NearbySearch = () => {
 
         const placesService = new google.maps.places.PlacesService(map);
         
-        // Wait for the map to be idle before performing the search
-        const idleListener = map.addListener('idle', () => {
-            setIsLoading(true);
-            const request: google.maps.places.TextSearchRequest = {
-                query: "Kula'daki restoran, lokanta veya kafeler",
-                location: userPosition,
-                radius: 20000, // 20km radius to cover the whole town
-            };
-
-            placesService.textSearch(request, (results, status) => {
-                if (status === google.maps.places.PlacesServiceStatus.OK && results) {
-                    setPlaces(results);
-                    const bounds = new google.maps.LatLngBounds();
-                    results.forEach(place => {
-                        if (place.geometry?.location) {
-                            bounds.extend(place.geometry.location);
-                        }
-                    });
-                    map.fitBounds(bounds);
-                } else if (status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
-                    setError(translations.map.noRestaurantsFound);
-                    map.setCenter(userPosition);
-                    map.setZoom(13);
-                } else {
-                    setError(translations.map.searchError);
-                    map.setCenter(userPosition);
-                    map.setZoom(13);
-                }
-                setIsLoading(false);
-            });
-            // Remove the listener after the first successful search to avoid re-searching on every map move
-            google.maps.event.removeListener(idleListener);
-        });
-
-        return () => {
-            if (idleListener) {
-                google.maps.event.removeListener(idleListener);
-            }
+        setIsLoading(true);
+        const request: google.maps.places.TextSearchRequest = {
+            query: "Kula'daki restoran, lokanta veya kafeler",
+            location: userPosition,
+            radius: 20000, // 20km radius to cover the whole town
         };
+
+        placesService.textSearch(request, (results, status) => {
+            if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+                setPlaces(results);
+                const bounds = new google.maps.LatLngBounds();
+                results.forEach(place => {
+                    if (place.geometry?.location) {
+                        bounds.extend(place.geometry.location);
+                    }
+                });
+                map.fitBounds(bounds);
+            } else if (status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
+                setError(translations.map.noRestaurantsFound);
+                map.setCenter(userPosition);
+                map.setZoom(13);
+            } else {
+                setError(translations.map.searchError);
+                map.setCenter(userPosition);
+                map.setZoom(13);
+            }
+            setIsLoading(false);
+        });
 
     }, [map, userPosition, translations]);
     
@@ -316,7 +320,7 @@ export const NearbySearch = () => {
                 </div>
             )}
             <Map
-                center={userPosition || { lat: 38.547, lng: 28.52 }}
+                center={userPosition || { lat: 38.547, lng: 28.65 }}
                 zoom={14}
                 gestureHandling={"cooperative"}
                 disableDefaultUI={false}
