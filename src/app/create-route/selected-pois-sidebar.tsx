@@ -25,14 +25,6 @@ export default function SelectedPoisSidebar({ selectedPois, setSelectedPois }: {
     const [isStartingRoute, setIsStartingRoute] = useState(false);
 
     const handleCreateRoute = (travelMode: 'driving' | 'walking') => {
-        if (!navigator.geolocation) {
-            toast({
-                title: translations.toast.locationErrorTitle,
-                description: translations.map.locationError,
-                variant: 'destructive',
-            });
-            return;
-        }
         if (selectedPois.length < 2) {
              toast({
                 title: translations.toast.errorTitle,
@@ -42,35 +34,28 @@ export default function SelectedPoisSidebar({ selectedPois, setSelectedPois }: {
             return;
         }
 
+        if (!navigator.geolocation) {
+            toast({
+                title: translations.toast.locationErrorTitle,
+                description: translations.map.locationError,
+                variant: 'destructive',
+            });
+            return;
+        }
+        
         setIsStartingRoute(true);
 
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const { latitude, longitude } = position.coords;
-                const origin = `${latitude},${longitude}`;
-                
-                const destination = `${selectedPois[selectedPois.length - 1].latitude},${selectedPois[selectedPois.length - 1].longitude}`;
+        // Google Maps URL'i oluştur
+        const destination = `${selectedPois[selectedPois.length - 1].latitude},${selectedPois[selectedPois.length - 1].longitude}`;
+        const waypoints = selectedPois
+            .slice(0, selectedPois.length - 1)
+            .map(p => `${p.latitude},${p.longitude}`)
+            .join('|');
 
-                const waypoints = selectedPois
-                    .slice(0, selectedPois.length - 1)
-                    .map(p => `${p.latitude},${p.longitude}`)
-                    .join('|');
+        const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${destination}&waypoints=${waypoints}&travelmode=${travelMode}`;
 
-                const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&waypoints=${waypoints}&travelmode=${travelMode}`;
-
-                window.open(googleMapsUrl, '_blank');
-                setIsStartingRoute(false);
-            },
-            (error) => {
-                toast({
-                    title: translations.toast.locationErrorTitle,
-                    description: translations.nearby.locationError,
-                    variant: 'destructive',
-                });
-                setIsStartingRoute(false);
-            },
-            { enableHighAccuracy: true }
-        );
+        window.open(googleMapsUrl, '_blank');
+        setIsStartingRoute(false);
     }
 
 
