@@ -15,7 +15,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import Link from 'next/link';
 import { FoodIcon, HistoricHouseIcon } from '@/components/icons';
 import { Separator } from '@/components/ui/separator';
-import EmbeddedMap, { NearbySearch } from '@/components/map';
+import EmbeddedMap from '@/components/map';
 import { APIProvider } from '@vis.gl/react-google-maps';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -65,8 +65,10 @@ export default function RoutePage() {
             const routeData = await getRouteBySlug(slug as string, language);
             if (routeData) {
                 setRoute(routeData);
-                const poisData = await getPoisByIds(routeData.poiIds, language);
-                setPois(poisData);
+                if (routeData.poiIds.length > 0) {
+                    const poisData = await getPoisByIds(routeData.poiIds, language);
+                    setPois(poisData);
+                }
             } else {
                 setRoute(null);
                 setPois([]);
@@ -158,38 +160,42 @@ export default function RoutePage() {
                 </div>
             </section>
             
-            <APIProvider apiKey={apiKey} libraries={['places']}>
-                <div className="container px-4 py-8 md:py-12">
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
-                        <div className="lg:col-span-2">
-                            <div className="text-lg text-foreground/80 mb-8 prose prose-lg max-w-none">
-                                {route.longDescription.split('\n').map((paragraph, index) => {
-                                    const trimmedParagraph = paragraph.trim();
-                                    if (trimmedParagraph === '') return null;
-                                    const isTitle = trimmedParagraph.endsWith(':');
-                                    return (
-                                        <p key={index}>
-                                            {isTitle ? <strong>{trimmedParagraph}</strong> : trimmedParagraph}
-                                        </p>
-                                    )
-                                })}
+            <div className="container px-4 py-8 md:py-12">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+                    <div className="lg:col-span-2">
+                        <div className="text-lg text-foreground/80 mb-8 prose prose-lg max-w-none">
+                            {route.longDescription.split('\n').map((paragraph, index) => {
+                                const trimmedParagraph = paragraph.trim();
+                                if (trimmedParagraph === '') return null;
+                                const isTitle = trimmedParagraph.endsWith(':');
+                                return (
+                                    <p key={index}>
+                                        {isTitle ? <strong>{trimmedParagraph}</strong> : trimmedParagraph}
+                                    </p>
+                                )
+                            })}
+                        </div>
+                        {isFlavorTour ? (
+                             <div className="mt-8">
+                                <Button size="lg" onClick={handleFlavorTourClick}>
+                                    <MapPin className="mr-2 h-5 w-5" />
+                                    {translations.food.nearbyRestaurants}
+                                </Button>
+                                <p className="text-sm text-muted-foreground mt-2">
+                                    {translations.food.nearbyDescription}
+                                </p>
                             </div>
-
-                            {!isFlavorTour && pois.length > 0 && (
-                                <div className="mb-8">
-                                    <h2 className="text-2xl font-headline font-bold mb-4">{translations.route.mapTitle}</h2>
-                                    <EmbeddedMap pois={pois} />
-                                </div>
-                            )}
-                            
-                            <h2 className="text-2xl font-headline font-bold mb-6">{isFlavorTour ? translations.food.title : translations.route.whatsOnThisRoute}</h2>
-
-                            {isFlavorTour ? (
-                                <div>
-                                    <p className="text-muted-foreground mb-4">{translations.food.nearbyDescription}</p>
-                                    <NearbySearch />
-                                </div>
-                            ) : (
+                        ) : (
+                            <>
+                                {pois.length > 0 && (
+                                     <div className="mb-8">
+                                        <h2 className="text-2xl font-headline font-bold mb-4">{translations.route.mapTitle}</h2>
+                                        <APIProvider apiKey={apiKey} libraries={['places']}>
+                                            <EmbeddedMap pois={pois} />
+                                        </APIProvider>
+                                    </div>
+                                )}
+                                <h2 className="text-2xl font-headline font-bold mb-6">{translations.route.whatsOnThisRoute}</h2>
                                 <div className="space-y-6">
                                     {pois.map((poi, index) => {
                                         const image = getImageById(poi.imageId);
@@ -240,70 +246,70 @@ export default function RoutePage() {
                                         );
                                     })}
                                 </div>
-                            )}
-                        </div>
-
-                        <aside className="lg:col-span-1">
-                            <div className="sticky top-24">
-                                <Card>
-                                    <CardHeader>
-                                        <CardTitle className="font-headline text-xl">{translations.route.routeInfo}</CardTitle>
-                                    </CardHeader>
-                                    <CardContent className="space-y-4">
-                                        {isFlavorTour ? (
-                                            <Button
-                                                onClick={handleFlavorTourClick}
-                                                className="w-full"
-                                            >
-                                                <UtensilsCrossed className="mr-2 h-4 w-4" />
-                                                {translations.food.nearbyRestaurants}
-                                            </Button>
-                                        ) : (
-                                            <AlertDialog>
-                                                <AlertDialogTrigger asChild>
-                                                    <Button className="w-full" disabled={isStartingRoute}>
-                                                        {isStartingRoute ? (
-                                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                                        ) : (
-                                                            isDrivingRoute ? <Car className="mr-2 h-4 w-4" /> : <Footprints className="mr-2 h-4 w-4" />
-                                                        )}
-                                                        {isStartingRoute ? translations.nearby.gettingLocation : "Rotayı Haritada Başlat"}
-                                                    </Button>
-                                                </AlertDialogTrigger>
-                                                <AlertDialogContent>
-                                                    <AlertDialogHeader>
-                                                    <AlertDialogTitle>Harita Uygulamasına Yönlendiriliyorsunuz</AlertDialogTitle>
-                                                    <AlertDialogDescription>
-                                                        En iyi yol tarifi deneyimi için Google Haritalar uygulaması açılacaktır. Bu işlem sırasında sesli rehber duraklatılacaktır. Uygulamaya geri döndüğünüzde sesli rehberi yeniden başlatabilirsiniz.
-                                                    </AlertDialogDescription>
-                                                    </AlertDialogHeader>
-                                                    <AlertDialogFooter>
-                                                    <AlertDialogCancel>İptal</AlertDialogCancel>
-                                                    <AlertDialogAction onClick={() => handleStartRoute(isDrivingRoute ? 'driving' : 'walking')}>
-                                                        Yine de Başlat
-                                                    </AlertDialogAction>
-                                                    </AlertDialogFooter>
-                                                </AlertDialogContent>
-                                            </AlertDialog>
-                                        )}
-                                        {!isFlavorTour && (
-                                            <>
-                                                <Separator />
-                                                <div className="space-y-2">
-                                                    <h4 className="font-semibold">{translations.route.stops}</h4>
-                                                    <ul className="list-disc list-inside text-muted-foreground text-sm space-y-1">
-                                                        {pois.map(poi => <li key={poi.id}>{poi.name}</li>)}
-                                                    </ul>
-                                                </div>
-                                            </>
-                                        )}
-                                    </CardContent>
-                                </Card>
-                            </div>
-                        </aside>
+                            </>
+                        )}
                     </div>
+
+                    <aside className="lg:col-span-1">
+                        <div className="sticky top-24">
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle className="font-headline text-xl">{translations.route.routeInfo}</CardTitle>
+                                </CardHeader>
+                                <CardContent className="space-y-4">
+                                    {isFlavorTour ? (
+                                        <Button
+                                            onClick={handleFlavorTourClick}
+                                            className="w-full"
+                                        >
+                                            <UtensilsCrossed className="mr-2 h-4 w-4" />
+                                            {translations.food.nearbyRestaurants}
+                                        </Button>
+                                    ) : (
+                                        <AlertDialog>
+                                            <AlertDialogTrigger asChild>
+                                                <Button className="w-full" disabled={isStartingRoute}>
+                                                    {isStartingRoute ? (
+                                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                                    ) : (
+                                                        isDrivingRoute ? <Car className="mr-2 h-4 w-4" /> : <Footprints className="mr-2 h-4 w-4" />
+                                                    )}
+                                                    {isStartingRoute ? translations.nearby.gettingLocation : "Rotayı Haritada Başlat"}
+                                                </Button>
+                                            </AlertDialogTrigger>
+                                            <AlertDialogContent>
+                                                <AlertDialogHeader>
+                                                <AlertDialogTitle>Harita Uygulamasına Yönlendiriliyorsunuz</AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    En iyi yol tarifi deneyimi için Google Haritalar uygulaması açılacaktır. Bu işlem sırasında sesli rehber duraklatılacaktır. Uygulamaya geri döndüğünüzde sesli rehberi yeniden başlatabilirsiniz.
+                                                </AlertDialogDescription>
+                                                </AlertDialogHeader>
+                                                <AlertDialogFooter>
+                                                <AlertDialogCancel>İptal</AlertDialogCancel>
+                                                <AlertDialogAction onClick={() => handleStartRoute(isDrivingRoute ? 'driving' : 'walking')}>
+                                                    Yine de Başlat
+                                                </AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
+                                    )}
+                                    {!isFlavorTour && pois.length > 0 && (
+                                        <>
+                                            <Separator />
+                                            <div className="space-y-2">
+                                                <h4 className="font-semibold">{translations.route.stops}</h4>
+                                                <ul className="list-disc list-inside text-muted-foreground text-sm space-y-1">
+                                                    {pois.map(poi => <li key={poi.id}>{poi.name}</li>)}
+                                                </ul>
+                                            </div>
+                                        </>
+                                    )}
+                                </CardContent>
+                            </Card>
+                        </div>
+                    </aside>
                 </div>
-            </APIProvider>
+            </div>
         </div>
     );
 }
