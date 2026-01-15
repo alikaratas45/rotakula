@@ -8,8 +8,9 @@ import { FirebaseClientProvider } from '@/firebase';
 
 
 export const metadata = {
-  title: 'RotaKula - Kula Gezi Rehberi',
-  description: "Manisa'nın Kula ilçesine özel tematik seyahat rotalarını, tarihi yerleri, doğal güzellikleri ve yöresel lezzetleri keşfedin.",
+  title: 'Kula Gezi Rehberi | Volkanik Toprakları ve Tarihi Evleri Keşfedin',
+  description: "Türkiye'nin ilk ve tek UNESCO Global Jeoparkı'na ev sahipliği yapan Manisa Kula'yı keşfedin. Tarihi Kula evleri, Kuladokya peri bacaları, volkanik parkurlar ve yöresel lezzetler için en kapsamlı mobil gezi rehberi.",
+  keywords: "Kula, Kula Gezi Rehberi, Kula Jeoparkı, Tarihi Kula Evleri, Manisa Kula, Kuladokya, Kula volkanik, Kula'da gezilecek yerler",
   manifest: '/manifest.json',
   icons: {
     icon: '/logo.png?v=3',
