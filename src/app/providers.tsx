@@ -19,7 +19,7 @@ function AppContent({ children }: PropsWithChildren) {
         <div className="hidden md:block fixed top-16 left-4 z-50">
             <Image src="/belediye.png" alt="Kula Belediyesi Logosu" width={100} height={100} />
         </div>
-        <main className="flex-grow">{children}</main>
+        <main className="flex-grow animate-fade-in">{children}</main>
         <Footer />
         <Toaster />
     </>

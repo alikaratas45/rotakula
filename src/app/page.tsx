@@ -159,7 +159,7 @@ export default function Home() {
       
       <section className="py-12 bg-muted/50">
         <div className="container mx-auto px-4 text-center">
-            <Image src="/belediye.png" alt="Kula Belediyesi Logosu" width={200} height={200} className="mx-auto mb-4" />
+            <Image src="/belediye.png" alt="Kula Belediyesi Logosu" width={100} height={100} className="mx-auto mb-4" />
             <p className="text-lg font-semibold text-foreground">
                 {translations.home.municipalityInfo}
             </p>
