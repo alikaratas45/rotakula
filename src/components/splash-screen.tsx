@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -45,9 +46,6 @@ export default function SplashScreen() {
           height={200}
           priority
         />
-         <p className="mt-4 text-xl font-semibold text-muted-foreground">
-            {translations.footer.credits}
-        </p>
       </div>
     </div>
   );
