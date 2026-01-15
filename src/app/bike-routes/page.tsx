@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Loader2, Bike } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { UserLocationMarker } from '@/components/map';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 function MapController({ selectedRoute }: { selectedRoute: BikeRoute | null }) {
     const map = useMap();
@@ -111,6 +112,9 @@ export default function BikeRoutesPage() {
     const [selectedRoute, setSelectedRoute] = useState<BikeRoute | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
+    
+    const isMobile = useIsMobile();
+    const mapRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         async function fetchRoutes() {
@@ -127,6 +131,13 @@ export default function BikeRoutesPage() {
         }
         fetchRoutes();
     }, [language]);
+    
+    const handleRouteSelection = (route: BikeRoute) => {
+        setSelectedRoute(route);
+        if (isMobile && mapRef.current) {
+            mapRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    };
 
     if (isLoading) {
         return (
@@ -154,7 +165,7 @@ export default function BikeRoutesPage() {
                              <Card 
                                 key={route.id}
                                 className={cn("cursor-pointer transition-all hover:shadow-lg", selectedRoute?.id === route.id ? "ring-2 ring-primary" : "hover:bg-muted/50")}
-                                onClick={() => setSelectedRoute(route)}
+                                onClick={() => handleRouteSelection(route)}
                             >
                                 <CardHeader>
                                     <CardTitle className="font-headline">{route.name}</CardTitle>
@@ -168,7 +179,7 @@ export default function BikeRoutesPage() {
                     </div>
 
                     {/* Map Area */}
-                    <div className="lg:col-span-2">
+                    <div ref={mapRef} className="lg:col-span-2">
                         <div className="sticky top-24">
                              <div className="h-[60vh] w-full rounded-lg overflow-hidden relative border">
                                 <Map
