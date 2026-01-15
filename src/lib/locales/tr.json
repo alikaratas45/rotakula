@@ -30,8 +30,7 @@
         "toggleTheme": "Temayı değiştir"
     },
     "footer": {
-        "copyright_part1": "© {year} Tüm hakları",
-        "copyright_part2": "Kula Belediyesi'ne aittir.",
+        "copyright_part2": "Tüm hakları Kula Belediyesi'ne aittir.",
         "credits": "Bu sitedeki bilgiler, görseller Kula Belediyesi ve Kula - Salihli UNESCO Global Jeoparkı arşivlerinden alınmıştır. Ayrıca Hasan Malay, Hüseyin Şahin, Avni Ataş, İsmail Tosun, Rüstem Bozer vb. Kula için emek vermiş yazarların kitaplarından da faydalanılmıştır. Bazı görseller yapay zeka ile oluşturulmuştur."
     },
     "home": {

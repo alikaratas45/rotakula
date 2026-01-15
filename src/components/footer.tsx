@@ -12,7 +12,7 @@ export function Footer() {
                 <div className="flex items-center justify-center gap-2">
                     <Image src="/logo.png?v=3" alt="RotaKula Logo" width={24} height={24} className="h-6 w-6" />
                     <p className="text-sm leading-loose text-center">
-                       © {currentYear} {translations.footer.copyright_part1} {translations.footer.copyright_part2}
+                       © {currentYear} {translations.footer.copyright_part2}
                     </p>
                 </div>
                 <div className="w-full max-w-4xl mx-auto">

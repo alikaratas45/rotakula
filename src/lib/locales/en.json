@@ -30,8 +30,7 @@
         "toggleTheme": "Toggle theme"
     },
     "footer": {
-        "copyright_part1": "© {year} All rights reserved by",
-        "copyright_part2": "Kula Municipality.",
+        "copyright_part2": "All rights reserved by Kula Municipality.",
         "credits": "The information and images on this site have been obtained from the archives of the Kula Municipality and the Kula - Salihli UNESCO Global Geopark. Additionally, books by authors who have contributed to Kula, such as Hasan Malay, Hüseyin Şahin, Avni Ataş, İsmail Tosun, Rüstem Bozer, etc., have been utilized. Some images were created with artificial intelligence."
     },
     "home": {
