@@ -11,8 +11,8 @@ import { Radio, RadioTower, PlayIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useApp } from '@/context/app-context';
 
-const PROXIMITY_THRESHOLD_ENTER = 20; // meters
-const PROXIMITY_THRESHOLD_EXIT = 60; // meters
+const PROXIMITY_THRESHOLD_ENTER = 0.02; // 20 meters in kilometers
+const PROXIMITY_THRESHOLD_EXIT = 0.06; // 60 meters in kilometers
 
 export function AudioGuideControl() {
     const { language, translations, isAudioGuideActive, setIsAudioGuideActive, addBadge, earnedBadges } = useApp();
