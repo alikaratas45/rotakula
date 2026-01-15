@@ -1,6 +1,7 @@
 "use client"
 
 import { type PropsWithChildren } from 'react';
+import Image from 'next/image';
 import { Toaster } from '@/components/ui/toaster';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
@@ -14,6 +15,9 @@ function AppContent({ children }: PropsWithChildren) {
     <>
         <SplashScreen />
         <Header />
+        <div className="hidden md:block fixed top-16 left-4 z-50">
+            <Image src="/belediye.png" alt="Kula Belediyesi Logosu" width={64} height={64} />
+        </div>
         <main className="flex-grow">{children}</main>
         <Footer />
         <Toaster />
