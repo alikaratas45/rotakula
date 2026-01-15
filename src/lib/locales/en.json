@@ -239,8 +239,8 @@
         "earnedDescription": "Congratulations, you have earned the {poiName} badge!"
     },
     "comments": {
-        "title": "Comments",
-        "description": "Share your thoughts and experiences about this place.",
+        "title": "Your Feedback on the Site",
+        "description": "Share your thoughts about the application with us.",
         "nameLabel": "Your Name (Optional)",
         "namePlaceholder": "Your Name",
         "messageLabel": "Your Comment",
@@ -287,5 +287,3 @@
         ]
     }
 }
-
-    

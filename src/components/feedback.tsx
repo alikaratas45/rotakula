@@ -26,12 +26,12 @@ import {
 } from '@/components/ui/form';
 import { Loader2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
-import { tr, enUS } from 'date-fns/locale';
+import { tr, enUS, fr, de } from 'date-fns/locale';
 import { useApp } from '@/context/app-context';
 import { addDocumentNonBlocking, useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, query, orderBy, limit } from 'firebase/firestore';
 
-const locales: { [key: string]: Locale } = { tr, enUS };
+const locales: { [key: string]: Locale } = { tr, en: enUS, fr, de };
 
 const feedbackSchema = z.object({
   name: z.string().optional(),
@@ -54,7 +54,7 @@ function FeedbackItem({ feedback }: { feedback: Feedback }) {
       return 'az önce';
     }
     const date = new Date(feedback.createdAt.seconds * 1000);
-    const locale = locales[language] || enUS;
+    const locale = locales[language] || tr;
     return formatDistanceToNow(date, { addSuffix: true, locale: locale });
   }, [feedback.createdAt, language]);
 
@@ -140,8 +140,8 @@ function FeedbackForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Site Hakkında Görüşleriniz</CardTitle>
-        <CardDescription>Uygulama hakkındaki düşüncelerinizi bizimle paylaşın.</CardDescription>
+        <CardTitle>{translations.comments.title}</CardTitle>
+        <CardDescription>{translations.comments.description}</CardDescription>
       </CardHeader>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -209,5 +209,3 @@ export function FeedbackSection({ isLimited = false }: { isLimited?: boolean }) 
         </div>
     );
 }
-
-    

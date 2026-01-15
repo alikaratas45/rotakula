@@ -238,8 +238,8 @@
         "earnedDescription": "Tebrikler, {poiName} rozetini kazandınız!"
     },
     "comments": {
-        "title": "Yorumlar",
-        "description": "Bu yer hakkındaki düşüncelerinizi ve deneyimlerinizi paylaşın.",
+        "title": "Site Hakkında Görüşleriniz",
+        "description": "Uygulama hakkındaki düşüncelerinizi bizimle paylaşın.",
         "nameLabel": "İsminiz (İsteğe Bağlı)",
         "namePlaceholder": "Adınız Soyadınız",
         "messageLabel": "Yorumunuz",
@@ -286,5 +286,3 @@
         ]
     }
 }
-
-    

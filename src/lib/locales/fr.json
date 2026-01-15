@@ -239,8 +239,8 @@
         "earnedDescription": "Félicitations, vous avez gagné le badge {poiName} !"
     },
     "comments": {
-        "title": "Commentaires",
-        "description": "Partagez vos réflexions et expériences sur ce lieu.",
+        "title": "Vos commentaires sur le site",
+        "description": "Partagez avec nous vos réflexions sur l'application.",
         "nameLabel": "Votre Nom (Facultatif)",
         "namePlaceholder": "Votre Nom",
         "messageLabel": "Votre Commentaire",
@@ -287,5 +287,3 @@
         ]
     }
 }
-
-    

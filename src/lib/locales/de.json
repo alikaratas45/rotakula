@@ -239,8 +239,8 @@
         "earnedDescription": "Herzlichen Glückwunsch, du hast das {poiName}-Abzeichen verdient!"
     },
     "comments": {
-        "title": "Kommentare",
-        "description": "Teilen Sie Ihre Gedanken und Erfahrungen zu diesem Ort.",
+        "title": "Ihr Feedback zur Website",
+        "description": "Teilen Sie uns Ihre Gedanken zur Anwendung mit.",
         "nameLabel": "Ihr Name (Optional)",
         "namePlaceholder": "Ihr Name",
         "messageLabel": "Ihr Kommentar",
@@ -287,5 +287,3 @@
         ]
     }
 }
-
-    
