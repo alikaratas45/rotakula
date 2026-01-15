@@ -16,13 +16,10 @@ export function Footer() {
                        © {currentYear} Tüm hakları Kula Belediyesi'ne aittir.
                     </p>
                 </div>
-                 <p className="text-center text-xs text-muted-foreground/80 max-w-2xl md:text-justify">
+                 <p className="text-center text-xs text-muted-foreground/80 max-w-2xl">
                     {translations.footer.credits}
                 </p>
             </div>
         </footer>
     );
 }
-
-
-
