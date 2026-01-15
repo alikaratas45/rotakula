@@ -43,8 +43,8 @@ export default function SplashScreen() {
              <Image
                 src="/belediye.png"
                 alt="Kula Belediyesi Logo"
-                width={200}
-                height={200}
+                width={700}
+                height={700}
                 priority
                 className="animate-spin-slow"
             />
