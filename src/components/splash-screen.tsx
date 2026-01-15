@@ -35,17 +35,20 @@ export default function SplashScreen() {
     <div
       className={cn(
         "fixed inset-0 z-[200] flex flex-col items-center justify-center bg-background transition-opacity duration-500 ease-in-out",
-        isFading ? "opacity-0" : "opacity-100"
+        isFading ? "opacity-50" : "opacity-100"
       )}
     >
-      <div className="text-center animate-fade-in-up">
-        <Image
-          src="/belediye.png"
-          alt="Kula Belediyesi Logo"
-          width={200}
-          height={200}
-          priority
-        />
+      <div className="text-center animate-fade-in-up perspective-1000">
+        <div className="preserve-3d">
+             <Image
+                src="/belediye.png"
+                alt="Kula Belediyesi Logo"
+                width={200}
+                height={200}
+                priority
+                className="animate-spin-slow"
+            />
+        </div>
       </div>
     </div>
   );
