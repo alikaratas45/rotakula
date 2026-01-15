@@ -161,7 +161,7 @@ export default function Home() {
         <div className="container mx-auto px-4 text-center">
             <Image src="/belediye.png" alt="Kula Belediyesi Logosu" width={200} height={200} className="mx-auto mb-4" />
             <p className="text-lg font-semibold text-foreground">
-                Bu site, ziyaretçilerimizin ücretsiz olarak faydalanması için Kula Belediyesi tarafından oluşturulmuştur.
+                {translations.home.municipalityInfo}
             </p>
         </div>
       </section>

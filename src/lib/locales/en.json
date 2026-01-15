@@ -29,15 +29,17 @@
         "toggleTheme": "Toggle theme"
     },
     "footer": {
-        "copyright": "All rights reserved.",
-        "credits": "The Heritage Born from the Ashes of Kula"
+        "copyright_part1": "All rights reserved by",
+        "copyright_part2": "Kula Municipality.",
+        "credits": "The information and images on this site have been obtained from the archives of the Kula Municipality and the Kula - Salihli UNESCO Global Geopark. Additionally, books by authors who have contributed to Kula, such as Hasan Malay, Hüseyin Şahin, Avni Ataş, İsmail Tosun, Rüstem Bozer, etc., have been utilized. Some images were created with artificial intelligence."
     },
     "home": {
         "heroTitle": "Discover the Hidden Treasures of Kula",
         "heroSubtitle": "An adventure awaits you, from the UNESCO Global Geopark to historic houses, unique flavors to natural beauties.",
         "exploreNow": "Explore Now",
         "routeOfWeek": "Route of the Week",
-        "thematicRoutes": "Thematic Routes"
+        "thematicRoutes": "Thematic Routes",
+        "municipalityInfo": "This site has been created by the Kula Municipality for our visitors to use free of charge."
     },
     "stories": {
         "title": "Stories from Kula"
@@ -183,7 +185,8 @@
         "moreInfo": "More Info",
         "cancel": "Cancel",
         "submit": "Submit",
-        "close": "Close"
+        "close": "Close",
+        "totalVisitors": "Total Visitors"
     },
     "category": {
         "geopark": "Geopark",

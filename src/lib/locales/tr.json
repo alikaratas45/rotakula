@@ -29,15 +29,17 @@
         "toggleTheme": "Temayı değiştir"
     },
     "footer": {
-        "copyright": "Tüm hakları saklıdır.",
-        "credits": "Kula'nın Küllerinden Doğan Miras"
+        "copyright_part1": "Tüm hakları",
+        "copyright_part2": "Kula Belediyesi'ne aittir.",
+        "credits": "Bu sitedeki bilgiler, görseller Kula Belediyesi ve Kula - Salihli UNESCO Global Jeoparkı arşivlerinden alınmıştır. Ayrıca Hasan Malay, Hüseyin Şahin, Avni Ataş, İsmail Tosun, Rüstem Bozer vb. Kula için emek vermiş yazarların kitaplarından da faydalanılmıştır. Bazı görseller yapay zeka ile oluşturulmuştur."
     },
     "home": {
         "heroTitle": "Kula'nın Saklı Hazinelerini Keşfedin",
         "heroSubtitle": "UNESCO Global Jeoparkı'ndan tarihi evlere, eşsiz lezzetlerden doğal güzelliklere uzanan bir macera sizi bekliyor.",
         "exploreNow": "Hemen Keşfet",
         "routeOfWeek": "Haftanın Rotası",
-        "thematicRoutes": "Tematik Rotalar"
+        "thematicRoutes": "Tematik Rotalar",
+        "municipalityInfo": "Bu site, ziyaretçilerimizin ücretsiz olarak faydalanması için Kula Belediyesi tarafından oluşturulmuştur."
     },
     "stories": {
         "title": "Kula'dan Hikayeler"
@@ -183,7 +185,8 @@
         "moreInfo": "Daha Fazla Bilgi",
         "cancel": "İptal",
         "submit": "Gönder",
-        "close": "Kapat"
+        "close": "Kapat",
+        "totalVisitors": "Toplam Ziyaretçi"
     },
     "category": {
         "geopark": "Jeopark",

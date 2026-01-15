@@ -29,15 +29,17 @@
         "toggleTheme": "Changer de thème"
     },
     "footer": {
-        "copyright": "Tous droits réservés.",
-        "credits": "L'héritage né des cendres de Kula"
+        "copyright_part1": "Tous droits réservés par la",
+        "copyright_part2": "Municipalité de Kula.",
+        "credits": "Les informations et les images de ce site proviennent des archives de la municipalité de Kula et du Géoparc mondial UNESCO de Kula - Salihli. De plus, des livres d'auteurs ayant contribué à Kula, tels que Hasan Malay, Hüseyin Şahin, Avni Ataş, İsmail Tosun, Rüstem Bozer, etc., ont été utilisés. Certaines images ont été créées avec l'intelligence artificielle."
     },
     "home": {
         "heroTitle": "Découvrez les trésors cachés de Kula",
         "heroSubtitle": "Une aventure vous attend, du Géoparc Mondial de l'UNESCO aux maisons historiques, des saveurs uniques aux beautés naturelles.",
         "exploreNow": "Explorer Maintenant",
         "routeOfWeek": "Itinéraire de la Semaine",
-        "thematicRoutes": "Itinéraires Thématiques"
+        "thematicRoutes": "Itinéraires Thématiques",
+        "municipalityInfo": "Ce site a été créé par la municipalité de Kula pour l'usage gratuit de nos visiteurs."
     },
     "stories": {
         "title": "Histoires de Kula"
@@ -183,7 +185,8 @@
         "moreInfo": "Plus d'Infos",
         "cancel": "Annuler",
         "submit": "Envoyer",
-        "close": "Fermer"
+        "close": "Fermer",
+        "totalVisitors": "Visiteurs Totaux"
     },
     "category": {
         "geopark": "Géoparc",

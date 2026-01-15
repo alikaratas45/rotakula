@@ -4,8 +4,10 @@ import { useEffect, useState } from 'react';
 import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
 import { doc, serverTimestamp, increment, setDoc } from 'firebase/firestore';
 import { Users } from 'lucide-react';
+import { useApp } from '@/context/app-context';
 
 const VisitorCounter = () => {
+    const { translations } = useApp();
     const firestore = useFirestore();
     const [visitorCount, setVisitorCount] = useState<number | null>(null);
 
@@ -50,7 +52,7 @@ const VisitorCounter = () => {
                 <div className="container mx-auto px-4 md:px-8 text-center">
                     <Users className="h-10 w-10 text-primary mx-auto mb-3" />
                     <h3 className="text-3xl font-bold font-headline text-foreground">
-                        Toplam Ziyaretçi
+                        {translations.common.totalVisitors}
                     </h3>
                     <div className="text-5xl font-bold text-primary mt-2 h-14 bg-muted-foreground/20 rounded-md animate-pulse w-48 mx-auto" />
                 </div>
@@ -63,7 +65,7 @@ const VisitorCounter = () => {
             <div className="container mx-auto px-4 md:px-8 text-center">
                 <Users className="h-10 w-10 text-primary mx-auto mb-3" />
                 <h3 className="text-3xl font-bold font-headline text-foreground">
-                    Toplam Ziyaretçi
+                    {translations.common.totalVisitors}
                 </h3>
                 <p className="text-5xl font-bold text-primary mt-2">
                     {visitorCount.toLocaleString('tr-TR')}

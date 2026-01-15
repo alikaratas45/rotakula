@@ -29,15 +29,17 @@
         "toggleTheme": "Thema wechseln"
     },
     "footer": {
-        "copyright": "Alle Rechte vorbehalten.",
-        "credits": "Das aus den Aschen von Kula geborene Erbe"
+        "copyright_part1": "Alle Rechte vorbehalten von der",
+        "copyright_part2": "Gemeinde Kula.",
+        "credits": "Die Informationen und Bilder auf dieser Website stammen aus den Archiven der Gemeinde Kula und des Kula - Salihli UNESCO Global Geoparks. Darüber hinaus wurden Bücher von Autoren wie Hasan Malay, Hüseyin Şahin, Avni Ataş, İsmail Tosun, Rüstem Bozer usw., die zu Kula beigetragen haben, verwendet. Einige Bilder wurden mit künstlicher Intelligenz erstellt."
     },
     "home": {
         "heroTitle": "Entdecken Sie die verborgenen Schätze von Kula",
         "heroSubtitle": "Ein Abenteuer erwartet Sie, vom UNESCO Global Geopark über historische Häuser bis hin zu einzigartigen Geschmäckern und Naturschönheiten.",
         "exploreNow": "Jetzt Erkunden",
         "routeOfWeek": "Route der Woche",
-        "thematicRoutes": "Thematische Routen"
+        "thematicRoutes": "Thematische Routen",
+        "municipalityInfo": "Diese Seite wurde von der Gemeinde Kula für unsere Besucher zur kostenlosen Nutzung erstellt."
     },
     "stories": {
         "title": "Geschichten aus Kula"
@@ -183,7 +185,8 @@
         "moreInfo": "Mehr Infos",
         "cancel": "Abbrechen",
         "submit": "Senden",
-        "close": "Schließen"
+        "close": "Schließen",
+        "totalVisitors": "Besucher Insgesamt"
     },
     "category": {
         "geopark": "Geopark",
@@ -279,7 +282,7 @@
     "sofa": {
         "title": "Sofa (Hayat)",
         "content": [
-            "Der Grundriss des Obergeschosses, oft als Hauptgeschoss bezeichnet, besteht aus einem Sofa und den darum angeordneten Räumen. Je nach Position des Sofas werden die Häuser als solche mit einem inneren, äußeren oder mittleren Sofa klassifiziert. Ein anderer Name für das Sofa ist 'Hayat'. Im Allgemeinen blickt das 'Hayat' auf den Innenhof. Ein oder zwei Treppen führen vom Innenhof zum 'Hayat'. In vielen Häusern ist das 'Hayat' in zwei Bereiche unterteilt: einen Harem (privater Bereich für Frauen) und einen Selamlık (öffentlicher Bereich für Männer) Pavillon. In einigen Häusern gibt es 40 cm hohe Plattformen, die 'Seki' genannt werden, am Übergang vom 'Hayat' zu diesen Pavillons. Diese Plattformen dienen dazu, die Pavillons leicht zu erhöhen. Nach einer weit verbreiteten Meinung markierten diese Plattformen auch eine Grenze für die Dienerschaft, die sie in Anwesenheit der Herren und Damen des Hauses nicht überschreiten durften. Darüber hinaus gibt es in einigen Häusern im Harem-Pavillon zwei Plattformen, und die zweite Plattform soll die Grenze für die Braut sein. Dies liegt daran, dass die schönste Ecke des Harem-Pavillons, die den gesamten Innenhof überblickt, die Ecke der Schwiegermutter ist. Es wäre respektlos für die neue Braut, hierher zu kommen."
+            "Der Grundriss des Obergeschosses, oft als Hauptgeschoss bezeichnet, besteht aus einem Sofa und den darum angeordneten Räumen. Je nach Position des Sofas werden die Häuser als solche mit einem inneren, äußeren oder mittleren Sofa klassifiziert. Ein anderer Name für das Sofa ist 'Hayat'. Allgemein blickt das 'Hayat' auf den Innenhof. Eine oder zwei Treppen führen vom Innenhof zum 'Hayat'. In vielen Häusern ist das 'Hayat' in zwei Bereiche unterteilt: einen Harem (privater Bereich für Frauen) und einen Selamlık (öffentlicher Bereich für Männer). In einigen Häusern gibt es 40 cm hohe Plattformen, die 'Seki' genannt werden, am Übergang vom 'Hayat' zu diesen Pavillons. Diese Plattformen dienen dazu, die Pavillons leicht zu erhöhen. Nach einer weit verbreiteten Meinung markierten diese Plattformen auch eine Grenze für die Dienerschaft, die sie in Anwesenheit der Herren und Damen des Hauses nicht überschreiten durften. Darüber hinaus gibt es in einigen Häusern im Harem-Pavillon zwei Plattformen, und die zweite Plattform soll die Grenze für die Braut sein. Dies liegt daran, dass die schönste Ecke des Harem-Pavillons, die den gesamten Innenhof überblickt, die Ecke der Schwiegermutter ist. Es wäre respektlos, wenn die neue Braut hierher käme."
         ]
     }
 }
