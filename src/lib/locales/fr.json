@@ -21,7 +21,8 @@
         "installAppAlready": "Application déjà installée",
         "installAppAlreadyDesc": "L'application RotaKula est déjà installée sur votre appareil.",
         "installAppNotPossible": "Installation impossible",
-        "installAppNotPossibleDesc": "L'application est peut-être déjà installée ou votre navigateur ne prend pas en charge cette fonctionnalité."
+        "installAppNotPossibleDesc": "L'application est peut-être déjà installée ou votre navigateur ne prend pas en charge cette fonctionnalité.",
+        "seeAllComments": "Voir tous les commentaires"
     },
     "header": {
         "menu": "Menu",
@@ -29,7 +30,7 @@
         "toggleTheme": "Changer de thème"
     },
     "footer": {
-        "copyright_part1": "Tous droits réservés par la",
+        "copyright_part1": "© {year} Tous droits réservés par la",
         "copyright_part2": "Municipalité de Kula.",
         "credits": "Les informations et les images de ce site proviennent des archives de la municipalité de Kula et du Géoparc mondial UNESCO de Kula - Salihli. De plus, des livres d'auteurs ayant contribué à Kula, tels que Hasan Malay, Hüseyin Şahin, Avni Ataş, İsmail Tosun, Rüstem Bozer, etc., ont été utilisés. Certaines images ont été créées avec l'intelligence artificielle."
     },
@@ -286,3 +287,5 @@
         ]
     }
 }
+
+    

@@ -21,7 +21,8 @@
         "installAppAlready": "Uygulama Zaten Yüklü",
         "installAppAlreadyDesc": "RotaKula uygulaması cihazınızda zaten yüklü.",
         "installAppNotPossible": "Yükleme Başlatılamadı",
-        "installAppNotPossibleDesc": "Uygulama zaten yüklü olabilir veya tarayıcınız bu özelliği desteklemiyor olabilir."
+        "installAppNotPossibleDesc": "Uygulama zaten yüklü olabilir veya tarayıcınız bu özelliği desteklemiyor olabilir.",
+        "seeAllComments": "Tüm Yorumları Gör"
     },
     "header": {
         "menu": "Menü",
@@ -29,7 +30,7 @@
         "toggleTheme": "Temayı değiştir"
     },
     "footer": {
-        "copyright_part1": "Tüm hakları",
+        "copyright_part1": "© {year} Tüm hakları",
         "copyright_part2": "Kula Belediyesi'ne aittir.",
         "credits": "Bu sitedeki bilgiler, görseller Kula Belediyesi ve Kula - Salihli UNESCO Global Jeoparkı arşivlerinden alınmıştır. Ayrıca Hasan Malay, Hüseyin Şahin, Avni Ataş, İsmail Tosun, Rüstem Bozer vb. Kula için emek vermiş yazarların kitaplarından da faydalanılmıştır. Bazı görseller yapay zeka ile oluşturulmuştur."
     },
@@ -285,3 +286,5 @@
         ]
     }
 }
+
+    

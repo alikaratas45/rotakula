@@ -31,7 +31,7 @@ import { useApp } from '@/context/app-context';
 import { addDocumentNonBlocking, useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { collection, query, orderBy, limit } from 'firebase/firestore';
 
-const locales: { [key: string]: Locale } = { tr, en: enUS };
+const locales: { [key: string]: Locale } = { tr, enUS };
 
 const feedbackSchema = z.object({
   name: z.string().optional(),
@@ -194,6 +194,7 @@ function FeedbackForm() {
 }
 
 export function FeedbackSection({ isLimited = false }: { isLimited?: boolean }) {
+    const { translations } = useApp();
     return (
         <div className="space-y-8">
             {!isLimited && <FeedbackForm />}
@@ -201,10 +202,12 @@ export function FeedbackSection({ isLimited = false }: { isLimited?: boolean }) 
              {isLimited && (
                 <div className="flex justify-center pt-4">
                   <Button asChild>
-                      <Link href="/feedback">Tüm Yorumları Gör</Link>
+                      <Link href="/feedback">{translations.nav.seeAllComments}</Link>
                   </Button>
                 </div>
             )}
         </div>
     );
 }
+
+    
