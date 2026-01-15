@@ -1,8 +1,7 @@
-
 'use client';
 
 import { useMemo, useState, useEffect } from 'react';
-import { Loader2, Star, LogOut, Filter, X, Smile, ThumbsUp, Users, Bus, Sparkles, Trash2, Check, Hand, FileSpreadsheet } from 'lucide-react';
+import { Loader2, Star, LogOut, Filter, X, Smile, ThumbsUp, Users, Bus, Sparkles, Trash2, Check, Hand, FileSpreadsheet, MapPin } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { format, formatDistanceToNow } from 'date-fns';
@@ -40,6 +39,7 @@ type SurveyResponse = {
   id: string;
   poiId: string;
   poiName: string;
+  neighborhood?: string;
   guidance: boolean;
   staffing: boolean;
   cleanliness: number;
@@ -206,6 +206,7 @@ export default function AdminSurveyDashboard() {
       'Ulaşım Kolaylığı': s.transportation,
       'Rehberlik Hizmeti': s.guidance ? 'Evet' : 'Hayır',
       'Personel İlgisi': s.staffing ? 'Evet' : 'Hayır',
+      'Yaşadığı Mahalle': s.neighborhood || 'Belirtilmemiş',
       'Yorum': s.comment,
       'Tarih': format(new Date(s.createdAt.seconds * 1000), 'dd/MM/yyyy HH:mm'),
     }));
@@ -222,6 +223,7 @@ export default function AdminSurveyDashboard() {
       { wch: 15 }, // Ulaşım Kolaylığı
       { wch: 15 }, // Rehberlik Hizmeti
       { wch: 15 }, // Personel İlgisi
+      { wch: 20 }, // Yaşadığı Mahalle
       { wch: 50 }, // Yorum
       { wch: 20 }, // Tarih
     ];
@@ -335,6 +337,13 @@ export default function AdminSurveyDashboard() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
+                 {survey.neighborhood && (
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <MapPin className="h-4 w-4" />
+                    <strong>Yaşadığı Mahalle:</strong>
+                    <span>{survey.neighborhood}</span>
+                  </div>
+                )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                         <StarDisplay rating={survey.overall} label="Genel Değerlendirme" />

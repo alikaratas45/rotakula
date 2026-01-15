@@ -51,6 +51,10 @@
           "type": "string",
           "description": "The name of the Point of Interest."
         },
+        "neighborhood": {
+          "type": "string",
+          "description": "The neighborhood the user lives in (optional)."
+        },
         "guidance": {
           "type": "boolean",
           "description": "Whether the user received guidance service."
