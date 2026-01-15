@@ -18,7 +18,7 @@ import AudioPlayer from '@/components/AudioPlayer';
 export default function PlaceDetailPage() {
     const params = useParams();
     const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
-    const { language, translations, addBadge } = useApp();
+    const { language, translations } = useApp();
     const [poi, setPoi] = useState<PointOfInterest | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -41,9 +41,6 @@ export default function PlaceDetailPage() {
                 setPoi(poiData);
                 const fullText = poiData.longDescription || '';
                 setNarrationText(fullText);
-                if (poiData.badgeId) {
-                    addBadge(poiData.id);
-                }
             } else {
                 setPoi(null);
             }
@@ -51,7 +48,7 @@ export default function PlaceDetailPage() {
         }
         fetchPoi();
 
-    }, [slug, language, addBadge]);
+    }, [slug, language]);
 
      useEffect(() => {
         const autoplay = searchParams.get('autoplay') === 'true';
