@@ -60,6 +60,7 @@ export function Header() {
 
 
     const handleLogoClick = () => {
+        if (isAdmin) return; // If already admin, don't show login dialog
         const newClickCount = clickCount + 1;
         setClickCount(newClickCount);
         if (newClickCount >= 5) {
@@ -105,6 +106,7 @@ export function Header() {
     );
 
     const AdminButton = () => {
+        const { isAdmin } = useApp();
         if (!isAdmin) return null;
 
         return (
@@ -142,7 +144,7 @@ export function Header() {
                 <div className="hidden md:flex flex-1 items-center">
                     <div onClick={handleLogoClick} className="cursor-pointer">
                         <Link href="/" className="flex items-center space-x-2 focus:outline-none">
-                            <Image src="/logo.png?v=2" alt="RotaKula Logo" width={28} height={28} />
+                            <Image src="/logo.png?v=3" alt="RotaKula Logo" width={28} height={28} />
                             <span className="hidden font-bold sm:inline-block font-headline text-lg">
                                 RotaKula
                             </span>
@@ -154,7 +156,7 @@ export function Header() {
                 <div className="flex flex-1 items-center justify-between md:hidden">
                     <div onClick={handleLogoClick} className="cursor-pointer">
                         <Link href="/" className="flex items-center space-x-2 focus:outline-none">
-                            <Image src="/logo.png?v=2" alt="RotaKula Logo" width={28} height={28} />
+                            <Image src="/logo.png?v=3" alt="RotaKula Logo" width={28} height={28} />
                             <span className="font-bold font-headline text-lg">RotaKula</span>
                         </Link>
                     </div>

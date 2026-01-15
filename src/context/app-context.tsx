@@ -10,6 +10,8 @@ import de from '@/lib/locales/de.json';
 import { getPois } from '@/lib/kula-data';
 import type { PointOfInterest, SurveyState } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { useAuth, useUser } from '@/firebase';
 
 
 type Language = 'tr' | 'en' | 'fr' | 'de';
@@ -49,8 +51,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { toast } = useToast();
   
-  const isAdmin = false;
-  const isUserLoading = false;
+  const auth = useAuth();
+  const { user, isUserLoading } = useUser();
+  
+  const isAdmin = useMemo(() => {
+    return !!user && user.email === ADMIN_EMAIL;
+  }, [user]);
 
   // Fetch all POIs on mount to map badge IDs to badge data
   useEffect(() => {
@@ -102,19 +108,38 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   };
   
   const handleAdminLogin = async (email: string, password: string) => {
-    toast({
-        title: "Giriş Devre Dışı",
-        description: "Firebase bağlantısı geçici olarak kaldırıldığı için admin girişi yapılamıyor.",
-        variant: "destructive"
-    });
+     try {
+      await signInWithEmailAndPassword(auth, email, password);
+      router.push('/admin/surveys');
+      toast({
+          title: "Giriş Başarılı",
+          description: "Admin paneline yönlendiriliyorsunuz.",
+      });
+    } catch (error) {
+       toast({
+          title: "Giriş Başarısız",
+          description: "E-posta veya şifre hatalı.",
+          variant: "destructive",
+      });
+      console.error("Admin login failed:", error);
+    }
   };
 
-  const handleAdminLogout = () => {
-    toast({
-        title: "Giriş Devre Dışı",
-        description: "Firebase bağlantısı geçici olarak kaldırıldığı için admin çıkışı yapılamıyor.",
-        variant: "destructive"
-    });
+  const handleAdminLogout = async () => {
+     try {
+      await signOut(auth);
+      router.push('/');
+      toast({
+          title: "Çıkış Başarılı",
+      });
+    } catch (error) {
+       toast({
+          title: "Çıkış Yapılamadı",
+          description: "Bir hata oluştu, lütfen tekrar deneyin.",
+          variant: "destructive",
+      });
+      console.error("Admin logout failed:", error);
+    }
   }
   
   useEffect(() => {
