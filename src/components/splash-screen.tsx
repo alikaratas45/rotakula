@@ -15,11 +15,11 @@ export default function SplashScreen() {
     // Hide splash screen after a delay
     const fadeTimer = setTimeout(() => {
       setIsFading(true);
-    }, 2000); // Start fading after 2 seconds
+    }, 1000); // Start fading after 1 second
 
     const visibilityTimer = setTimeout(() => {
         setIsVisible(false);
-    }, 2500); // Completely hide after 2.5 seconds
+    }, 1500); // Completely hide after 1.5 seconds
 
     return () => {
       clearTimeout(fadeTimer);
@@ -35,7 +35,7 @@ export default function SplashScreen() {
     <div
       className={cn(
         "fixed inset-0 z-[200] flex flex-col items-center justify-center bg-background transition-opacity duration-500 ease-in-out",
-        isFading ? "opacity-50" : "opacity-100"
+        isFading ? "opacity-0" : "opacity-100"
       )}
     >
       <div className="text-center animate-fade-in-up perspective-1000">
