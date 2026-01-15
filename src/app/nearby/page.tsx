@@ -17,7 +17,7 @@ import { useApp } from '@/context/app-context';
 import { haversineDistance } from '@/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
-const NEARBY_RADIUS_KM = 10;
+const NEARBY_RADIUS_KM = 5;
 
 type PoiWithDistance = PointOfInterest & { distance: number };
 
@@ -76,7 +76,7 @@ export default function NearbyPage() {
                 distance: haversineDistance(
                     { lat: currentLocation.lat, lon: currentLocation.lng },
                     { lat: poi.latitude, lon: poi.longitude }
-                ) / 1000,
+                ),
             })).filter(poi => poi.distance <= NEARBY_RADIUS_KM);
 
             poisWithDistances.sort((a, b) => a.distance - b.distance);
@@ -140,7 +140,7 @@ export default function NearbyPage() {
             case 'no_results':
                 return (
                     <div className="text-center py-16 border-2 border-dashed rounded-lg">
-                        <h2 className="text-xl font-semibold text-muted-foreground">{translations.nearby.noPoisFound}</h2>
+                        <h2 className="text-xl font-semibold text-muted-foreground">{translations.nearby.noPoisFound.replace('{radius}', NEARBY_RADIUS_KM.toString())}</h2>
                          <p className="text-muted-foreground mt-2 mb-4">Yakınlarda bir yer bulamadık ama tüm yerlere göz atabilirsiniz.</p>
                         <Button asChild>
                           <Link href="/places">{translations.nav.places}</Link>
@@ -209,7 +209,7 @@ export default function NearbyPage() {
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
                     <h1 className="text-3xl md:text-4xl font-headline font-bold">{translations.nearby.title}</h1>
                 </div>
-                <p className="text-muted-foreground mb-8">{translations.nearby.description}</p>
+                <p className="text-muted-foreground mb-8">{translations.nearby.description.replace('{radius}', NEARBY_RADIUS_KM.toString())}</p>
 
                 {poisForMap.length > 0 && (
                     <div className="mb-12">

@@ -9,7 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 export function haversineDistance(coords1: Coordinate, coords2: Coordinate): number {
   const toRad = (x: number) => x * Math.PI / 180;
 
-  const R = 6371e3; // metres
+  const R = 6371; // Kilometres
   const φ1 = toRad(coords1.lat);
   const φ2 = toRad(coords2.lat);
   const Δφ = toRad(coords2.lat - coords1.lat);
@@ -20,5 +20,5 @@ export function haversineDistance(coords1: Coordinate, coords2: Coordinate): num
             Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-  return R * c; // in metres
+  return R * c; // in kilometres
 }

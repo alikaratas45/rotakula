@@ -70,10 +70,10 @@
     },
     "nearby": {
         "title": "Çevremde Ne Var?",
-        "description": "Mevcut konumunuza 10 km mesafedeki yerler aşağıda listelenmiştir.",
+        "description": "Mevcut konumunuza {radius} km mesafedeki yerler aşağıda listelenmiştir.",
         "gettingLocation": "Konumunuz alınıyor...",
         "locationError": "Konumunuz alınamadı. Lütfen tarayıcınızın konum izinlerini kontrol edin.",
-        "noPoisFound": "Konumunuza 10 km mesafede gezilecek yer bulunamadı.",
+        "noPoisFound": "Konumunuza {radius} km mesafede gezilecek yer bulunamadı.",
         "distance": "Uzaklık"
     },
     "route": {
