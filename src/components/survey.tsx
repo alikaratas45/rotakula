@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -26,25 +27,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-
-const kulaNeighborhoods = [
-    "Akgün", "Atatürk", "Barış", "Bey", "Camiicedit", "Cumhuriyet", "Dört Eylül", "Ertuğrul Gazi", "İstasyon", "Jeopark",
-    "Kenan Evren", "Kurtuluş", "Narıncalı Pıtrak", "Sandallı", "Seyitali", "Tabakhane", "Yenidoğan", "Yeni", "Zaferiye",
-    "Ahmetli", "Akören", "Aktaş", "Alaşar", "Ayazören", "Ayvatlar", "Balıbey", "Başıbüyük", "Bebekli", "Börtlüce", "Cemalettin",
-    "Çakırca", "Çarıkballı", "Çarıkmahmutlu", "Çarıktekke", "Çiftçiibrahim", "Dereköy", "Emre", "Encekler", "Eroğlu", "Esenyazı",
-    "Evciler", "Gökçeören", "Gölbaşı", "Güre", "Hacıtufan", "Hamidiye", "Hayalli", "İbrahimağa", "İncesu", "Kalınharman",
-    "Kavacık", "Kenger", "Konurca", "Körez", "Kula", "Narci", "Narıncalı", "Ortaköy", "Pabucçular", "Peynirciler", "Sandal",
-    "Saraçlar", "Sarnıç", "Şehitlioğlu", "Şeremet", "Şeritli", "Şıhlı", "Tabaklar", "Tatlıçeşme", "Topuzdamları", "Yağbastı",
-    "Yeniköy", "Yeşilyayla", "Yurtbaşı", "Diğer"
-].sort((a, b) => a.localeCompare(b, 'tr'));
-
-
 export const Survey = ({ poiId, poiName, onSubmitted }: { poiId: string; poiName: string; onSubmitted?: () => void; }) => {
   const { translations } = useApp();
   const firestore = useFirestore();
   
   const surveySchema = z.object({
-    neighborhood: z.string().optional(),
     guidance: z.enum(['yes', 'no'], {
       required_error: translations.survey.requiredError,
     }),
@@ -197,31 +184,6 @@ export const Survey = ({ poiId, poiName, onSubmitted }: { poiId: string; poiName
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <CardContent className="space-y-4 p-0">
-             <FormField
-                control={form.control}
-                name="neighborhood"
-                render={({ field }) => (
-                    <FormItem>
-                        <FormLabel>Yaşadığınız Mahalle (İsteğe Bağlı)</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Mahallenizi seçin..." />
-                                </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                                {kulaNeighborhoods.map((neighborhood) => (
-                                    <SelectItem key={neighborhood} value={neighborhood}>
-                                        {neighborhood}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                        <FormMessage />
-                    </FormItem>
-                )}
-            />
-            <Separator />
              <FormField
               control={form.control}
               name="guidance"
