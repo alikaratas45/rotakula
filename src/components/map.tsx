@@ -17,8 +17,14 @@ import { cn } from "@/lib/utils";
 export function UserLocationMarker() {
   const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
   const { translations } = useApp();
+  
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
+    if (!navigator.geolocation) {
+      console.warn("Geolocation is not supported by this browser.");
+      return;
+    }
+
+    const watchId = navigator.geolocation.watchPosition(
       (geoPosition) => {
         setPosition({
           lat: geoPosition.coords.latitude,
@@ -27,10 +33,13 @@ export function UserLocationMarker() {
       },
       (error) => {
         console.warn(`Error getting user location: ${error.message}`);
-        // Silently fail if user denies permission
       },
-      { enableHighAccuracy: true }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
+
+    return () => {
+      navigator.geolocation.clearWatch(watchId);
+    };
   }, []);
 
   if (!position) return null;
@@ -212,7 +221,7 @@ export default function EmbeddedMap({ pois, drawRouteLine = false }: { pois: Poi
         mapId="rotakula-map"
         onClick={handleInfoWindowClose}
       >
-        {userPosition && <UserLocationMarker />}
+        <UserLocationMarker />
         {pois.map((poi) => (
           <PoiMarker key={poi.id} poi={poi} onClick={() => handleMarkerClick(poi)} />
         ))}
@@ -290,7 +299,7 @@ export const NearbySearch = () => {
                 });
             },
             () => {
-                // If user denies or an error occurs, fall back to Kula center
+                // Fail silently if user denies or an error occurs, fall back to Kula center
                 setUserPosition({ lat: 38.547, lng: 28.65 });
             }
         );
@@ -377,7 +386,7 @@ export const NearbySearch = () => {
                 mapId="rotakula-nearby-map"
                 onClick={() => setSelectedPlace(null)}
             >
-                {userPosition && <UserLocationMarker />}
+                <UserLocationMarker />
                 {places.map((place) => 
                     place.place_id && <PlaceMarker key={place.place_id} place={place} onClick={() => handleMarkerClick(place)} />
                 )}
