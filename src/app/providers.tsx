@@ -1,7 +1,6 @@
-
 "use client"
 
-import { type PropsWithChildren } from 'react';
+import { type PropsWithChildren, useEffect } from 'react';
 import Image from 'next/image';
 import { Toaster } from '@/components/ui/toaster';
 import { Header } from '@/components/header';
@@ -12,6 +11,16 @@ import SplashScreen from '@/components/splash-screen';
 
 
 function AppContent({ children }: PropsWithChildren) {
+  useEffect(() => {
+    if (
+      typeof window !== 'undefined' &&
+      window.location.protocol === 'http:' &&
+      process.env.NODE_ENV === 'production'
+    ) {
+      window.location.href = window.location.href.replace('http:', 'https:');
+    }
+  }, []);
+
   return (
     <>
         <SplashScreen />
