@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Map, AdvancedMarker, useMap } from "@vis.gl/react-google-maps";
@@ -102,71 +103,88 @@ export default function EmbeddedMap({ pois, drawRouteLine = false }: { pois: Poi
   }, []);
 
 
-   useEffect(() => {
+  useEffect(() => {
     if (!map) return;
 
-    if (pois.length > 0) {
+    // 1. Clear any existing polyline
+    if (polylineRef.current) {
+        polylineRef.current.setMap(null);
+        polylineRef.current = null;
+    }
+
+    // 2. Decide what to do based on props
+    if (drawRouteLine && pois.length > 1) {
+        // --- DRAW ROUTE ON ROADS ---
+        const directionsService = new google.maps.DirectionsService();
+        const origin = { lat: pois[0].latitude, lng: pois[0].longitude };
+        const destination = { lat: pois[pois.length - 1].latitude, lng: pois[pois.length - 1].longitude };
+        const waypoints = pois.slice(1, -1).map(poi => ({
+            location: { lat: poi.latitude, lng: poi.longitude },
+            stopover: true,
+        }));
+
+        directionsService.route(
+            {
+                origin: origin,
+                destination: destination,
+                travelMode: google.maps.TravelMode.DRIVING, // Default to driving
+                waypoints: waypoints,
+            },
+            (result, status) => {
+                if (status === google.maps.DirectionsStatus.OK && result) {
+                    const routePolyline = new google.maps.Polyline({
+                        path: result.routes[0].overview_path,
+                        geodesic: true,
+                        strokeColor: '#4285F4',
+                        strokeOpacity: 0.9,
+                        strokeWeight: 5
+                    });
+                    routePolyline.setMap(map);
+                    polylineRef.current = routePolyline;
+                    
+                    // Fit map to the route bounds
+                    map.fitBounds(result.routes[0].bounds, 60);
+
+                } else {
+                    console.error(`Directions request failed due to ${status}. Falling back to fitting POIs.`);
+                    // Fallback: Fit bounds to POIs directly if Directions API fails
+                    const bounds = new google.maps.LatLngBounds();
+                    pois.forEach((poi) => {
+                        bounds.extend(new google.maps.LatLng(poi.latitude, poi.longitude));
+                    });
+                    map.fitBounds(bounds, 60);
+                }
+            }
+        );
+    } else if (pois.length > 0) {
+        // --- FIT POIS WITHOUT ROUTE LINE ---
         if (pois.length === 1) {
-            // Single POI: center on it with a closer zoom
-            const poi = pois[0];
-            map.setCenter({ lat: poi.latitude, lng: poi.longitude });
+            // Single POI: center on it
+            map.setCenter({ lat: pois[0].latitude, lng: pois[0].longitude });
             map.setZoom(15);
         } else {
             // Multiple POIs: fit them all
             const bounds = new google.maps.LatLngBounds();
-            if (userPosition) {
-                bounds.extend(new google.maps.LatLng(userPosition.lat, userPosition.lng));
-            }
             pois.forEach((poi) => {
                 bounds.extend(new google.maps.LatLng(poi.latitude, poi.longitude));
             });
-            map.fitBounds(bounds, 60); // Reduced padding for a tighter fit
+            map.fitBounds(bounds, 60);
         }
-    } else if (userPosition) {
-        // No POIs, but we have user location, center on them
-        map.setCenter(userPosition);
-        map.setZoom(13);
     } else {
-        // No POIs and no user location, set a default view of Kula
-        map.setCenter({ lat: 38.547, lng: 28.65 });
-        map.setZoom(13);
+        // --- NO POIS, DEFAULT VIEW ---
+        if (userPosition) {
+            map.setCenter(userPosition);
+            map.setZoom(13);
+        } else {
+            map.setCenter({ lat: 38.547, lng: 28.65 });
+            map.setZoom(13);
+        }
     }
 
     setMarkersLoaded(true);
 
-  }, [map, pois, userPosition]);
+  }, [map, pois, drawRouteLine, userPosition]);
 
-  useEffect(() => {
-    if (!map) return;
-
-    // Always clear the previous polyline when pois or the flag change
-    if (polylineRef.current) {
-        polylineRef.current.setMap(null);
-    }
-    
-    // Draw a new polyline if requested and possible
-    if (drawRouteLine && pois.length > 1) {
-        const path = pois.map(poi => ({ lat: poi.latitude, lng: poi.longitude }));
-
-        const newPolyline = new google.maps.Polyline({
-            path: path,
-            geodesic: true,
-            strokeColor: '#4285F4', // Google Maps blue
-            strokeOpacity: 0.9,
-            strokeWeight: 5
-        });
-
-        newPolyline.setMap(map);
-        polylineRef.current = newPolyline;
-    }
-
-    // Cleanup function to remove polyline when component unmounts
-    return () => {
-        if (polylineRef.current) {
-            polylineRef.current.setMap(null);
-        }
-    };
-  }, [map, pois, drawRouteLine]);
 
   const center = pois.length > 0
     ? { lat: pois[0].latitude, lng: pois[0].longitude }
