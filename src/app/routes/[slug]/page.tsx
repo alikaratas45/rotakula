@@ -1,5 +1,3 @@
-
-
 "use client"
 
 import { getRouteBySlug, getPoisByIds } from '@/lib/kula-data';
@@ -181,7 +179,7 @@ export default function RoutePage() {
                                      <div className="mb-8">
                                         <h2 className="text-2xl font-headline font-bold mb-4">{translations.route.mapTitle}</h2>
                                         <APIProvider apiKey={apiKey} libraries={['places']}>
-                                            <EmbeddedMap pois={pois} />
+                                            <EmbeddedMap pois={pois} drawRouteLine />
                                         </APIProvider>
                                     </div>
                                 )}

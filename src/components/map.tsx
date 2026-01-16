@@ -1,10 +1,8 @@
-
-
 "use client";
 
 import { Map, AdvancedMarker, useMap } from "@vis.gl/react-google-maps";
 import { PointOfInterest } from "@/lib/types";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { Loader2, Star, Navigation, X } from "lucide-react";
 import Image from "next/image";
 import { getImageById } from "@/lib/placeholder-images";
@@ -63,13 +61,14 @@ function PoiMarker({
 }
 
 // --- Main Map Component ---
-export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
+export default function EmbeddedMap({ pois, drawRouteLine = false }: { pois: PointOfInterest[], drawRouteLine?: boolean }) {
   const map = useMap();
   const router = useRouter();
   const { translations } = useApp();
   const [markersLoaded, setMarkersLoaded] = useState(false);
   const [userPosition, setUserPosition] = useState<{ lat: number; lng: number } | null>(null);
   const [selectedPoi, setSelectedPoi] = useState<PointOfInterest | null>(null);
+  const polylineRef = useRef<google.maps.Polyline | null>(null);
 
 
   const handleMarkerClick = (poi: PointOfInterest) => {
@@ -136,6 +135,38 @@ export default function EmbeddedMap({ pois }: { pois: PointOfInterest[] }) {
     setMarkersLoaded(true);
 
   }, [map, pois, userPosition]);
+
+  useEffect(() => {
+    if (!map) return;
+
+    // Always clear the previous polyline when pois or the flag change
+    if (polylineRef.current) {
+        polylineRef.current.setMap(null);
+    }
+    
+    // Draw a new polyline if requested and possible
+    if (drawRouteLine && pois.length > 1) {
+        const path = pois.map(poi => ({ lat: poi.latitude, lng: poi.longitude }));
+
+        const newPolyline = new google.maps.Polyline({
+            path: path,
+            geodesic: true,
+            strokeColor: '#4285F4', // Google Maps blue
+            strokeOpacity: 0.9,
+            strokeWeight: 5
+        });
+
+        newPolyline.setMap(map);
+        polylineRef.current = newPolyline;
+    }
+
+    // Cleanup function to remove polyline when component unmounts
+    return () => {
+        if (polylineRef.current) {
+            polylineRef.current.setMap(null);
+        }
+    };
+  }, [map, pois, drawRouteLine]);
 
   const center = pois.length > 0
     ? { lat: pois[0].latitude, lng: pois[0].longitude }
