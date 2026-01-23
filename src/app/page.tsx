@@ -7,21 +7,33 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import Image from 'next/image';
 import Link from 'next/link';
 import { getImageById } from '@/lib/placeholder-images';
-import { useEffect, useState, useMemo, Suspense } from 'react';
+import { useEffect, useState, useMemo, memo } from 'react';
 import { useApp } from '@/context/app-context';
-import { Utensils, Map, Pin, Route, BookOpen, QrCode, Landmark, Smile, Award, Bike, Loader2 } from 'lucide-react';
+import { Utensils, Map, Pin, Route, BookOpen, QrCode, Landmark, Smile, Award, Bike, Loader2, Users } from 'lucide-react';
 import { BedIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { InstallPwaButton } from '@/components/install-pwa-button';
 import dynamic from 'next/dynamic';
-import VisitorCounter from '@/components/VisitorCounter';
 
 const FeedbackSection = dynamic(() => import('@/components/feedback').then(mod => mod.FeedbackSection), {
     loading: () => <div className="flex justify-center py-8"><Loader2 className="h-8 w-8 animate-spin" /></div>,
     ssr: false
 });
 
-const RouteCard = ({ route, delay }: { route: ThematicRoute, delay: number }) => {
+const VisitorCounter = dynamic(() => import('@/components/VisitorCounter'), {
+    loading: () => (
+      <section className="py-12 bg-muted">
+        <div className="container mx-auto px-4 md:px-8 text-center">
+          <Users className="h-10 w-10 text-primary mx-auto mb-3" />
+            <div className="text-3xl font-bold font-headline text-foreground h-9 bg-muted-foreground/10 rounded-md animate-pulse w-56 mx-auto mb-2" />
+            <div className="text-5xl font-bold text-primary mt-2 h-14 bg-muted-foreground/20 rounded-md animate-pulse w-48 mx-auto" />
+        </div>
+      </section>
+    ),
+    ssr: false
+});
+
+const RouteCard = memo(({ route, delay }: { route: ThematicRoute, delay: number }) => {
   const image = getImageById(route.imageId);
   return (
     <Link 
@@ -51,7 +63,8 @@ const RouteCard = ({ route, delay }: { route: ThematicRoute, delay: number }) =>
       </Card>
     </Link>
   );
-};
+});
+RouteCard.displayName = 'RouteCard';
 
 export default function Home() {
   const { language, translations } = useApp();
@@ -147,9 +160,7 @@ export default function Home() {
         </div>
       </section>
 
-      <Suspense fallback={<div className="flex justify-center py-8"><Loader2 className="h-8 w-8 animate-spin" /></div>}>
-        <VisitorCounter />
-      </Suspense>
+      <VisitorCounter />
       
       <section className="py-16 px-4 md:px-8 bg-background">
         <div className="max-w-4xl mx-auto">
