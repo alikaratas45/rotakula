@@ -39,7 +39,7 @@
     {
       "id": "poi-divlit-park",
       "description": "Kula Divlit Volkanik Parkı yürüyüş yolu",
-      "imageUrl": "https://images.unsplash.com/photo-1593217188322-6a547f02ddb5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxuYXR1cmUlMjBwYXRofGVufDB8fHx8MTc2OTE2ODIyN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/eWJeFRM.jpeg",
       "imageHint": "nature path"
     },
     {
@@ -69,7 +69,7 @@
     {
       "id": "poi-local-artisans",
       "description": "Kula'da yerel bir zanaatkar atölyesi",
-      "imageUrl": "https://images.unsplash.com/photo-1552836514-bbf70221e437?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxhcnRpc2FuJTIwd29ya3Nob3B8ZW58MHx8fHwxNzY5MTczOTg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/tikRPgE.jpeg",
       "imageHint": "artisan workshop"
     },
     {
@@ -87,13 +87,13 @@
     {
       "id": "poi-village-houses",
       "description": "Encekler mahallesinden tarihi taş evler.",
-      "imageUrl": "https://images.unsplash.com/photo-1677477242116-7bc3c5b18e77?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxzdG9uZSUyMGhvdXNlc3xlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/dvyGF1D.jpeg",
       "imageHint": "stone houses"
     },
     {
       "id": "poi-sandal-village",
       "description": "Sandal mahallesinin genel görünümü.",
-      "imageUrl": "https://images.unsplash.com/photo-1664859666474-f9bc2b023c54?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx2aWxsYWdlJTIwdmlld3xlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/YjyCCQY.jpeg",
       "imageHint": "village view"
     },
     {
@@ -105,31 +105,31 @@
     {
       "id": "poi-gokceoren-village",
       "description": "Gökçeören mahallesinin genel görünümü.",
-      "imageUrl": "https://images.unsplash.com/photo-1731234057680-cc5303a80157?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx2aWxsYWdlJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/fcEDHWX.png",
       "imageHint": "village landscape"
     },
     {
       "id": "poi-incesu-village",
       "description": "İncesu mahallesi ve çevresindeki doğal güzellikler.",
-      "imageUrl": "https://images.unsplash.com/photo-1735992519503-d87b578249a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8dmlsbGFnZSUyMHN0cmVhbXxlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/I0a00tm.jpeg",
       "imageHint": "village stream"
     },
     {
       "id": "poi-korez-village",
       "description": "Körez mahallesinden tarihi bir sokak.",
-      "imageUrl": "https://images.unsplash.com/photo-1663875612292-1bd48eb0a6ce?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxoaXN0b3JpYyUyMHZpbGxhZ2UlMjBzdHJlZXR8ZW58MHx8fHwxNzY5MTczOTg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/Q8u94eq.png",
       "imageHint": "historic village street"
     },
     {
       "id": "poi-emre-village",
       "description": "Emre Mahallesi ve Yunus Emre Türbesi",
-      "imageUrl": "https://images.unsplash.com/photo-1741972585157-893918245e97?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx2aWxsYWdlJTIwdG9tYnxlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/YsZ5q7t.jpeg",
       "imageHint": "village tomb"
     },
     {
       "id": "poi-evciler-village",
       "description": "Evciler mahallesinden bir sokak.",
-      "imageUrl": "https://images.unsplash.com/photo-1678021928227-b9c63bac9ef1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx2aWxsYWdlJTIwc3RyZWV0fGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/vfC9Z9h.jpeg",
       "imageHint": "village street"
     },
     {
@@ -153,13 +153,13 @@
     {
       "id": "story-kollyda",
       "description": "İncesu mahallesi yakınlarında bir dere.",
-      "imageUrl": "https://images.unsplash.com/photo-1735992519397-85c490943cdb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx2aWxsYWdlJTIwc3RyZWFtfGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/I0a00tm.jpeg",
       "imageHint": "village stream"
     },
     {
       "id": "story-maionia",
       "description": "Gökçeören mahallesinin genel görünümü.",
-      "imageUrl": "https://images.unsplash.com/photo-1629977681402-c7db16d6c6d1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx2aWxsYWdlJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/fcEDHWX.png",
       "imageHint": "village landscape"
     },
     {
@@ -177,7 +177,7 @@
     {
       "id": "poi-kursunlu-camii",
       "description": "Kurşunlu Camii dış görünüşü",
-      "imageUrl": "https://images.unsplash.com/photo-1652868795643-20996bcc2c9a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxoaXN0b3JpYyUyMG1vc3F1ZXxlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/Gf0AsBZ.jpeg",
       "imageHint": "historic mosque"
     },
     {
@@ -195,19 +195,19 @@
     {
       "id": "poi-meryem-ana",
       "description": "Meryem Ana Kilisesi",
-      "imageUrl": "https://images.unsplash.com/photo-1599818539518-c5d59a0e2a08?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxvbGQlMjBjaHVyY2h8ZW58MHx8fHwxNzY5MTczOTg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/Aar5EAC.jpeg",
       "imageHint": "old church"
     },
     {
       "id": "poi-zafer-okulu",
       "description": "Tarihi Zafer Okulu binası",
-      "imageUrl": "https://images.unsplash.com/photo-1684789145247-2da6f63e9f40?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxoaXN0b3JpYyUyMHNjaG9vbHxlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/sGHbXWV.jpeg",
       "imageHint": "historic school"
     },
     {
       "id": "poi-turk-evi",
       "description": "Türk Evi Etnografya Müzesi",
-      "imageUrl": "https://images.unsplash.com/photo-1674141852440-4f46fd14bfac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxldGhub2dyYXBoeSUyMG11c2V1bXxlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/v9Nob9M.jpeg",
       "imageHint": "ethnography museum"
     },
     {
@@ -219,7 +219,7 @@
     {
       "id": "poi-tabala",
       "description": "Yurtbaşı mahallesinden bir görünüm.",
-      "imageUrl": "https://images.unsplash.com/photo-1717518215340-0d1184c493fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhbmNpZW50JTIwcnVpbnN8ZW58MHx8fHwxNzY5MDk3NTk0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/hUdGAbs.png",
       "imageHint": "ancient ruins"
     },
     {
@@ -231,7 +231,7 @@
     {
       "id": "poi-carsi",
       "description": "Tarihi Kula Çarşısı",
-      "imageUrl": "https://images.unsplash.com/photo-1728325444494-ff37c2462f01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxoaXN0b3JpYyUyMGJhemFhcnxlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/OFsdIYm.jpeg",
       "imageHint": "historic bazaar"
     },
     {
@@ -243,13 +243,13 @@
     {
       "id": "poi-suleyman-sah",
       "description": "Süleyman Şah Türbesi",
-      "imageUrl": "https://images.unsplash.com/photo-1599978559047-8e83c06e57e2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxoaXN0b3JpYyUyMHRvbWJ8ZW58MHx8fHwxNzY5MTczOTg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/iAObd9R.jpeg",
       "imageHint": "historic tomb"
     },
     {
       "id": "story-nar-motifi",
       "description": "Ahşap üzerine oyulmuş nar motifi",
-      "imageUrl": "https://picsum.photos/seed/41/800/600",
+      "imageUrl": "https://i.imgur.com/GJl7uln.jpeg",
       "imageHint": "wood carving pomegranate"
     },
     {
