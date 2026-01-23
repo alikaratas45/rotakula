@@ -147,19 +147,19 @@
     {
       "id": "story-artisan",
       "description": "Bir zanaatkarın el aletleriyle çalıştığı an",
-      "imageUrl": "https://images.unsplash.com/photo-1761410403735-108d974d9a76?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxhcnRpc2FuJTIwaGFuZHN8ZW58MHx8fHwxNzY5MTczOTg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/MsJgQBa.jpeg",
       "imageHint": "artisan hands"
     },
     {
       "id": "story-kollyda",
       "description": "İncesu mahallesi yakınlarında bir dere.",
-      "imageUrl": "https://i.imgur.com/I0a00tm.jpeg",
+      "imageUrl": "https://i.imgur.com/5hMTuzT.jpeg",
       "imageHint": "village stream"
     },
     {
       "id": "story-maionia",
       "description": "Gökçeören mahallesinin genel görünümü.",
-      "imageUrl": "https://i.imgur.com/fcEDHWX.png",
+      "imageUrl": "https://i.imgur.com/eLdIvRz.png",
       "imageHint": "village landscape"
     },
     {
@@ -225,7 +225,7 @@
     {
       "id": "story-tabala",
       "description": "Antik Tabala kentinden kalıntılar ve Roma dönemi yazıtları.",
-      "imageUrl": "https://images.unsplash.com/photo-1632153630862-5e255a9d481f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxyb21hbiUyMGluc2NyaXB0aW9ufGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/8zB0FxP.png",
       "imageHint": "roman inscription"
     },
     {
@@ -267,7 +267,7 @@
     {
       "id": "story-mezalim",
       "description": "Milli mücadele döneminden tarihi bir sokak.",
-      "imageUrl": "https://images.unsplash.com/flagged/photo-1557263256-5c1f869cfd45?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxoaXN0b3JpYyUyMHZpbGxhZ2UlMjBzdHJlZXR8ZW58MHx8fHwxNzY5MTczOTg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/ZknI1pr.jpeg",
       "imageHint": "historic village street"
     },
     {
