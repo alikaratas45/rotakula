@@ -1,4 +1,3 @@
-
 'use client';
 
 // This file is intentionally left empty. The dynamic content page feature

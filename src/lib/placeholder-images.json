@@ -3,19 +3,19 @@
     {
       "id": "hero-home",
       "description": "Kula peri bacaları gün batımı",
-      "imageUrl": "https://images.unsplash.com/photo-1664747477819-2ab263fa1fe9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjYW55b24lMjBzdW5zZXR8ZW58MHx8fHwxNzY5MTczOTg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/Micuxek.jpeg",
       "imageHint": "canyon sunset"
     },
     {
       "id": "route-geopark",
       "description": "Kula volkanik arazisi",
-      "imageUrl": "https://images.unsplash.com/photo-1715348020375-f8d4308698f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx2b2xjYW5pYyUyMGxhbmRzY2FwZXxlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/Hdu1l4X.jpeg",
       "imageHint": "volcanic landscape"
     },
     {
       "id": "route-history",
       "description": "Tarihi Kula evlerinin olduğu dar bir sokak",
-      "imageUrl": "https://images.unsplash.com/photo-1612030685139-3fe0993d49bc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxvbGQlMjB0b3duJTIwc3RyZWV0fGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/F82x5w6.jpeg",
       "imageHint": "old town street"
     },
     {
@@ -33,7 +33,7 @@
     {
       "id": "poi-divlit-volcano",
       "description": "Kula Divlit Volkan Konisi",
-      "imageUrl": "https://images.unsplash.com/photo-1688938990011-3de8902c7dc6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjaW5kZXIlMjBjb25lJTIwdm9sY2Fub3xlbnwwfHx8fDE3NjkxNzM5ODN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/iTVX6CJ.jpeg",
       "imageHint": "cinder cone volcano"
     },
     {
@@ -45,25 +45,25 @@
     {
       "id": "poi-fairy-chimneys",
       "description": "Kula Peri Bacaları jeolojik oluşumları",
-      "imageUrl": "https://images.unsplash.com/photo-1663562585744-e29fcdd2c507?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxyb2NrJTIwZm9ybWF0aW9uc3xlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/Micuxek.jpeg",
       "imageHint": "rock formations"
     },
     {
       "id": "poi-basalt-columns",
       "description": "Çakırca Bazalt Sütunları",
-      "imageUrl": "https://images.unsplash.com/photo-1678105498516-ee8ce22af33f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxiYXNhbHQlMjBjb2x1bW5zfGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/FWZRRu8.jpeg",
       "imageHint": "basalt columns"
     },
     {
       "id": "poi-historic-houses",
       "description": "Restore edilmiş bir Tarihi Kula Evi",
-      "imageUrl": "https://images.unsplash.com/photo-1694349930841-548c81995854?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxoaXN0b3JpYyUyMG1hbnNpb258ZW58MHx8fHwxNzY5MTczOTg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/F82x5w6.jpeg",
       "imageHint": "historic mansion"
     },
     {
       "id": "poi-carullah-mosque",
       "description": "Carullah Bin Süleyman Camii'nin avlusu",
-      "imageUrl": "https://images.unsplash.com/photo-1740912672919-5244faf31048?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxtb3NxdWUlMjBjb3VydHlhcmR8ZW58MHx8fHwxNzY5MTczOTgzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/EfRjrD5.jpeg",
       "imageHint": "mosque courtyard"
     },
     {
@@ -81,7 +81,7 @@
     {
       "id": "poi-essanlar-konagi",
       "description": "Essanlar Konağı otelinin dış görünüşü",
-      "imageUrl": "https://images.unsplash.com/photo-1573750261458-3ca93c21512f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxoaXN0b3JpYyUyMGhvdGVsfGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/tm18msf.jpeg",
       "imageHint": "historic hotel"
     },
     {
@@ -99,7 +99,7 @@
     {
       "id": "poi-sandal-volcano",
       "description": "Sandal Divlit Yanardağı ve çevresi.",
-      "imageUrl": "https://images.unsplash.com/photo-1761639069216-f7b87d7ee45a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx2b2xjYW5vJTIwY29uZXxlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/YjyCCQY.jpeg",
       "imageHint": "volcano cone"
     },
     {
@@ -135,13 +135,13 @@
     {
       "id": "story-kuladokya",
       "description": "Kuladokya peri bacalarının gün batımında görünüşü",
-      "imageUrl": "https://images.unsplash.com/photo-1658005027948-da29e65599fd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjYW55b24lMjBzdW5zZXR8ZW58MHx8fHwxNzY5MTczOTg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/Micuxek.jpeg",
       "imageHint": "canyon sunset"
     },
     {
       "id": "story-kula-house",
       "description": "Tarihi bir Kula konağının cumbalı penceresi",
-      "imageUrl": "https://images.unsplash.com/photo-1763858803418-3f326eb809e8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxoaXN0b3JpYyUyMGhvdXNlJTIwd2luZG93fGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/F82x5w6.jpeg",
       "imageHint": "historic house window"
     },
     {
@@ -165,7 +165,7 @@
     {
       "id": "poi-visitor-center",
       "description": "Jeopark Ziyaretçi Merkezi",
-      "imageUrl": "https://images.unsplash.com/photo-1742869246327-6a3c355cb48f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx2aXNpdG9yJTIwY2VudGVyfGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/mAAt7af.jpeg",
       "imageHint": "visitor center"
     },
     {
@@ -183,13 +183,13 @@
     {
       "id": "poi-haci-muhsinler",
       "description": "Hacı Muhsinler Evi",
-      "imageUrl": "https://images.unsplash.com/photo-1577926866949-c1ed2147d862?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxvbGQlMjBtYW5zaW9ufGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/t3tYW4E.jpeg",
       "imageHint": "old mansion"
     },
     {
       "id": "poi-beyler-evi",
       "description": "Beyler Evi dış görünüşü",
-      "imageUrl": "https://images.unsplash.com/photo-1731663044393-96efeef65cd9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx0cmFkaXRpb25hbCUyMGhvdXNlfGVufDB8fHx8MTc2OTA4MjE1Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/KrKOSMR.jpeg",
       "imageHint": "traditional house"
     },
     {
@@ -213,7 +213,7 @@
     {
       "id": "poi-anemon-otel",
       "description": "Anemon Oteli",
-      "imageUrl": "https://images.unsplash.com/photo-1573750261458-3ca93c21512f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxoaXN0b3JpYyUyMGhvdGVsfGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/F82x5w6.jpeg",
       "imageHint": "historic hotel"
     },
     {
@@ -237,7 +237,7 @@
     {
       "id": "poi-cukur-cesmeler",
       "description": "Kurşunlu Camii yanındaki tarihi Çukur Çeşme",
-      "imageUrl": "https://images.unsplash.com/photo-1699021448950-2674f82fa82c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxoaXN0b3JpYyUyMGZvdW50YWlufGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/h0Hddrs.jpeg",
       "imageHint": "historic fountain"
     },
     {
@@ -261,7 +261,7 @@
     {
       "id": "poi-bahas-bridge",
       "description": "Hoca Seyfeddin Köprüsü",
-      "imageUrl": "https://images.unsplash.com/photo-1659343970202-e7d3106d6a38?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8c3RvbmUlMjBicmlkZ2V8ZW58MHx8fHwxNzY5MTM1MjQyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/pVpzxDT.jpeg",
       "imageHint": "stone bridge"
     },
     {

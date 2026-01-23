@@ -50,7 +50,8 @@
         "listen": "Listen",
         "pause": "Pause",
         "listenNarration": "Listen to narration",
-        "pauseNarration": "Pause narration"
+        "pauseNarration": "Pause narration",
+        "continueNarration": "Continue"
     },
     "food": {
         "title": "Flavor Stops",
@@ -222,11 +223,6 @@
             "After the First World War, following the signing of the Armistice of Mudros, Greek forces landed in İzmir on May 15, 1919, and began the occupation of Western Anatolia; they also occupied Kula on June 28, 1920. However, after the victory on August 30, 1922, Turkish cavalry under the command of Fahrettin Altay entered Kula on September 4, 1922, and liberated the city.",
             "Today, Kula is a city that still preserves its volcanic heritage, historical layers, and cultural richness, acting as a gateway from the past to the present. The traces of ancient Katakekaumene still live on in the stones, streets, and volcanic hills of Kula."
         ]
-    },
-    "famous": {
-        "title": "About Kula",
-        "narrationTitle": "The History and Importance of Kula",
-        "continueNarration": "Continue"
     },
     "badges": {
         "title": "My Badges",

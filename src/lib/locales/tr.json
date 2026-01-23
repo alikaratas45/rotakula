@@ -50,7 +50,8 @@
         "listen": "Sesli Dinle",
         "pause": "Duraklat",
         "listenNarration": "Anlatımı dinle",
-        "pauseNarration": "Anlatımı duraklat"
+        "pauseNarration": "Anlatımı duraklat",
+        "continueNarration": "Devam Et"
     },
     "food": {
         "title": "Lezzet Durakları",
@@ -221,11 +222,6 @@
             "Birinci Dünya Savaşı’ndan sonra, 15 Mayıs 1919’da Yunan kuvvetleri İzmir’e çıkarak Batı Anadolu’yu işgale başlamış; 28 Haziran 1920 tarihinde Kula’yı da işgal etmiştir. Ancak 30 Ağustos 1922 zaferinin ardından Fahrettin Altay komutasındaki Türk süvarileri 4 Eylül 1922’de Kula’ya girerek şehri kurtarmıştır.",
             "Bugün Kula, volkanik mirası, tarihi katmanları ve kültürel zenginliği ile geçmişten günümüze uzanan bir kapı gibidir. Antik Katakekaumene’nin izleri, Kula’nın taşlarında, sokaklarında ve volkanik tepelerinde hâlâ yaşamaktadır."
         ]
-    },
-    "famous": {
-        "title": "Kula Hakkında",
-        "narrationTitle": "Kula'nın Tarihi ve Önemi",
-        "continueNarration": "Devam Et"
     },
     "badges": {
         "title": "Rozetlerim",

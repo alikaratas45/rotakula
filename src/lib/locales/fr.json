@@ -50,7 +50,8 @@
         "listen": "Écouter",
         "pause": "Pause",
         "listenNarration": "Écouter la narration",
-        "pauseNarration": "Mettre la narration en pause"
+        "pauseNarration": "Mettre la narration en pause",
+        "continueNarration": "Continuer"
     },
     "food": {
         "title": "Arrêts Gourmands",
@@ -222,11 +223,6 @@
             "Après la Première Guerre mondiale, suite à la signature de l'armistice de Moudros, les forces grecques ont débarqué à Izmir le 15 mai 1919 et ont commencé l'occupation de l'Anatolie occidentale ; elles ont également occupé Kula le 28 juin 1920. Cependant, après la victoire du 30 août 1922, la cavalerie turque sous le commandement de Fahrettin Altay est entrée dans Kula le 4 septembre 1922 et a libéré la ville.",
             "Aujourd'hui, Kula est une ville qui préserve encore son patrimoine volcanique, ses strates historiques et sa richesse culturelle, agissant comme une passerelle du passé au présent. Les traces de l'ancienne Katakekaumene vivent encore dans les pierres, les rues et les collines volcaniques de Kula."
         ]
-    },
-    "famous": {
-        "title": "À propos de Kula",
-        "narrationTitle": "L'Histoire et l'Importance de Kula",
-        "continueNarration": "Continuer"
     },
     "badges": {
         "title": "Mes Badges",

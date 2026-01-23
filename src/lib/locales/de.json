@@ -50,7 +50,8 @@
         "listen": "Anhören",
         "pause": "Pause",
         "listenNarration": "Erzählung anhören",
-        "pauseNarration": "Erzählung anhalten"
+        "pauseNarration": "Erzählung anhalten",
+        "continueNarration": "Fortsetzen"
     },
     "food": {
         "title": "Geschmacksstopps",
@@ -222,11 +223,6 @@
             "Nach dem Ersten Weltkrieg landeten nach der Unterzeichnung des Waffenstillstands von Mudros griechische Truppen am 15. Mai 1919 in İzmir und begannen die Besetzung Westanatoliens; sie besetzten auch Kula am 28. Juni 1920. Nach dem Sieg vom 30. August 1922 drang jedoch türkische Kavallerie unter dem Kommando von Fahrettin Altay am 4. September 1922 in Kula ein und befreite die Stadt.",
             "Heute ist Kula eine Stadt, die noch immer ihr vulkanisches Erbe, ihre historischen Schichten und ihren kulturellen Reichtum bewahrt und als Tor von der Vergangenheit in die Gegenwart fungiert. Die Spuren des antiken Katakekaumene leben noch in den Steinen, Straßen und vulkanischen Hügeln von Kula weiter."
         ]
-    },
-    "famous": {
-        "title": "Über Kula",
-        "narrationTitle": "Die Geschichte und Bedeutung von Kula",
-        "continueNarration": "Fortsetzen"
     },
     "badges": {
         "title": "Meine Abzeichen",

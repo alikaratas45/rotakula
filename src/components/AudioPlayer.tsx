@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from 'react';
@@ -135,7 +134,7 @@ export default function AudioPlayer({ text, autoPlay = false }: AudioPlayerProps
                     <span className="ml-2">
                         {isPlaying 
                             ? translations.pois.pause 
-                            : (textToSpeakRef.current.length < text.length ? translations.famous.continueNarration : translations.pois.listen)
+                            : (textToSpeakRef.current.length < text.length ? translations.pois.continueNarration : translations.pois.listen)
                         }
                     </span>
                 </Button>
