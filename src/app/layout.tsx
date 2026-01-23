@@ -5,6 +5,7 @@ import { type PropsWithChildren } from 'react';
 import { AppProvider } from '@/context/app-context';
 import { Providers } from '@/app/providers';
 import { FirebaseClientProvider } from '@/firebase';
+import { ptSans, playfairDisplay } from './fonts';
 
 
 export const metadata = {
@@ -29,7 +30,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <meta name="theme-color" content="#4E342E" />
       </head>
-      <body className={cn('font-body antialiased min-h-screen flex flex-col')}>
+      <body className={cn('font-body antialiased min-h-screen flex flex-col', ptSans.variable, playfairDisplay.variable)}>
         <FirebaseClientProvider>
           <AppProvider>
             <Providers>{children}</Providers>
