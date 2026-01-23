@@ -68,8 +68,8 @@ export default function SelfieSpotPage() {
             if (mode === 'environment' && (error as Error).name === 'OverconstrainedError') {
                  toast({
                     variant: 'destructive',
-                    title: "Arka Kamera Bulunamadı",
-                    description: "Cihazınızda arka kamera bulunmuyor veya erişilemiyor. Ön kameraya geçiliyor.",
+                    title: translations.selfieSpot.rearCameraNotFoundTitle,
+                    description: translations.selfieSpot.rearCameraNotFoundDescription,
                 });
                 setFacingMode('user'); // Fallback to user camera
             } else {
@@ -130,13 +130,13 @@ export default function SelfieSpotPage() {
         filterImg.onerror = () => {
             toast({
                 title: translations.toast.errorTitle,
-                description: "Çerçeve yüklenirken bir hata oluştu.",
+                description: translations.selfieSpot.frameLoadError,
                 variant: 'destructive',
             });
             setIsProcessing(false);
         };
 
-    }, [selectedFilter, toast, facingMode, stopCameraStream, translations.toast.errorTitle]);
+    }, [selectedFilter, toast, facingMode, stopCameraStream, translations]);
     
     const downloadSelfie = () => {
         if (!selfie) return;
@@ -216,7 +216,7 @@ export default function SelfieSpotPage() {
                                         )}
                                         {translations.selfieSpot.takeSelfie}
                                     </Button>
-                                    <Button size="lg" variant="outline" onClick={toggleFacingMode} aria-label="Kamerayı değiştir">
+                                    <Button size="lg" variant="outline" onClick={toggleFacingMode} aria-label={translations.selfieSpot.toggleCameraLabel}>
                                         <SwitchCamera className="h-5 w-5" />
                                     </Button>
                                 </div>

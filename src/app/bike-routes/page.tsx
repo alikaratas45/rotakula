@@ -160,7 +160,7 @@ export default function BikeRoutesPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Routes List */}
                     <div className="lg:col-span-1 space-y-4">
-                        <h2 className="text-2xl font-headline font-bold">Rotalar</h2>
+                        <h2 className="text-2xl font-headline font-bold">{translations.route.routes}</h2>
                         {routes.map(route => (
                              <Card 
                                 key={route.id}

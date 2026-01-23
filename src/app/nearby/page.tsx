@@ -87,11 +87,11 @@ export default function NearbyPage() {
         } catch (err: any) {
             let errorMessage = translations.map.locationError;
             if (err.code === 1) { // PERMISSION_DENIED
-                errorMessage = "Konum erişimine izin vermeniz gerekiyor.";
+                errorMessage = translations.nearby.permissionDenied;
             } else if (err.code === 2) { // POSITION_UNAVAILABLE
-                errorMessage = "Konum bilgisi şu anda alınamıyor.";
+                errorMessage = translations.nearby.positionUnavailable;
             } else if (err.code === 3) { // TIMEOUT
-                errorMessage = "Konum bilgisi alınırken zaman aşımı oluştu.";
+                errorMessage = translations.nearby.timeout;
             }
             setError(errorMessage);
             setStatus('error');
@@ -111,11 +111,11 @@ export default function NearbyPage() {
                 return (
                     <div className="text-center py-16 border-2 border-dashed rounded-lg flex flex-col items-center gap-4">
                         <LocateFixed className="h-10 w-10 text-muted-foreground" />
-                        <h2 className="text-xl font-semibold text-muted-foreground">Yakınınızdaki yerleri keşfedin</h2>
-                        <p className="text-muted-foreground max-w-md">Yakınınızdaki turistik noktaları görmek için konum izni vermeniz gerekmektedir.</p>
+                        <h2 className="text-xl font-semibold text-muted-foreground">{translations.nearby.discoverTitle}</h2>
+                        <p className="text-muted-foreground max-w-md">{translations.nearby.discoverDescription}</p>
                         <Button onClick={requestLocation}>
                             <MapPin className="mr-2 h-4 w-4" />
-                            Yakınımdakileri Bul
+                            {translations.nearby.findButton}
                         </Button>
                     </div>
                 );
@@ -133,7 +133,7 @@ export default function NearbyPage() {
                         <AlertTitle>{translations.toast.errorTitle}</AlertTitle>
                         <AlertDescription className="flex items-center justify-between">
                            {error}
-                           <Button variant="secondary" size="sm" onClick={requestLocation}>Tekrar Dene</Button>
+                           <Button variant="secondary" size="sm" onClick={requestLocation}>{translations.nearby.tryAgain}</Button>
                         </AlertDescription>
                     </Alert>
                 );
@@ -141,7 +141,7 @@ export default function NearbyPage() {
                 return (
                     <div className="text-center py-16 border-2 border-dashed rounded-lg">
                         <h2 className="text-xl font-semibold text-muted-foreground">{translations.nearby.noPoisFound.replace('{radius}', NEARBY_RADIUS_KM.toString())}</h2>
-                         <p className="text-muted-foreground mt-2 mb-4">Yakınlarda bir yer bulamadık ama tüm yerlere göz atabilirsiniz.</p>
+                         <p className="text-muted-foreground mt-2 mb-4">{translations.nearby.noResults}</p>
                         <Button asChild>
                           <Link href="/places">{translations.nav.places}</Link>
                         </Button>

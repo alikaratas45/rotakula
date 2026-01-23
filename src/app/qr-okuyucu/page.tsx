@@ -47,7 +47,7 @@ export default function QRScannerPage() {
                     const destinationPath = `${decodedText}?autoplay=true`;
                     router.push(destinationPath);
                 } else {
-                   setErrorMessage("Geçersiz QR Kod. Lütfen uygulamaya ait bir QR kod taratın.");
+                   setErrorMessage(translations.qrScanner.invalidQrCode);
                 }
 
             }).catch(err => console.error("Failed to stop scanner", err));
@@ -81,11 +81,11 @@ export default function QRScannerPage() {
          setErrorMessage(null);
       } catch (err: any) {
         console.error("Failed to start scanner", err);
-        let userFriendlyMessage = "Kamera başlatılırken bir hata oluştu. Lütfen başka bir uygulamanın kamerayı kullanmadığından emin olun.";
+        let userFriendlyMessage = translations.qrScanner.cameraError;
         if (err.name === 'NotAllowedError') {
-            userFriendlyMessage = "Kamera erişimine izin vermeniz gerekiyor. Lütfen tarayıcı ayarlarınızı kontrol edin.";
+            userFriendlyMessage = translations.qrScanner.cameraPermissionError;
         } else if (err.name === 'NotReadableError') {
-            userFriendlyMessage = "Kamera şu anda kullanılamıyor. Başka bir uygulama veya sekme tarafından kullanılıyor olabilir veya donanımsal bir sorun olabilir.";
+            userFriendlyMessage = translations.qrScanner.cameraNotReadableError;
         } else if (err.message && err.message.includes("already under transition")) {
             // This is a known benign error in the library, ignore it.
             console.warn("Scanner transition error ignored.");
@@ -100,11 +100,11 @@ export default function QRScannerPage() {
         if (cameras && cameras.length) {
             startScanner();
         } else {
-            setErrorMessage("Bu cihazda kamera bulunamadı veya kamera erişimine izin verilmedi.");
+            setErrorMessage(translations.qrScanner.noCameraFound);
         }
     }).catch(err => {
         // This catch block is crucial for permission denied errors.
-        setErrorMessage("Kamera erişimi reddedildi. Lütfen tarayıcı ayarlarınızdan izin verin.");
+        setErrorMessage(translations.qrScanner.cameraAccessDenied);
     });
 
 

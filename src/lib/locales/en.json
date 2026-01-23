@@ -73,20 +73,40 @@
     },
     "nearby": {
         "title": "What's Around Me?",
-        "description": "Places within a 10 km radius of your current location are listed below.",
+        "description": "Places within a {radius} km radius of your current location are listed below.",
         "gettingLocation": "Getting your location...",
         "locationError": "Could not get your location. Please check your browser's location permissions.",
-        "noPoisFound": "No points of interest found within 10 km of your location.",
-        "distance": "Distance"
+        "noPoisFound": "No points of interest found within {radius} km of your location.",
+        "distance": "Distance",
+        "discoverTitle": "Discover places near you",
+        "discoverDescription": "You need to grant location permission to see nearby tourist spots.",
+        "findButton": "Find What's Nearby",
+        "permissionDenied": "You need to allow location access.",
+        "positionUnavailable": "Location information is currently unavailable.",
+        "timeout": "A timeout occurred while retrieving location information.",
+        "tryAgain": "Try Again",
+        "noResults": "We couldn't find any places nearby, but you can browse all places."
     },
     "route": {
         "mapTitle": "Route Map",
         "whatsOnThisRoute": "What's on This Route?",
         "routeInfo": "Route Information",
-        "stops": "Stops"
+        "stops": "Stops",
+        "routes": "Routes",
+        "startRouteOnMap": "Start Route on Map",
+        "redirectToMapsTitle": "Redirecting to Map Application",
+        "redirectToMapsDescription": "The Google Maps application will be opened for the best navigation experience. The audio guide will be paused during this process. You can restart the audio guide when you return to the application.",
+        "startAnyway": "Start Anyway",
+        "noStopsFound": "No stops were found for this route."
     },
      "qrScanner": {
-        "description": "Instantly access detailed information about a place by scanning the QR codes at the information points in Kula."
+        "description": "Instantly access detailed information about a place by scanning the QR codes at the information points in Kula.",
+        "invalidQrCode": "Invalid QR Code. Please scan a QR code belonging to the application.",
+        "cameraError": "An error occurred while starting the camera. Please make sure another application is not using the camera.",
+        "cameraPermissionError": "You need to allow camera access. Please check your browser settings.",
+        "cameraNotReadableError": "The camera is currently unavailable. It may be in use by another application or tab, or there may be a hardware issue.",
+        "noCameraFound": "No camera was found on this device or camera access was not allowed.",
+        "cameraAccessDenied": "Camera access was denied. Please allow it from your browser settings."
     },
     "audioGuide": {
         "title": "Audio Guide",
@@ -153,7 +173,11 @@
         "retake": "Retake",
         "cameraAccessDeniedTitle": "Camera Access Denied",
         "cameraAccessDenied": "To use this feature, please allow camera access in your browser settings.",
-        "cameraUnsupported": "Your browser does not support camera access."
+        "cameraUnsupported": "Your browser does not support camera access.",
+        "frameLoadError": "An error occurred while loading the frame.",
+        "rearCameraNotFoundTitle": "Rear Camera Not Found",
+        "rearCameraNotFoundDescription": "Your device does not have a rear camera or it is inaccessible. Switching to the front camera.",
+        "toggleCameraLabel": "Toggle camera"
     },
     "map": {
         "yourLocation": "Your Location",
@@ -242,7 +266,9 @@
         "messagePlaceholder": "Write your experience or advice here...",
         "submit": "Submit Comment",
         "sending": "Sending...",
-        "sent": "Sent!"
+        "sent": "Sent!",
+        "noComments": "No comments yet. Be the first to comment!",
+        "justNow": "just now"
     },
     "survey": {
         "title": "Rate Your Visit: {poiName}",
@@ -261,7 +287,8 @@
         "yes": "Yes",
         "no": "No",
         "requiredError": "Please make a selection.",
-        "ratingRequiredError": "Rating is required."
+        "ratingRequiredError": "Rating is required.",
+        "feedbackThanksDescription": "Thank you for your feedback."
     },
     "narMotifi": {
         "title": "Pomegranate Motif",

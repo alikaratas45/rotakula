@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useMemo } from 'react';
@@ -48,15 +49,15 @@ type Feedback = FeedbackFormValues & {
 };
 
 function FeedbackItem({ feedback }: { feedback: Feedback }) {
-  const { language } = useApp();
+  const { language, translations } = useApp();
   const displayDate = useMemo(() => {
     if (!feedback.createdAt?.seconds) {
-      return 'az önce';
+      return translations.comments.justNow;
     }
     const date = new Date(feedback.createdAt.seconds * 1000);
     const locale = locales[language] || tr;
     return formatDistanceToNow(date, { addSuffix: true, locale: locale });
-  }, [feedback.createdAt, language]);
+  }, [feedback.createdAt, language, translations]);
 
   return (
     <Card>
@@ -101,7 +102,7 @@ function FeedbackList({ isLimited }: { isLimited?: boolean }) {
         feedback.map((item) => <FeedbackItem key={item.id} feedback={item} />)
       ) : (
         <p className="text-center text-muted-foreground">
-          Henüz yorum yapılmamış. İlk yorumu siz yapın!
+          {translations.comments.noComments}
         </p>
       )}
     </div>

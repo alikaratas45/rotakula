@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -7,7 +8,7 @@ import { Users } from 'lucide-react';
 import { useApp } from '@/context/app-context';
 
 const VisitorCounter = () => {
-    const { translations } = useApp();
+    const { translations, language } = useApp();
     const firestore = useFirestore();
     const [visitorCount, setVisitorCount] = useState<number | null>(null);
 
@@ -68,7 +69,7 @@ const VisitorCounter = () => {
                     {translations.common.totalVisitors}
                 </h3>
                 <p className="text-5xl font-bold text-primary mt-2">
-                    {visitorCount.toLocaleString('tr-TR')}
+                    {visitorCount.toLocaleString(language)}
                 </p>
             </div>
         </section>

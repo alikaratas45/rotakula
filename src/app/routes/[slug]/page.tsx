@@ -1,3 +1,4 @@
+
 "use client"
 
 import { getRouteBySlug, getPoisByIds } from '@/lib/kula-data';
@@ -91,7 +92,7 @@ export default function RoutePage() {
         if (!pois || pois.length < 1) {
              toast({
                 title: translations.toast.errorTitle,
-                description: "Bu rota için durak bulunamadı.",
+                description: translations.route.noStopsFound,
                 variant: 'destructive',
             });
             return;
@@ -262,20 +263,20 @@ export default function RoutePage() {
                                                     ) : (
                                                         isDrivingRoute ? <Car className="mr-2 h-4 w-4" /> : <Footprints className="mr-2 h-4 w-4" />
                                                     )}
-                                                    {isStartingRoute ? translations.nearby.gettingLocation : "Rotayı Haritada Başlat"}
+                                                    {isStartingRoute ? translations.nearby.gettingLocation : translations.route.startRouteOnMap}
                                                 </Button>
                                             </AlertDialogTrigger>
                                             <AlertDialogContent>
                                                 <AlertDialogHeader>
-                                                <AlertDialogTitle>Harita Uygulamasına Yönlendiriliyorsunuz</AlertDialogTitle>
+                                                <AlertDialogTitle>{translations.route.redirectToMapsTitle}</AlertDialogTitle>
                                                 <AlertDialogDescription>
-                                                    En iyi yol tarifi deneyimi için Google Haritalar uygulaması açılacaktır. Bu işlem sırasında sesli rehber duraklatılacaktır. Uygulamaya geri döndüğünüzde sesli rehberi yeniden başlatabilirsiniz.
+                                                    {translations.route.redirectToMapsDescription}
                                                 </AlertDialogDescription>
                                                 </AlertDialogHeader>
                                                 <AlertDialogFooter>
-                                                <AlertDialogCancel>İptal</AlertDialogCancel>
+                                                <AlertDialogCancel>{translations.common.cancel}</AlertDialogCancel>
                                                 <AlertDialogAction onClick={() => handleStartRoute(isDrivingRoute ? 'driving' : 'walking')}>
-                                                    Yine de Başlat
+                                                    {translations.route.startAnyway}
                                                 </AlertDialogAction>
                                                 </AlertDialogFooter>
                                             </AlertDialogContent>

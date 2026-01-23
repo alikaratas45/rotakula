@@ -92,7 +92,7 @@ export const Survey = ({ poiId, poiName, onSubmitted }: { poiId: string; poiName
 
     toast({
         title: translations.survey.thanksTitle,
-        description: "Geri bildiriminiz için teşekkür ederiz."
+        description: translations.survey.feedbackThanksDescription,
     });
 
     setIsSubmitting(false);

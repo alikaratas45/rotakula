@@ -73,20 +73,40 @@
     },
     "nearby": {
         "title": "Qu'y a-t-il Autour de Moi ?",
-        "description": "Les lieux dans un rayon de 10 km de votre emplacement actuel sont listés ci-dessous.",
+        "description": "Les lieux dans un rayon de {radius} km de votre emplacement actuel sont listés ci-dessous.",
         "gettingLocation": "Obtention de votre emplacement...",
         "locationError": "Impossible d'obtenir votre emplacement. Veuillez vérifier les autorisations de localisation de votre navigateur.",
-        "noPoisFound": "Aucun point d'intérêt trouvé à moins de 10 km de votre emplacement.",
-        "distance": "Distance"
+        "noPoisFound": "Aucun point d'intérêt trouvé à moins de {radius} km de votre emplacement.",
+        "distance": "Distance",
+        "discoverTitle": "Découvrez les lieux près de chez vous",
+        "discoverDescription": "Vous devez autoriser la localisation pour voir les sites touristiques à proximité.",
+        "findButton": "Trouver à proximité",
+        "permissionDenied": "Vous devez autoriser l'accès à la localisation.",
+        "positionUnavailable": "Les informations de localisation sont actuellement indisponibles.",
+        "timeout": "Un délai d'attente s'est produit lors de la récupération des informations de localisation.",
+        "tryAgain": "Réessayer",
+        "noResults": "Nous n'avons trouvé aucun lieu à proximité, mais vous pouvez parcourir tous les lieux."
     },
     "route": {
         "mapTitle": "Carte de l'Itinéraire",
         "whatsOnThisRoute": "Qu'y a-t-il sur cet itinéraire ?",
         "routeInfo": "Informations sur l'itinéraire",
-        "stops": "Arrêts"
+        "stops": "Arrêts",
+        "routes": "Itinéraires",
+        "startRouteOnMap": "Démarrer l'itinéraire sur la carte",
+        "redirectToMapsTitle": "Redirection vers l'application de cartographie",
+        "redirectToMapsDescription": "L'application Google Maps sera ouverte pour une meilleure expérience de navigation. L'audioguide sera mis en pause pendant ce processus. Vous pouvez redémarrer l'audioguide lorsque vous revenez à l'application.",
+        "startAnyway": "Démarrer quand même",
+        "noStopsFound": "Aucun arrêt n'a été trouvé pour cet itinéraire."
     },
      "qrScanner": {
-        "description": "Accédez instantanément à des informations détaillées sur un lieu en scannant les codes QR aux points d'information de Kula."
+        "description": "Accédez instantanément à des informations détaillées sur un lieu en scannant les codes QR aux points d'information de Kula.",
+        "invalidQrCode": "QR Code invalide. Veuillez scanner un QR code appartenant à l'application.",
+        "cameraError": "Une erreur s'est produite lors du démarrage de la caméra. Veuillez vous assurer qu'une autre application n'utilise pas la caméra.",
+        "cameraPermissionError": "Vous devez autoriser l'accès à la caméra. Veuillez vérifier les paramètres de votre navigateur.",
+        "cameraNotReadableError": "La caméra est actuellement indisponible. Elle est peut-être utilisée par une autre application ou un autre onglet, ou il peut y avoir un problème matériel.",
+        "noCameraFound": "Aucune caméra n'a été trouvée sur cet appareil ou l'accès à la caméra n'a pas été autorisé.",
+        "cameraAccessDenied": "L'accès à la caméra a été refusé. Veuillez l'autoriser dans les paramètres de votre navigateur."
     },
     "audioGuide": {
         "title": "Audio Guide",
@@ -153,7 +173,11 @@
         "retake": "Reprendre",
         "cameraAccessDeniedTitle": "Accès à la Caméra Refusé",
         "cameraAccessDenied": "Pour utiliser cette fonctionnalité, veuillez autoriser l'accès à la caméra dans les paramètres de votre navigateur.",
-        "cameraUnsupported": "Votre navigateur ne prend pas en charge l'accès à la caméra."
+        "cameraUnsupported": "Votre navigateur ne prend pas en charge l'accès à la caméra.",
+        "frameLoadError": "Une erreur s'est produite lors du chargement du cadre.",
+        "rearCameraNotFoundTitle": "Caméra arrière non trouvée",
+        "rearCameraNotFoundDescription": "Votre appareil n'a pas de caméra arrière ou elle est inaccessible. Passage à la caméra avant.",
+        "toggleCameraLabel": "Changer de caméra"
     },
     "map": {
         "yourLocation": "Votre Emplacement",
@@ -242,7 +266,9 @@
         "messagePlaceholder": "Écrivez votre expérience ou vos conseils ici...",
         "submit": "Envoyer le Commentaire",
         "sending": "Envoi en cours...",
-        "sent": "Envoyé !"
+        "sent": "Envoyé !",
+        "noComments": "Pas encore de commentaires. Soyez le premier à commenter !",
+        "justNow": "à l'instant"
     },
     "survey": {
         "title": "Évaluez Votre Visite : {poiName}",
@@ -261,7 +287,8 @@
         "yes": "Oui",
         "no": "Non",
         "requiredError": "Veuillez faire une sélection.",
-        "ratingRequiredError": "Une évaluation est requise."
+        "ratingRequiredError": "Une évaluation est requise.",
+        "feedbackThanksDescription": "Merci pour votre feedback."
     },
     "narMotifi": {
         "title": "Motif de la Grenade",

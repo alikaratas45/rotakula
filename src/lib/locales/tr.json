@@ -77,16 +77,36 @@
         "gettingLocation": "Konumunuz alınıyor...",
         "locationError": "Konumunuz alınamadı. Lütfen tarayıcınızın konum izinlerini kontrol edin.",
         "noPoisFound": "Konumunuza {radius} km mesafede gezilecek yer bulunamadı.",
-        "distance": "Uzaklık"
+        "distance": "Uzaklık",
+        "discoverTitle": "Yakınınızdaki yerleri keşfedin",
+        "discoverDescription": "Yakınınızdaki turistik noktaları görmek için konum izni vermeniz gerekmektedir.",
+        "findButton": "Yakınımdakileri Bul",
+        "permissionDenied": "Konum erişimine izin vermeniz gerekiyor.",
+        "positionUnavailable": "Konum bilgisi şu anda alınamıyor.",
+        "timeout": "Konum bilgisi alınırken zaman aşımı oluştu.",
+        "tryAgain": "Tekrar Dene",
+        "noResults": "Yakınlarda bir yer bulamadık ama tüm yerlere göz atabilirsiniz."
     },
     "route": {
         "mapTitle": "Rota Haritası",
         "whatsOnThisRoute": "Bu Rotada Neler Var?",
         "routeInfo": "Rota Bilgileri",
-        "stops": "Duraklar"
+        "stops": "Duraklar",
+        "routes": "Rotalar",
+        "startRouteOnMap": "Rotayı Haritada Başlat",
+        "redirectToMapsTitle": "Harita Uygulamasına Yönlendiriliyorsunuz",
+        "redirectToMapsDescription": "En iyi yol tarifi deneyimi için Google Haritalar uygulaması açılacaktır. Bu işlem sırasında sesli rehber duraklatılacaktır. Uygulamaya geri döndüğünüzde sesli rehberi yeniden başlatabilirsiniz.",
+        "startAnyway": "Yine de Başlat",
+        "noStopsFound": "Bu rota için durak bulunamadı."
     },
      "qrScanner": {
-        "description": "Kula'daki bilgilendirme noktalarında bulunan QR kodlarını tarayarak ilgili yer hakkında detaylı bilgiye anında ulaşın."
+        "description": "Kula'daki bilgilendirme noktalarında bulunan QR kodlarını tarayarak ilgili yer hakkında detaylı bilgiye anında ulaşın.",
+        "invalidQrCode": "Geçersiz QR Kod. Lütfen uygulamaya ait bir QR kod taratın.",
+        "cameraError": "Kamera başlatılırken bir hata oluştu. Lütfen başka bir uygulamanın kamerayı kullanmadığından emin olun.",
+        "cameraPermissionError": "Kamera erişimine izin vermeniz gerekiyor. Lütfen tarayıcı ayarlarınızı kontrol edin.",
+        "cameraNotReadableError": "Kamera şu anda kullanılamıyor. Başka bir uygulama veya sekme tarafından kullanılıyor olabilir veya donanımsal bir sorun olabilir.",
+        "noCameraFound": "Bu cihazda kamera bulunamadı veya kamera erişimine izin verilmedi.",
+        "cameraAccessDenied": "Kamera erişimi reddedildi. Lütfen tarayıcı ayarlarınızdan izin verin."
     },
     "audioGuide": {
         "title": "Sesli Rehber",
@@ -153,7 +173,11 @@
         "retake": "Tekrar Çek",
         "cameraAccessDeniedTitle": "Kamera Erişimi Reddedildi",
         "cameraAccessDenied": "Bu özelliği kullanmak için lütfen tarayıcı ayarlarınızdan kamera erişimine izin verin.",
-        "cameraUnsupported": "Tarayıcınız kamera erişimini desteklemiyor."
+        "cameraUnsupported": "Tarayıcınız kamera erişimini desteklemiyor.",
+        "frameLoadError": "Çerçeve yüklenirken bir hata oluştu.",
+        "rearCameraNotFoundTitle": "Arka Kamera Bulunamadı",
+        "rearCameraNotFoundDescription": "Cihazınızda arka kamera bulunmuyor veya erişilemiyor. Ön kameraya geçiliyor.",
+        "toggleCameraLabel": "Kamerayı değiştir"
     },
     "map": {
         "yourLocation": "Sizin Konumunuz",
@@ -241,7 +265,9 @@
         "messagePlaceholder": "Deneyiminizi veya tavsiyelerinizi buraya yazın...",
         "submit": "Yorumu Gönder",
         "sending": "Gönderiliyor...",
-        "sent": "Gönderildi!"
+        "sent": "Gönderildi!",
+        "noComments": "Henüz yorum yapılmamış. İlk yorumu siz yapın!",
+        "justNow": "az önce"
     },
     "survey": {
         "title": "Ziyaretinizi Değerlendirin: {poiName}",
@@ -260,7 +286,8 @@
         "yes": "Evet",
         "no": "Hayır",
         "requiredError": "Lütfen bir seçim yapın.",
-        "ratingRequiredError": "Puanlama zorunludur."
+        "ratingRequiredError": "Puanlama zorunludur.",
+        "feedbackThanksDescription": "Geri bildiriminiz için teşekkür ederiz."
     },
     "narMotifi": {
         "title": "Nar Motifi",

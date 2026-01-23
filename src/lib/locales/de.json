@@ -73,20 +73,40 @@
     },
     "nearby": {
         "title": "Was ist in meiner Nähe?",
-        "description": "Orte im Umkreis von 10 km von Ihrem aktuellen Standort sind unten aufgeführt.",
+        "description": "Orte im Umkreis von {radius} km von Ihrem aktuellen Standort sind unten aufgeführt.",
         "gettingLocation": "Ihr Standort wird abgerufen...",
         "locationError": "Ihr Standort konnte nicht abgerufen werden. Bitte überprüfen Sie die Standorteinstellungen Ihres Browsers.",
-        "noPoisFound": "Keine Sehenswürdigkeiten im Umkreis von 10 km von Ihrem Standort gefunden.",
-        "distance": "Entfernung"
+        "noPoisFound": "Keine Sehenswürdigkeiten im Umkreis von {radius} km von Ihrem Standort gefunden.",
+        "distance": "Entfernung",
+        "discoverTitle": "Yakınınızdaki yerleri keşfedin",
+        "discoverDescription": "Yakınınızdaki turistik noktaları görmek için konum izni vermeniz gerekmektedir.",
+        "findButton": "Yakınımdakileri Bul",
+        "permissionDenied": "Konum erişimine izin vermeniz gerekiyor.",
+        "positionUnavailable": "Konum bilgisi şu anda alınamıyor.",
+        "timeout": "Konum bilgisi alınırken zaman aşımı oluştu.",
+        "tryAgain": "Tekrar Dene",
+        "noResults": "Yakınlarda bir yer bulamadık ama tüm yerlere göz atabilirsiniz."
     },
     "route": {
         "mapTitle": "Routenkartde",
         "whatsOnThisRoute": "Was gibt es auf dieser Route?",
         "routeInfo": "Routeninformationen",
-        "stops": "Stopps"
+        "stops": "Stopps",
+        "routes": "Routen",
+        "startRouteOnMap": "Route auf der Karte starten",
+        "redirectToMapsTitle": "Sie werden zur Kartenanwendung weitergeleitet",
+        "redirectToMapsDescription": "Für das beste Navigationserlebnis wird die Google Maps-Anwendung geöffnet. Während dieses Vorgangs wird der Audioguide angehalten. Sie können den Audioguide neu starten, wenn Sie zur Anwendung zurückkehren.",
+        "startAnyway": "Trotzdem starten",
+        "noStopsFound": "Für diese Route wurden keine Haltestellen gefunden."
     },
      "qrScanner": {
-        "description": "Greifen Sie sofort auf detaillierte Informationen über einen Ort zu, indem Sie die QR-Codes an den Informationspunkten in Kula scannen."
+        "description": "Greifen Sie sofort auf detaillierte Informationen über einen Ort zu, indem Sie die QR-Codes an den Informationspunkten in Kula scannen.",
+        "invalidQrCode": "Ungültiger QR-Code. Bitte scannen Sie einen zur Anwendung gehörenden QR-Code.",
+        "cameraError": "Beim Starten der Kamera ist ein Fehler aufgetreten. Bitte stellen Sie sicher, dass keine andere Anwendung die Kamera verwendet.",
+        "cameraPermissionError": "Sie müssen den Kamerazugriff zulassen. Bitte überprüfen Sie Ihre Browsereinstellungen.",
+        "cameraNotReadableError": "Die Kamera ist derzeit nicht verfügbar. Sie wird möglicherweise von einer anderen Anwendung oder einem anderen Tab verwendet, oder es liegt ein Hardwareproblem vor.",
+        "noCameraFound": "Auf diesem Gerät wurde keine Kamera gefunden oder der Kamerazugriff wurde nicht erlaubt.",
+        "cameraAccessDenied": "Der Kamerazugriff wurde verweigert. Bitte erlauben Sie ihn in Ihren Browsereinstellungen."
     },
     "audioGuide": {
         "title": "Audioguide",
@@ -153,7 +173,11 @@
         "retake": "Erneut aufnehmen",
         "cameraAccessDeniedTitle": "Kamerazugriff verweigert",
         "cameraAccessDenied": "Um diese Funktion zu nutzen, erlauben Sie bitte den Kamerazugriff in Ihren Browsereinstellungen.",
-        "cameraUnsupported": "Ihr Browser unterstützt den Kamerazugriff nicht."
+        "cameraUnsupported": "Ihr Browser unterstützt den Kamerazugriff nicht.",
+        "frameLoadError": "Beim Laden des Rahmens ist ein Fehler aufgetreten.",
+        "rearCameraNotFoundTitle": "Rückkamera nicht gefunden",
+        "rearCameraNotFoundDescription": "Auf Ihrem Gerät ist keine Rückkamera vorhanden oder sie ist nicht zugänglich. Es wird zur Frontkamera gewechselt.",
+        "toggleCameraLabel": "Kamera wechseln"
     },
     "map": {
         "yourLocation": "Ihr Standort",
@@ -242,7 +266,9 @@
         "messagePlaceholder": "Schreiben Sie hier Ihre Erfahrung oder Ihren Rat...",
         "submit": "Kommentar Senden",
         "sending": "Wird gesendet...",
-        "sent": "Gesendet!"
+        "sent": "Gesendet!",
+        "noComments": "Bisher keine Kommentare. Seien Sie der Erste, der einen Kommentar abgibt!",
+        "justNow": "gerade eben"
     },
     "survey": {
         "title": "Bewerten Sie Ihren Besuch: {poiName}",
@@ -261,7 +287,8 @@
         "yes": "Ja",
         "no": "Nein",
         "requiredError": "Bitte treffen Sie eine Auswahl.",
-        "ratingRequiredError": "Bewertung ist erforderlich."
+        "ratingRequiredError": "Bewertung ist erforderlich.",
+        "feedbackThanksDescription": "Vielen Dank für Ihr Feedback."
     },
     "narMotifi": {
         "title": "Granatapfel-Motiv",
