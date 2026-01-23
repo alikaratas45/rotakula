@@ -11,11 +11,10 @@ import { ptSans, playfairDisplay } from './fonts';
 export const metadata = {
   title: 'Kula Gezi Rehberi | Volkanik Toprakları ve Tarihi Evleri Keşfedin',
   description: "Türkiye'nin ilk ve tek UNESCO Global Jeoparkı'na ev sahipliği yapan Manisa Kula'yı keşfedin. Tarihi Kula evleri, Kuladokya peri bacaları, volkanik parkurlar ve yöresel lezzetler için en kapsamlı mobil gezi rehberi.",
-  keywords: "Kula, Kula Gezi Rehberi, Kula Jeoparkı, Tarihi Kula Evleri, Manisa Kula, Kuladokya, Kula volkanik, Kula'da gezilecek yerler",
   manifest: '/manifest.json',
   icons: {
-    icon: '/logo.png?v=3',
-    apple: '/logo.png?v=3',
+    icon: 'https://i.imgur.com/PS0UgvO.png',
+    apple: 'https://i.imgur.com/PS0UgvO.png',
   },
 };
 
