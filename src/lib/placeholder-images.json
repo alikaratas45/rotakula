@@ -3,169 +3,169 @@
     {
       "id": "hero-home",
       "description": "Kula peri bacaları gün batımı",
-      "imageUrl": "/kula.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1664747477819-2ab263fa1fe9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjYW55b24lMjBzdW5zZXR8ZW58MHx8fHwxNzY5MTczOTg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "canyon sunset"
     },
     {
       "id": "route-geopark",
       "description": "Kula volkanik arazisi",
-      "imageUrl": "/geopark.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1715348020375-f8d4308698f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHx2b2xjYW5pYyUyMGxhbmRzY2FwZXxlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "volcanic landscape"
     },
     {
       "id": "route-history",
       "description": "Tarihi Kula evlerinin olduğu dar bir sokak",
-      "imageUrl": "/essanlar.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1612030685139-3fe0993d49bc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxvbGQlMjB0b3duJTIwc3RyZWV0fGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "old town street"
     },
     {
       "id": "route-food",
       "description": "Toprak güveçte Kula güveci",
-      "imageUrl": "/govec.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1711915408198-9cac70d045c7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxzdGV3JTIwZGlzaHxlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "stew dish"
     },
     {
       "id": "route-villages",
       "description": "Kula'da tarihi bir mahalleden taş evler",
-      "imageUrl": "/goldeli.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1651785071958-6f7ce673e0c7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8dmlsbGFnZSUyMGhvdXNlc3xlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "village houses"
     },
     {
       "id": "poi-divlit-volcano",
       "description": "Kula Divlit Volkan Konisi",
-      "imageUrl": "/kuladivlit.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1688938990011-3de8902c7dc6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjaW5kZXIlMjBjb25lJTIwdm9sY2Fub3xlbnwwfHx8fDE3NjkxNzM5ODN8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "cinder cone volcano"
     },
     {
       "id": "poi-divlit-park",
       "description": "Kula Divlit Volkanik Parkı yürüyüş yolu",
-      "imageUrl": "/doga.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1593217188322-6a547f02ddb5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxuYXR1cmUlMjBwYXRofGVufDB8fHx8MTc2OTE2ODIyN3ww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "nature path"
     },
     {
       "id": "poi-fairy-chimneys",
       "description": "Kula Peri Bacaları jeolojik oluşumları",
-      "imageUrl": "/peri-bacalari.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1663562585744-e29fcdd2c507?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxyb2NrJTIwZm9ybWF0aW9uc3xlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "rock formations"
     },
     {
       "id": "poi-basalt-columns",
       "description": "Çakırca Bazalt Sütunları",
-      "imageUrl": "/cakirca.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1678105498516-ee8ce22af33f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxiYXNhbHQlMjBjb2x1bW5zfGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "basalt columns"
     },
     {
       "id": "poi-historic-houses",
       "description": "Restore edilmiş bir Tarihi Kula Evi",
-      "imageUrl": "/essanlar.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1694349930841-548c81995854?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxoaXN0b3JpYyUyMG1hbnNpb258ZW58MHx8fHwxNzY5MTczOTg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "historic mansion"
     },
     {
       "id": "poi-carullah-mosque",
       "description": "Carullah Bin Süleyman Camii'nin avlusu",
-      "imageUrl": "/carullah.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1740912672919-5244faf31048?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxtb3NxdWUlMjBjb3VydHlhcmR8ZW58MHx8fHwxNzY5MTczOTgzfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "mosque courtyard"
     },
     {
       "id": "poi-local-artisans",
       "description": "Kula'da yerel bir zanaatkar atölyesi",
-      "imageUrl": "/elsanat.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1552836514-bbf70221e437?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxhcnRpc2FuJTIwd29ya3Nob3B8ZW58MHx8fHwxNzY5MTczOTg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "artisan workshop"
     },
     {
       "id": "poi-sweet-pide",
       "description": "Fırından yeni çıkmış Kula şekerli pidesi",
-      "imageUrl": "/sekerli.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1635282544448-19b74a304711?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzd2VldCUyMHBhc3RyeXxlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "sweet pastry"
     },
     {
       "id": "poi-essanlar-konagi",
       "description": "Essanlar Konağı otelinin dış görünüşü",
-      "imageUrl": "/essanlar.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1573750261458-3ca93c21512f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxoaXN0b3JpYyUyMGhvdGVsfGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "historic hotel"
     },
     {
       "id": "poi-village-houses",
       "description": "Encekler mahallesinden tarihi taş evler.",
-      "imageUrl": "/encekler.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1677477242116-7bc3c5b18e77?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxzdG9uZSUyMGhvdXNlc3xlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "stone houses"
     },
     {
       "id": "poi-sandal-village",
       "description": "Sandal mahallesinin genel görünümü.",
-      "imageUrl": "/sandal.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1664859666474-f9bc2b023c54?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx2aWxsYWdlJTIwdmlld3xlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "village view"
     },
     {
       "id": "poi-sandal-volcano",
       "description": "Sandal Divlit Yanardağı ve çevresi.",
-      "imageUrl": "/sandal.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1761639069216-f7b87d7ee45a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx2b2xjYW5vJTIwY29uZXxlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "volcano cone"
     },
     {
       "id": "poi-gokceoren-village",
       "description": "Gökçeören mahallesinin genel görünümü.",
-      "imageUrl": "/gokce.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1731234057680-cc5303a80157?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx2aWxsYWdlJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "village landscape"
     },
     {
       "id": "poi-incesu-village",
       "description": "İncesu mahallesi ve çevresindeki doğal güzellikler.",
-      "imageUrl": "/goldeli.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1735992519503-d87b578249a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8dmlsbGFnZSUyMHN0cmVhbXxlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "village stream"
     },
     {
       "id": "poi-korez-village",
       "description": "Körez mahallesinden tarihi bir sokak.",
-      "imageUrl": "/korez.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1663875612292-1bd48eb0a6ce?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxoaXN0b3JpYyUyMHZpbGxhZ2UlMjBzdHJlZXR8ZW58MHx8fHwxNzY5MTczOTg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "historic village street"
     },
     {
       "id": "poi-emre-village",
       "description": "Emre Mahallesi ve Yunus Emre Türbesi",
-      "imageUrl": "/yunus.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1741972585157-893918245e97?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx2aWxsYWdlJTIwdG9tYnxlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "village tomb"
     },
     {
       "id": "poi-evciler-village",
       "description": "Evciler mahallesinden bir sokak.",
-      "imageUrl": "/evci.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1678021928227-b9c63bac9ef1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx2aWxsYWdlJTIwc3RyZWV0fGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "village street"
     },
     {
       "id": "story-kuladokya",
       "description": "Kuladokya peri bacalarının gün batımında görünüşü",
-      "imageUrl": "/peri-bacalari.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1658005027948-da29e65599fd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjYW55b24lMjBzdW5zZXR8ZW58MHx8fHwxNzY5MTczOTg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "canyon sunset"
     },
     {
       "id": "story-kula-house",
       "description": "Tarihi bir Kula konağının cumbalı penceresi",
-      "imageUrl": "/essanlar.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1763858803418-3f326eb809e8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxoaXN0b3JpYyUyMGhvdXNlJTIwd2luZG93fGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "historic house window"
     },
     {
       "id": "story-artisan",
       "description": "Bir zanaatkarın el aletleriyle çalıştığı an",
-      "imageUrl": "/semerci.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1761410403735-108d974d9a76?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxhcnRpc2FuJTIwaGFuZHN8ZW58MHx8fHwxNzY5MTczOTg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "artisan hands"
     },
     {
       "id": "story-kollyda",
       "description": "İncesu mahallesi yakınlarında bir dere.",
-      "imageUrl": "/gunah.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1735992519397-85c490943cdb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx2aWxsYWdlJTIwc3RyZWFtfGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "village stream"
     },
     {
       "id": "story-maionia",
       "description": "Gökçeören mahallesinin genel görünümü.",
-      "imageUrl": "/hikaye3.png",
+      "imageUrl": "https://images.unsplash.com/photo-1629977681402-c7db16d6c6d1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx2aWxsYWdlJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "village landscape"
     },
     {
       "id": "poi-visitor-center",
       "description": "Jeopark Ziyaretçi Merkezi",
-      "imageUrl": "/zm.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1742869246327-6a3c355cb48f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx2aXNpdG9yJTIwY2VudGVyfGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "visitor center"
     },
     {
@@ -177,103 +177,103 @@
     {
       "id": "poi-kursunlu-camii",
       "description": "Kurşunlu Camii dış görünüşü",
-      "imageUrl": "/kursunlu.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1652868795643-20996bcc2c9a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxoaXN0b3JpYyUyMG1vc3F1ZXxlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "historic mosque"
     },
     {
       "id": "poi-haci-muhsinler",
       "description": "Hacı Muhsinler Evi",
-      "imageUrl": "/muhsinler.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1577926866949-c1ed2147d862?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxvbGQlMjBtYW5zaW9ufGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "old mansion"
     },
     {
       "id": "poi-beyler-evi",
       "description": "Beyler Evi dış görünüşü",
-      "imageUrl": "/beyler.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1731663044393-96efeef65cd9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx0cmFkaXRpb25hbCUyMGhvdXNlfGVufDB8fHx8MTc2OTA4MjE1Mnww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "traditional house"
     },
     {
       "id": "poi-meryem-ana",
       "description": "Meryem Ana Kilisesi",
-      "imageUrl": "/kilise.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1599818539518-c5d59a0e2a08?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxvbGQlMjBjaHVyY2h8ZW58MHx8fHwxNzY5MTczOTg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "old church"
     },
     {
       "id": "poi-zafer-okulu",
       "description": "Tarihi Zafer Okulu binası",
-      "imageUrl": "/zafer.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1684789145247-2da6f63e9f40?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxoaXN0b3JpYyUyMHNjaG9vbHxlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "historic school"
     },
     {
       "id": "poi-turk-evi",
       "description": "Türk Evi Etnografya Müzesi",
-      "imageUrl": "/kestaneciler.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1674141852440-4f46fd14bfac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxldGhub2dyYXBoeSUyMG11c2V1bXxlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "ethnography museum"
     },
     {
       "id": "poi-anemon-otel",
       "description": "Anemon Oteli",
-      "imageUrl": "/anemon-otel.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1573750261458-3ca93c21512f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxoaXN0b3JpYyUyMGhvdGVsfGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "historic hotel"
     },
     {
       "id": "poi-tabala",
       "description": "Yurtbaşı mahallesinden bir görünüm.",
-      "imageUrl": "/yurtbasi.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1717518215340-0d1184c493fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhbmNpZW50JTIwcnVpbnN8ZW58MHx8fHwxNzY5MDk3NTk0fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "ancient ruins"
     },
     {
       "id": "story-tabala",
       "description": "Antik Tabala kentinden kalıntılar ve Roma dönemi yazıtları.",
-      "imageUrl": "/hikaye2.png",
+      "imageUrl": "https://images.unsplash.com/photo-1632153630862-5e255a9d481f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxyb21hbiUyMGluc2NyaXB0aW9ufGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "roman inscription"
     },
     {
       "id": "poi-carsi",
       "description": "Tarihi Kula Çarşısı",
-      "imageUrl": "/carsi.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1728325444494-ff37c2462f01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxoaXN0b3JpYyUyMGJhemFhcnxlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "historic bazaar"
     },
     {
       "id": "poi-cukur-cesmeler",
       "description": "Kurşunlu Camii yanındaki tarihi Çukur Çeşme",
-      "imageUrl": "/cukur.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1699021448950-2674f82fa82c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxoaXN0b3JpYyUyMGZvdW50YWlufGVufDB8fHx8MTc2OTE3Mzk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "historic fountain"
     },
     {
       "id": "poi-suleyman-sah",
       "description": "Süleyman Şah Türbesi",
-      "imageUrl": "/suleyman.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1599978559047-8e83c06e57e2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxoaXN0b3JpYyUyMHRvbWJ8ZW58MHx8fHwxNzY5MTczOTg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "historic tomb"
     },
     {
       "id": "story-nar-motifi",
       "description": "Ahşap üzerine oyulmuş nar motifi",
-      "imageUrl": "/nar.jpg",
+      "imageUrl": "https://picsum.photos/seed/41/800/600",
       "imageHint": "wood carving pomegranate"
     },
     {
       "id": "story-sofa",
       "description": "Tarihi bir konakta yer alan ve sofa olarak bilinen hayat bölümü.",
-      "imageUrl": "/sofa.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1762117361523-0fb17f384e73?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxvdHRvbWFuJTIwaG91c2UlMjBpbnRlcmlvcnxlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "ottoman house interior"
     },
     {
       "id": "poi-bahas-bridge",
       "description": "Hoca Seyfeddin Köprüsü",
-      "imageUrl": "/hoca.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1659343970202-e7d3106d6a38?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8c3RvbmUlMjBicmlkZ2V8ZW58MHx8fHwxNzY5MTM1MjQyfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "stone bridge"
     },
     {
       "id": "story-mezalim",
       "description": "Milli mücadele döneminden tarihi bir sokak.",
-      "imageUrl": "/hikaye.jpg",
+      "imageUrl": "https://images.unsplash.com/flagged/photo-1557263256-5c1f869cfd45?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxoaXN0b3JpYyUyMHZpbGxhZ2UlMjBzdHJlZXR8ZW58MHx8fHwxNzY5MTczOTg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "historic village street"
     },
     {
       "id": "kula-tanitim-video",
       "description": "Kula tanıtım videosu için bir kapak görseli",
-      "imageUrl": "/kula-video-thumb.jpg",
+      "imageUrl": "https://images.unsplash.com/photo-1619121612709-3d5c8c72461b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bGFuZHNjYXBlJTIwYWVyaWFsJTIwdmlld3xlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "landscape aerial view"
     }
   ]
