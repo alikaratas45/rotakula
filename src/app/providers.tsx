@@ -6,7 +6,6 @@ import { Toaster } from '@/components/ui/toaster';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { ThemeProvider } from 'next-themes';
-import { useApp } from '@/context/app-context';
 import SplashScreen from '@/components/splash-screen';
 
 
@@ -37,8 +36,6 @@ function AppContent({ children }: PropsWithChildren) {
 
 
 export function Providers({ children }: PropsWithChildren) {
-  const { language } = useApp();
-  
   return (
     <ThemeProvider
       attribute="class"
@@ -46,7 +43,7 @@ export function Providers({ children }: PropsWithChildren) {
       enableSystem
       disableTransitionOnChange
     >
-      <AppContent key={language}>{children}</AppContent>
+      <AppContent>{children}</AppContent>
     </ThemeProvider>
   );
 }

@@ -1,17 +1,25 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import { useApp } from '@/context/app-context';
 
 export default function SplashScreen() {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   const [isFading, setIsFading] = useState(false);
-  const { translations } = useApp();
 
   useEffect(() => {
+    // Check if the splash screen has already been shown in this session
+    const hasBeenShown = sessionStorage.getItem('splashScreenShown');
+    if (hasBeenShown) {
+      setIsVisible(false);
+      return;
+    }
+
+    // If not shown, make it visible and set the flag in session storage
+    setIsVisible(true);
+    sessionStorage.setItem('splashScreenShown', 'true');
+
     // Hide splash screen after a delay
     const fadeTimer = setTimeout(() => {
       setIsFading(true);
