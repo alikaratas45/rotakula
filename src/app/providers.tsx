@@ -1,3 +1,4 @@
+
 "use client"
 
 import { type PropsWithChildren, useEffect } from 'react';
@@ -25,7 +26,7 @@ function AppContent({ children }: PropsWithChildren) {
         <SplashScreen />
         <Header />
         <div className="hidden md:block fixed top-16 left-4 z-50">
-            <Image src="/belediye.png" alt="Kula Belediyesi Logosu" width={100} height={100} />
+            <Image src="https://i.imgur.com/aQa6rQO.png" alt="Kula Belediyesi Logosu" width={100} height={100} />
         </div>
         <main className="flex-grow animate-fade-in">{children}</main>
         <Footer />

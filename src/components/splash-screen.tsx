@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -49,7 +50,7 @@ export default function SplashScreen() {
       <div className="text-center animate-fade-in-up perspective-1000">
         <div className="preserve-3d">
              <Image
-                src="/belediye.png"
+                src="https://i.imgur.com/aQa6rQO.png"
                 alt="Kula Belediyesi Logo"
                 width={700}
                 height={700}
