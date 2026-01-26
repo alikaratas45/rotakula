@@ -31,17 +31,17 @@
     },
     {
       "id": "walk-route-3",
-      "slug": "kula-emre-parkuru",
-      "name": "Kula Emre Parkuru",
-      "description": "Yunus Emre ve Tabduk Emre'nin manevi atmosferinde huzurlu bir sürüş.",
+      "slug": "burgaz-peri-bacalari-kalinharman-parkuru",
+      "name": "Burgaz - Peri Bacaları - Kalınharman Parkuru",
+      "description": "Burgaz köyünden başlayıp, peri bacalarından geçerek Kalınharman'a ulaşan doğal ve tarihi güzelliklerle dolu bir parkur.",
+      "kmlPath": "/routes/burgaz-peri-bacalari-kalinharman-seyyah-rotasi.kml",
       "distance": "Yaklaşık 20 km",
-      "kmlPath": "/routes/Kula_emre_bisiklet.kml",
-      "name_en": "Kula Emre Trail",
-      "description_en": "A peaceful ride in the spiritual atmosphere of Yunus Emre and Tabduk Emre.",
-      "name_fr": "Piste de Kula Emre",
-      "description_fr": "Une balade paisible dans l'atmosphère spirituelle de Yunus Emre et Tabduk Emre.",
-      "name_de": "Kula Emre Strecke",
-      "description_de": "Eine friedliche Fahrt in der spirituellen Atmosphäre von Yunus Emre und Tabduk Emre."
+      "name_en": "Burgaz - Fairy Chimneys - Kalınharman Trail",
+      "description_en": "A trail full of natural and historical beauties, starting from Burgaz village, passing through the fairy chimneys, and reaching Kalınharman.",
+      "name_fr": "Piste Burgaz - Cheminées de Fées - Kalınharman",
+      "description_fr": "Un sentier plein de beautés naturelles et historiques, partant du village de Burgaz, passant par les cheminées de fées et atteignant Kalınharman.",
+      "name_de": "Burgaz - Feenkamine - Kalınharman Strecke",
+      "description_de": "Ein Weg voller natürlicher und historischer Schönheiten, der vom Dorf Burgaz ausgeht, durch die Feenkamine führt und Kalınharman erreicht."
     },
     {
       "id": "walk-route-5",
