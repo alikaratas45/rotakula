@@ -1,2 +1,19 @@
 
-{}
+{
+  "walkingRoutes": [
+    {
+      "id": "walk-route-1",
+      "slug": "kula-divlit-zirve-yuruyusu",
+      "name": "Kula Divlit Zirve Yürüyüşü",
+      "description": "Kula'nın en etkileyici volkanik oluşumlarından biri olan Divlit konisine doğru bir zirve yürüyüşü.",
+      "kmlPath": "/routes/lavyuruyus.kml",
+      "distance": "Yaklaşık 5 km",
+      "name_en": "Kula Divlit Summit Hike",
+      "description_en": "A summit hike towards the Divlit cone, one of Kula's most impressive volcanic formations.",
+      "name_fr": "Randonnée au Sommet de Kula Divlit",
+      "description_fr": "Une randonnée au sommet vers le cône de Divlit, l'une des formations volcaniques les plus impressionnantes de Kula.",
+      "name_de": "Kula Divlit Gipfelwanderung",
+      "description_de": "Eine Gipfelwanderung zum Divlit-Kegel, einer der beeindruckendsten Vulkanformationen von Kula."
+    }
+  ]
+}

@@ -1,15 +1,18 @@
 
-import type { ThematicRoute, PointOfInterest, Story, BikeRoute } from './types';
+
+import type { ThematicRoute, PointOfInterest, Story, BikeRoute, WalkingRoute } from './types';
 import routesData from './data/kula-routes.json';
 import poisData from './data/kula-pois.json';
 import storiesData from './data/kula-stories.json';
 import bikeRoutesData from './data/bike-routes.json';
+import walkingRoutesData from './data/walking-routes.json';
 
 // A simple in-memory cache to simulate a database and avoid re-reading files.
 const routes: ThematicRoute[] = routesData.routes;
 const pois: PointOfInterest[] = poisData.pois;
 const stories: Story[] = storiesData.stories;
 const bikeRoutes: BikeRoute[] = bikeRoutesData.bikeRoutes;
+const walkingRoutes: WalkingRoute[] = walkingRoutesData.walkingRoutes;
 
 
 // Adding a delay to simulate network latency
@@ -37,6 +40,11 @@ export async function getRoutes(lang: string = 'tr'): Promise<ThematicRoute[]> {
 export async function getBikeRoutes(lang: string = 'tr'): Promise<BikeRoute[]> {
   await new Promise(resolve => setTimeout(resolve, DELAY));
   return bikeRoutes.map(route => translateItem(route, lang));
+}
+
+export async function getWalkingRoutes(lang: string = 'tr'): Promise<WalkingRoute[]> {
+  await new Promise(resolve => setTimeout(resolve, DELAY));
+  return walkingRoutes.map(route => translateItem(route, lang));
 }
 
 export async function getPois(lang: string = 'tr'): Promise<PointOfInterest[]> {
