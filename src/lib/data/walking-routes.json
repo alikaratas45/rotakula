@@ -45,17 +45,17 @@
     },
     {
       "id": "walk-route-5",
-      "slug": "gediz-irmagi-bazalt-sutunlari-peribacalari",
-      "name": "Gediz Irmağı - Bazalt Sütunları - Peribacaları",
-      "description": "Gediz Irmağı kıyısından başlayıp, etkileyici bazalt sütunlarını ve peri bacalarını keşfedeceğiniz bir rota.",
-      "kmlPath": "/routes/gediz.kml",
+      "slug": "incesu-emre-rotasi",
+      "name": "İncesu - Emre rotası",
+      "description": "İncesu ve Emre mahalleleri arasındaki tarihi ve doğal güzellikleri keşfedin.",
+      "kmlPath": "/routes/incesu-emre.kml",
       "distance": "Yaklaşık 16 km",
-      "name_en": "Gediz River - Basalt Columns - Fairy Chimneys",
-      "description_en": "A route starting from the banks of the Gediz River, where you will discover impressive basalt columns and fairy chimneys.",
-      "name_fr": "Rivière Gediz - Colonnes de Basalte - Cheminées de Fées",
-      "description_fr": "Un itinéraire partant des rives de la rivière Gediz, où vous découvrirez d'impressionnantes colonnes de basalte et des cheminées de fées.",
-      "name_de": "Gediz-Fluss - Basaltsäulen - Feenkamine",
-      "description_de": "Eine Route, die an den Ufern des Gediz-Flusses beginnt und bei der Sie beeindruckende Basaltsäulen und Feenkamine entdecken werden."
+      "name_en": "İncesu - Emre Route",
+      "description_en": "Discover the historical and natural beauties between İncesu and Emre neighborhoods.",
+      "name_fr": "Route İncesu - Emre",
+      "description_fr": "Découvrez les beautés historiques et naturelles entre les quartiers d'İncesu et d'Emre.",
+      "name_de": "İncesu - Emre Route",
+      "description_de": "Entdecken Sie die historischen und natürlichen Schönheiten zwischen den Stadtteilen İncesu und Emre."
     },
     {
       "id": "walk-route-6",
