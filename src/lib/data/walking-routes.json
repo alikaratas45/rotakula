@@ -45,17 +45,17 @@
     },
     {
       "id": "walk-route-5",
-      "slug": "peribacalari-kula-parkuru",
-      "name": "Peribacaları - Kula Parkuru",
-      "description": "Peri bacalarından başlayarak Kula merkeze uzanan keyifli bir iniş rotası.",
+      "slug": "gediz-irmagi-bazalt-sutunlari-peribacalari",
+      "name": "Gediz Irmağı - Bazalt Sütunları - Peribacaları",
+      "description": "Gediz Irmağı kıyısından başlayıp, etkileyici bazalt sütunlarını ve peri bacalarını keşfedeceğiniz bir rota.",
       "distance": "Yaklaşık 22 km",
-      "kmlPath": "/routes/Peribacalari_kula.kml",
-      "name_en": "Fairy Chimneys - Kula Trail",
-      "description_en": "A pleasant downhill route starting from the fairy chimneys and extending to the center of Kula.",
-      "name_fr": "Piste des Cheminées de Fées - Kula",
-      "description_fr": "Un agréable parcours de descente partant des cheminées de fées et s'étendant jusqu'au centre de Kula.",
-      "name_de": "Feenkamine - Kula Strecke",
-      "description_de": "Eine angenehme Abfahrtsroute, die von den Feenkaminen ausgeht und sich bis ins Zentrum von Kula erstreckt."
+      "kmlPath": "/routes/gediz-irmagi-bazalt-sutunlari-peribacalari.kml",
+      "name_en": "Gediz River - Basalt Columns - Fairy Chimneys",
+      "description_en": "A route starting from the banks of the Gediz River, where you will discover impressive basalt columns and fairy chimneys.",
+      "name_fr": "Rivière Gediz - Colonnes de Basalte - Cheminées de Fées",
+      "description_fr": "Un itinéraire partant des rives de la rivière Gediz, où vous découvrirez d'impressionnantes colonnes de basalte et des cheminées de fées.",
+      "name_de": "Gediz-Fluss - Basaltsäulen - Feenkamine",
+      "description_de": "Eine Route, die an den Ufern des Gediz-Flusses beginnt und bei der Sie beeindruckende Basaltsäulen und Feenkamine entdecken werden."
     }
   ]
 }
