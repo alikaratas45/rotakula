@@ -12,7 +12,6 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
     const polylineRef = useRef<google.maps.Polyline | null>(null);
 
     useEffect(() => {
-        // Function to clear the existing polyline from the map
         const clearPolyline = () => {
             if (polylineRef.current) {
                 polylineRef.current.setMap(null);
@@ -26,14 +25,13 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
 
         if (!kmlPath) {
             clearPolyline();
-            // Optional: Reset map to default view when no route is selected
             map.panTo({ lat: 38.547, lng: 28.65 });
             map.setZoom(11);
             return;
         }
 
         async function fetchAndDrawKml() {
-            clearPolyline(); // Clear any previous route
+            clearPolyline();
 
             try {
                 const response = await fetch(kmlPath);
@@ -54,47 +52,43 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
                 let allCoordinates: { lat: number; lng: number }[] = [];
 
                 for (let i = 0; i < lineStringNodes.length; i++) {
-                    const coordsStringNode = lineStringNodes[i].getElementsByTagName('coordinates')[0];
-                    if (!coordsStringNode || !coordsStringNode.textContent) {
-                        continue;
+                    const coordsNode = lineStringNodes[i].getElementsByTagName('coordinates')[0];
+                    if (coordsNode && coordsNode.textContent) {
+                        const coordinates = coordsNode.textContent
+                            .trim()
+                            .split(/\s+/)
+                            .map(coordStr => {
+                                const [lng, lat] = coordStr.split(',').map(Number);
+                                if (!isNaN(lat) && !isNaN(lng)) {
+                                    return { lat, lng };
+                                }
+                                return null;
+                            }).filter((c): c is { lat: number; lng: number } => c !== null);
+                        
+                        allCoordinates = allCoordinates.concat(coordinates);
                     }
-                    
-                    const coordinates = coordsStringNode.textContent
-                        .trim()
-                        .split(/\s+/) // Split by any whitespace
-                        .map(coordStr => {
-                            const [lng, lat] = coordStr.split(',').map(Number);
-                            if (!isNaN(lat) && !isNaN(lng)) {
-                                return { lat, lng };
-                            }
-                            return null;
-                        }).filter((c): c is { lat: number; lng: number } => c !== null);
-                    
-                    allCoordinates = allCoordinates.concat(coordinates);
                 }
 
-
-                if (allCoordinates.length === 0) {
-                     console.warn(`Could not parse valid coordinates from KML file: ${kmlPath}`);
+                if (allCoordinates.length < 2) {
+                     console.warn(`Could not parse a valid polyline (less than 2 points) from KML file: ${kmlPath}`);
                      return;
                 }
                 
                 const newPolyline = new google.maps.Polyline({
                     path: allCoordinates,
-                    strokeColor: "#0000FF", // A strong blue color
+                    strokeColor: "#0000FF",
                     strokeOpacity: 0.8,
-                    strokeWeight: 6, // Make it thicker and more visible
+                    strokeWeight: 6,
                     map: map,
                 });
                 
                 polylineRef.current = newPolyline;
                 
-                // Automatically adjust the map's viewport to fit the entire polyline
                 const bounds = new google.maps.LatLngBounds();
                 allCoordinates.forEach(point => {
                     bounds.extend(point);
                 });
-                map.fitBounds(bounds, 60); // 60px padding
+                map.fitBounds(bounds, 60);
 
             } catch (error) {
                 console.error(`Error processing KML file (${kmlPath}):`, error);
@@ -103,12 +97,11 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
 
         fetchAndDrawKml();
 
-        // Cleanup function for when the component unmounts or kmlPath changes
         return () => {
             clearPolyline();
         };
         
     }, [kmlPath, map]);
 
-    return null; // This component does not render anything itself
+    return null;
 }

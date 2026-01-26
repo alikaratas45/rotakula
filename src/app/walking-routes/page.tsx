@@ -10,7 +10,7 @@ import { Loader2, Footprints } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { UserLocationMarker } from '@/components/map';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { KmlLayerComponent } from '@/components/kml-layer';
+import { KmlPolyline } from '@/components/kml-polyline';
 
 
 export default function WalkingRoutesPage() {
@@ -96,7 +96,7 @@ export default function WalkingRoutesPage() {
                                     disableDefaultUI={false}
                                     mapId="rotakula-walking-map"
                                 >
-                                   <KmlLayerComponent url={selectedRoute?.kmlPath ?? null} />
+                                   <KmlPolyline kmlPath={selectedRoute?.kmlPath ?? null} />
                                    <UserLocationMarker />
                                 </Map>
                             </div>
