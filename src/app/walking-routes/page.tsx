@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useEffect, useState, useRef } from 'react';
@@ -54,8 +53,7 @@ function MapController({ selectedRoute }: { selectedRoute: WalkingRoute | null }
             try {
                 const response = await fetch(selectedRoute!.kmlPath);
                 if (!response.ok) {
-                    console.error(`KML file could not be fetched: ${response.status} ${response.statusText}`);
-                    return;
+                    throw new Error(`KML dosyası getirilemedi: ${response.status} ${response.statusText}`);
                 }
                 const kmlText = await response.text();
                 
@@ -64,7 +62,7 @@ function MapController({ selectedRoute }: { selectedRoute: WalkingRoute | null }
 
                 const coordsStringNode = kml.getElementsByTagName('coordinates')[0];
                 if (!coordsStringNode || !coordsStringNode.textContent) {
-                    console.warn(`Could not find <coordinates> tag in KML file: ${selectedRoute!.kmlPath}`);
+                    console.warn(`KML dosyasında <coordinates> etiketi bulunamadı: ${selectedRoute!.kmlPath}`);
                     return;
                 }
 
@@ -80,7 +78,7 @@ function MapController({ selectedRoute }: { selectedRoute: WalkingRoute | null }
                     }).filter((c): c is { lat: number; lng: number } => c !== null);
 
                 if (coordinates.length === 0) {
-                     console.warn(`Could not parse valid coordinates from KML: ${selectedRoute!.kmlPath}`);
+                     console.warn(`KML dosyasından geçerli koordinat ayrıştırılamadı: ${selectedRoute!.kmlPath}`);
                      return;
                 }
                 
