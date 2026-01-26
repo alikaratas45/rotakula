@@ -8,6 +8,7 @@ import { useApp } from '@/context/app-context';
 import PoiSelectionList from './poi-selection-list';
 import SelectedPoisSidebar from './selected-pois-sidebar';
 import { RouteMap } from './route-map';
+import { BackButton } from '@/components/back-button';
 
 const MAX_SELECTION = 10;
 
@@ -84,6 +85,7 @@ export default function CreateRoutePage() {
     
     return (
         <div className="container mx-auto px-4 py-8">
+            <BackButton className="mb-8" />
             <div className="flex flex-col gap-8">
                 {/* Selected POIs */}
                 <div className="sticky top-16 z-20 -mx-4 px-4 py-4 border-y bg-background/95 backdrop-blur-sm">
@@ -110,4 +112,3 @@ export default function CreateRoutePage() {
         </div>
     );
 }
-

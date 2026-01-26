@@ -9,6 +9,7 @@ import { Camera, Download, Loader2, RefreshCw, Sparkles, Smile, ShieldAlert, Swi
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { BackButton } from '@/components/back-button';
 
 const filters = [
     { src: "/frames/kula-geopark.svg", name: "UNESCO Global Geopark" },
@@ -162,6 +163,7 @@ export default function SelfieSpotPage() {
 
     return (
         <div className="container px-4 py-8 md:py-12">
+            <BackButton className="mb-8" />
             <div className="max-w-2xl mx-auto space-y-8">
                 <div className="text-center">
                     <h1 className="text-3xl md:text-4xl font-headline font-bold">{translations.selfieSpot.title}</h1>

@@ -7,6 +7,7 @@ import { Gem } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { getImageById } from '@/lib/placeholder-images';
 import AudioPlayer from '@/components/AudioPlayer';
+import { BackButton } from '@/components/back-button';
 
 export default function NarMotifiPage() {
     const { translations } = useApp();
@@ -40,6 +41,7 @@ export default function NarMotifiPage() {
             </section>
             
             <div className="container px-4 py-8 md:py-12">
+                <BackButton className="mb-8" />
                 <div className="max-w-3xl mx-auto">
                     <div className="flex items-center gap-4 mb-6">
                         <Gem className="h-6 w-6 text-primary" />

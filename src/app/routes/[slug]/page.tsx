@@ -28,6 +28,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { BackButton } from '@/components/back-button';
 
 function getCategoryIcon(category: PointOfInterest['category']) {
     switch (category) {
@@ -160,6 +161,7 @@ export default function RoutePage() {
             </section>
             
             <div className="container px-4 py-8 md:py-12">
+                <BackButton className="mb-8" />
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
                     <div className="lg:col-span-2">
                         <div className="text-lg text-foreground/80 mb-8 prose prose-lg max-w-none">

@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 import { UserLocationMarker } from '@/components/map';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { KmlPolyline } from '@/components/kml-polyline';
+import { BackButton } from '@/components/back-button';
 
 
 export default function BikeRoutesPage() {
@@ -57,6 +58,7 @@ export default function BikeRoutesPage() {
     return (
         <APIProvider apiKey={apiKey}>
             <div className="container px-4 py-8 md:py-12">
+                <BackButton className="mb-8" />
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
                     <div className="flex items-center gap-4">
                          <Bike className="h-8 w-8 text-primary" />

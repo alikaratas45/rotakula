@@ -213,7 +213,8 @@
         "submit": "Envoyer",
         "close": "Fermer",
         "totalVisitors": "Visiteurs Totaux",
-        "justNow": "à l'instant"
+        "justNow": "à l'instant",
+        "back": "Retour"
     },
     "category": {
         "geopark": "Géoparc",

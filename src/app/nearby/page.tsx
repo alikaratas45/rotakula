@@ -16,6 +16,7 @@ import { APIProvider } from '@vis.gl/react-google-maps';
 import { useApp } from '@/context/app-context';
 import { haversineDistance } from '@/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { BackButton } from '@/components/back-button';
 
 const NEARBY_RADIUS_KM = 5;
 
@@ -206,6 +207,7 @@ export default function NearbyPage() {
     return (
         <APIProvider apiKey={apiKey}>
             <div className="container px-4 py-8 md:py-12">
+                <BackButton className="mb-4" />
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
                     <h1 className="text-3xl md:text-4xl font-headline font-bold">{translations.nearby.title}</h1>
                 </div>

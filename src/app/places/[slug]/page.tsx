@@ -14,6 +14,7 @@ import { useApp } from '@/context/app-context';
 import { Survey } from '@/components/survey';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AudioPlayer from '@/components/AudioPlayer';
+import { BackButton } from '@/components/back-button';
 
 export default function PlaceDetailPage() {
     const params = useParams();
@@ -102,6 +103,7 @@ export default function PlaceDetailPage() {
                 </section>
                 
                 <div className="container px-4 py-8 md:py-12">
+                    <BackButton className="mb-8" />
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
                          <div className="lg:col-span-2">
                              <div className="flex flex-col gap-4 mb-6">

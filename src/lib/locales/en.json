@@ -213,7 +213,8 @@
         "submit": "Submit",
         "close": "Close",
         "totalVisitors": "Total Visitors",
-        "justNow": "just now"
+        "justNow": "just now",
+        "back": "Back"
     },
     "category": {
         "geopark": "Geopark",

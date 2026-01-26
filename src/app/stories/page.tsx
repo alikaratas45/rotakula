@@ -9,6 +9,7 @@ import { getImageById } from '@/lib/placeholder-images';
 import { BookOpen } from 'lucide-react';
 import { useApp } from '@/context/app-context';
 import { useEffect, useState } from 'react';
+import { BackButton } from '@/components/back-button';
 
 const StoryCard = ({ story }: { story: Story }) => {
   const image = getImageById(story.imageId);
@@ -52,6 +53,7 @@ export default function StoriesPage() {
 
   return (
     <div className="container px-4 py-8 md:py-12">
+        <BackButton className="mb-8" />
         <div className="flex items-center gap-4 mb-8">
             <BookOpen className="h-8 w-8 text-primary" />
             <h1 className="text-3xl md:text-4xl font-headline font-bold">{translations.stories.title}</h1>

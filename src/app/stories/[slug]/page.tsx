@@ -10,6 +10,7 @@ import { notFound, useParams } from 'next/navigation';
 import { getImageById } from '@/lib/placeholder-images';
 import { Loader2 } from 'lucide-react';
 import AudioPlayer from '@/components/AudioPlayer';
+import { BackButton } from '@/components/back-button';
 
 export default function StoryPage() {
     const params = useParams();
@@ -74,6 +75,7 @@ export default function StoryPage() {
             </section>
             
             <div className="container px-4 py-8 md:py-12">
+                <BackButton className="mb-8" />
                 <div className="max-w-3xl mx-auto">
                     <div className="flex flex-col gap-4 mb-6">
                         <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>

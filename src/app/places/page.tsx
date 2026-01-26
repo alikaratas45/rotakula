@@ -14,6 +14,7 @@ import { HistoricHouseIcon, FoodIcon, BedIcon } from '@/components/icons';
 import EmbeddedMap from '@/components/map';
 import { APIProvider } from '@vis.gl/react-google-maps';
 import { useApp } from '@/context/app-context';
+import { BackButton } from '@/components/back-button';
 
 const customPoiOrder = [
     'poi-30', // Ahşap köprüler
@@ -112,6 +113,7 @@ export default function PlacesPage() {
     return (
         <APIProvider apiKey={apiKey}>
             <div className="container px-4 py-8 md:py-12">
+                <BackButton className="mb-8" />
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
                     <h1 className="text-3xl md:text-4xl font-headline font-bold">{translations.nav.places}</h1>
                 </div>

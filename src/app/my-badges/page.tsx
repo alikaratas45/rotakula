@@ -8,12 +8,14 @@ import { getImageById } from '@/lib/placeholder-images';
 import { Award, Gem } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { BackButton } from '@/components/back-button';
 
 export default function MyBadgesPage() {
     const { earnedBadges, totalPoints, translations } = useApp();
 
     return (
         <div className="container px-4 py-8 md:py-12">
+            <BackButton className="mb-8" />
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
                 <div className="flex items-center gap-4">
                     <Award className="h-8 w-8 text-primary" />

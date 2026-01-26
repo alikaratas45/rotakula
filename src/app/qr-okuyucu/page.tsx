@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useApp } from "@/context/app-context";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { QrCode, ShieldAlert } from "lucide-react";
+import { BackButton } from "@/components/back-button";
 
 const qrboxFunction = (viewfinderWidth: number, viewfinderHeight: number) => {
   const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
@@ -123,6 +124,7 @@ export default function QRScannerPage() {
 
   return (
     <div className="container px-4 py-8 md:py-12">
+      <BackButton className="mb-8" />
       <div className="max-w-xl mx-auto">
         <div className="flex items-center gap-4 mb-4">
             <QrCode className="h-8 w-8 text-primary" />
