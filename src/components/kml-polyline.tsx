@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useMap } from '@vis.gl/react-google-maps';
@@ -9,7 +10,7 @@ interface KmlPolylineProps {
 
 export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
     const map = useMap();
-    // Keep a ref to an array of polylines, as a KML file can contain multiple segments
+    // Ref to hold an array of polylines, as a KML file can contain multiple segments
     const polylinesRef = useRef<google.maps.Polyline[]>([]);
 
     useEffect(() => {
@@ -39,7 +40,8 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
             try {
                 const response = await fetch(kmlPath);
                 if (!response.ok) {
-                    throw new Error(`KML file not found: ${response.statusText} for ${kmlPath}`);
+                    console.error(`KML file not found: ${response.statusText} for ${kmlPath}`);
+                    return;
                 }
                 const kmlText = await response.text();
                 
@@ -52,38 +54,39 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
                     return;
                 }
 
-                // Find all LineString elements, regardless of their parent elements
-                const lineStringNodes = kml.getElementsByTagNameNS('*', 'LineString');
-                if (lineStringNodes.length === 0) {
-                    console.warn(`No <LineString> found in KML: ${kmlPath}`);
+                // Find all <coordinates> elements. This is more direct.
+                const coordsNodes = kml.getElementsByTagName('coordinates');
+                
+                if (coordsNodes.length === 0) {
+                    console.warn(`No <coordinates> found in KML: ${kmlPath}`);
                     return;
                 }
                 
                 const bounds = new google.maps.LatLngBounds();
                 const createdPolylines: google.maps.Polyline[] = [];
 
-                // Iterate over each LineString found in the KML
-                for (const lineStringNode of Array.from(lineStringNodes)) {
-                    const coordsNode = lineStringNode.getElementsByTagNameNS('*', 'coordinates')[0];
+                for (const coordsNode of Array.from(coordsNodes)) {
                     if (coordsNode?.textContent) {
-                        const coordinates = coordsNode.textContent
-                            .trim()
-                            .split(/\s+/) // Split by any whitespace (space, newline, etc.)
-                            .filter(c => c.length > 0) // Filter out potential empty strings
-                            .map(coordStr => {
-                                const [lng, lat] = coordStr.split(',').map(Number);
-                                if (!isNaN(lat) && !isNaN(lng)) {
-                                    const latLng = { lat, lng };
-                                    bounds.extend(latLng); // Extend bounds for each valid point
+                        const coordsText = coordsNode.textContent.trim();
+                        const coordPairs = coordsText.split(/\s+/).filter(pair => pair.length > 0);
+
+                        const path = coordPairs.map(pair => {
+                            const parts = pair.split(',');
+                            if (parts.length >= 2) {
+                                const lng = parseFloat(parts[0]);
+                                const lat = parseFloat(parts[1]);
+                                if (!isNaN(lng) && !isNaN(lat)) {
+                                    const latLng = new google.maps.LatLng(lat, lng);
+                                    bounds.extend(latLng);
                                     return latLng;
                                 }
-                                return null;
-                            }).filter((c): c is { lat: number; lng: number } => c !== null);
+                            }
+                            return null;
+                        }).filter((p): p is google.maps.LatLng => p !== null);
 
-                        // Only create a polyline if it has at least two points
-                        if (coordinates.length > 1) {
+                        if (path.length > 1) {
                             const newPolyline = new google.maps.Polyline({
-                                path: coordinates,
+                                path: path,
                                 strokeColor: "#0000FF", // Blue color for the route
                                 strokeOpacity: 0.8,
                                 strokeWeight: 6,
@@ -96,7 +99,6 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
                 
                 if (createdPolylines.length > 0) {
                     polylinesRef.current = createdPolylines;
-                    // Fit the map to the bounds of all points from all polylines
                     if (!bounds.isEmpty()) {
                         map.fitBounds(bounds, 60); // 60px padding
                     }
@@ -111,12 +113,12 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
 
         fetchAndDrawKml();
 
-        // Cleanup function to remove polylines when component unmounts or kmlPath changes
+        // Cleanup function
         return () => {
             clearPolylines();
         };
         
     }, [kmlPath, map]);
 
-    return null; // This component does not render anything itself
+    return null;
 }
