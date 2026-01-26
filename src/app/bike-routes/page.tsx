@@ -85,7 +85,7 @@ function MapController({ selectedRoute }: { selectedRoute: BikeRoute | null }) {
                 
                 const newPolyline = new google.maps.Polyline({
                     path: coordinates,
-                    strokeColor: "#FF0000",
+                    strokeColor: "#4285F4",
                     strokeOpacity: 0.8,
                     strokeWeight: 4,
                     map: map,
