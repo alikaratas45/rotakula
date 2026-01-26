@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { getImageById } from '@/lib/placeholder-images';
 import { useEffect, useState, useMemo, memo } from 'react';
 import { useApp } from '@/context/app-context';
-import { Utensils, Map, Pin, Route, BookOpen, QrCode, Landmark, Smile, Award, Bike, Loader2, Users } from 'lucide-react';
+import { Utensils, Map, Pin, Route, BookOpen, QrCode, Landmark, Smile, Award, Bike, Loader2, Users, Footprints } from 'lucide-react';
 import { BedIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { InstallPwaButton } from '@/components/install-pwa-button';
@@ -87,6 +87,7 @@ export default function Home() {
   const iconNavItems = [
     { href: "/places", label: translations.nav.places, icon: Landmark, color: "border-blue-500" },
     { href: "/create-route", label: translations.nav.createRoute, icon: Route, color: "border-green-500" },
+    { href: "/walking-routes", label: translations.nav.walkingRoutes, icon: Footprints, color: "border-stone-500" },
     { href: "/bike-routes", label: translations.nav.bikeRoutes, icon: Bike, color: "border-yellow-500" },
     { href: "/stories", label: translations.nav.stories, icon: BookOpen, color: "border-purple-500" },
     { href: "/routes/kula-flavor-tour", label: translations.nav.food, icon: Utensils, color: "border-orange-500" },

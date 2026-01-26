@@ -1,0 +1,33 @@
+
+{
+  "walkingRoutes": [
+    {
+      "id": "walking-route-1",
+      "slug": "caminin-golgesinde-tarihe-yolculuk",
+      "name": "Caminin Gölgesinde Tarihe Yolculuk",
+      "description": "Kurşunlu Camii çevresindeki tarihi dokuyu keşfedin ve Kula'nın asırlık sokaklarında kaybolun.",
+      "kmlPath": "/routes/walking-route-1.kml",
+      "distance": "Yaklaşık 2 km",
+      "name_en": "A Journey to History in the Shadow of the Mosque",
+      "description_en": "Discover the historical texture around Kurşunlu Mosque and get lost in the centuries-old streets of Kula.",
+      "name_fr": "Un Voyage dans l'Histoire à l'Ombre de la Mosquée",
+      "description_fr": "Découvrez la texture historique autour de la mosquée Kurşunlu et perdez-vous dans les rues séculaires de Kula.",
+      "name_de": "Eine Reise in die Geschichte im Schatten der Moschee",
+      "description_de": "Entdecken Sie die historische Textur rund um die Kurşunlu-Moschee und verlieren Sie sich in den jahrhundertealten Straßen von Kula."
+    },
+    {
+      "id": "walking-route-2",
+      "slug": "jeopark-patikasi",
+      "name": "Jeopark Patikası Yürüyüşü",
+      "description": "Kula Divlit Volkanik Parkı'ndaki ahşap yürüyüş yolunda, ay yüzeyini andıran lav tarlaları arasında yürüyün.",
+      "kmlPath": "/routes/walking-route-2.kml",
+      "distance": "Yaklaşık 1.5 km",
+      "name_en": "Geopark Trail Walk",
+      "description_en": "Walk on the wooden pathway in Kula Divlit Volcanic Park, among lava fields resembling the lunar surface.",
+      "name_fr": "Randonnée sur le Sentier du Géoparc",
+      "description_fr": "Marchez sur le sentier en bois du parc volcanique de Kula Divlit, parmi des champs de lave ressemblant à la surface lunaire.",
+      "name_de": "Geopark-Wanderweg",
+      "description_de": "Wandern Sie auf dem Holzweg im Vulkanpark Kula Divlit zwischen Lavafeldern, die der Mondoberfläche ähneln."
+    }
+  ]
+}
