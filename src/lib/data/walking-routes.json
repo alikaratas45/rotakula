@@ -5,15 +5,15 @@
       "id": "walk-route-1",
       "slug": "kula-divlit-parkuru",
       "name": "Kula Divlit Parkuru",
-      "description": "Kula'nın en etkileyici volkanik oluşumlarından biri olan Divlit konisi çevresinde bir yürüyüş turu.",
-      "kmlPath": "/routes/Kula_divlit.kml",
+      "description": "Kula'nın en etkileyici volkanik oluşumlarından biri olan Divlit konisi çevresinde bir bisiklet turu.",
+      "kmlPath": "/routes/lavyuruyus.kml",
       "distance": "Yaklaşık 15 km",
       "name_en": "Kula Divlit Trail",
-      "description_en": "A walking tour around the Divlit cone, one of Kula's most impressive volcanic formations.",
+      "description_en": "A bike tour around the Divlit cone, one of Kula's most impressive volcanic formations.",
       "name_fr": "Piste de Kula Divlit",
-      "description_fr": "Un tour à pied autour du cône de Divlit, l'une des formations volcaniques les plus impressionnantes de Kula.",
+      "description_fr": "Un tour à vélo autour du cône de Divlit, l'une des formations volcaniques les plus impressionnantes de Kula.",
       "name_de": "Kula Divlit Strecke",
-      "description_de": "Eine Wanderung um den Divlit-Kegel, eine der beeindruckendsten Vulkanformationen von Kula."
+      "description_de": "Eine Radtour um den Divlit-Kegel, eine der beeindruckendsten Vulkanformationen von Kula."
     },
     {
       "id": "walk-route-2",
@@ -33,18 +33,18 @@
       "id": "walk-route-3",
       "slug": "kula-emre-parkuru",
       "name": "Kula Emre Parkuru",
-      "description": "Yunus Emre ve Tabduk Emre'nin manevi atmosferinde huzurlu bir yürüyüş.",
+      "description": "Yunus Emre ve Tabduk Emre'nin manevi atmosferinde huzurlu bir sürüş.",
       "distance": "Yaklaşık 20 km",
       "kmlPath": "/routes/Kula_emre_bisiklet.kml",
       "name_en": "Kula Emre Trail",
-      "description_en": "A peaceful walk in the spiritual atmosphere of Yunus Emre and Tabduk Emre.",
+      "description_en": "A peaceful ride in the spiritual atmosphere of Yunus Emre and Tabduk Emre.",
       "name_fr": "Piste de Kula Emre",
       "description_fr": "Une balade paisible dans l'atmosphère spirituelle de Yunus Emre et Tabduk Emre.",
       "name_de": "Kula Emre Strecke",
-      "description_de": "Eine friedliche Wanderung in der spirituellen Atmosphäre von Yunus Emre und Tabduk Emre."
+      "description_de": "Eine friedliche Fahrt in der spirituellen Atmosphäre von Yunus Emre und Tabduk Emre."
     },
     {
-      "id": "walk-route-4",
+      "id": "walk-route-5",
       "slug": "peribacalari-kula-parkuru",
       "name": "Peribacaları - Kula Parkuru",
       "description": "Peri bacalarından başlayarak Kula merkeze uzanan keyifli bir iniş rotası.",
