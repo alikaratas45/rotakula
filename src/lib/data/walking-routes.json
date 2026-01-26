@@ -20,8 +20,8 @@
       "slug": "korez-kula-parkuru",
       "name": "Körez - Kula Parkuru",
       "description": "Tarihi Körez mahallesinden başlayıp Kula merkezine uzanan bir rota.",
-      "distance": "Yaklaşık 12 km",
       "kmlPath": "/routes/korez-kula.kml",
+      "distance": "Yaklaşık 12 km",
       "name_en": "Körez - Kula Trail",
       "description_en": "A route starting from the historic Körez neighborhood and extending to the center of Kula.",
       "name_fr": "Piste de Körez - Kula",
@@ -56,6 +56,20 @@
       "description_fr": "Un itinéraire partant des rives de la rivière Gediz, où vous découvrirez d'impressionnantes colonnes de basalte et des cheminées de fées.",
       "name_de": "Gediz-Fluss - Basaltsäulen - Feenkamine",
       "description_de": "Eine Route, die an den Ufern des Gediz-Flusses beginnt und bei der Sie beeindruckende Basaltsäulen und Feenkamine entdecken werden."
+    },
+    {
+      "id": "walk-route-6",
+      "slug": "jeopark-lav-yuruyusu-ring",
+      "name": "Jeopark Lav Yürüyüşü (Ring)",
+      "description": "Divlit Volkanik arazisi üzerinde 5km'lik bir ring yürüyüş parkuru.",
+      "kmlPath": "/routes/divlit-volkanik-arazi-jeoparkring-5km.kml",
+      "distance": "Yaklaşık 5 km",
+      "name_en": "Geopark Lava Walk (Ring)",
+      "description_en": "A 5km ring walking trail on the Divlit Volcanic terrain.",
+      "name_fr": "Marche de Lave du Géoparc (Boucle)",
+      "description_fr": "Un sentier de randonnée en boucle de 5 km sur le terrain volcanique de Divlit.",
+      "name_de": "Geopark Lava-Wanderung (Rundweg)",
+      "description_de": "Ein 5 km langer Rundwanderweg auf dem vulkanischen Gelände von Divlit."
     }
   ]
 }
