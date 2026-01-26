@@ -25,6 +25,7 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
 
         if (!kmlPath) {
             clearPolyline();
+            // Reset view when no route is selected
             map.panTo({ lat: 38.547, lng: 28.65 });
             map.setZoom(11);
             return;
@@ -36,23 +37,31 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
             try {
                 const response = await fetch(kmlPath);
                 if (!response.ok) {
-                    throw new Error(`KML file not found: ${response.status}`);
+                    throw new Error(`KML file not found: ${response.status} ${response.statusText} for ${kmlPath}`);
                 }
                 const kmlText = await response.text();
                 
                 const parser = new DOMParser();
                 const kml = parser.parseFromString(kmlText, "application/xml");
+                
+                // Handle XML parsing errors
+                const parserError = kml.querySelector('parsererror');
+                if (parserError) {
+                    console.error('Error parsing KML:', parserError.textContent);
+                    return;
+                }
 
-                const lineStringNodes = kml.getElementsByTagName('LineString');
+                // Use getElementsByTagNameNS to be namespace-agnostic
+                const lineStringNodes = kml.getElementsByTagNameNS('*', 'LineString');
                 if (!lineStringNodes || lineStringNodes.length === 0) {
-                    console.warn(`No <LineString> element found in KML file: ${kmlPath}`);
+                    console.warn(`No <LineString> element found in KML file: ${kmlPath}. This might be due to an unsupported KML structure.`);
                     return;
                 }
 
                 let allCoordinates: { lat: number; lng: number }[] = [];
 
                 for (let i = 0; i < lineStringNodes.length; i++) {
-                    const coordsNode = lineStringNodes[i].getElementsByTagName('coordinates')[0];
+                    const coordsNode = lineStringNodes[i].getElementsByTagNameNS('*', 'coordinates')[0];
                     if (coordsNode && coordsNode.textContent) {
                         const coordinates = coordsNode.textContent
                             .trim()
@@ -76,7 +85,7 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
                 
                 const newPolyline = new google.maps.Polyline({
                     path: allCoordinates,
-                    strokeColor: "#0000FF",
+                    strokeColor: "#0000FF", // Blue color for the route
                     strokeOpacity: 0.8,
                     strokeWeight: 6,
                     map: map,
@@ -88,7 +97,7 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
                 allCoordinates.forEach(point => {
                     bounds.extend(point);
                 });
-                map.fitBounds(bounds, 60);
+                map.fitBounds(bounds, 60); // 60px padding
 
             } catch (error) {
                 console.error(`Error processing KML file (${kmlPath}):`, error);
@@ -97,11 +106,12 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
 
         fetchAndDrawKml();
 
+        // Cleanup function
         return () => {
             clearPolyline();
         };
         
     }, [kmlPath, map]);
 
-    return null;
+    return null; // This component does not render anything itself
 }
