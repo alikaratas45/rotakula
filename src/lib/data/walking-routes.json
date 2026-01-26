@@ -17,17 +17,17 @@
     },
     {
       "id": "walk-route-2",
-      "slug": "evciler-parkuru",
-      "name": "Evciler Parkuru",
-      "description": "Tarihi Evciler köyünün çevresindeki doğal güzellikleri keşfedin.",
+      "slug": "korez-kula-parkuru",
+      "name": "Körez - Kula Parkuru",
+      "description": "Tarihi Körez mahallesinden başlayıp Kula merkezine uzanan bir rota.",
       "distance": "Yaklaşık 25 km",
-      "kmlPath": "/routes/Evciler_bisiklet.kml",
-      "name_en": "Evciler Trail",
-      "description_en": "Explore the natural beauties around the historic village of Evciler.",
-      "name_fr": "Piste d'Evciler",
-      "description_fr": "Explorez les beautés naturelles autour du village historique d'Evciler.",
-      "name_de": "Evciler Strecke",
-      "description_de": "Erkunden Sie die Naturschönheiten rund um das historische Dorf Evciler."
+      "kmlPath": "/routes/korez-kula.kml",
+      "name_en": "Körez - Kula Trail",
+      "description_en": "A route starting from the historic Körez neighborhood and extending to the center of Kula.",
+      "name_fr": "Piste de Körez - Kula",
+      "description_fr": "Un itinéraire partant du quartier historique de Körez et s'étendant jusqu'au centre de Kula.",
+      "name_de": "Körez - Kula Strecke",
+      "description_de": "Eine Route, die vom historischen Viertel Körez ausgeht und sich bis ins Zentrum von Kula erstreckt."
     },
     {
       "id": "walk-route-3",
