@@ -45,37 +45,42 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
                 const parser = new DOMParser();
                 const kml = parser.parseFromString(kmlText, "application/xml");
 
-                // Find the LineString element which contains the path coordinates
-                const lineStringNode = kml.getElementsByTagName('LineString')[0];
-                if (!lineStringNode) {
+                const lineStringNodes = kml.getElementsByTagName('LineString');
+                if (!lineStringNodes || lineStringNodes.length === 0) {
                     console.warn(`No <LineString> element found in KML file: ${kmlPath}`);
                     return;
                 }
 
-                const coordsStringNode = lineStringNode.getElementsByTagName('coordinates')[0];
-                if (!coordsStringNode || !coordsStringNode.textContent) {
-                    console.warn(`No <coordinates> tag found inside <LineString> in KML file: ${kmlPath}`);
-                    return;
+                let allCoordinates: { lat: number; lng: number }[] = [];
+
+                for (let i = 0; i < lineStringNodes.length; i++) {
+                    const coordsStringNode = lineStringNodes[i].getElementsByTagName('coordinates')[0];
+                    if (!coordsStringNode || !coordsStringNode.textContent) {
+                        continue;
+                    }
+                    
+                    const coordinates = coordsStringNode.textContent
+                        .trim()
+                        .split(/\s+/) // Split by any whitespace
+                        .map(coordStr => {
+                            const [lng, lat] = coordStr.split(',').map(Number);
+                            if (!isNaN(lat) && !isNaN(lng)) {
+                                return { lat, lng };
+                            }
+                            return null;
+                        }).filter((c): c is { lat: number; lng: number } => c !== null);
+                    
+                    allCoordinates = allCoordinates.concat(coordinates);
                 }
 
-                const coordinates = coordsStringNode.textContent
-                    .trim()
-                    .split(/\s+/) // Split by any whitespace
-                    .map(coordStr => {
-                        const [lng, lat] = coordStr.split(',').map(Number);
-                        if (!isNaN(lat) && !isNaN(lng)) {
-                            return { lat, lng };
-                        }
-                        return null;
-                    }).filter((c): c is { lat: number; lng: number } => c !== null);
 
-                if (coordinates.length === 0) {
+                if (allCoordinates.length === 0) {
                      console.warn(`Could not parse valid coordinates from KML file: ${kmlPath}`);
                      return;
                 }
                 
                 const newPolyline = new google.maps.Polyline({
-                    path: coordinates,
+                    path: allCoordinates,
                     strokeColor: "#0000FF", // A strong blue color
                     strokeOpacity: 0.8,
                     strokeWeight: 6, // Make it thicker and more visible
@@ -86,7 +91,7 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
                 
                 // Automatically adjust the map's viewport to fit the entire polyline
                 const bounds = new google.maps.LatLngBounds();
-                coordinates.forEach(point => {
+                allCoordinates.forEach(point => {
                     bounds.extend(point);
                 });
                 map.fitBounds(bounds, 60); // 60px padding
