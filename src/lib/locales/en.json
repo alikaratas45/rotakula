@@ -16,7 +16,6 @@
         "selfieSpot": "Selfie Spot",
         "myBadges": "My Badges",
         "bikeRoutes": "Bike Routes",
-        "walkingRoutes": "Walking Routes",
         "installApp": "Install App",
         "installAppTitle": "Install the app on your home screen",
         "installAppAlready": "App Already Installed",
@@ -212,7 +211,8 @@
         "cancel": "Cancel",
         "submit": "Submit",
         "close": "Close",
-        "totalVisitors": "Total Visitors"
+        "totalVisitors": "Total Visitors",
+        "justNow": "just now"
     },
     "category": {
         "geopark": "Geopark",
@@ -268,8 +268,7 @@
         "submit": "Submit Comment",
         "sending": "Sending...",
         "sent": "Sent!",
-        "noComments": "No comments yet. Be the first to comment!",
-        "justNow": "just now"
+        "noComments": "No comments yet. Be the first to comment!"
     },
     "survey": {
         "title": "Rate Your Visit: {poiName}",

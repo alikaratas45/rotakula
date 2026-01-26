@@ -16,7 +16,6 @@
         "selfieSpot": "Point Selfie",
         "myBadges": "Mes Badges",
         "bikeRoutes": "Itinéraires à Vélo",
-        "walkingRoutes": "Itinéraires de Randonnée",
         "installApp": "Installer l'App",
         "installAppTitle": "Installer l'application sur votre écran d'accueil",
         "installAppAlready": "Application déjà installée",
@@ -212,7 +211,8 @@
         "cancel": "Annuler",
         "submit": "Envoyer",
         "close": "Fermer",
-        "totalVisitors": "Visiteurs Totaux"
+        "totalVisitors": "Visiteurs Totaux",
+        "justNow": "à l'instant"
     },
     "category": {
         "geopark": "Géoparc",
@@ -268,8 +268,7 @@
         "submit": "Envoyer le Commentaire",
         "sending": "Envoi en cours...",
         "sent": "Envoyé !",
-        "noComments": "Pas encore de commentaires. Soyez le premier à commenter !",
-        "justNow": "à l'instant"
+        "noComments": "Pas encore de commentaires. Soyez le premier à commenter !"
     },
     "survey": {
         "title": "Évaluez Votre Visite : {poiName}",

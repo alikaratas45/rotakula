@@ -16,7 +16,6 @@
         "selfieSpot": "Selfie Noktası",
         "myBadges": "Rozetlerim",
         "bikeRoutes": "Bisiklet Rotaları",
-        "walkingRoutes": "Yürüyüş Rotaları",
         "installApp": "Uygulamayı Yükle",
         "installAppTitle": "Uygulamayı ana ekrana yükle",
         "installAppAlready": "Uygulama Zaten Yüklü",
@@ -212,7 +211,8 @@
         "cancel": "İptal",
         "submit": "Gönder",
         "close": "Kapat",
-        "totalVisitors": "Toplam Ziyaretçi"
+        "totalVisitors": "Toplam Ziyaretçi",
+        "justNow": "az önce"
     },
     "category": {
         "geopark": "Jeopark",
@@ -267,8 +267,7 @@
         "submit": "Yorumu Gönder",
         "sending": "Gönderiliyor...",
         "sent": "Gönderildi!",
-        "noComments": "Henüz yorum yapılmamış. İlk yorumu siz yapın!",
-        "justNow": "az önce"
+        "noComments": "Henüz yorum yapılmamış. İlk yorumu siz yapın!"
     },
     "survey": {
         "title": "Ziyaretinizi Değerlendirin: {poiName}",

@@ -16,7 +16,6 @@
         "selfieSpot": "Selfie-Punkt",
         "myBadges": "Meine Abzeichen",
         "bikeRoutes": "Fahrradrouten",
-        "walkingRoutes": "Wanderwege",
         "installApp": "App installieren",
         "installAppTitle": "App auf Ihrem Startbildschirm installieren",
         "installAppAlready": "App bereits installiert",
@@ -79,17 +78,17 @@
         "locationError": "Ihr Standort konnte nicht abgerufen werden. Bitte überprüfen Sie die Standorteinstellungen Ihres Browsers.",
         "noPoisFound": "Keine Sehenswürdigkeiten im Umkreis von {radius} km von Ihrem Standort gefunden.",
         "distance": "Entfernung",
-        "discoverTitle": "Yakınınızdaki yerleri keşfedin",
-        "discoverDescription": "Yakınınızdaki turistik noktaları görmek için konum izni vermeniz gerekmektedir.",
-        "findButton": "Yakınımdakileri Bul",
-        "permissionDenied": "Konum erişimine izin vermeniz gerekiyor.",
-        "positionUnavailable": "Konum bilgisi şu anda alınamıyor.",
-        "timeout": "Konum bilgisi alınırken zaman aşımı oluştu.",
-        "tryAgain": "Tekrar Dene",
-        "noResults": "Yakınlarda bir yer bulamadık ama tüm yerlere göz atabilirsiniz."
+        "discoverTitle": "Entdecken Sie Orte in Ihrer Nähe",
+        "discoverDescription": "Sie müssen die Standorterlaubnis erteilen, um nahegelegene Touristenorte zu sehen.",
+        "findButton": "In meiner Nähe finden",
+        "permissionDenied": "Sie müssen den Standortzugriff zulassen.",
+        "positionUnavailable": "Standortinformationen sind derzeit nicht verfügbar.",
+        "timeout": "Bei der Abfrage der Standortinformationen ist eine Zeitüberschreitung aufgetreten.",
+        "tryAgain": "Erneut versuchen",
+        "noResults": "Wir konnten keine Orte in der Nähe finden, aber Sie können alle Orte durchsuchen."
     },
     "route": {
-        "mapTitle": "Routenkartde",
+        "mapTitle": "Routenkarte",
         "whatsOnThisRoute": "Was gibt es auf dieser Route?",
         "routeInfo": "Routeninformationen",
         "stops": "Stopps",
@@ -212,7 +211,8 @@
         "cancel": "Abbrechen",
         "submit": "Senden",
         "close": "Schließen",
-        "totalVisitors": "Besucher Insgesamt"
+        "totalVisitors": "Besucher Insgesamt",
+        "justNow": "gerade eben"
     },
     "category": {
         "geopark": "Geopark",
@@ -268,8 +268,7 @@
         "submit": "Kommentar Senden",
         "sending": "Wird gesendet...",
         "sent": "Gesendet!",
-        "noComments": "Bisher keine Kommentare. Seien Sie der Erste, der einen Kommentar abgibt!",
-        "justNow": "gerade eben"
+        "noComments": "Bisher keine Kommentare. Seien Sie der Erste, der einen Kommentar abgibt!"
     },
     "survey": {
         "title": "Bewerten Sie Ihren Besuch: {poiName}",
