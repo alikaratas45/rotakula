@@ -79,12 +79,21 @@ export default function AboutPage() {
                     </div>
                     
                     <div className="prose prose-lg max-w-none text-foreground/90">
-                        {contentParagraphs.map((paragraph, index) => (
-                            <p key={index}>{paragraph}</p>
-                        ))}
+                        {contentParagraphs.map((paragraph, index) => {
+                            const trimmedParagraph = paragraph.trim();
+                            if (trimmedParagraph === '') return null;
+                            const isTitle = ['Bizans Dönemi', 'Türk Dönemi ve Germiyan Beyliği', 'Osmanlı ve Cumhuriyet Dönemi'].includes(trimmedParagraph);
+                            return (
+                                isTitle 
+                                    ? <h3 key={index} className="font-headline font-bold text-xl mt-6 mb-2">{trimmedParagraph}</h3>
+                                    : <p key={index}>{trimmedParagraph}</p>
+                            )
+                        })}
                     </div>
                 </div>
             </div>
         </div>
     );
 }
+
+    
