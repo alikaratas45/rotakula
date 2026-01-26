@@ -10,7 +10,7 @@ import { Loader2, Bike } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { UserLocationMarker } from '@/components/map';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { KmlPolyline } from '@/components/kml-polyline';
+import { KmlLayerComponent } from '@/components/kml-layer';
 
 
 export default function BikeRoutesPage() {
@@ -96,7 +96,7 @@ export default function BikeRoutesPage() {
                                     disableDefaultUI={false}
                                     mapId="rotakula-bike-map"
                                 >
-                                   <KmlPolyline kmlPath={selectedRoute?.kmlPath ?? null} />
+                                   <KmlLayerComponent url={selectedRoute?.kmlPath ?? null} />
                                    <UserLocationMarker />
                                 </Map>
                             </div>

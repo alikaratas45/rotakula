@@ -12,7 +12,8 @@ export const KmlLayerComponent = ({ url }: KmlLayerProps) => {
     const kmlLayerRef = useRef<google.maps.KmlLayer | null>(null);
 
     useEffect(() => {
-        if (!map) {
+        // Ensure map is available and we are in a browser environment
+        if (!map || typeof window === 'undefined') {
             return;
         }
 
@@ -31,15 +32,18 @@ export const KmlLayerComponent = ({ url }: KmlLayerProps) => {
                 url: absoluteUrl,
                 map: map,
                 preserveViewport: false, // Let the KML layer set the viewport to fit the route
-                suppressInfoWindows: true, // We can handle popups ourselves if needed later
+                suppressInfoWindows: true, // We can handle popups ourselves if needed
             });
+            
             kmlLayerRef.current = layer;
+
         } else {
              // If no URL is provided, pan back to the default view of Kula
              map.panTo({ lat: 38.547, lng: 28.65 });
              map.setZoom(11);
         }
         
+        // Cleanup function
         return () => {
             if (kmlLayerRef.current) {
                 kmlLayerRef.current.setMap(null);
