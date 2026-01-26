@@ -35,7 +35,7 @@ function MapController({ selectedRoute }: { selectedRoute: WalkingRoute | null }
         let center = { lat: 38.547, lng: 28.65 }; // Default Kula center
         let zoom = 14;
 
-        if (selectedRoute.slug.includes('caminin-golgesinde')) {
+        if (selectedRoute.slug.includes('caminin-golgesinde-tarihe-yolculuk')) {
             center = { lat: 38.546, lng: 28.648 };
             zoom = 16;
         } else if (selectedRoute.slug.includes('jeopark-patikasi')) {
@@ -94,7 +94,7 @@ function MapController({ selectedRoute }: { selectedRoute: WalkingRoute | null }
                 polylineRef.current = newPolyline;
                 
             } catch (error) {
-                console.error(`Error processing KML file (${selectedRoute!.kmlPath}):`, error);
+                console.error(`KML dosyası işlenirken bir hata oluştu (${selectedRoute!.kmlPath}):`, error);
             }
         }
 
