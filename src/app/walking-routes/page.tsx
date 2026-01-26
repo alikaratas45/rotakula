@@ -86,38 +86,38 @@ export default function WalkingRoutesPage() {
                                     {route.difficulty && (
                                         <>
                                             <Separator className="my-4" />
-                                            <h4 className="text-md font-semibold mb-3">Parkur İstatistikleri</h4>
+                                            <h4 className="text-md font-semibold mb-3">{translations.route.statsTitle}</h4>
                                             <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
                                                 <div>
-                                                    <p className="text-muted-foreground">Mesafe</p>
+                                                    <p className="text-muted-foreground">{translations.route.distanceLabel}</p>
                                                     <p className="font-semibold">{route.distance}</p>
                                                 </div>
                                                 <div>
-                                                    <p className="text-muted-foreground">İrtifa Kazancı</p>
+                                                    <p className="text-muted-foreground">{translations.route.elevationGainLabel}</p>
                                                     <p className="font-semibold">{route.elevationGain}</p>
                                                 </div>
                                                 <div>
-                                                    <p className="text-muted-foreground">Teknik Zorluk</p>
+                                                    <p className="text-muted-foreground">{translations.route.difficultyLabel}</p>
                                                     <p className="font-semibold">{route.difficulty}</p>
                                                 </div>
                                                 <div>
-                                                    <p className="text-muted-foreground">İrtifa Kaybı</p>
+                                                    <p className="text-muted-foreground">{translations.route.elevationLossLabel}</p>
                                                     <p className="font-semibold">{route.elevationLoss}</p>
                                                 </div>
                                                 <div>
-                                                    <p className="text-muted-foreground">Maksimum İrtifa</p>
+                                                    <p className="text-muted-foreground">{translations.route.maxElevationLabel}</p>
                                                     <p className="font-semibold">{route.maxElevation}</p>
                                                 </div>
                                                 <div>
-                                                    <p className="text-muted-foreground">Minimum İrtifa</p>
+                                                    <p className="text-muted-foreground">{translations.route.minElevationLabel}</p>
                                                     <p className="font-semibold">{route.minElevation}</p>
                                                 </div>
                                                  <div>
-                                                    <p className="text-muted-foreground">TrailRank</p>
+                                                    <p className="text-muted-foreground">{translations.route.trailRankLabel}</p>
                                                     <p className="font-semibold">{route.trailRank}</p>
                                                 </div>
                                                 <div>
-                                                    <p className="text-muted-foreground">Parkur Türü</p>
+                                                    <p className="text-muted-foreground">{translations.route.trackTypeLabel}</p>
                                                     <p className="font-semibold">{route.trackType}</p>
                                                 </div>
                                             </div>

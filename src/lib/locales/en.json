@@ -98,7 +98,16 @@
         "redirectToMapsTitle": "Redirecting to Map Application",
         "redirectToMapsDescription": "The Google Maps application will be opened for the best navigation experience. The audio guide will be paused during this process. You can restart the audio guide when you return to the application.",
         "startAnyway": "Start Anyway",
-        "noStopsFound": "No stops were found for this route."
+        "noStopsFound": "No stops were found for this route.",
+        "statsTitle": "Trail Statistics",
+        "distanceLabel": "Distance",
+        "elevationGainLabel": "Elevation Gain",
+        "difficultyLabel": "Technical Difficulty",
+        "elevationLossLabel": "Elevation Loss",
+        "maxElevationLabel": "Max Elevation",
+        "minElevationLabel": "Min Elevation",
+        "trailRankLabel": "TrailRank",
+        "trackTypeLabel": "Track Type"
     },
      "qrScanner": {
         "description": "Instantly access detailed information about a place by scanning the QR codes at the information points in Kula.",

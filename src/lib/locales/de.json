@@ -98,7 +98,16 @@
         "redirectToMapsTitle": "Sie werden zur Kartenanwendung weitergeleitet",
         "redirectToMapsDescription": "Für das beste Navigationserlebnis wird die Google Maps-Anwendung geöffnet. Während dieses Vorgangs wird der Audioguide angehalten. Sie können den Audioguide neu starten, wenn Sie zur Anwendung zurückkehren.",
         "startAnyway": "Trotzdem starten",
-        "noStopsFound": "Für diese Route wurden keine Haltestellen gefunden."
+        "noStopsFound": "Für diese Route wurden keine Haltestellen gefunden.",
+        "statsTitle": "Streckenstatistik",
+        "distanceLabel": "Distanz",
+        "elevationGainLabel": "Höhengewinn",
+        "difficultyLabel": "Technische Schwierigkeit",
+        "elevationLossLabel": "Höhenverlust",
+        "maxElevationLabel": "Maximale Höhe",
+        "minElevationLabel": "Minimale Höhe",
+        "trailRankLabel": "TrailRank",
+        "trackTypeLabel": "Streckentyp"
     },
      "qrScanner": {
         "description": "Greifen Sie sofort auf detaillierte Informationen über einen Ort zu, indem Sie die QR-Codes an den Informationspunkten in Kula scannen.",

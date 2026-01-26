@@ -98,7 +98,16 @@
         "redirectToMapsTitle": "Harita Uygulamasına Yönlendiriliyorsunuz",
         "redirectToMapsDescription": "En iyi yol tarifi deneyimi için Google Haritalar uygulaması açılacaktır. Bu işlem sırasında sesli rehber duraklatılacaktır. Uygulamaya geri döndüğünüzde sesli rehberi yeniden başlatabilirsiniz.",
         "startAnyway": "Yine de Başlat",
-        "noStopsFound": "Bu rota için durak bulunamadı."
+        "noStopsFound": "Bu rota için durak bulunamadı.",
+        "statsTitle": "Parkur İstatistikleri",
+        "distanceLabel": "Mesafe",
+        "elevationGainLabel": "İrtifa Kazancı",
+        "difficultyLabel": "Teknik Zorluk",
+        "elevationLossLabel": "İrtifa Kaybı",
+        "maxElevationLabel": "Maksimum İrtifa",
+        "minElevationLabel": "Minimum İrtifa",
+        "trailRankLabel": "TrailRank",
+        "trackTypeLabel": "Parkur Türü"
     },
      "qrScanner": {
         "description": "Kula'daki bilgilendirme noktalarında bulunan QR kodlarını tarayarak ilgili yer hakkında detaylı bilgiye anında ulaşın.",
