@@ -35,9 +35,15 @@ function MapController({ selectedRoute }: { selectedRoute: WalkingRoute | null }
         let center = { lat: 38.547, lng: 28.65 }; // Default Kula center
         let zoom = 13;
 
-        if (selectedRoute.slug.includes('kula-divlit-zirve-yuruyusu')) {
-            center = { lat: 38.56, lng: 28.66 };
+        if (selectedRoute.slug.includes('kula-divlit-parkuru')) {
+            center = { lat: 38.557, lng: 28.661 };
             zoom = 14;
+        } else if (selectedRoute.slug.includes('emre')) {
+            center = { lat: 38.623, lng: 28.523 };
+        } else if (selectedRoute.slug.includes('peribacalari-kula')) {
+             center = { lat: 38.607, lng: 28.808 };
+        } else if (selectedRoute.slug.includes('evciler')) {
+            center = { lat: 38.538, lng: 28.765 };
         }
 
         map.panTo(center);
