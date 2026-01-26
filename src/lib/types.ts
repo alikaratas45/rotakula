@@ -99,6 +99,13 @@ export type WalkingRoute = {
   description_fr?: string;
   name_de?: string;
   description_de?: string;
+  elevationGain?: string;
+  difficulty?: string;
+  elevationLoss?: string;
+  maxElevation?: string;
+  trailRank?: string;
+  minElevation?: string;
+  trackType?: string;
 }
 
 export interface SurveyState {
