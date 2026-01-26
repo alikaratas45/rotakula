@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useEffect, useState, useRef } from 'react';
@@ -11,7 +10,7 @@ import { Loader2, Bike } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { UserLocationMarker } from '@/components/map';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { KmlLayerComponent } from '@/components/kml-layer';
+import { KmlPolyline } from '@/components/kml-polyline';
 
 
 export default function BikeRoutesPage() {
@@ -97,7 +96,7 @@ export default function BikeRoutesPage() {
                                     disableDefaultUI={false}
                                     mapId="rotakula-bike-map"
                                 >
-                                   <KmlLayerComponent url={selectedRoute?.kmlPath ?? null} />
+                                   <KmlPolyline kmlPath={selectedRoute?.kmlPath ?? null} />
                                    <UserLocationMarker />
                                 </Map>
                             </div>

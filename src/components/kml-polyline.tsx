@@ -1,55 +1,66 @@
+'use client';
 
-"use client";
-
-import { useEffect, useRef } from 'react';
 import { useMap } from '@vis.gl/react-google-maps';
+import { useEffect, useRef } from 'react';
 
 interface KmlPolylineProps {
-    kmlPath: string;
+    kmlPath: string | null;
 }
 
 export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
     const map = useMap();
-    // useRef, bileşen yeniden render olsa bile polyline referansını kaybetmememizi sağlar.
     const polylineRef = useRef<google.maps.Polyline | null>(null);
 
     useEffect(() => {
-        if (!map || !kmlPath) {
-            // Eğer harita veya KML yolu yoksa, hiçbir şey yapma.
+        // Function to clear the existing polyline from the map
+        const clearPolyline = () => {
+            if (polylineRef.current) {
+                polylineRef.current.setMap(null);
+                polylineRef.current = null;
+            }
+        };
+
+        if (!map) {
             return;
         }
 
-        // 1. Önceki rotayı haritadan temizle.
-        // Bu, yeni bir rota seçildiğinde eskisinin kalmasını engeller.
-        if (polylineRef.current) {
-            polylineRef.current.setMap(null);
-            polylineRef.current = null;
+        if (!kmlPath) {
+            clearPolyline();
+            // Optional: Reset map to default view when no route is selected
+            map.panTo({ lat: 38.547, lng: 28.65 });
+            map.setZoom(11);
+            return;
         }
 
         async function fetchAndDrawKml() {
+            clearPolyline(); // Clear any previous route
+
             try {
                 const response = await fetch(kmlPath);
                 if (!response.ok) {
-                    // Eğer dosya bulunamazsa (404 hatası gibi), konsola net bir hata yaz.
-                    throw new Error(`KML dosyası getirilemedi: ${response.status} ${response.statusText}. Kontrol edilen yol: ${kmlPath}`);
+                    throw new Error(`KML file not found: ${response.status}`);
                 }
                 const kmlText = await response.text();
                 
                 const parser = new DOMParser();
                 const kml = parser.parseFromString(kmlText, "application/xml");
 
-                const coordsStringNode = kml.getElementsByTagName('coordinates')[0];
-                if (!coordsStringNode || !coordsStringNode.textContent) {
-                    // Eğer KML dosyası içinde <coordinates> etiketi yoksa, hata ver.
-                    console.warn(`KML dosyasında <coordinates> etiketi bulunamadı: ${kmlPath}`);
+                // Find the LineString element which contains the path coordinates
+                const lineStringNode = kml.getElementsByTagName('LineString')[0];
+                if (!lineStringNode) {
+                    console.warn(`No <LineString> element found in KML file: ${kmlPath}`);
                     return;
                 }
 
-                // Koordinatları daha esnek bir şekilde ayrıştır.
-                // Farklı boşluk türlerini (boşluk, yeni satır, tab) ve fazla boşlukları tolere eder.
+                const coordsStringNode = lineStringNode.getElementsByTagName('coordinates')[0];
+                if (!coordsStringNode || !coordsStringNode.textContent) {
+                    console.warn(`No <coordinates> tag found inside <LineString> in KML file: ${kmlPath}`);
+                    return;
+                }
+
                 const coordinates = coordsStringNode.textContent
                     .trim()
-                    .split(/\s+/) 
+                    .split(/\s+/) // Split by any whitespace
                     .map(coordStr => {
                         const [lng, lat] = coordStr.split(',').map(Number);
                         if (!isNaN(lat) && !isNaN(lng)) {
@@ -59,38 +70,40 @@ export function KmlPolyline({ kmlPath }: KmlPolylineProps) {
                     }).filter((c): c is { lat: number; lng: number } => c !== null);
 
                 if (coordinates.length === 0) {
-                     // Eğer koordinatlar ayrıştırılamazsa, hata ver.
-                     console.warn(`KML dosyasından geçerli koordinat ayrıştırılamadı: ${kmlPath}`);
+                     console.warn(`Could not parse valid coordinates from KML file: ${kmlPath}`);
                      return;
                 }
                 
-                // 2. Yeni rotayı oluştur ve çiz.
                 const newPolyline = new google.maps.Polyline({
                     path: coordinates,
-                    strokeColor: "#FF0000", // Kırmızı renk
+                    strokeColor: "#0000FF", // A strong blue color
                     strokeOpacity: 0.8,
-                    strokeWeight: 4, // Daha belirgin bir kalınlık
+                    strokeWeight: 6, // Make it thicker and more visible
                     map: map,
                 });
                 
-                // 3. Yeni çizilen rotanın referansını sakla ki bir sonraki seçimde silebilelim.
                 polylineRef.current = newPolyline;
                 
+                // Automatically adjust the map's viewport to fit the entire polyline
+                const bounds = new google.maps.LatLngBounds();
+                coordinates.forEach(point => {
+                    bounds.extend(point);
+                });
+                map.fitBounds(bounds, 60); // 60px padding
+
             } catch (error) {
-                console.error(`KML dosyası işlenirken bir hata oluştu (${kmlPath}):`, error);
+                console.error(`Error processing KML file (${kmlPath}):`, error);
             }
         }
 
         fetchAndDrawKml();
 
-        // Bu cleanup fonksiyonu, component unmount olduğunda son rotayı temizler.
+        // Cleanup function for when the component unmounts or kmlPath changes
         return () => {
-            if (polylineRef.current) {
-                polylineRef.current.setMap(null);
-            }
+            clearPolyline();
         };
         
-    }, [kmlPath, map]); // Bu efekt, SADECE kmlPath veya map değiştiğinde çalışır.
+    }, [kmlPath, map]);
 
-    return null; // Bu bileşen görsel bir çıktı üretmez.
+    return null; // This component does not render anything itself
 }
