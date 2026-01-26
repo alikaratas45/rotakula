@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useEffect, useState, useRef } from 'react';
@@ -30,15 +31,30 @@ function MapController({ selectedRoute }: { selectedRoute: WalkingRoute | null }
              return;
         };
 
+        // --- Pan Map to Route ---
+        let center = { lat: 38.547, lng: 28.65 }; // Default Kula center
+        let zoom = 14;
+
+        if (selectedRoute.slug.includes('caminin-golgesinde')) {
+            center = { lat: 38.546, lng: 28.648 };
+            zoom = 16;
+        } else if (selectedRoute.slug.includes('jeopark-patikasi')) {
+            center = { lat: 38.5587, lng: 28.6613 };
+            zoom = 15;
+        } else if (selectedRoute.slug.includes('kula-divlit-zirve-yuruyusu')) {
+             center = { lat: 38.5578, lng: 28.6610 };
+             zoom = 15;
+        }
+
+        map.panTo(center);
+        map.setZoom(zoom);
+
         // --- Draw KML Polyline ---
         async function fetchAndDrawKml() {
             try {
                 const response = await fetch(selectedRoute!.kmlPath);
                 if (!response.ok) {
                     console.error(`KML file could not be fetched: ${response.status} ${response.statusText}`);
-                    // pan to default if kml not found
-                    map.panTo({ lat: 38.547, lng: 28.65 });
-                    map.setZoom(12);
                     return;
                 }
                 const kmlText = await response.text();
@@ -75,12 +91,6 @@ function MapController({ selectedRoute }: { selectedRoute: WalkingRoute | null }
                     strokeWeight: 4,
                     map: map,
                 });
-
-                const bounds = new google.maps.LatLngBounds();
-                coordinates.forEach(point => {
-                    bounds.extend(point);
-                });
-                map.fitBounds(bounds);
                 
                 polylineRef.current = newPolyline;
                 
