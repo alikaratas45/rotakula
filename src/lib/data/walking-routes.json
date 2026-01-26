@@ -68,15 +68,22 @@
       "id": "walk-route-6",
       "slug": "jeopark-lav-yuruyusu-ring",
       "name": "Jeopark Lav Yürüyüşü (Ring)",
-      "description": "Divlit Volkanik arazisi üzerinde 5km'lik bir ring yürüyüş parkuru.",
+      "description": "Divlit Volkanik arazisi üzerinde bir ring yürüyüş parkuru.",
       "kmlPath": "/routes/divlit-volkanik-arazi-jeoparkring-5km.kml",
-      "distance": "Yaklaşık 5 km",
+      "distance": "4,34 km",
+      "elevationGain": "50 m",
+      "difficulty": "Orta zorlukta",
+      "elevationLoss": "50 m",
+      "maxElevation": "694 m",
+      "trailRank": "33",
+      "minElevation": "639 m",
+      "trackType": "Döngü",
       "name_en": "Geopark Lava Walk (Ring)",
-      "description_en": "A 5km ring walking trail on the Divlit Volcanic terrain.",
+      "description_en": "A 4.34 km ring walking trail on the Divlit Volcanic terrain.",
       "name_fr": "Marche de Lave du Géoparc (Boucle)",
-      "description_fr": "Un sentier de randonnée en boucle de 5 km sur le terrain volcanique de Divlit.",
+      "description_fr": "Un sentier de randonnée en boucle de 4.34 km sur le terrain volcanique de Divlit.",
       "name_de": "Geopark Lava-Wanderung (Rundweg)",
-      "description_de": "Ein 5 km langer Rundwanderweg auf dem vulkanischen Gelände von Divlit."
+      "description_de": "Ein 4.34 km langer Rundwanderweg auf dem vulkanischen Gelände von Divlit."
     }
   ]
 }

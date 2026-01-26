@@ -81,7 +81,7 @@ export default function WalkingRoutesPage() {
                                 </CardHeader>
                                 <CardContent>
                                     <p className="text-sm text-muted-foreground">{route.description}</p>
-                                    {route.id === 'walk-route-5' && route.difficulty && (
+                                    {route.difficulty && (
                                         <>
                                             <Separator className="my-4" />
                                             <h4 className="text-md font-semibold mb-3">Parkur İstatistikleri</h4>
