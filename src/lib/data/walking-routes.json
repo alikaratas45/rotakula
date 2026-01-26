@@ -28,6 +28,20 @@
       "description_fr": "Marchez sur le sentier en bois du parc volcanique de Kula Divlit, parmi des champs de lave ressemblant à la surface lunaire.",
       "name_de": "Geopark-Wanderweg",
       "description_de": "Wandern Sie auf dem Holzweg im Vulkanpark Kula Divlit zwischen Lavafeldern, die der Mondoberfläche ähneln."
+    },
+    {
+      "id": "walking-route-3",
+      "slug": "kula-divlit-zirve-yuruyusu",
+      "name": "Kula Divlit Zirve Yürüyüşü",
+      "description": "Kula Divlit yanardağının zirvesine doğru, lavların üzerinde unutulmaz bir yürüyüş.",
+      "kmlPath": "/routes/lavyuruyus.kml",
+      "distance": "Yaklaşık 3 km",
+      "name_en": "Kula Divlit Summit Walk",
+      "description_en": "An unforgettable walk on the lavas towards the summit of the Kula Divlit volcano.",
+      "name_fr": "Marche du Sommet de Kula Divlit",
+      "description_fr": "Une marche inoubliable sur les laves vers le sommet du volcan Kula Divlit.",
+      "name_de": "Kula Divlit Gipfelwanderung",
+      "description_de": "Eine unvergessliche Wanderung auf den Laven zum Gipfel des Vulkans Kula Divlit."
     }
   ]
 }
