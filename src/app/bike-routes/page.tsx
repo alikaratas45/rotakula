@@ -90,7 +90,7 @@ export default function BikeRoutesPage() {
                     {/* Map Area */}
                     <div ref={mapRef} className="lg:col-span-2">
                         <div className="sticky top-24">
-                             <div className="h-[60vh] w-full rounded-lg overflow-hidden relative border">
+                             <div className="h-96 w-full rounded-lg overflow-hidden relative border">
                                 <Map
                                     defaultCenter={{ lat: 38.547, lng: 28.65 }}
                                     defaultZoom={11}
