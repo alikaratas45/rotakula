@@ -135,6 +135,33 @@
       "description_fr": "Un sentier de randonnée en boucle de 4.34 km sur le terrain volcanique de Divlit.",
       "name_de": "Geopark Lava-Wanderung (Rundweg)",
       "description_de": "Ein 4.34 km langer Rundwanderweg auf dem vulkanischen Gelände von Divlit."
+    },
+    {
+      "id": "walk-route-7",
+      "slug": "sandal-volkan-konisi-parkuru",
+      "name": "Sandal Volkan Konisi Yürüyüş Parkuru",
+      "description": "Sandal Volkan Konisi çevresinde eşsiz manzaralar sunan, tek yönlü bir yürüyüş parkuru.",
+      "kmlPath": "/routes/sandal.kml",
+      "distance": "6,75 km",
+      "elevationGain": "72 m",
+      "difficulty": "Orta zorlukta",
+      "difficulty_en": "Medium difficulty",
+      "difficulty_fr": "Difficulté moyenne",
+      "difficulty_de": "Mittelschwer",
+      "elevationLoss": "203 m",
+      "maxElevation": "863 m",
+      "trailRank": "50",
+      "minElevation": "688 m",
+      "trackType": "Tek Yönlü",
+      "trackType_en": "One Way",
+      "trackType_fr": "Aller simple",
+      "trackType_de": "Einweg",
+      "name_en": "Sandal Volcano Cone Walking Trail",
+      "description_en": "A one-way walking trail around the Sandal Volcano Cone offering unique views.",
+      "name_fr": "Sentier de Randonnée du Cône Volcanique de Sandal",
+      "description_fr": "Un sentier de randonnée aller simple autour du cône volcanique de Sandal offrant des vues uniques.",
+      "name_de": "Sandal Vulkankegel Wanderweg",
+      "description_de": "Ein Einweg-Wanderweg um den Sandal Vulkankegel, der einzigartige Ausblicke bietet."
     }
   ]
 }
