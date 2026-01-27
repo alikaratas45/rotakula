@@ -124,7 +124,7 @@ export default function Home() {
                 alt="Kula Belediyesi Logosu"
                 width={350}
                 height={350}
-                className="animate-fade-in"
+                className="animate-fade-in w-full max-w-[350px] h-auto"
                 style={{ animationDelay: '0ms' }}
                 priority
             />
@@ -138,7 +138,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative z-20 pb-12 px-4 md:px-8 -mt-24 md:-mt-32">
+      <section className="relative z-20 pb-12 px-4 md:px-8 -mt-20 md:-mt-32">
          <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
               {iconNavItems.map((item, index) => (
@@ -166,7 +166,7 @@ export default function Home() {
           </div>
       </section>
 
-      <section className="pb-16 pt-8 bg-background">
+      <section className="pb-16 pt-12 bg-background">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <h2 className="text-4xl font-headline font-bold text-center mb-12 animate-fade-in-up">{translations.home.thematicRoutes}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
