@@ -1,4 +1,3 @@
-
 "use client"
 
 import Link from "next/link";
@@ -57,18 +56,40 @@ export function Header() {
     const [showAdminDialog, setShowAdminDialog] = React.useState(false);
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
+    const clickTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
 
     const handleLogoClick = () => {
         if (isAdmin) return; // If already admin, don't show login dialog
+
+        // Clear any existing timeout to ensure clicks are consecutive
+        if (clickTimeoutRef.current) {
+            clearTimeout(clickTimeoutRef.current);
+        }
+
         const newClickCount = clickCount + 1;
         setClickCount(newClickCount);
+
         if (newClickCount >= 5) {
             setShowAdminDialog(true);
-            setClickCount(0); // Reset count
+            setClickCount(0); // Reset count after showing dialog
+        } else {
+            // Set a new timeout to reset the count if the user stops clicking
+            clickTimeoutRef.current = setTimeout(() => {
+                setClickCount(0);
+            }, 1500); // Reset after 1.5 seconds of inactivity
         }
     };
     
+    // Cleanup timeout on component unmount
+    React.useEffect(() => {
+        return () => {
+            if (clickTimeoutRef.current) {
+                clearTimeout(clickTimeoutRef.current);
+            }
+        };
+    }, []);
+
     const onPasswordSubmit = () => {
         handleAdminLogin(email, password);
         setShowAdminDialog(false);
