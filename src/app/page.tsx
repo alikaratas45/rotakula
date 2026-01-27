@@ -111,7 +111,7 @@ export default function Home() {
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
-        <div className="relative z-10 mx-auto max-w-4xl p-4 pt-20 md:pt-28">
+        <div className="relative z-10 mx-auto max-w-4xl p-4 pt-4 md:pt-8">
           <Image
             src="https://i.imgur.com/aQa6rQO.png"
             alt="Kula Belediyesi Logosu"
