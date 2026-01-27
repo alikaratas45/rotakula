@@ -1,3 +1,4 @@
+
 "use client"
 
 import { getRoutes } from '@/lib/kula-data';
@@ -137,7 +138,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative z-20 pb-12 px-4 md:px-8 -mt-20 md:-mt-32">
+      <section className="relative z-20 pb-12 px-4 md:px-8 -mt-12 md:-mt-32">
          <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
               {iconNavItems.map((item, index) => (
