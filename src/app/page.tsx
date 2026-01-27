@@ -104,7 +104,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      <section className="relative h-[70vh] md:h-[90vh] w-full text-center flex flex-col justify-start pt-0">
+      <section className="relative h-[70vh] md:h-[90vh] w-full text-center flex flex-col justify-center">
         {heroImage && (
           <Image
             src={heroImage.imageUrl}
@@ -120,22 +120,22 @@ export default function Home() {
           <Image
             src="https://i.imgur.com/aQa6rQO.png"
             alt="Kula Belediyesi Logosu"
-            width={400}
-            height={400}
+            width={128}
+            height={128}
             className="mx-auto mb-6 animate-fade-in"
             style={{ animationDelay: '0ms' }}
             priority
           />
-          <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-3d animate-fade-in text-black dark:text-white" style={{animationDelay: '200ms'}}>
+          <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-3d animate-fade-in" style={{animationDelay: '200ms'}}>
             {translations.home.heroTitle}
           </h1>
-          <p className="mt-6 text-lg md:text-xl max-w-3xl mx-auto drop-shadow-md animate-fade-in text-black dark:text-white" style={{animationDelay: '600ms'}}>
+          <p className="mt-6 text-lg md:text-xl max-w-3xl mx-auto drop-shadow-md animate-fade-in" style={{animationDelay: '600ms'}}>
             {translations.home.heroSubtitle}
           </p>
         </div>
       </section>
 
-      <section className="pt-2 pb-12 px-4 md:px-8 bg-background relative z-20">
+      <section className="relative z-20 -mt-24 pb-12 px-4 md:px-8">
          <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
               {iconNavItems.map((item, index) => (
