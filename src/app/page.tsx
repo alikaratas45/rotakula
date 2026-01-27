@@ -120,8 +120,8 @@ export default function Home() {
           <Image
             src="https://i.imgur.com/aQa6rQO.png"
             alt="Kula Belediyesi Logosu"
-            width={128}
-            height={128}
+            width={400}
+            height={400}
             className="mx-auto mb-6 animate-fade-in"
             style={{ animationDelay: '0ms' }}
             priority
