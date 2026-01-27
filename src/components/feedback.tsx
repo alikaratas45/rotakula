@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useMemo } from 'react';
@@ -201,8 +200,11 @@ export function FeedbackSection({ isLimited = false }: { isLimited?: boolean }) 
             {!isLimited && <FeedbackForm />}
             <FeedbackList isLimited={isLimited} />
              {isLimited && (
-                <div className="flex justify-center pt-4">
+                <div className="flex flex-col items-center gap-2 pt-4">
                   <Button asChild>
+                      <Link href="/feedback">{(translations.nav as any).makeComment || 'Yorum Yap'}</Link>
+                  </Button>
+                  <Button asChild variant="outline">
                       <Link href="/feedback">{translations.nav.seeAllComments}</Link>
                   </Button>
                 </div>

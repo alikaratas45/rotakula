@@ -23,7 +23,8 @@
         "installAppAlreadyDesc": "The RotaKula application is already installed on your device.",
         "installAppNotPossible": "Installation Not Possible",
         "installAppNotPossibleDesc": "The application may already be installed or your browser may not support this feature.",
-        "seeAllComments": "See All Comments"
+        "seeAllComments": "See All Comments",
+        "makeComment": "Make a Comment"
     },
     "header": {
         "menu": "Menu",
