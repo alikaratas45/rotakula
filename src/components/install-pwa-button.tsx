@@ -76,6 +76,7 @@ export const InstallPwaButton = () => {
           <span className="text-center text-sm font-semibold text-foreground/90 group-hover:text-primary transition-colors">
             {translations.nav.installApp}
           </span>
+          <span className="text-center text-xs text-muted-foreground mt-1">(android ve windows için)</span>
         </div>
       </div>
     </div>
