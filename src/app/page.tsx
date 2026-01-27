@@ -105,7 +105,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      <section className="relative h-[70vh] md:h-[90vh] w-full text-center flex flex-col justify-start">
+      <section className="relative h-[70vh] md:h-[90vh] w-full text-center flex flex-col justify-start pt-0">
         {heroImage && (
           <Image
             src={heroImage.imageUrl}
@@ -118,16 +118,27 @@ export default function Home() {
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
         <div className="relative z-10 mx-auto max-w-4xl px-4 pb-4">
-          <Image
-            src="https://i.imgur.com/aQa6rQO.png"
-            alt="Kula Belediyesi Logosu"
-            width={400}
-            height={400}
-            className="mx-auto mb-6 animate-fade-in"
-            style={{ animationDelay: '0ms' }}
-            priority
-          />
-          <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-3d animate-fade-in" style={{animationDelay: '200ms'}}>
+        <div className="flex justify-center items-center gap-4">
+            <Image
+                src="https://i.imgur.com/aQa6rQO.png"
+                alt="Kula Belediyesi Logosu"
+                width={128}
+                height={128}
+                className="animate-fade-in"
+                style={{ animationDelay: '0ms' }}
+                priority
+            />
+            <Image
+                src="https://i.imgur.com/PS0UgvO.png"
+                alt="RotaKula Logosu"
+                width={128}
+                height={128}
+                className="animate-fade-in"
+                style={{ animationDelay: '100ms' }}
+                priority
+            />
+        </div>
+          <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-3d animate-fade-in mt-4" style={{animationDelay: '200ms'}}>
             {translations.home.heroTitle}
           </h1>
           <p className="mt-6 text-lg md:text-xl max-w-3xl mx-auto drop-shadow-md animate-fade-in" style={{animationDelay: '600ms'}}>
@@ -136,7 +147,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative z-20 -mt-24 pb-12 px-4 md:px-8">
+      <section className="relative z-20 pb-12 px-4 md:px-8 -mt-32">
          <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
               {iconNavItems.map((item, index) => (
@@ -164,7 +175,7 @@ export default function Home() {
           </div>
       </section>
 
-      <section className="py-16 bg-background">
+      <section className="pb-16 bg-background">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <h2 className="text-4xl font-headline font-bold text-center mb-12 animate-fade-in-up">{translations.home.thematicRoutes}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
