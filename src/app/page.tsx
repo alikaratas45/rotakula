@@ -100,7 +100,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      <section className="relative h-[70vh] md:h-[90vh] w-full text-center flex flex-col justify-start">
+      <section className="relative h-[70vh] md:h-[90vh] w-full text-center flex flex-col justify-start pt-0">
         {heroImage && (
           <Image
             src={heroImage.imageUrl}
@@ -122,7 +122,7 @@ export default function Home() {
             style={{ animationDelay: '0ms' }}
             priority
           />
-          <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight drop-shadow-lg animate-fade-in text-black dark:text-white" style={{animationDelay: '200ms'}}>
+          <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-3d animate-fade-in text-black dark:text-white" style={{animationDelay: '200ms'}}>
             {translations.home.heroTitle}
           </h1>
           <p className="mt-6 text-lg md:text-xl max-w-3xl mx-auto drop-shadow-md animate-fade-in text-black dark:text-white" style={{animationDelay: '600ms'}}>

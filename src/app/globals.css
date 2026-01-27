@@ -170,4 +170,12 @@
   .preserve-3d {
     transform-style: preserve-3d;
   }
+  .text-3d {
+    text-shadow:
+      1px 1px 0px hsl(var(--muted-foreground) / 0.5),
+      2px 2px 0px hsl(var(--muted-foreground) / 0.4),
+      3px 3px 0px hsl(var(--muted-foreground) / 0.3),
+      4px 4px 0px hsl(var(--muted-foreground) / 0.2),
+      5px 5px 0px hsl(var(--muted-foreground) / 0.1);
+  }
 }
