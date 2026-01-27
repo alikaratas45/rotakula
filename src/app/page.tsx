@@ -113,6 +113,15 @@ export default function Home() {
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
         <div className="relative z-10 max-w-4xl p-4 mt-24">
+          <Image
+            src="https://i.imgur.com/aQa6rQO.png"
+            alt="Kula Belediyesi Logosu"
+            width={128}
+            height={128}
+            className="mx-auto mb-6 animate-fade-in"
+            style={{ animationDelay: '0ms' }}
+            priority
+          />
           <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight drop-shadow-lg animate-fade-in text-black dark:text-white" style={{animationDelay: '200ms'}}>
             {translations.home.heroTitle}
           </h1>
