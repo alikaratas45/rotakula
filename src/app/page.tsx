@@ -1,3 +1,4 @@
+
 "use client"
 
 import { getRoutes } from '@/lib/kula-data';
@@ -104,7 +105,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      <section className="relative h-[70vh] md:h-[90vh] w-full text-center flex flex-col justify-center">
+      <section className="relative h-[70vh] md:h-[90vh] w-full text-center flex flex-col justify-start">
         {heroImage && (
           <Image
             src={heroImage.imageUrl}
