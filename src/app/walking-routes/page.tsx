@@ -2,17 +2,21 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { APIProvider, Map } from "@vis.gl/react-google-maps";
-import { getWalkingRoutes } from '@/lib/kula-data';
-import type { WalkingRoute } from '@/lib/types';
+import { getWalkingRoutes, getPoisByIds } from '@/lib/kula-data';
+import type { WalkingRoute, PointOfInterest } from '@/lib/types';
 import { useApp } from '@/context/app-context';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, Footprints } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Loader2, Footprints, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { UserLocationMarker } from '@/components/map';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { KmlPolyline } from '@/components/kml-polyline';
 import { Separator } from '@/components/ui/separator';
 import { BackButton } from '@/components/back-button';
+import Image from 'next/image';
+import Link from 'next/link';
+import { getImageById } from '@/lib/placeholder-images';
+import { Button } from '@/components/ui/button';
 
 
 export default function WalkingRoutesPage() {
@@ -24,6 +28,9 @@ export default function WalkingRoutesPage() {
     
     const isMobile = useIsMobile();
     const mapRef = useRef<HTMLDivElement>(null);
+
+    const [routePois, setRoutePois] = useState<PointOfInterest[]>([]);
+    const [isPoisLoading, setIsPoisLoading] = useState(false);
 
     useEffect(() => {
         async function fetchRoutes() {
@@ -41,9 +48,22 @@ export default function WalkingRoutesPage() {
         fetchRoutes();
     }, [language]);
     
-    const handleRouteSelection = (route: WalkingRoute) => {
-        setSelectedRoute(prevRoute => (prevRoute?.id === route.id ? null : route));
-        if (isMobile && mapRef.current) {
+    const handleRouteSelection = async (route: WalkingRoute) => {
+        const isDeselecting = selectedRoute?.id === route.id;
+        const newSelectedRoute = isDeselecting ? null : route;
+        setSelectedRoute(newSelectedRoute);
+
+        if (newSelectedRoute && newSelectedRoute.poiIds && newSelectedRoute.poiIds.length > 0) {
+            setIsPoisLoading(true);
+            setRoutePois([]);
+            const poisData = await getPoisByIds(newSelectedRoute.poiIds, language);
+            setRoutePois(poisData);
+            setIsPoisLoading(false);
+        } else {
+            setRoutePois([]);
+        }
+
+        if (!isDeselecting && isMobile && mapRef.current) {
             mapRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     };
@@ -144,6 +164,50 @@ export default function WalkingRoutesPage() {
                                 </Map>
                             </div>
                         </div>
+                    </div>
+
+                     <div className="lg:col-span-3 mt-12">
+                        {isPoisLoading && (
+                             <div className="flex justify-center py-8">
+                                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+                            </div>
+                        )}
+                        {!isPoisLoading && routePois.length > 0 && (
+                            <div>
+                                <h2 className="text-2xl font-headline font-bold mb-6">{translations.route.whatsOnThisRoute}</h2>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {routePois.map(poi => {
+                                        const image = getImageById(poi.imageId);
+                                        return (
+                                            <Card key={poi.id} className="flex flex-col">
+                                                {image && (
+                                                    <div className="relative h-40 w-full">
+                                                        <Image src={image.imageUrl} alt={image.description} fill className="object-cover rounded-t-lg" data-ai-hint={image.imageHint} />
+                                                    </div>
+                                                )}
+                                                <CardHeader>
+                                                    <CardTitle className="font-headline text-lg">{poi.name}</CardTitle>
+                                                    <CardDescription className="capitalize">
+                                                        {translations.category[poi.category as keyof typeof translations.category] || poi.category}
+                                                    </CardDescription>
+                                                </CardHeader>
+                                                <CardContent className="flex-grow">
+                                                    <p className="text-sm text-muted-foreground line-clamp-3">{poi.description}</p>
+                                                </CardContent>
+                                                <CardFooter>
+                                                    <Button asChild variant="secondary" size="sm">
+                                                        <Link href={`/places/${poi.slug}`}>
+                                                            <Info className="mr-2 h-4 w-4" />
+                                                            {translations.common.moreInfo}
+                                                        </Link>
+                                                    </Button>
+                                                </CardFooter>
+                                            </Card>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

@@ -78,6 +78,7 @@ export type BikeRoute = {
   description: string;
   distance: string;
   kmlPath: string;
+  poiIds?: string[];
   name_en?: string;
   description_en?: string;
   name_fr?: string;
@@ -93,6 +94,7 @@ export type WalkingRoute = {
   description: string;
   distance: string;
   kmlPath: string;
+  poiIds?: string[];
   name_en?: string;
   description_en?: string;
   name_fr?: string;
