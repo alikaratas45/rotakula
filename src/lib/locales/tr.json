@@ -279,7 +279,10 @@
         "submit": "Yorumu Gönder",
         "sending": "Gönderiliyor...",
         "sent": "Gönderildi!",
-        "noComments": "Henüz yorum yapılmamış. İlk yorumu siz yapın!"
+        "noComments": "Henüz yorum yapılmamış. İlk yorumu siz yapın!",
+        "reply": "Yanıtla",
+        "writeReply": "Bir yanıt yazın...",
+        "replySent": "Yanıtınız gönderildi!"
     },
     "survey": {
         "title": "Ziyaretinizi Değerlendirin: {poiName}",

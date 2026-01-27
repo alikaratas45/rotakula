@@ -280,7 +280,10 @@
         "submit": "Envoyer le Commentaire",
         "sending": "Envoi en cours...",
         "sent": "Envoyé !",
-        "noComments": "Pas encore de commentaires. Soyez le premier à commenter !"
+        "noComments": "Pas encore de commentaires. Soyez le premier à commenter !",
+        "reply": "Répondre",
+        "writeReply": "Écrire une réponse...",
+        "replySent": "Votre réponse a été envoyée !"
     },
     "survey": {
         "title": "Évaluez Votre Visite : {poiName}",

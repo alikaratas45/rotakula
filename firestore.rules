@@ -10,9 +10,10 @@ service cloud.firestore {
     }
 
     // Feedback Collection: Anyone can read and create. Admin can delete.
+    // Likes and replies can be updated by anyone.
     match /feedback/{feedbackId} {
       allow read, create: if true;
-      allow update: if false;
+      allow update: if request.resource.data.diff(resource.data).affectedKeys().hasAny(['likes', 'replies']);
       allow delete: if isAdmin();
     }
 

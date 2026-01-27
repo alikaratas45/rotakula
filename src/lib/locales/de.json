@@ -280,7 +280,10 @@
         "submit": "Kommentar Senden",
         "sending": "Wird gesendet...",
         "sent": "Gesendet!",
-        "noComments": "Bisher keine Kommentare. Seien Sie der Erste, der einen Kommentar abgibt!"
+        "noComments": "Bisher keine Kommentare. Seien Sie der Erste, der einen Kommentar abgibt!",
+        "reply": "Antworten",
+        "writeReply": "Schreiben Sie eine Antwort...",
+        "replySent": "Ihre Antwort wurde gesendet!"
     },
     "survey": {
         "title": "Bewerten Sie Ihren Besuch: {poiName}",

@@ -93,6 +93,30 @@
         "createdAt"
       ]
     },
+    "Reply": {
+      "title": "Reply",
+      "type": "object",
+      "description": "Represents a reply to a feedback comment.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the user replying (optional)."
+        },
+        "message": {
+          "type": "string",
+          "description": "The reply message."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of when the reply was submitted."
+        }
+      },
+      "required": [
+        "message",
+        "createdAt"
+      ]
+    },
     "Feedback": {
       "title": "Feedback",
       "type": "object",
@@ -114,6 +138,17 @@
           "type": "string",
           "format": "date-time",
           "description": "Timestamp of when the feedback was submitted."
+        },
+        "likes": {
+          "type": "number",
+          "description": "The number of likes the feedback has received."
+        },
+        "replies": {
+          "type": "array",
+          "description": "A list of replies to this feedback.",
+          "items": {
+            "$ref": "#/entities/Reply"
+          }
         }
       },
       "required": [

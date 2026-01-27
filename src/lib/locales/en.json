@@ -280,7 +280,10 @@
         "submit": "Submit Comment",
         "sending": "Sending...",
         "sent": "Sent!",
-        "noComments": "No comments yet. Be the first to comment!"
+        "noComments": "No comments yet. Be the first to comment!",
+        "reply": "Reply",
+        "writeReply": "Write a reply...",
+        "replySent": "Your reply has been sent!"
     },
     "survey": {
         "title": "Rate Your Visit: {poiName}",
