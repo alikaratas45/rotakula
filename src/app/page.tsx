@@ -99,7 +99,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
-      <section className="relative h-[70vh] md:h-[90vh] w-full flex items-start pt-20 md:pt-28 justify-center text-center">
+      <section className="relative h-[70vh] md:h-[90vh] w-full text-center">
         {heroImage && (
           <Image
             src={heroImage.imageUrl}
@@ -111,7 +111,7 @@ export default function Home() {
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
-        <div className="relative z-10 max-w-4xl p-4">
+        <div className="relative z-10 mx-auto max-w-4xl p-4 pt-20 md:pt-28">
           <Image
             src="https://i.imgur.com/aQa6rQO.png"
             alt="Kula Belediyesi Logosu"
