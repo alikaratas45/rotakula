@@ -122,19 +122,10 @@ export default function Home() {
             <Image
                 src="https://i.imgur.com/aQa6rQO.png"
                 alt="Kula Belediyesi Logosu"
-                width={128}
-                height={128}
+                width={350}
+                height={350}
                 className="animate-fade-in"
                 style={{ animationDelay: '0ms' }}
-                priority
-            />
-            <Image
-                src="https://i.imgur.com/PS0UgvO.png"
-                alt="RotaKula Logosu"
-                width={128}
-                height={128}
-                className="animate-fade-in"
-                style={{ animationDelay: '100ms' }}
                 priority
             />
         </div>
