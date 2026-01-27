@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -81,7 +82,7 @@ function ReplyItem({ reply }: { reply: Reply }) {
     return (
         <div className="flex items-start gap-3 my-4">
             <Avatar className="h-8 w-8">
-                <AvatarFallback>{(reply.name || 'A').charAt(0)}</AvatarFallback>
+                <AvatarFallback>{(reply.name || 'A').charAt(0).toUpperCase()}</AvatarFallback>
             </Avatar>
             <div className="flex-1">
                 <div className="flex items-center gap-2">
@@ -118,11 +119,24 @@ function ReplyForm({ feedbackId, onSubmitted }: { feedbackId: string; onSubmitte
         toast({ title: translations.comments.replySent });
         setIsSubmitting(false);
         onSubmitted();
+        form.reset();
     };
     
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="my-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="my-4 space-y-3">
+                 <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormControl>
+                                <Input placeholder={translations.comments.namePlaceholder} {...field} className="h-9 text-sm" />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
                 <FormField
                     control={form.control}
                     name="message"
@@ -135,7 +149,7 @@ function ReplyForm({ feedbackId, onSubmitted }: { feedbackId: string; onSubmitte
                         </FormItem>
                     )}
                 />
-                <div className="flex justify-end gap-2 mt-2">
+                <div className="flex justify-end gap-2 pt-2">
                      <Button type="button" variant="ghost" size="sm" onClick={onSubmitted}>{translations.common.cancel}</Button>
                      <Button type="submit" size="sm" disabled={isSubmitting}>
                         {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -199,39 +213,37 @@ function FeedbackItem({ feedback }: { feedback: Feedback }) {
   return (
     <Card>
       <CardHeader className="pb-2">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-lg">{feedback.name || 'Anonim'}</CardTitle>
-          <CardDescription>{displayDate}</CardDescription>
+        <div className="flex items-start gap-3">
+          <Avatar className="h-10 w-10">
+              <AvatarFallback>{(feedback.name || 'A').charAt(0).toUpperCase()}</AvatarFallback>
+          </Avatar>
+          <div className="flex-1">
+            <p className="font-semibold">{feedback.name || 'Anonim'}</p>
+            <p className="text-xs text-muted-foreground">{displayDate}</p>
+          </div>
         </div>
       </CardHeader>
-      <CardContent>
-        <p className="text-muted-foreground">{feedback.message}</p>
+      <CardContent className="pt-2 pl-14">
+        <p className="text-foreground/90">{feedback.message}</p>
       </CardContent>
-       <CardFooter className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" onClick={handleLike} disabled={isLiked} className={cn(isLiked && "text-primary hover:text-primary")}>
+       <CardFooter className="flex items-center gap-4 border-t pt-2 pb-2 pl-14">
+            <Button variant="ghost" size="sm" onClick={handleLike} disabled={isLiked} className={cn("text-muted-foreground", isLiked && "text-primary hover:text-primary")}>
                 <ThumbsUp className="mr-2 h-4 w-4" />
-                {optimisticLikes}
+                {optimisticLikes > 0 && <span>{optimisticLikes}</span>}
             </Button>
-            <Button variant="ghost" size="sm" onClick={() => setIsReplying(!isReplying)}>
+            <Button variant="ghost" size="sm" onClick={() => setIsReplying(!isReplying)} className="text-muted-foreground">
                 <MessageSquare className="mr-2 h-4 w-4" />
                 {translations.comments.reply}
             </Button>
         </CardFooter>
 
-        {(feedback.replies && feedback.replies.length > 0) && (
-            <div className="px-6 pb-4">
-                <div className="border-l-2 ml-2 pl-4">
-                    {feedback.replies.map((reply, index) => <ReplyItem key={index} reply={reply} />)}
-                </div>
+        {(isReplying || (feedback.replies && feedback.replies.length > 0)) && (
+          <div className="bg-muted/50 pl-14">
+            <div className="border-l-2 ml-4 pl-4 py-2">
+                {feedback.replies && feedback.replies.sort((a,b) => (a.createdAt instanceof Date ? a.createdAt.getTime() : a.createdAt.seconds) - (b.createdAt instanceof Date ? b.createdAt.getTime() : b.createdAt.seconds)).map((reply, index) => <ReplyItem key={index} reply={reply} />)}
+                {isReplying && <ReplyForm feedbackId={feedback.id} onSubmitted={() => setIsReplying(false)} />}
             </div>
-        )}
-
-        {isReplying && (
-            <div className="px-6 pb-4">
-                <div className="border-l-2 ml-2 pl-4">
-                    <ReplyForm feedbackId={feedback.id} onSubmitted={() => setIsReplying(false)} />
-                </div>
-            </div>
+          </div>
         )}
     </Card>
   );
@@ -264,7 +276,7 @@ function FeedbackList({ isLimited }: { isLimited?: boolean }) {
       {feedback && feedback.length > 0 ? (
         feedback.map((item) => <FeedbackItem key={item.id} feedback={item} />)
       ) : (
-        <p className="text-center text-muted-foreground">
+        <p className="text-center text-muted-foreground py-8">
           {translations.comments.noComments}
         </p>
       )}
@@ -363,6 +375,7 @@ export function FeedbackSection({ isLimited = false }: { isLimited?: boolean }) 
     const { translations } = useApp();
     return (
         <div className="space-y-8">
+            <h2 className="text-3xl font-headline font-bold text-center">{translations.comments.title}</h2>
             {!isLimited && <FeedbackForm />}
             <FeedbackList isLimited={isLimited} />
              {isLimited && (
@@ -370,7 +383,7 @@ export function FeedbackSection({ isLimited = false }: { isLimited?: boolean }) 
                   <Button asChild>
                       <Link href="/feedback">{(translations.nav as any).makeComment || 'Yorum Yap'}</Link>
                   </Button>
-                  <Button asChild variant="outline">
+                  <Button asChild variant="link">
                       <Link href="/feedback">{translations.nav.seeAllComments}</Link>
                   </Button>
                 </div>
