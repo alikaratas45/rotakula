@@ -18,6 +18,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { useState }from 'react';
+import { haversineDistance } from "@/lib/utils";
 
 export default function SelectedPoisSidebar({ selectedPois, setSelectedPois }: { selectedPois: PointOfInterest[], setSelectedPois: React.Dispatch<React.SetStateAction<PointOfInterest[]>> }) {
     const { translations } = useApp();
@@ -45,17 +46,48 @@ export default function SelectedPoisSidebar({ selectedPois, setSelectedPois }: {
         
         setIsStartingRoute(true);
 
-        // Google Maps URL'i oluştur
-        const destination = `${selectedPois[selectedPois.length - 1].latitude},${selectedPois[selectedPois.length - 1].longitude}`;
-        const waypoints = selectedPois
-            .slice(0, selectedPois.length - 1)
-            .map(p => `${p.latitude},${p.longitude}`)
-            .join('|');
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const userLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                };
 
-        const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${destination}&waypoints=${waypoints}&travelmode=${travelMode}`;
+                // Sort POIs by distance from user's current location
+                const sortedPois = [...selectedPois].sort((a, b) => {
+                    const distanceA = haversineDistance(
+                        { lat: userLocation.lat, lon: userLocation.lng },
+                        { lat: a.latitude, lon: a.longitude }
+                    );
+                    const distanceB = haversineDistance(
+                        { lat: userLocation.lat, lon: userLocation.lng },
+                        { lat: b.latitude, lon: b.longitude }
+                    );
+                    return distanceA - distanceB;
+                });
+                
+                // Build Google Maps URL with optimized route
+                const destination = `${sortedPois[sortedPois.length - 1].latitude},${sortedPois[sortedPois.length - 1].longitude}`;
+                const waypoints = sortedPois
+                    .slice(0, sortedPois.length - 1)
+                    .map(p => `${p.latitude},${p.longitude}`)
+                    .join('|');
+                
+                const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${destination}&waypoints=${waypoints}&travelmode=${travelMode}`;
 
-        window.open(googleMapsUrl, '_blank');
-        setIsStartingRoute(false);
+                window.open(googleMapsUrl, '_blank');
+                setIsStartingRoute(false);
+            },
+            (error) => {
+                console.error("Error getting location: ", error);
+                toast({
+                    title: translations.toast.locationErrorTitle,
+                    description: translations.map.locationError,
+                    variant: 'destructive',
+                });
+                setIsStartingRoute(false);
+            }
+        );
     }
 
 
