@@ -129,7 +129,7 @@ export default function Home() {
                 priority
             />
         </div>
-          <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-3d animate-fade-in mt-4" style={{animationDelay: '200ms'}}>
+          <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-3d animate-fade-in" style={{animationDelay: '200ms'}}>
             {translations.home.heroTitle}
           </h1>
           <p className="mt-6 text-lg md:text-xl max-w-3xl mx-auto drop-shadow-md animate-fade-in" style={{animationDelay: '600ms'}}>
@@ -138,7 +138,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative z-20 pb-12 px-4 md:px-8 -mt-12 md:-mt-32">
+      <section className="relative z-20 pb-12 px-4 md:px-8 -mt-24 md:-mt-32">
          <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
               {iconNavItems.map((item, index) => (
