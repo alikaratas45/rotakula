@@ -33,7 +33,7 @@ const VisitorCounter = dynamic(() => import('@/components/VisitorCounter'), {
     ssr: false
 });
 
-const RouteCard = memo(({ route, delay }: { route: ThematicRoute, delay: number }) => {
+const RouteCard = memo(({ route, delay, color }: { route: ThematicRoute, delay: number, color: string }) => {
   const image = getImageById(route.imageId);
   return (
     <Link 
@@ -41,7 +41,10 @@ const RouteCard = memo(({ route, delay }: { route: ThematicRoute, delay: number 
       className="group block animate-fade-in-up"
       style={{ animationDelay: `${delay}ms` }}
     >
-      <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out bg-card/50 hover:bg-card hover:shadow-2xl hover:-translate-y-1">
+      <Card className={cn(
+        "h-full overflow-hidden transition-all duration-300 ease-in-out bg-card/50 hover:bg-card hover:shadow-2xl hover:-translate-y-1 rounded-2xl border-b-4 border-r-4",
+        color
+      )}>
         <CardHeader className="p-0">
           <div className="relative h-48 w-full">
             {image && (
@@ -97,6 +100,8 @@ export default function Home() {
     { href: "/nearby", label: translations.nav.nearby, icon: Pin, color: "border-red-500" },
     { href: "/my-badges", label: translations.nav.myBadges, icon: Award, color: "border-amber-500" },
   ];
+
+  const routeCardColors = ["border-blue-500", "border-green-500", "border-purple-500", "border-orange-500"];
 
   return (
     <div className="flex flex-col">
@@ -164,7 +169,12 @@ export default function Home() {
           <h2 className="text-4xl font-headline font-bold text-center mb-12 animate-fade-in-up">{translations.home.thematicRoutes}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {displayedRoutes.map((route, index) => (
-              <RouteCard key={route.id} route={route} delay={index * 150} />
+              <RouteCard 
+                key={route.id} 
+                route={route} 
+                delay={index * 150} 
+                color={routeCardColors[index % routeCardColors.length]}
+              />
             ))}
           </div>
         </div>
