@@ -29,15 +29,11 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <meta name="theme-color" content="#4E342E" />
       </head>
-      <body className={cn('font-body antialiased bg-transparent', ptSans.variable, playfairDisplay.variable)}>
-        {/* Full-screen, low-opacity background image */}
-        <div 
-          className="fixed inset-0 z-[-1] bg-cover bg-center opacity-[0.04] dark:opacity-[0.02]"
-          style={{ backgroundImage: "url('https://i.imgur.com/F82x5w6.jpeg')" }}
-        />
-
-        {/* Main content wrapper with the actual background color */}
-        <div className="relative z-0 min-h-screen flex flex-col bg-background">
+      <body 
+        className={cn('font-body antialiased bg-cover bg-center bg-fixed', ptSans.variable, playfairDisplay.variable)}
+        style={{ backgroundImage: "url('https://i.imgur.com/F82x5w6.jpeg')" }}
+      >
+        <div className="relative z-0 min-h-screen flex flex-col bg-background/90">
             <FirebaseClientProvider>
               <AppProvider>
                 <Providers>{children}</Providers>
