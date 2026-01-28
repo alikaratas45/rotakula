@@ -36,8 +36,8 @@ export default function RootLayout({
           style={{ backgroundImage: "url('https://i.imgur.com/F82x5w6.jpeg')" }}
         />
 
-        {/* Main content wrapper with a slightly transparent background */}
-        <div className="relative z-0 min-h-screen flex flex-col bg-background/95 dark:bg-background/98">
+        {/* Main content wrapper */}
+        <div className="relative z-0 min-h-screen flex flex-col">
             <FirebaseClientProvider>
               <AppProvider>
                 <Providers>{children}</Providers>
