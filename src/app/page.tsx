@@ -8,11 +8,10 @@ import Link from 'next/link';
 import { getImageById } from '@/lib/placeholder-images';
 import { useEffect, useState, useMemo, memo } from 'react';
 import { useApp } from '@/context/app-context';
-import { Utensils, Map, Pin, Route, BookOpen, QrCode, Landmark, Smile, Award, Bike, Loader2, Users, Footprints, HomeIcon, ShieldCheck } from 'lucide-react';
+import { Utensils, Map, Pin, Route, BookOpen, QrCode, Landmark, Smile, Award, Bike, Loader2, Users, Footprints, HomeIcon, Sparkles } from 'lucide-react';
 import { BedIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { InstallPwaButton } from '@/components/install-pwa-button';
-import { Badge } from '@/components/ui/badge';
 import dynamic from 'next/dynamic';
 
 const FeedbackSection = dynamic(() => import('@/components/feedback').then(mod => mod.FeedbackSection), {
@@ -69,38 +68,6 @@ const RouteCard = memo(({ route, delay, color }: { route: ThematicRoute, delay: 
 });
 RouteCard.displayName = 'RouteCard';
 
-const IndicatedProductCard = ({ title, description, imageId, link, delay }: { title: string, description: string, imageId: string, link: string, delay: number }) => {
-  const image = getImageById(imageId);
-  return (
-    <Link href={link} className="group block animate-fade-in-up" style={{ animationDelay: `${delay}ms` }}>
-      <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-1 rounded-2xl border-2 border-transparent hover:border-primary">
-        <CardHeader className="p-0">
-          <div className="relative h-56 w-full">
-            {image && (
-              <Image
-                src={image.imageUrl}
-                alt={image.description}
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
-                data-ai-hint={image.imageHint}
-              />
-            )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
-            <Badge variant="secondary" className="absolute top-3 right-3 text-sm">
-              <ShieldCheck className="mr-2 h-4 w-4 text-green-500" />
-              Coğrafi İşaretli Ürün
-            </Badge>
-          </div>
-        </CardHeader>
-        <CardContent className="p-4">
-          <CardTitle className="font-headline text-2xl mb-2 group-hover:text-primary transition-colors">{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
-        </CardContent>
-      </Card>
-    </Link>
-  );
-};
-
 
 export default function HomePage() {
   const { language, translations } = useApp();
@@ -123,7 +90,8 @@ export default function HomePage() {
   const iconNavItems = [
     { href: "/places", label: translations.nav.places, icon: Landmark, color: "border-blue-500" },
     { href: "/create-route", label: translations.nav.createRoute, icon: Route, color: "border-green-500" },
-    { href: "/bike-routes", label: translations.nav.bikeRoutes, icon: Bike, color: "border-yellow-500" },
+    { href: "/famous", label: (translations.nav as any).famousProducts, icon: Sparkles, color: "border-yellow-500" },
+    { href: "/bike-routes", label: translations.nav.bikeRoutes, icon: Bike, color: "border-rose-500" },
     { href: "/walking-routes", label: translations.nav.walkingRoutes, icon: Footprints, color: "border-lime-500" },
     { href: "/stories", label: translations.nav.stories, icon: BookOpen, color: "border-purple-500" },
     { href: "/routes/kula-flavor-tour", label: translations.nav.food, icon: Utensils, color: "border-orange-500" },
@@ -203,28 +171,6 @@ export default function HomePage() {
               <InstallPwaButton />
             </div>
           </div>
-      </section>
-
-       <section className="py-16 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
-          <h2 className="text-4xl font-headline font-bold text-center mb-12 animate-fade-in-up">Coğrafi İşaretli Ürünlerimiz</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <IndicatedProductCard
-              title="Kula Halısı"
-              description="Kök boyaları ve asırlık motifleriyle Kula Halısı, sadece bir dokuma değil, bir kültür mirasıdır."
-              imageId="story-kula-carpet"
-              link="/stories/kula-halisi"
-              delay={0}
-            />
-            <IndicatedProductCard
-              title="Kula Leblebisi"
-              description="40 gün süren meşakkatli bir yolculuğun sonunda ortaya çıkan, Kula'nın meşhur ve eşsiz lezzeti."
-              imageId="story-kula-leblebi"
-              link="/stories/kula-leblebisi"
-              delay={150}
-            />
-          </div>
-        </div>
       </section>
 
       <section className="pb-16 pt-12 bg-background">

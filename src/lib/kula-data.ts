@@ -54,7 +54,9 @@ export async function getPois(lang: string = 'tr'): Promise<PointOfInterest[]> {
 
 export async function getStories(lang: string = 'tr'): Promise<Story[]> {
   await new Promise(resolve => setTimeout(resolve, DELAY));
-  return stories.map(story => translateItem(story, lang));
+  const famousProductSlugs = ['kula-halisi', 'kula-leblebisi'];
+  const filteredStories = stories.filter(story => !famousProductSlugs.includes(story.slug));
+  return filteredStories.map(story => translateItem(story, lang));
 }
 
 export async function getRouteBySlug(slug: string, lang: string = 'tr'): Promise<ThematicRoute | undefined> {
