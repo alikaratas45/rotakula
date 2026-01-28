@@ -24,7 +24,7 @@ function AppContent({ children }: PropsWithChildren) {
     <>
         <SplashScreen />
         <Header />
-        <main className="flex-grow animate-fade-in bg-background">{children}</main>
+        <main className="flex-grow animate-fade-in">{children}</main>
         <Footer />
         <Toaster />
     </>

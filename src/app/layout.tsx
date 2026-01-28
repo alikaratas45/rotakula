@@ -31,16 +31,14 @@ export default function RootLayout({
       <body 
         className={cn('font-body antialiased', ptSans.variable, playfairDisplay.variable)}
       >
-        {/* Left background image for wide screens */}
-        <div className="fixed left-0 top-0 z-0 h-full w-[25vw] bg-left-image bg-cover bg-no-repeat opacity-40 dark:opacity-30 lg:block hidden">
-          <div className="h-full w-full bg-gradient-to-r from-transparent via-background/60 to-background"></div>
-        </div>
-        {/* Right background image for wide screens */}
-        <div className="fixed right-0 top-0 z-0 h-full w-[25vw] bg-right-image bg-cover bg-no-repeat opacity-40 dark:opacity-30 lg:block hidden">
-          <div className="h-full w-full bg-gradient-to-l from-transparent via-background/60 to-background"></div>
-        </div>
+        {/* Left background image for wide screens. Sits behind everything. */}
+        <div className="fixed left-0 top-0 -z-10 h-full w-1/2 bg-left-image bg-cover bg-no-repeat opacity-15 dark:opacity-10 lg:block hidden" />
         
-        <div className="relative z-10 min-h-screen flex flex-col bg-transparent">
+        {/* Right background image for wide screens. Sits behind everything. */}
+        <div className="fixed right-0 top-0 -z-10 h-full w-1/2 bg-right-image bg-cover bg-no-repeat opacity-15 dark:opacity-10 lg:block hidden" />
+        
+        {/* This is the main content container. It has the solid background and is centered. */}
+        <div className="relative min-h-screen flex flex-col bg-background lg:max-w-7xl lg:mx-auto lg:shadow-2xl">
             <FirebaseClientProvider>
               <AppProvider>
                 <Providers>{children}</Providers>
