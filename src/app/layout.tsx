@@ -29,15 +29,8 @@ export default function RootLayout({
         <meta name="theme-color" content="#4E342E" />
       </head>
       <body 
-        className={cn('font-body antialiased', ptSans.variable, playfairDisplay.variable)}
+        className={cn('font-body antialiased bg-gradient-to-br from-muted/30 via-background to-muted/30', ptSans.variable, playfairDisplay.variable)}
       >
-        {/* Left background image for wide screens. Sits behind everything. */}
-        <div className="fixed left-0 top-0 -z-10 h-full w-1/2 bg-left-image bg-cover bg-no-repeat opacity-25 dark:opacity-20 lg:block hidden" />
-        
-        {/* Right background image for wide screens. Sits behind everything. */}
-        <div className="fixed right-0 top-0 -z-10 h-full w-1/2 bg-right-image bg-cover bg-no-repeat opacity-25 dark:opacity-20 lg:block hidden" />
-        
-        {/* This is the main content container. It has the solid background and is centered. */}
         <div className="relative min-h-screen flex flex-col bg-background lg:max-w-7xl lg:mx-auto lg:shadow-2xl">
             <FirebaseClientProvider>
               <AppProvider>

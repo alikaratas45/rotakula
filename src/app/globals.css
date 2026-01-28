@@ -113,12 +113,6 @@
 }
 
 @layer utilities {
-  .bg-left-image {
-    background-image: url('https://i.imgur.com/FWZRRu8.jpeg'); /* Basalt columns */
-  }
-  .bg-right-image {
-    background-image: url('https://i.imgur.com/F82x5w6.jpeg'); /* Kula house street */
-  }
   .curved-sheet {
     clip-path: path('M 0 1000 C 50 800, 250 1000, 280 500 S 250 0, 0 0 L 0 1000 Z');
   }
