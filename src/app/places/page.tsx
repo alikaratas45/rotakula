@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useEffect, useState, useRef } from 'react';
@@ -20,7 +19,6 @@ const customPoiOrder = [
     'poi-30', // Ahşap köprüler
     'poi-2',  // Peri Bacaları
     'poi-3',  // Çakırca Bazalt Sütunları
-    'poi-4',  // tarihi kula evleri
     'poi-1',  // sandal divlit volkan konisi
     'poi-18', // jeopark ziyaretçi merkezi
 ];
