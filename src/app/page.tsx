@@ -82,7 +82,7 @@ export default function Home() {
   }, [language]);
 
   const displayedRoutes = useMemo(() => {
-    return allRoutes.filter(route => route.slug !== 'kula-flavor-tour' && route.slug !== 'historic-kula-walking-tour');
+    return allRoutes.filter(route => route.slug !== 'kula-flavor-tour');
   }, [allRoutes]);
   
   const heroImage = getImageById('hero-home');
