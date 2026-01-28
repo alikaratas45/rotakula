@@ -30,6 +30,22 @@ export default function RootLayout({
         <meta name="theme-color" content="#4E342E" />
       </head>
       <body className={cn('font-body antialiased min-h-screen flex flex-col', ptSans.variable, playfairDisplay.variable)}>
+        {/* Decorative side backgrounds for wide screens */}
+        <div className="hidden xl:block fixed top-0 left-0 w-1/2 h-full -z-10 pointer-events-none">
+            <div 
+                className="absolute inset-0 bg-cover bg-no-repeat bg-center opacity-10"
+                style={{ backgroundImage: "url('https://i.imgur.com/FWZRRu8.jpeg')" }}
+            ></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent"></div>
+        </div>
+        <div className="hidden xl:block fixed top-0 right-0 w-1/2 h-full -z-10 pointer-events-none">
+            <div 
+                className="absolute inset-0 bg-cover bg-no-repeat bg-center opacity-10"
+                style={{ backgroundImage: "url('https://i.imgur.com/F82x5w6.jpeg')" }}
+            ></div>
+            <div className="absolute inset-0 bg-gradient-to-l from-background via-background/80 to-transparent"></div>
+        </div>
+
         <FirebaseClientProvider>
           <AppProvider>
             <Providers>{children}</Providers>
