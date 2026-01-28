@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { getImageById } from '@/lib/placeholder-images';
 import { useEffect, useState, useMemo, memo } from 'react';
 import { useApp } from '@/context/app-context';
-import { Utensils, Map, Pin, Route, BookOpen, QrCode, Landmark, Smile, Award, Bike, Loader2, Users, Footprints, Home as HomeIcon } from 'lucide-react';
+import { Utensils, Map, Pin, Route, BookOpen, QrCode, Landmark, Smile, Award, Bike, Loader2, Users, Footprints, HomeIcon } from 'lucide-react';
 import { BedIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { InstallPwaButton } from '@/components/install-pwa-button';
@@ -196,15 +196,6 @@ export default function Home() {
       </section>
       
       <section className="py-12 bg-muted/50">
-        <div className="container mx-auto px-4 text-center">
-            <Image src="https://i.imgur.com/aQa6rQO.png" alt="Kula Belediyesi Logosu" width={100} height={100} className="mx-auto mb-4" />
-            <p className="text-lg font-semibold text-foreground">
-                {translations.home.municipalityInfo}
-            </p>
-        </div>
-      </section>
-
-      <section className="py-12 bg-muted/50">
         <div className="container mx-auto px-4 md:px-8 text-center">
             <h3 className="text-3xl font-bold font-headline text-foreground mb-8">
                 {(translations.home as any).municipalityInNumbers || 'Rakamlarla Belediyemiz'}
@@ -218,6 +209,15 @@ export default function Home() {
                     </div>
                 ))}
             </div>
+        </div>
+      </section>
+
+      <section className="py-12 bg-muted/50">
+        <div className="container mx-auto px-4 text-center">
+            <Image src="https://i.imgur.com/aQa6rQO.png" alt="Kula Belediyesi Logosu" width={100} height={100} className="mx-auto mb-4" />
+            <p className="text-lg font-semibold text-foreground">
+                {translations.home.municipalityInfo}
+            </p>
         </div>
       </section>
     </div>
