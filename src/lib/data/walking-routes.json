@@ -6,8 +6,8 @@
       "slug": "kula-divlit-parkuru",
       "name": "Kula Divlit Parkuru",
       "description": "Kula'nın en etkileyici volkanik oluşumlarından biri olan Divlit konisi çevresinde bir yürüyüş parkuru.",
-      "kmlPath": "/routes/divlitkula.kml",
-      "distance": "11,94 km",
+      "kmlPath": "/routes/yuruyusdivlit.kml",
+      "distance": "8,39 km",
       "elevationGain": "301 m",
       "difficulty": "Orta zorlukta",
       "difficulty_en": "Medium difficulty",
@@ -24,8 +24,8 @@
       "poiIds": [
         "poi-18",
         "poi-12",
-        "poi-30",
-        "poi-31"
+        "poi-31",
+        "poi-30"
       ],
       "name_en": "Kula Divlit Trail",
       "description_en": "A walking trail around the Divlit cone, one of Kula's most impressive volcanic formations.",
@@ -56,10 +56,13 @@
       "trackType_de": "Einweg",
       "poiIds": [
         "poi-15",
-        "poi-28",
-        "poi-20",
         "poi-18",
-        "poi-12"
+        "poi-12",
+        "poi-29",
+        "poi-20",
+        "poi-23",
+        "poi-25",
+        "poi-19"
       ],
       "name_en": "Körez - Kula Trail",
       "description_en": "A route starting from the historic Körez neighborhood and extending to the center of Kula.",
@@ -91,7 +94,6 @@
       "poiIds": [
         "poi-2",
         "poi-3",
-        "poi-33",
         "poi-27"
       ],
       "name_en": "Burgaz - Fairy Chimneys - Kalınharman Trail",
