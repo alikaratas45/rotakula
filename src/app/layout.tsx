@@ -30,26 +30,14 @@ export default function RootLayout({
         <meta name="theme-color" content="#4E342E" />
       </head>
       <body className={cn('font-body antialiased', ptSans.variable, playfairDisplay.variable)}>
-        {/* Decorative side backgrounds for wide screens */}
-        <div className="hidden xl:block fixed top-0 left-0 w-1/2 h-full -z-10 pointer-events-none">
-            <div 
-                className="absolute inset-0 bg-cover bg-no-repeat bg-center opacity-10"
-                style={{ backgroundImage: "url('https://i.imgur.com/FWZRRu8.jpeg')" }}
-            ></div>
-            {/* This gradient fades the image into the background color towards the center */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-background/80 to-background"></div>
-        </div>
-        <div className="hidden xl:block fixed top-0 right-0 w-1/2 h-full -z-10 pointer-events-none">
-            <div 
-                className="absolute inset-0 bg-cover bg-no-repeat bg-center opacity-10"
-                style={{ backgroundImage: "url('https://i.imgur.com/F82x5w6.jpeg')" }}
-            ></div>
-            {/* This gradient fades the image into the background color towards the center */}
-            <div className="absolute inset-0 bg-gradient-to-l from-transparent via-background/80 to-background"></div>
-        </div>
+        {/* Full-screen, low-opacity background image */}
+        <div 
+          className="fixed inset-0 z-[-1] bg-cover bg-center opacity-[0.04] dark:opacity-[0.02]"
+          style={{ backgroundImage: "url('https://i.imgur.com/F82x5w6.jpeg')" }}
+        />
 
-        {/* Main content wrapper that holds the background color and sits on top of the decorative elements */}
-        <div className="relative z-0 min-h-screen flex flex-col bg-background">
+        {/* Main content wrapper with a slightly transparent background */}
+        <div className="relative z-0 min-h-screen flex flex-col bg-background/95 dark:bg-background/98">
             <FirebaseClientProvider>
               <AppProvider>
                 <Providers>{children}</Providers>
