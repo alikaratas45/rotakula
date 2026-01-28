@@ -31,7 +31,7 @@ export default function RootLayout({
       <body 
         className={cn('font-body antialiased bg-gradient-to-br from-muted/30 via-background to-muted/30', ptSans.variable, playfairDisplay.variable)}
       >
-        <div className="relative min-h-screen flex flex-col bg-background lg:max-w-7xl lg:mx-auto lg:shadow-2xl">
+        <div className="relative min-h-screen flex flex-col lg:max-w-7xl lg:mx-auto lg:shadow-2xl">
             <FirebaseClientProvider>
               <AppProvider>
                 <Providers>{children}</Providers>
