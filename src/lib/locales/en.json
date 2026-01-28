@@ -41,7 +41,8 @@
         "exploreNow": "Explore Now",
         "routeOfWeek": "Route of the Week",
         "thematicRoutes": "Thematic Routes",
-        "municipalityInfo": "This site has been created by the Kula Municipality for our visitors to use free of charge."
+        "municipalityInfo": "This site has been created by the Kula Municipality for our visitors to use free of charge.",
+        "municipalityInNumbers": "Our Municipality in Numbers"
     },
     "stories": {
         "title": "Stories from Kula"

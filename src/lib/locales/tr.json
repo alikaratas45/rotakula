@@ -41,7 +41,8 @@
         "exploreNow": "Hemen Keşfet",
         "routeOfWeek": "Haftanın Rotası",
         "thematicRoutes": "Tematik Rotalar",
-        "municipalityInfo": "Bu site, ziyaretçilerimizin ücretsiz olarak faydalanması için Kula Belediyesi tarafından oluşturulmuştur."
+        "municipalityInfo": "Bu site, ziyaretçilerimizin ücretsiz olarak faydalanması için Kula Belediyesi tarafından oluşturulmuştur.",
+        "municipalityInNumbers": "Rakamlarla Belediyemiz"
     },
     "stories": {
         "title": "Kula'dan Hikayeler"

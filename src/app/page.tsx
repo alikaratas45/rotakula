@@ -1,4 +1,3 @@
-
 "use client"
 
 import { getRoutes } from '@/lib/kula-data';
@@ -9,7 +8,7 @@ import Link from 'next/link';
 import { getImageById } from '@/lib/placeholder-images';
 import { useEffect, useState, useMemo, memo } from 'react';
 import { useApp } from '@/context/app-context';
-import { Utensils, Map, Pin, Route, BookOpen, QrCode, Landmark, Smile, Award, Bike, Loader2, Users, Footprints } from 'lucide-react';
+import { Utensils, Map, Pin, Route, BookOpen, QrCode, Landmark, Smile, Award, Bike, Loader2, Users, Footprints, Home as HomeIcon } from 'lucide-react';
 import { BedIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { InstallPwaButton } from '@/components/install-pwa-button';
@@ -99,6 +98,12 @@ export default function Home() {
     { href: "/qr-okuyucu", label: translations.nav.qrScanner, icon: QrCode, color: "border-indigo-500" },
     { href: "/nearby", label: translations.nav.nearby, icon: Pin, color: "border-red-500" },
     { href: "/my-badges", label: translations.nav.myBadges, icon: Award, color: "border-amber-500" },
+  ];
+
+  const stats = [
+    { icon: Users, value: "42.952", label: translations.about.population },
+    { icon: HomeIcon, value: "60", label: translations.about.neighborhoods },
+    { icon: Landmark, value: "1150", label: translations.about.registeredBuildings },
   ];
 
   const routeCardColors = ["border-blue-500", "border-green-500", "border-purple-500", "border-orange-500"];
@@ -196,6 +201,23 @@ export default function Home() {
             <p className="text-lg font-semibold text-foreground">
                 {translations.home.municipalityInfo}
             </p>
+        </div>
+      </section>
+
+      <section className="py-12 bg-muted/50">
+        <div className="container mx-auto px-4 md:px-8 text-center">
+            <h3 className="text-3xl font-bold font-headline text-foreground mb-8">
+                {(translations.home as any).municipalityInNumbers || 'Rakamlarla Belediyemiz'}
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                {stats.map((stat, index) => (
+                    <div key={index} className="flex flex-col items-center justify-center p-4 text-center">
+                        <stat.icon className="h-10 w-10 text-primary mb-3" strokeWidth={1.5} />
+                        <p className="text-4xl font-bold font-headline">{stat.value}</p>
+                        <p className="text-md font-semibold text-muted-foreground mt-1">{stat.label}</p>
+                    </div>
+                ))}
+            </div>
         </div>
       </section>
     </div>
