@@ -29,15 +29,15 @@ export default function RootLayout({
         <meta name="theme-color" content="#4E342E" />
       </head>
       <body 
-        className={cn('font-body antialiased bg-background', ptSans.variable, playfairDisplay.variable)}
+        className={cn('font-body antialiased', ptSans.variable, playfairDisplay.variable)}
       >
         {/* Left background image for wide screens */}
-        <div className="fixed left-0 top-0 z-0 h-full w-[25vw] bg-left-image bg-cover bg-no-repeat opacity-30 dark:opacity-20 lg:block hidden">
-          <div className="h-full w-full bg-gradient-to-r from-transparent via-background/80 to-background"></div>
+        <div className="fixed left-0 top-0 z-0 h-full w-[25vw] bg-left-image bg-cover bg-no-repeat opacity-40 dark:opacity-30 lg:block hidden">
+          <div className="h-full w-full bg-gradient-to-r from-transparent via-background/60 to-background"></div>
         </div>
         {/* Right background image for wide screens */}
-        <div className="fixed right-0 top-0 z-0 h-full w-[25vw] bg-right-image bg-cover bg-no-repeat opacity-30 dark:opacity-20 lg:block hidden">
-          <div className="h-full w-full bg-gradient-to-l from-transparent via-background/80 to-background"></div>
+        <div className="fixed right-0 top-0 z-0 h-full w-[25vw] bg-right-image bg-cover bg-no-repeat opacity-40 dark:opacity-30 lg:block hidden">
+          <div className="h-full w-full bg-gradient-to-l from-transparent via-background/60 to-background"></div>
         </div>
         
         <div className="relative z-10 min-h-screen flex flex-col bg-transparent">
