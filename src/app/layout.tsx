@@ -1,4 +1,3 @@
-
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { type PropsWithChildren } from 'react';
@@ -30,10 +29,18 @@ export default function RootLayout({
         <meta name="theme-color" content="#4E342E" />
       </head>
       <body 
-        className={cn('font-body antialiased bg-cover bg-center bg-fixed', ptSans.variable, playfairDisplay.variable)}
-        style={{ backgroundImage: "url('https://i.imgur.com/F82x5w6.jpeg')" }}
+        className={cn('font-body antialiased bg-background', ptSans.variable, playfairDisplay.variable)}
       >
-        <div className="relative z-0 min-h-screen flex flex-col bg-background/90">
+        {/* Left background image for wide screens */}
+        <div className="fixed left-0 top-0 z-0 h-full w-[25vw] bg-left-image bg-cover bg-no-repeat opacity-30 dark:opacity-20 lg:block hidden">
+          <div className="h-full w-full bg-gradient-to-r from-transparent via-background/80 to-background"></div>
+        </div>
+        {/* Right background image for wide screens */}
+        <div className="fixed right-0 top-0 z-0 h-full w-[25vw] bg-right-image bg-cover bg-no-repeat opacity-30 dark:opacity-20 lg:block hidden">
+          <div className="h-full w-full bg-gradient-to-l from-transparent via-background/80 to-background"></div>
+        </div>
+        
+        <div className="relative z-10 min-h-screen flex flex-col bg-transparent">
             <FirebaseClientProvider>
               <AppProvider>
                 <Providers>{children}</Providers>
