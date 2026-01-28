@@ -1,6 +1,6 @@
 "use client"
 
-import { getStoryBySlug } from '@/lib/kula-data';
+import { getStoryBySlug, getPoiBySlug } from '@/lib/kula-data';
 import Image from 'next/image';
 import { useApp } from '@/context/app-context';
 import { useEffect, useState } from 'react';
@@ -19,6 +19,7 @@ export default function StoryPage() {
     const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
     const { language, translations } = useApp();
     const [story, setStory] = useState<Story | null>(null);
+    const [drAristiEviLocation, setDrAristiEviLocation] = useState<PointOfInterest | null>(null);
     const [loading, setLoading] = useState(true);
     
     const [narrationText, setNarrationText] = useState('');
@@ -32,6 +33,14 @@ export default function StoryPage() {
           setStory(storyData);
           const fullText = storyData.content || '';
           setNarrationText(fullText);
+
+           if (storyData.slug === 'kula-halisi') {
+            const poiData = await getPoiBySlug('dr-aristi-evi', language);
+            if (poiData) {
+              setDrAristiEviLocation(poiData);
+            }
+          }
+
         } else {
           setStory(null);
           setNarrationText('');
@@ -54,19 +63,6 @@ export default function StoryPage() {
     }
 
     const storyImage = getImageById(story.imageId);
-
-    const isKulaCarpetStory = story.slug === 'kula-halisi';
-    const drAristiEviLocation: PointOfInterest | null = isKulaCarpetStory ? {
-        id: 'dr-aristi-evi',
-        slug: 'dr-aristi-evi',
-        name: 'Dr. Aristi Evi (Kula Halı ve Kilim Atölyesi)',
-        latitude: 38.547766,
-        longitude: 28.648808,
-        description: 'Kula halılarını görebileceğiniz, deneyimleyebileceğiniz ve satın alabileceğiniz yer.',
-        longDescription: '',
-        category: 'history',
-        imageId: 'story-kula-carpet'
-    } : null;
     
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
     
@@ -106,7 +102,7 @@ export default function StoryPage() {
                             ))}
                         </div>
 
-                        {isKulaCarpetStory && drAristiEviLocation && (
+                        {story.slug === 'kula-halisi' && drAristiEviLocation && (
                             <div className="mt-12">
                                 <h2 className="text-2xl font-headline font-bold mb-4">Konum</h2>
                                 <EmbeddedMap pois={[drAristiEviLocation]} />

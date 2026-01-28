@@ -26,7 +26,7 @@
       "description": "Kula merkezindeki tarihi yapıları, camileri ve konakları adım adım keşfedin.",
       "longDescription": "Kula'nın dar sokaklarında kaybolun, asırlık konakların hikayelerini dinleyin ve geleneksel el sanatlarını yaşatan zanaatkarlarla tanışın. Bu yürüyüş rotası, Kula'nın zengin kültürel mirasını size hissettirecek. Kula, bir kısmı Rum bir kısmı ise geleneksel Türk mimari özelliklerini taşıyan yaklaşık 3.000 tarihi eve ev sahipliği yapmaktadır. Bu rota, bu eşsiz mimari sentezin en güzel örneklerini görmenizi sağlayacak.",
       "imageId": "route-history",
-      "poiIds": ["poi-6", "poi-20", "poi-29", "poi-21", "poi-9", "poi-22", "poi-23", "poi-24", "poi-25", "poi-28", "poi-32"],
+      "poiIds": ["poi-6", "poi-20", "poi-29", "poi-21", "poi-9", "poi-22", "poi-23", "poi-24", "poi-25", "poi-34", "poi-28", "poi-32"],
       "title_en": "Historic Kula Walking Tour",
       "description_en": "Explore the historic buildings, mosques, and mansions in the center of Kula step by step.",
       "longDescription_en": "Get lost in the narrow streets of Kula, listen to the stories of centuries-old mansions, and meet the artisans who keep traditional crafts alive. This walking route will make you feel the rich cultural heritage of Kula. Kula is home to approximately 3,000 historic houses, some bearing Greek architectural features and others traditional Turkish architectural features. This route will allow you to see the most beautiful examples of this unique architectural synthesis.",
@@ -75,6 +75,4 @@
     }
   ]
 }
-    
-
     
