@@ -281,6 +281,18 @@
       "description": "Bir kase içinde Kula leblebisi",
       "imageUrl": "https://images.unsplash.com/photo-1605389053351-fc65a38883a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
       "imageHint": "roasted chickpeas"
+    },
+    {
+      "id": "story-kula-bread",
+      "description": "Dilimlenmiş ekşi mayalı köy ekmeği",
+      "imageUrl": "https://images.unsplash.com/photo-1594498335532-49d799f93539?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "sourdough bread"
+    },
+    {
+      "id": "story-tahin-helva",
+      "description": "Dilimlenmiş tahin helvası",
+      "imageUrl": "https://images.unsplash.com/photo-1619213426768-4a4e8d35e9a4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "tahini halva"
     }
   ]
 }

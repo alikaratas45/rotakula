@@ -14,6 +14,9 @@ import { Badge } from '@/components/ui/badge';
 
 const ProductCard = ({ story }: { story: Story }) => {
   const image = getImageById(story.imageId);
+  const isGeographicallyIndicated = ['kula-halisi', 'kula-leblebisi'].includes(story.slug);
+  const { translations } = useApp();
+
   return (
     <Link href={`/stories/${story.slug}`} className="group block">
       <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out bg-card/50 hover:bg-card hover:shadow-xl hover:-translate-y-1">
@@ -29,10 +32,12 @@ const ProductCard = ({ story }: { story: Story }) => {
               />
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent group-hover:from-black/70 transition-colors"></div>
-             <Badge variant="secondary" className="absolute top-3 right-3 text-sm">
-              <ShieldCheck className="mr-2 h-4 w-4 text-green-500" />
-              Coğrafi İşaretli Ürün
-            </Badge>
+             {isGeographicallyIndicated && (
+                <Badge variant="secondary" className="absolute top-3 right-3 text-sm">
+                    <ShieldCheck className="mr-2 h-4 w-4 text-green-500" />
+                    {(translations.nav as any).geographicallyIndicated || 'Coğrafi İşaretli Ürün'}
+                </Badge>
+             )}
           </div>
         </CardHeader>
         <CardContent className="p-6">
@@ -52,7 +57,9 @@ export default function FamousProductsPage() {
     async function fetchData() {
       const carpetStory = await getStoryBySlug('kula-halisi', language);
       const leblebiStory = await getStoryBySlug('kula-leblebisi', language);
-      const fetchedProducts = [carpetStory, leblebiStory].filter((p): p is Story => !!p);
+      const breadStory = await getStoryBySlug('eksimayali-kula-ekmegi', language);
+      const halvaStory = await getStoryBySlug('tahin-helvasi', language);
+      const fetchedProducts = [carpetStory, leblebiStory, breadStory, halvaStory].filter((p): p is Story => !!p);
       setProducts(fetchedProducts);
     }
     fetchData();

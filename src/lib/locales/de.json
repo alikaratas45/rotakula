@@ -25,7 +25,8 @@
         "installAppNotPossibleDesc": "Die Anwendung ist möglicherweise bereits installiert oder Ihr Browser unterstützt diese Funktion nicht.",
         "seeAllComments": "Alle Kommentare ansehen",
         "makeComment": "Kommentar abgeben",
-        "famousProducts": "Berühmte Produkte"
+        "famousProducts": "Berühmte Produkte",
+        "geographicallyIndicated": "Produkt mit geografischer Angabe"
     },
     "header": {
         "menu": "Menü",

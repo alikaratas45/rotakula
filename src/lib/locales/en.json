@@ -25,7 +25,8 @@
         "installAppNotPossibleDesc": "The application may already be installed or your browser may not support this feature.",
         "seeAllComments": "See All Comments",
         "makeComment": "Make a Comment",
-        "famousProducts": "Famous Products"
+        "famousProducts": "Famous Products",
+        "geographicallyIndicated": "Geographically Indicated Product"
     },
     "header": {
         "menu": "Menu",

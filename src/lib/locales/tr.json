@@ -25,7 +25,8 @@
         "installAppNotPossibleDesc": "Uygulama zaten yüklü olabilir veya tarayıcınız bu özelliği desteklemiyor olabilir.",
         "seeAllComments": "Tüm Yorumları Gör",
         "makeComment": "Yorum Yap",
-        "famousProducts": "Meşhur Ürünler"
+        "famousProducts": "Meşhur Ürünler",
+        "geographicallyIndicated": "Coğrafi İşaretli Ürün"
     },
     "header": {
         "menu": "Menü",

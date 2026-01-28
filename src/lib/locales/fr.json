@@ -25,7 +25,8 @@
         "installAppNotPossibleDesc": "L'application est peut-être déjà installée ou votre navigateur ne prend pas en charge cette fonctionnalité.",
         "seeAllComments": "Voir tous les commentaires",
         "makeComment": "Faire un Commentaire",
-        "famousProducts": "Produits Célèbres"
+        "famousProducts": "Produits Célèbres",
+        "geographicallyIndicated": "Produit à Indication Géographique"
     },
     "header": {
         "menu": "Menu",
