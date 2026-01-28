@@ -269,6 +269,18 @@
       "description": "Kula tanıtım videosu için bir kapak görseli",
       "imageUrl": "https://images.unsplash.com/photo-1619121612709-3d5c8c72461b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bGFuZHNjYXBlJTIwYWVyaWFsJTIwdmlld3xlbnwwfHx8fDE3NjkxNzM5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "landscape aerial view"
+    },
+    {
+      "id": "story-kula-carpet",
+      "description": "Yere serilmiş geleneksel bir Kula halısı",
+      "imageUrl": "https://images.unsplash.com/photo-1595341595379-cf3cb629c158?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "turkish carpet"
+    },
+    {
+      "id": "story-kula-leblebi",
+      "description": "Bir kase içinde Kula leblebisi",
+      "imageUrl": "https://images.unsplash.com/photo-1605389053351-fc65a38883a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageHint": "roasted chickpeas"
     }
   ]
 }
