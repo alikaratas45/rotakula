@@ -106,6 +106,8 @@
   body {
     @apply text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+    background-color: hsl(var(--background));
+    background-image: linear-gradient(to right, hsl(220 80% 30% / 0.15), hsl(var(--background)) 40%, hsl(var(--background)) 60%, hsl(220 80% 30% / 0.15));
   }
   .prose p {
     @apply text-justify;

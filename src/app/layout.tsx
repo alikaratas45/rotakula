@@ -29,7 +29,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#4E342E" />
       </head>
       <body 
-        className={cn('font-body antialiased bg-gradient-to-br from-muted/30 via-background to-muted/30', ptSans.variable, playfairDisplay.variable)}
+        className={cn('font-body antialiased', ptSans.variable, playfairDisplay.variable)}
       >
         <div className="relative min-h-screen flex flex-col lg:max-w-7xl lg:mx-auto lg:shadow-2xl">
             <FirebaseClientProvider>
