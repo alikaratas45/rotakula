@@ -1,16 +1,18 @@
-
 "use client"
 
 import { getStoryBySlug } from '@/lib/kula-data';
 import Image from 'next/image';
 import { useApp } from '@/context/app-context';
 import { useEffect, useState } from 'react';
-import type { Story } from '@/lib/types';
+import type { Story, PointOfInterest } from '@/lib/types';
 import { notFound, useParams } from 'next/navigation';
 import { getImageById } from '@/lib/placeholder-images';
 import { Loader2 } from 'lucide-react';
 import AudioPlayer from '@/components/AudioPlayer';
 import { BackButton } from '@/components/back-button';
+import { APIProvider } from '@vis.gl/react-google-maps';
+import EmbeddedMap from '@/components/map';
+
 
 export default function StoryPage() {
     const params = useParams();
@@ -52,43 +54,67 @@ export default function StoryPage() {
     }
 
     const storyImage = getImageById(story.imageId);
+
+    const isKulaCarpetStory = story.slug === 'kula-halisi';
+    const drAristiEviLocation: PointOfInterest | null = isKulaCarpetStory ? {
+        id: 'dr-aristi-evi',
+        slug: 'dr-aristi-evi',
+        name: 'Dr. Aristi Evi (Kula Halı ve Kilim Atölyesi)',
+        latitude: 38.547766,
+        longitude: 28.648808,
+        description: 'Kula halılarını görebileceğiniz, deneyimleyebileceğiniz ve satın alabileceğiniz yer.',
+        longDescription: '',
+        category: 'history',
+        imageId: 'story-kula-carpet'
+    } : null;
+    
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
     
     return (
-        <article>
-            <section className="relative h-[40vh] md:h-[50vh] w-full flex items-end text-white">
-                {storyImage && (
-                    <Image
-                        src={storyImage.imageUrl}
-                        alt={storyImage.description}
-                        fill
-                        priority
-                        className="object-cover"
-                        data-ai-hint={storyImage.imageHint}
-                    />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                <div className="relative z-10 container px-4 py-8">
-                    <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight drop-shadow-lg">
-                        {story.title}
-                    </h1>
-                </div>
-            </section>
-            
-            <div className="container px-4 py-8 md:py-12">
-                <BackButton className="mb-8" />
-                <div className="max-w-3xl mx-auto">
-                    <div className="flex flex-col gap-4 mb-6">
-                        <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
-                         <AudioPlayer text={narrationText} />
+        <APIProvider apiKey={apiKey}>
+            <article>
+                <section className="relative h-[40vh] md:h-[50vh] w-full flex items-end text-white">
+                    {storyImage && (
+                        <Image
+                            src={storyImage.imageUrl}
+                            alt={storyImage.description}
+                            fill
+                            priority
+                            className="object-cover"
+                            data-ai-hint={storyImage.imageHint}
+                        />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                    <div className="relative z-10 container px-4 py-8">
+                        <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight drop-shadow-lg">
+                            {story.title}
+                        </h1>
                     </div>
+                </section>
+                
+                <div className="container px-4 py-8 md:py-12">
+                    <BackButton className="mb-8" />
+                    <div className="max-w-3xl mx-auto">
+                        <div className="flex flex-col gap-4 mb-6">
+                            <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
+                            <AudioPlayer text={narrationText} />
+                        </div>
 
-                    <div className="prose prose-lg max-w-none text-foreground/90">
-                         {story.content.split('\n\n').map((paragraph, index) => (
-                            <p key={index}>{paragraph}</p>
-                        ))}
+                        <div className="prose prose-lg max-w-none text-foreground/90">
+                            {story.content.split('\n\n').map((paragraph, index) => (
+                                <p key={index}>{paragraph}</p>
+                            ))}
+                        </div>
+
+                        {isKulaCarpetStory && drAristiEviLocation && (
+                            <div className="mt-12">
+                                <h2 className="text-2xl font-headline font-bold mb-4">Konum</h2>
+                                <EmbeddedMap pois={[drAristiEviLocation]} />
+                            </div>
+                        )}
                     </div>
                 </div>
-            </div>
-        </article>
+            </article>
+        </APIProvider>
     );
 }
