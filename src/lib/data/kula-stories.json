@@ -1,3 +1,4 @@
+
 {
   "stories": [
     {
@@ -227,7 +228,25 @@
       "title_de": "Süße Pide aus Kula mit Tahini",
       "excerpt_de": "Ein einzigartiger Geschmack, der spezifisch für Kula ist, besonders zum Frühstück und an besonderen Tagen gegessen wird und mit Tahini und Zucker zubereitet wird.",
       "content_de": "Die süße Pide aus Kula ist ein traditioneller Geschmack, der zubereitet wird, indem reichlich Tahini und Zucker auf dünn ausgerollten Teig gestreut und in einem Holzofen gebacken wird. Mit ihrer knusprigen Textur und ihrem süßen Geschmack ist sie ein unverzichtbarer Bestandteil von Frühstücken, Hochzeiten und besonderen Tagen in Kula. Sie wird normalerweise mit darüber gestreuten Walnüssen serviert. Verlassen Sie Kula nicht, ohne diesen einzigartigen Geschmack probiert zu haben."
+    },
+    {
+      "id": "story-kula-guveci",
+      "slug": "kula-guveci",
+      "title": "Kula Güveci",
+      "excerpt": "Toprak kaplarda, odun ateşinde ağır ağır pişen, Kula'nın en meşhur et yemeği.",
+      "content": "Kula Güveci, ilçenin adıyla anılan en özel lezzetlerden biridir. Kuzu etinin, domates, biber, soğan ve Kula'ya özgü baharatlarla birlikte toprak güveçlerde, taş fırınların odun ateşinde saatlerce pişirilmesiyle hazırlanır. Ağır ateşte uzun süre pişmesi, etin lokum gibi yumuşacık olmasını ve tüm lezzetlerin birbiriyle bütünleşmesini sağlar. Genellikle özel günlerin ve kalabalık sofraların baş tacı olan Kula Güveci, bu yöreye gelenlerin mutlaka tatması gereken bir deneyimdir.",
+      "author": "Kula Belediyesi",
+      "date": "2024-07-04",
+      "imageId": "story-kula-guvec",
+      "title_en": "Kula Güveç (Stew)",
+      "excerpt_en": "Kula's most famous meat dish, slow-cooked in earthenware pots over a wood fire.",
+      "content_en": "Kula Güveç is one of the most special dishes identified with the district. It is prepared by slow-cooking lamb meat with tomatoes, peppers, onions, and Kula's unique spices in earthenware pots over a wood fire in stone ovens for hours. Cooking slowly over a low heat makes the meat as soft as Turkish delight and allows all the flavors to blend together. Usually the star of special occasions and large gatherings, Kula Güveç is a must-try experience for visitors to the region.",
+      "title_fr": "Güveç (Ragoût) de Kula",
+      "excerpt_fr": "Le plat de viande le plus célèbre de Kula, cuit lentement dans des pots en terre cuite sur un feu de bois.",
+      "content_fr": "Le Güveç de Kula est l'un des plats les plus spéciaux identifiés au district. Il est préparé en faisant cuire lentement de la viande d'agneau avec des tomates, des poivrons, des oignons et les épices uniques de Kula dans des pots en terre cuite sur un feu de bois dans des fours en pierre pendant des heures. La cuisson lente à feu doux rend la viande aussi tendre que du loukoum et permet à toutes les saveurs de se mélanger. Habituellement la vedette des occasions spéciales et des grands rassemblements, le Güveç de Kula est une expérience incontournable pour les visiteurs de la région.",
+      "title_de": "Kula Güveç (Eintopf)",
+      "excerpt_de": "Kulas berühmtestes Fleischgericht, langsam in Tontöpfen über Holzfeuer gekocht.",
+      "content_de": "Kula Güveç ist eines der speziellsten Gerichte, die mit dem Bezirk identifiziert werden. Es wird zubereitet, indem Lammfleisch mit Tomaten, Paprika, Zwiebeln und den einzigartigen Gewürzen von Kula stundenlang in Tontöpfen über einem Holzfeuer in Steinöfen langsam gekocht wird. Das langsame Garen bei schwacher Hitze macht das Fleisch so weich wie türkischer Honig und lässt alle Aromen miteinander verschmelzen. Normalerweise der Star bei besonderen Anlässen und großen Zusammenkünften, ist Kula Güveç ein Muss für Besucher der Region."
     }
   ]
 }
-    

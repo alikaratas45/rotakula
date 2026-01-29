@@ -1,3 +1,4 @@
+
 "use client";
 
 import { getStoryBySlug } from '@/lib/kula-data';
@@ -60,7 +61,8 @@ export default function FamousProductsPage() {
       const breadStory = await getStoryBySlug('eksimayali-kula-ekmegi', language);
       const halvaStory = await getStoryBySlug('tahin-helvasi', language);
       const pideStory = await getStoryBySlug('sekerli-pide', language);
-      const fetchedProducts = [carpetStory, leblebiStory, breadStory, halvaStory, pideStory].filter((p): p is Story => !!p);
+      const guvecStory = await getStoryBySlug('kula-guveci', language);
+      const fetchedProducts = [carpetStory, leblebiStory, breadStory, halvaStory, pideStory, guvecStory].filter((p): p is Story => !!p);
       setProducts(fetchedProducts);
     }
     fetchData();

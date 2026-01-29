@@ -293,6 +293,12 @@
       "description": "Dilimlenmiş tahin helvası",
       "imageUrl": "https://images.unsplash.com/photo-1619213426768-4a4e8d35e9a4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
       "imageHint": "tahini halva"
+    },
+    {
+      "id": "story-kula-guvec",
+      "description": "Toprak kapta Kula Güveci",
+      "imageUrl": "https://i.imgur.com/W1ugpIi.jpeg",
+      "imageHint": "stew dish"
     }
   ]
 }
