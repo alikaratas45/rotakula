@@ -7,7 +7,7 @@
       "name": "Kula Divlit Parkuru",
       "description": "Kula'nın en etkileyici volkanik oluşumlarından biri olan Divlit konisi çevresinde bir bisiklet turu.",
       "kmlPath": "/routes/Kula_divlit.kml",
-      "distance": "8,33 km",
+      "distance": "8,36 km",
       "poiIds": [
         "poi-18",
         "poi-12",
@@ -26,7 +26,7 @@
       "slug": "evciler-parkuru",
       "name": "Evciler Parkuru",
       "description": "Tarihi Evciler köyünün çevresindeki doğal güzellikleri keşfedin.",
-      "distance": "25,5 km",
+      "distance": "25,74 km",
       "kmlPath": "/routes/Evciler_bisiklet.kml",
       "poiIds": [
         "poi-17"
@@ -43,7 +43,7 @@
       "slug": "kula-emre-parkuru",
       "name": "Kula Emre Parkuru",
       "description": "Yunus Emre ve Tabduk Emre'nin manevi atmosferinde huzurlu bir sürüş.",
-      "distance": "27,3 km",
+      "distance": "27,85 km",
       "kmlPath": "/routes/Kula_emre_bisiklet.kml",
       "poiIds": [
         "poi-16",
@@ -62,7 +62,7 @@
       "slug": "sandal-emre-bisiklet-parkuru",
       "name": "Sandal - Emre Bisiklet Parkuru",
       "description": "Sandal'dan başlayıp Emre köyüne kadar uzanan, hem volkanik araziyi hem de köy dokusunu birleştiren bir rota.",
-      "distance": "23,8 km",
+      "distance": "25,93 km",
       "kmlPath": "/routes/Sandal_Emre_bisiklet.kml",
       "poiIds": [
         "poi-1",
@@ -82,7 +82,7 @@
       "slug": "peribacalari-kula-parkuru",
       "name": "Peribacaları - Kula Parkuru",
       "description": "Peri bacalarından başlayarak Kula merkeze uzanan keyifli bir iniş rotası.",
-      "distance": "31 km",
+      "distance": "30 km",
       "kmlPath": "/routes/Peribacalari_kula.kml",
       "poiIds": [
         "poi-2",
