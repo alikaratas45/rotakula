@@ -21,7 +21,7 @@
     {
       "id": "route-food",
       "description": "Toprak güveçte Kula güveci",
-      "imageUrl": "https://i.imgur.com/W1ugpIi.jpeg",
+      "imageUrl": "https://i.imgur.com/7nTtO1x.jpeg",
       "imageHint": "stew dish"
     },
     {
@@ -69,7 +69,7 @@
     {
       "id": "poi-sweet-pide",
       "description": "Fırından yeni çıkmış Kula şekerli pidesi",
-      "imageUrl": "https://i.imgur.com/97y02cQ.jpeg",
+      "imageUrl": "https://i.imgur.com/SJQbTjc.jpeg",
       "imageHint": "sweet pastry"
     },
     {
@@ -273,31 +273,31 @@
     {
       "id": "story-kula-carpet",
       "description": "Yere serilmiş geleneksel bir Kula halısı",
-      "imageUrl": "https://images.unsplash.com/photo-1595341595379-cf3cb629c158?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/DISdfvu.jpeg",
       "imageHint": "turkish carpet"
     },
     {
       "id": "story-kula-leblebi",
       "description": "Bir kase içinde Kula leblebisi",
-      "imageUrl": "https://images.unsplash.com/photo-1605389053351-fc65a38883a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/BEClMxo.jpeg",
       "imageHint": "roasted chickpeas"
     },
     {
       "id": "story-kula-bread",
       "description": "Dilimlenmiş ekşi mayalı köy ekmeği",
-      "imageUrl": "https://images.unsplash.com/photo-1594498335532-49d799f93539?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/NveLFKu.jpeg",
       "imageHint": "sourdough bread"
     },
     {
       "id": "story-tahin-helva",
       "description": "Dilimlenmiş tahin helvası",
-      "imageUrl": "https://images.unsplash.com/photo-1619213426768-4a4e8d35e9a4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/EirUvmp.jpeg",
       "imageHint": "tahini halva"
     },
     {
       "id": "story-kula-guvec",
       "description": "Toprak kapta Kula Güveci",
-      "imageUrl": "https://i.imgur.com/W1ugpIi.jpeg",
+      "imageUrl": "https://i.imgur.com/7nTtO1x.jpeg",
       "imageHint": "stew dish"
     }
   ]
