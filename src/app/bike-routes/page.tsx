@@ -122,6 +122,40 @@ export default function BikeRoutesPage() {
                                    <UserLocationMarker />
                                 </Map>
                             </div>
+                            {selectedRoute?.slug === 'kula-divlit-parkuru' && (
+                                <div className="mt-8">
+                                    <h3 className="text-xl font-headline font-bold mb-4">Wikiloc Rota Detayı</h3>
+                                    <iframe 
+                                        frameBorder="0" 
+                                        scrolling="no" 
+                                        src="https://tr.wikiloc.com/wikiloc/embedv2.do?id=248605848&elevation=off&images=off&maptype=H" 
+                                        className="w-full h-[500px] rounded-lg border"
+                                    ></iframe>
+                                    <div style={{color:'#777', fontSize:'11px', lineHeight:'16px', marginTop: '4px'}}>
+                                        Powered by&nbsp;
+                                        <a style={{color:'#4C8C2B', fontSize:'11px', lineHeight:'16px'}} target="_blank" rel="noopener noreferrer" href="https://tr.wikiloc.com">
+                                            Wikiloc
+                                        </a>
+                                    </div>
+                                </div>
+                            )}
+                            {selectedRoute?.slug === 'evciler-parkuru' && (
+                                <div className="mt-8">
+                                    <h3 className="text-xl font-headline font-bold mb-4">Wikiloc Rota Detayı</h3>
+                                    <iframe 
+                                        frameBorder="0" 
+                                        scrolling="no" 
+                                        src="https://tr.wikiloc.com/wikiloc/embedv2.do?id=248605898&elevation=off&images=off&maptype=H" 
+                                        className="w-full h-[500px] rounded-lg border"
+                                    ></iframe>
+                                    <div style={{color:'#777', fontSize:'11px', lineHeight:'16px', marginTop: '4px'}}>
+                                        Powered by&nbsp;
+                                        <a style={{color:'#4C8C2B', fontSize:'11px', lineHeight:'16px'}} target="_blank" rel="noopener noreferrer" href="https://tr.wikiloc.com">
+                                            Wikiloc
+                                        </a>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
