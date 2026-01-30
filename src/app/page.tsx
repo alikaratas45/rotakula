@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { getImageById } from '@/lib/placeholder-images';
 import { useEffect, useState, useMemo, memo } from 'react';
 import { useApp } from '@/context/app-context';
-import { Utensils, Map, Pin, Route, BookOpen, QrCode, Landmark, Smile, Award, Bike, Loader2, Users, Footprints, HomeIcon, Sparkles } from 'lucide-react';
+import { Utensils, Map, Pin, Route, BookOpen, QrCode, Landmark, Smile, Award, Bike, Loader2, Users, Footprints, HomeIcon, Sparkles, Info } from 'lucide-react';
 import { BedIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
 import { InstallPwaButton } from '@/components/install-pwa-button';
@@ -94,6 +94,7 @@ export default function HomePage() {
     { href: "/bike-routes", label: translations.nav.bikeRoutes, icon: Bike, color: "border-rose-500" },
     { href: "/walking-routes", label: translations.nav.walkingRoutes, icon: Footprints, color: "border-lime-500" },
     { href: "/stories", label: translations.nav.stories, icon: BookOpen, color: "border-purple-500" },
+    { href: "/about", label: translations.nav.about, icon: Info, color: "border-stone-500" },
     { href: "/routes/kula-flavor-tour", label: translations.nav.food, icon: Utensils, color: "border-orange-500" },
     { href: "/accommodation", label: translations.nav.accommodation, icon: BedIcon, color: "border-teal-500" },
     { href: "/selfie-spot", label: translations.nav.selfieSpot, icon: Smile, color: "border-cyan-500" },
