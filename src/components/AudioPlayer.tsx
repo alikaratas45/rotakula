@@ -10,49 +10,63 @@ interface AudioPlayerProps {
   autoPlay?: boolean;
 }
 
+// Function to split text into manageable chunks (e.g., by sentences)
+const chunkText = (text: string): string[] => {
+  if (!text) return [];
+  // Split by sentences, but also handle paragraphs. This regex is not perfect but a good start.
+  const chunks = text.match(/[^.!?]+[.!?]+(\s|$)|\S+/g);
+  return chunks || [text]; // Fallback to the whole text if splitting fails
+};
+
+
 export default function AudioPlayer({ text, autoPlay = false }: AudioPlayerProps) {
     const { translations, language } = useApp();
-
     const [isPlaying, setIsPlaying] = useState(false);
     
     const synthRef = useRef<SpeechSynthesis | null>(null);
-    const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-    
-    const textToSpeakRef = useRef(text);
-    const charIndexRef = useRef(0);
+    const chunksRef = useRef<string[]>([]);
+    const currentChunkIndexRef = useRef(0);
+    const isCancelledRef = useRef(false);
 
     useEffect(() => {
         if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
             synthRef.current = window.speechSynthesis;
         }
+
+        // Cleanup function to stop any ongoing speech when the component unmounts
+        // or when the text changes.
         return () => {
             if (synthRef.current?.speaking) {
+                isCancelledRef.current = true;
                 synthRef.current.cancel();
             }
         };
     }, []);
 
+    // Effect to handle text changes
     useEffect(() => {
+        // When text or language changes, stop any current playback and reset.
         if (synthRef.current?.speaking) {
+            isCancelledRef.current = true;
             synthRef.current.cancel();
         }
-        textToSpeakRef.current = text;
-        charIndexRef.current = 0;
+        chunksRef.current = chunkText(text);
+        currentChunkIndexRef.current = 0;
         setIsPlaying(false);
-        utteranceRef.current = null;
+        isCancelledRef.current = false;
+        
     }, [text, language]);
-
     
-    const startPlayback = useCallback((textToStart: string) => {
+    const speakChunk = useCallback((chunkIndex: number) => {
         const synth = synthRef.current;
-        if (!synth || !textToStart) return;
-
-        if (synth.speaking) {
-            synth.cancel();
+        const chunks = chunksRef.current;
+        if (!synth || chunkIndex >= chunks.length) {
+            setIsPlaying(false);
+            return;
         }
 
-        const utterance = new SpeechSynthesisUtterance(textToStart);
-        utteranceRef.current = utterance;
+        isCancelledRef.current = false;
+        const utterance = new SpeechSynthesisUtterance(chunks[chunkIndex]);
         
         const voices = synth.getVoices();
         const voice = voices.find(v => v.lang.startsWith(language) && v.default) || voices.find(v => v.lang.startsWith(language));
@@ -60,61 +74,64 @@ export default function AudioPlayer({ text, autoPlay = false }: AudioPlayerProps
             utterance.voice = voice;
         }
         utterance.lang = language;
-
-        utterance.onboundary = (event) => {
-            const baseIndex = text.length - textToSpeakRef.current.length;
-            charIndexRef.current = baseIndex + event.charIndex;
-        };
-
+        
         utterance.onend = () => {
-            setIsPlaying(false);
-            textToSpeakRef.current = text; 
-            charIndexRef.current = 0;
+            // If cancel was called, don't proceed to the next chunk.
+            if (isCancelledRef.current) {
+                return;
+            }
+            
+            // Move to the next chunk
+            currentChunkIndexRef.current++;
+            if (currentChunkIndexRef.current < chunks.length) {
+                speakChunk(currentChunkIndexRef.current);
+            } else {
+                // End of playback
+                setIsPlaying(false);
+                currentChunkIndexRef.current = 0; // Reset for next play
+            }
         };
 
         utterance.onerror = (event) => {
-            console.warn("Speech synthesis error (silently handled):", event.error);
+            console.warn("Speech synthesis error:", event.error);
             setIsPlaying(false);
-            textToSpeakRef.current = text; 
-            charIndexRef.current = 0;
         };
         
-        setTimeout(() => {
-            synth.speak(utterance);
-            setIsPlaying(true);
-        }, 100);
-    }, [language, text]);
+        synth.speak(utterance);
+    }, [language]);
 
 
     const handlePlayPause = useCallback(() => {
         const synth = synthRef.current;
-        if (!synth) {
-            return;
-        }
+        if (!synth) return;
 
-        if (synth.speaking) {
-            synth.cancel(); 
-            textToSpeakRef.current = text.substring(charIndexRef.current);
+        if (isPlaying) { // If playing, then pause
+            isCancelledRef.current = true;
+            synth.cancel();
             setIsPlaying(false);
-
-        } else {
-            if (synth.getVoices().length === 0) {
+        } else { // If paused, then play
+            setIsPlaying(true);
+            // Ensure voices are loaded before speaking
+             if (synth.getVoices().length === 0) {
                 synth.onvoiceschanged = () => {
-                    startPlayback(textToSpeakRef.current);
+                    speakChunk(currentChunkIndexRef.current);
                 };
             } else {
-                startPlayback(textToSpeakRef.current);
+                speakChunk(currentChunkIndexRef.current);
             }
         }
-    }, [startPlayback, text]);
+    }, [isPlaying, speakChunk]);
 
+    // Effect for autoplay
     useEffect(() => {
-        if (autoPlay && text) {
-            setTimeout(() => {
-                textToSpeakRef.current = text;
-                charIndexRef.current = 0;
-                handlePlayPause();
-            }, 500);
+        if (autoPlay && text && chunksRef.current.length > 0) {
+            const timer = setTimeout(() => {
+                // Ensure it's not already playing from a previous action
+                if (!isPlaying) {
+                    handlePlayPause();
+                }
+            }, 500); // Small delay to ensure everything is ready
+            return () => clearTimeout(timer);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [autoPlay, text]);
@@ -134,7 +151,7 @@ export default function AudioPlayer({ text, autoPlay = false }: AudioPlayerProps
                     <span className="ml-2">
                         {isPlaying 
                             ? translations.pois.pause 
-                            : (textToSpeakRef.current.length < text.length ? translations.pois.continueNarration : translations.pois.listen)
+                            : (currentChunkIndexRef.current > 0 ? translations.pois.continueNarration : translations.pois.listen)
                         }
                     </span>
                 </Button>
