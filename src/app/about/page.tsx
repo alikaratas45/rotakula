@@ -3,7 +3,7 @@
 
 import { useApp } from '@/context/app-context';
 import { Users, Home, Landmark } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import Image from 'next/image';
 import { getImageById } from '@/lib/placeholder-images';
 import { Card, CardContent } from '@/components/ui/card';
@@ -14,19 +14,15 @@ export default function AboutPage() {
     const { translations } = useApp();
     const heroImage = getImageById('hero-home');
 
-    const [narrationText, setNarrationText] = useState("");
-    
-    useEffect(() => {
-        const newNarrationText = Array.isArray(translations.about.content)
-            ? translations.about.content.join(' ')
-            : translations.about.content || "";
-            
-        setNarrationText(newNarrationText);
-    }, [translations.about.content]);
-    
-    const contentParagraphs = Array.isArray(translations.about.content)
-        ? translations.about.content
-        : (translations.about.content || "").split('\n\n');
+    const contentParagraphs = useMemo(() =>
+        Array.isArray(translations.about.content)
+            ? translations.about.content
+            : (translations.about.content || "").split('\n\n')
+    , [translations.about.content]);
+
+    const narrationText = useMemo(() =>
+        contentParagraphs.join('\n\n')
+    , [contentParagraphs]);
 
     const stats = [
         { icon: Users, value: "42.952", label: translations.about.population },
@@ -100,5 +96,3 @@ export default function AboutPage() {
         </div>
     );
 }
-
-    
