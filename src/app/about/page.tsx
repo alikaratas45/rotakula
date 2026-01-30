@@ -55,7 +55,34 @@ export default function AboutPage() {
                 </div>
             </section>
 
-             <section className="py-8 bg-muted/50">
+            <div className="container px-4 py-8 md:py-12">
+                <BackButton className="mb-8" />
+                <div className="max-w-3xl mx-auto">
+                    <div className="flex flex-col gap-4 mb-6">
+                        <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
+                        <AudioPlayer text={narrationText} />
+                    </div>
+                    
+                    <div className="prose prose-lg max-w-none text-foreground/90">
+                        {contentParagraphs.map((paragraph, index) => {
+                            const trimmedParagraph = paragraph.trim();
+                            if (trimmedParagraph === '') return null;
+                             const isTitle = [
+                                'Bizans Dönemi', 'Türk Dönemi ve Germiyan Beyliği', 'Osmanlı ve Cumhuriyet Dönemi',
+                                'KULA ADININ ANLAMI', 'THE MEANING OF THE NAME KULA', 
+                                'LA SIGNIFICATION DU NOM KULA', 'DIE BEDEUTUNG DES NAMENS KULA'
+                            ].includes(trimmedParagraph);
+                            return (
+                                isTitle 
+                                    ? <h3 key={index} className="font-headline font-bold text-xl mt-6 mb-2">{trimmedParagraph}</h3>
+                                    : <p key={index}>{paragraph}</p>
+                            )
+                        })}
+                    </div>
+                </div>
+            </div>
+
+            <section className="py-8 bg-muted/50">
                 <div className="container px-4">
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                         {stats.map((stat, index) => (
@@ -70,30 +97,6 @@ export default function AboutPage() {
                     </div>
                 </div>
             </section>
-
-
-            <div className="container px-4 py-8 md:py-12">
-                <BackButton className="mb-8" />
-                <div className="max-w-3xl mx-auto">
-                    <div className="flex flex-col gap-4 mb-6">
-                        <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
-                        <AudioPlayer text={narrationText} />
-                    </div>
-                    
-                    <div className="prose prose-lg max-w-none text-foreground/90">
-                        {contentParagraphs.map((paragraph, index) => {
-                            const trimmedParagraph = paragraph.trim();
-                            if (trimmedParagraph === '') return null;
-                            const isTitle = ['Bizans Dönemi', 'Türk Dönemi ve Germiyan Beyliği', 'Osmanlı ve Cumhuriyet Dönemi'].includes(trimmedParagraph);
-                            return (
-                                isTitle 
-                                    ? <h3 key={index} className="font-headline font-bold text-xl mt-6 mb-2">{trimmedParagraph}</h3>
-                                    : <p key={index}>{trimmedParagraph}</p>
-                            )
-                        })}
-                    </div>
-                </div>
-            </div>
         </div>
     );
 }
