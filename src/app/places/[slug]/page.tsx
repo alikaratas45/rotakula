@@ -111,7 +111,7 @@ export default function PlaceDetailPage() {
                                 <AudioPlayer text={narrationText} autoPlay={shouldAutoplay} />
                              </div>
                              <div className="prose prose-lg max-w-none text-foreground/90">
-                                {poi.longDescription.split('\n').map((paragraph, index) => (
+                                {poi.longDescription.split('\n\n').map((paragraph, index) => (
                                     <p key={index}>{paragraph}</p>
                                 ))}
                             </div>

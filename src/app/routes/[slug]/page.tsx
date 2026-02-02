@@ -165,14 +165,23 @@ export default function RoutePage() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
                     <div className="lg:col-span-2">
                         <div className="text-lg text-foreground/80 mb-8 prose prose-lg max-w-none">
-                            {route.longDescription.split('\n').map((paragraph, index) => {
+                            {route.longDescription.split('\n\n').map((paragraph, index) => {
                                 const trimmedParagraph = paragraph.trim();
                                 if (trimmedParagraph === '') return null;
-                                const isTitle = trimmedParagraph.endsWith(':');
+                                const firstLine = trimmedParagraph.split('\n')[0];
+                                const isTitle = firstLine.trim().endsWith(':');
+
                                 return (
-                                    <p key={index}>
-                                        {isTitle ? <strong>{trimmedParagraph}</strong> : trimmedParagraph}
-                                    </p>
+                                    <div key={index}>
+                                        {isTitle ? (
+                                            <>
+                                                <h4 className='font-bold mt-4 mb-2 text-xl'>{firstLine}</h4>
+                                                <p>{trimmedParagraph.substring(firstLine.length).trim()}</p>
+                                            </>
+                                        ) : (
+                                            <p>{trimmedParagraph}</p>
+                                        )}
+                                    </div>
                                 )
                             })}
                         </div>
