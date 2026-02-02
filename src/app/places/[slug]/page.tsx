@@ -1,4 +1,3 @@
-
 "use client"
 
 import { getPoiBySlug } from '@/lib/kula-data';
@@ -111,9 +110,10 @@ export default function PlaceDetailPage() {
                                 <AudioPlayer text={narrationText} autoPlay={shouldAutoplay} />
                              </div>
                              <div className="prose prose-lg max-w-none text-foreground/90">
-                                {poi.longDescription.split('\n\n').map((paragraph, index) => (
-                                    <p key={index}>{paragraph}</p>
-                                ))}
+                                {poi.longDescription.split('\n\n').map((paragraph, index) => {
+                                    const trimmed = paragraph.trim();
+                                    return trimmed ? <p key={index}>{trimmed}</p> : null;
+                                })}
                             </div>
                         </div>
 
