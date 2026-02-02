@@ -1,4 +1,3 @@
-
 "use client"
 
 import { getPoiBySlug, getAudioUrl } from '@/lib/kula-data';
@@ -44,7 +43,7 @@ export default function PlaceDetailPage() {
                 setPoi(poiData);
                 const fullText = poiData.longDescription || '';
                 setNarrationText(fullText.replace(/\\n/g, ' '));
-                const url = getAudioUrl(poiData.id);
+                const url = getAudioUrl(poiData.slug);
                 setAudioUrl(url);
             } else {
                 setPoi(null);
