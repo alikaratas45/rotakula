@@ -164,9 +164,9 @@ export default function RoutePage() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
                     <div className="lg:col-span-2">
                         <div className="prose prose-lg max-w-none text-foreground/90 mb-8">
-                            {route.longDescription.split('\n\n').map((paragraph, index) => {
+                            {route.longDescription.split('\\n\\n').map((paragraph, index) => {
                                 const trimmed = paragraph.trim();
-                                return trimmed ? <p key={index}>{trimmed}</p> : null;
+                                return trimmed ? <p key={index}>{trimmed.replace(/\\n/g, ' ')}</p> : null;
                             })}
                         </div>
                         {isFlavorTour ? null : (

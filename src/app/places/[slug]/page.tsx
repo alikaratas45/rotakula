@@ -110,9 +110,9 @@ export default function PlaceDetailPage() {
                                 <AudioPlayer text={narrationText} autoPlay={shouldAutoplay} />
                              </div>
                              <div className="prose prose-lg max-w-none text-foreground/90">
-                                {poi.longDescription.split('\n\n').map((paragraph, index) => {
+                                {poi.longDescription.split('\\n\\n').map((paragraph, index) => {
                                     const trimmed = paragraph.trim();
-                                    return trimmed ? <p key={index}>{trimmed}</p> : null;
+                                    return trimmed ? <p key={index}>{trimmed.replace(/\\n/g, ' ')}</p> : null;
                                 })}
                             </div>
                         </div>
