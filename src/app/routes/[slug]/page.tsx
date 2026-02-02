@@ -164,26 +164,10 @@ export default function RoutePage() {
                 <BackButton className="mb-8" />
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
                     <div className="lg:col-span-2">
-                        <div className="text-lg text-foreground/80 mb-8 prose prose-lg max-w-none">
-                            {route.longDescription.split('\n\n').map((paragraph, index) => {
-                                const trimmedParagraph = paragraph.trim();
-                                if (trimmedParagraph === '') return null;
-                                const firstLine = trimmedParagraph.split('\n')[0];
-                                const isTitle = firstLine.trim().endsWith(':');
-
-                                return (
-                                    <div key={index}>
-                                        {isTitle ? (
-                                            <>
-                                                <h4 className='font-bold mt-4 mb-2 text-xl'>{firstLine}</h4>
-                                                <p>{trimmedParagraph.substring(firstLine.length).trim()}</p>
-                                            </>
-                                        ) : (
-                                            <p>{trimmedParagraph}</p>
-                                        )}
-                                    </div>
-                                )
-                            })}
+                        <div className="prose prose-lg max-w-none text-foreground/90 mb-8">
+                            {route.longDescription.split('\n\n').map((paragraph, index) => (
+                                <p key={index}>{paragraph}</p>
+                            ))}
                         </div>
                         {isFlavorTour ? null : (
                             <>
