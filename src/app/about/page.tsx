@@ -3,16 +3,18 @@
 
 import { useApp } from '@/context/app-context';
 import { Users, Home, Landmark } from 'lucide-react';
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { getImageById } from '@/lib/placeholder-images';
 import { Card, CardContent } from '@/components/ui/card';
 import AudioPlayer from '@/components/AudioPlayer';
 import { BackButton } from '@/components/back-button';
+import { getAudioUrl } from '@/lib/kula-data';
 
 export default function AboutPage() {
     const { translations } = useApp();
     const heroImage = getImageById('hero-home');
+    const [audioUrl, setAudioUrl] = useState<string | null>(null);
 
     const contentParagraphs = useMemo(() =>
         Array.isArray(translations.about.content)
@@ -23,6 +25,11 @@ export default function AboutPage() {
     const narrationText = useMemo(() =>
         contentParagraphs.join('\n\n')
     , [contentParagraphs]);
+
+    useEffect(() => {
+        const url = getAudioUrl('about-page');
+        setAudioUrl(url);
+    }, []);
 
     const stats = [
         { icon: Users, value: "42.952", label: translations.about.population },
@@ -56,7 +63,7 @@ export default function AboutPage() {
                 <div className="max-w-3xl mx-auto">
                     <div className="flex flex-col gap-4 mb-6">
                         <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
-                        <AudioPlayer text={narrationText} />
+                        <AudioPlayer audioUrl={audioUrl} textToNarrate={narrationText} />
                     </div>
                     
                     <div className="prose prose-lg max-w-none text-foreground/90">

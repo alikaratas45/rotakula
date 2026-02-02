@@ -8,15 +8,19 @@ import { useEffect, useState } from 'react';
 import { getImageById } from '@/lib/placeholder-images';
 import AudioPlayer from '@/components/AudioPlayer';
 import { BackButton } from '@/components/back-button';
+import { getAudioUrl } from '@/lib/kula-data';
 
 export default function NarMotifiPage() {
     const { translations } = useApp();
     const heroImage = getImageById('story-nar-motifi');
     const [narrationText, setNarrationText] = useState("");
+    const [audioUrl, setAudioUrl] = useState<string | null>(null);
 
     useEffect(() => {
         const newNarrationText = translations.narMotifi.content.join(' ') + ' ' + translations.narMotifi.poem.join(' ');
         setNarrationText(newNarrationText);
+        const url = getAudioUrl('nar-motifi-page');
+        setAudioUrl(url);
     }, [translations]);
 
     return (
@@ -48,7 +52,7 @@ export default function NarMotifiPage() {
                         <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
                     </div>
                     <div className='mb-6'>
-                      <AudioPlayer text={narrationText} />
+                      <AudioPlayer audioUrl={audioUrl} textToNarrate={narrationText} />
                     </div>
                     
                     <div className="prose prose-lg max-w-none text-foreground/90 space-y-4">

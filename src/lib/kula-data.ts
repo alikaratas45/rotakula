@@ -6,6 +6,8 @@ import poisData from './data/kula-pois.json';
 import storiesData from './data/kula-stories.json';
 import bikeRoutesData from './data/bike-routes.json';
 import walkingRoutesData from './data/walking-routes.json';
+import audioNarrations from './data/audio-narrations.json';
+
 
 // A simple in-memory cache to simulate a database and avoid re-reading files.
 const routes: ThematicRoute[] = routesData.routes;
@@ -101,4 +103,18 @@ export async function getFeaturedRoute(lang: string = 'tr'): Promise<ThematicRou
     // Return the first route as the featured route to avoid hydration issues with date-fns.
     const route = routes[0];
     return route ? translateItem(route, lang) : undefined;
+}
+
+const AUDIO_BASE_URL = "https://firebasestorage.googleapis.com/v0/b/rotakulasonuncu-38859976-662ba.appspot.com/o/audio%2F";
+const AUDIO_URL_SUFFIX = "?alt=media";
+
+export function getAudioUrl(id: string): string | null {
+  const narrations: { [key: string]: string } = (audioNarrations as any).narrations;
+  const filename = narrations[id];
+  
+  if (filename) {
+    return `${AUDIO_BASE_URL}${encodeURIComponent(filename)}${AUDIO_URL_SUFFIX}`;
+  }
+  
+  return null;
 }

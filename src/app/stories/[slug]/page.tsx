@@ -1,6 +1,7 @@
+
 "use client"
 
-import { getStoryBySlug, getPoiBySlug } from '@/lib/kula-data';
+import { getStoryBySlug, getPoiBySlug, getAudioUrl } from '@/lib/kula-data';
 import Image from 'next/image';
 import { useApp } from '@/context/app-context';
 import { useEffect, useState } from 'react';
@@ -21,6 +22,7 @@ export default function StoryPage() {
     const [story, setStory] = useState<Story | null>(null);
     const [drAristiEviLocation, setDrAristiEviLocation] = useState<PointOfInterest | null>(null);
     const [loading, setLoading] = useState(true);
+    const [audioUrl, setAudioUrl] = useState<string | null>(null);
     
     const [narrationText, setNarrationText] = useState('');
 
@@ -32,7 +34,9 @@ export default function StoryPage() {
         if (storyData) {
           setStory(storyData);
           const fullText = storyData.content || '';
-          setNarrationText(fullText);
+          setNarrationText(fullText.replace(/\\n/g, ' '));
+          const url = getAudioUrl(storyData.slug);
+          setAudioUrl(url);
 
            if (storyData.slug === 'kula-halisi') {
             const poiData = await getPoiBySlug('dr-aristi-evi', language);
@@ -44,6 +48,7 @@ export default function StoryPage() {
         } else {
           setStory(null);
           setNarrationText('');
+          setAudioUrl(null);
         }
         setLoading(false);
       }
@@ -66,6 +71,8 @@ export default function StoryPage() {
     
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
     
+    const paragraphs = story.content.split('\\n\\n').map(p => p.trim()).filter(Boolean);
+
     return (
         <APIProvider apiKey={apiKey}>
             <article>
@@ -93,14 +100,13 @@ export default function StoryPage() {
                     <div className="max-w-3xl mx-auto">
                         <div className="flex flex-col gap-4 mb-6">
                             <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
-                            <AudioPlayer text={narrationText} />
+                            <AudioPlayer audioUrl={audioUrl} textToNarrate={narrationText} />
                         </div>
 
                         <div className="prose prose-lg max-w-none text-foreground/90">
-                            {story.content.split('\\n\\n').map((paragraph, index) => {
-                                const trimmed = paragraph.trim();
-                                return trimmed ? <p key={index}>{trimmed.replace(/\\n/g, ' ')}</p> : null;
-                            })}
+                           {paragraphs.map((paragraph, index) => (
+                                <p key={index}>{paragraph.replace(/\\n/g, ' ')}</p>
+                            ))}
                         </div>
 
                         {story.slug === 'kula-halisi' && drAristiEviLocation && (

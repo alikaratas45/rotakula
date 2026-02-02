@@ -1,6 +1,7 @@
+
 "use client"
 
-import { getPoiBySlug } from '@/lib/kula-data';
+import { getPoiBySlug, getAudioUrl } from '@/lib/kula-data';
 import { notFound, useRouter, useSearchParams, useParams } from 'next/navigation';
 import Image from 'next/image';
 import { APIProvider } from '@vis.gl/react-google-maps';
@@ -21,6 +22,7 @@ export default function PlaceDetailPage() {
     const { language, translations } = useApp();
     const [poi, setPoi] = useState<PointOfInterest | null>(null);
     const [loading, setLoading] = useState(true);
+    const [audioUrl, setAudioUrl] = useState<string | null>(null);
 
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -33,6 +35,7 @@ export default function PlaceDetailPage() {
         if (!slug) return;
         setPoi(null);
         setNarrationText('');
+        setAudioUrl(null);
         
         async function fetchPoi() {
             setLoading(true);
@@ -40,7 +43,9 @@ export default function PlaceDetailPage() {
             if (poiData) {
                 setPoi(poiData);
                 const fullText = poiData.longDescription || '';
-                setNarrationText(fullText);
+                setNarrationText(fullText.replace(/\\n/g, ' '));
+                const url = getAudioUrl(poiData.id);
+                setAudioUrl(url);
             } else {
                 setPoi(null);
             }
@@ -76,6 +81,8 @@ export default function PlaceDetailPage() {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
     const heroImage = getImageById(poi.imageId);
 
+    const paragraphs = poi.longDescription.split('\\n\\n').map(p => p.trim()).filter(Boolean);
+
     return (
         <APIProvider apiKey={apiKey}>
             <article>
@@ -107,13 +114,12 @@ export default function PlaceDetailPage() {
                          <div className="lg:col-span-2">
                              <div className="flex flex-col gap-4 mb-6">
                                 <h2 className="text-2xl font-headline font-bold">{translations.pois.details}</h2>
-                                <AudioPlayer text={narrationText} autoPlay={shouldAutoplay} />
+                                <AudioPlayer audioUrl={audioUrl} textToNarrate={narrationText} autoPlay={shouldAutoplay} />
                              </div>
                              <div className="prose prose-lg max-w-none text-foreground/90">
-                                {poi.longDescription.split('\\n\\n').map((paragraph, index) => {
-                                    const trimmed = paragraph.trim();
-                                    return trimmed ? <p key={index}>{trimmed.replace(/\\n/g, ' ')}</p> : null;
-                                })}
+                                {paragraphs.map((paragraph, index) => (
+                                    <p key={index}>{paragraph.replace(/\\n/g, ' ')}</p>
+                                ))}
                             </div>
                         </div>
 
