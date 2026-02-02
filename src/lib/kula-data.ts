@@ -105,15 +105,14 @@ export async function getFeaturedRoute(lang: string = 'tr'): Promise<ThematicRou
     return route ? translateItem(route, lang) : undefined;
 }
 
-const AUDIO_BASE_URL = "https://firebasestorage.googleapis.com/v0/b/rotakulasonuncu-38859976-662ba.appspot.com/o/audio%2F";
-const AUDIO_URL_SUFFIX = "?alt=media";
-
-export function getAudioUrl(id: string): string | null {
+export function getAudioUrl(slug: string): string | null {
   const narrations: { [key: string]: string } = (audioNarrations as any).narrations;
-  const filename = narrations[id];
+  const fileUrl = narrations[slug];
   
-  if (filename) {
-    return `${AUDIO_BASE_URL}${encodeURIComponent(filename)}${AUDIO_URL_SUFFIX}`;
+  // The value in the JSON should be the full URL.
+  // If it's an empty string or a placeholder, return null.
+  if (fileUrl && fileUrl.startsWith('https://')) {
+    return fileUrl;
   }
   
   return null;
