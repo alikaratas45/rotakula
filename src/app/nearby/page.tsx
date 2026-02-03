@@ -18,7 +18,7 @@ import { haversineDistance } from '@/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { BackButton } from '@/components/back-button';
 
-const NEARBY_RADIUS_KM = 5;
+const NEARBY_RADIUS_KM = 15;
 
 type PoiWithDistance = PointOfInterest & { distance: number };
 
@@ -56,14 +56,35 @@ export default function NearbyPage() {
             return;
         }
 
-        try {
-            const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-                navigator.geolocation.getCurrentPosition(resolve, reject, {
-                    enableHighAccuracy: true, // PC'de hızlı ve doğru konum için true olmalı
-                    timeout: 10000, // 10 saniye bekleme
-                    maximumAge: 0, // Önbelleği kullanma, taze veri al
-                });
+        const getPosition = (options: PositionOptions) => {
+            return new Promise<GeolocationPosition>((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject, options);
             });
+        };
+
+        try {
+            let position: GeolocationPosition;
+            
+            try {
+                // Deneme 1: Yüksek hassasiyet (GPS/Wi-Fi) - Hızlı sonuç için önbellek izniyle
+                position = await getPosition({
+                    enableHighAccuracy: true,
+                    timeout: 8000, 
+                    maximumAge: 60000 // 1 dakikalık eski konum kabul edilebilir (Hız kazandırır)
+                });
+            } catch (err: any) {
+                // Deneme 2: Eğer yüksek hassasiyet hata verirse veya zaman aşımına uğrarsa (PC'lerde yaygındır)
+                // Düşük hassasiyet (IP/Ağ tabanlı) ile tekrar dene
+                if (err.code === 2 || err.code === 3) {
+                    position = await getPosition({
+                        enableHighAccuracy: false,
+                        timeout: 10000,
+                        maximumAge: 60000
+                    });
+                } else {
+                    throw err; // İzin reddi gibi durumları ana catch'e fırlat
+                }
+            }
 
             const currentLocation = {
                 lat: position.coords.latitude,

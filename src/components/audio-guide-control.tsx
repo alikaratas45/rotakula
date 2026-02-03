@@ -124,9 +124,9 @@ export function AudioGuideControl() {
                 handlePositionUpdate,
                 (error) => console.warn("Could not get user location:", error.message),
                 { 
-                    enableHighAccuracy: true, // PC'lerde GPS olmasa bile Wi-Fi tabanlı hızlı konum için true olmalı
-                    timeout: 10000,
-                    maximumAge: 0 
+                    enableHighAccuracy: true, 
+                    timeout: 15000,
+                    maximumAge: 30000 
                 }
             );
         }

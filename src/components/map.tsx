@@ -24,6 +24,7 @@ export function UserLocationMarker() {
       return;
     }
 
+    // watchPosition için daha dengeli ayarlar
     const watchId = navigator.geolocation.watchPosition(
       (geoPosition) => {
         setPosition({
@@ -36,8 +37,8 @@ export function UserLocationMarker() {
       },
       { 
         enableHighAccuracy: true, 
-        timeout: 10000, 
-        maximumAge: 0 
+        timeout: 15000, 
+        maximumAge: 30000 // 30 saniyelik eski veri hızı artırır
       }
     );
 
@@ -100,24 +101,31 @@ export default function EmbeddedMap({ pois, drawRouteLine = false }: { pois: Poi
   }
 
   useEffect(() => {
-    // Get user's location
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setUserPosition({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-      },
-      () => {
-        // Fail silently if user denies
-        setUserPosition(null); 
-      },
-      { 
-        enableHighAccuracy: true, 
-        timeout: 10000, 
-        maximumAge: 0 
-      }
-    );
+    // Kademeli konum alma
+    const getPos = () => {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                setUserPosition({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                });
+            },
+            (err) => {
+                if (err.code === 3 || err.code === 2) {
+                    // Fail over to low accuracy
+                    navigator.geolocation.getCurrentPosition(
+                        (p) => setUserPosition({ lat: p.coords.latitude, lng: p.coords.longitude }),
+                        () => setUserPosition(null),
+                        { enableHighAccuracy: false, timeout: 10000, maximumAge: 60000 }
+                    );
+                } else {
+                    setUserPosition(null); 
+                }
+            },
+            { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 }
+        );
+    }
+    getPos();
   }, []);
 
 
@@ -300,19 +308,26 @@ export const NearbySearch = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                setUserPosition({
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                });
-            },
-            () => {
-                // Fail silently if user denies or an error occurs, fall back to Kula center
-                setUserPosition({ lat: 38.547, lng: 28.65 });
-            },
-            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-        );
+        const getPos = () => {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    setUserPosition({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    });
+                },
+                () => {
+                    // PC'ler için fallback
+                    navigator.geolocation.getCurrentPosition(
+                        (p) => setUserPosition({ lat: p.coords.latitude, lng: p.coords.longitude }),
+                        () => setUserPosition({ lat: 38.547, lng: 28.65 }),
+                        { enableHighAccuracy: false, timeout: 10000, maximumAge: 60000 }
+                    );
+                },
+                { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 }
+            );
+        }
+        getPos();
     }, []);
 
     // Perform nearby search
