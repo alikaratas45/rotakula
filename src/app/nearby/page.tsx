@@ -58,12 +58,10 @@ export default function NearbyPage() {
 
         try {
             const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-                // PC'lerde ve bazı ağlarda enableHighAccuracy:true hata verebilir veya çok yavaş olabilir.
-                // Önce daha hızlı sonuç almak için toleranslı bir istek yapıyoruz.
                 navigator.geolocation.getCurrentPosition(resolve, reject, {
-                    enableHighAccuracy: false, // PC uyumluluğu için false
-                    timeout: 20000, // 20 saniye (PC ağ tabanlı konum için daha güvenli)
-                    maximumAge: 60000, // 1 dakikalık eski konumu kabul et (hız için)
+                    enableHighAccuracy: true, // PC'de hızlı ve doğru konum için true olmalı
+                    timeout: 10000, // 10 saniye bekleme
+                    maximumAge: 0, // Önbelleği kullanma, taze veri al
                 });
             });
 

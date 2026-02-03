@@ -86,7 +86,8 @@ export default function SelectedPoisSidebar({ selectedPois, setSelectedPois }: {
                     variant: 'destructive',
                 });
                 setIsStartingRoute(false);
-            }
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
         );
     }
 
