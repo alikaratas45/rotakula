@@ -34,7 +34,11 @@ export function UserLocationMarker() {
       (error) => {
         console.warn(`Error getting user location: ${error.message}`);
       },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      { 
+        enableHighAccuracy: false, // PC uyumluluğu için
+        timeout: 20000, 
+        maximumAge: 30000 
+      }
     );
 
     return () => {
@@ -107,6 +111,11 @@ export default function EmbeddedMap({ pois, drawRouteLine = false }: { pois: Poi
       () => {
         // Fail silently if user denies
         setUserPosition(null); 
+      },
+      { 
+        enableHighAccuracy: false, 
+        timeout: 20000, 
+        maximumAge: 60000 
       }
     );
   }, []);
@@ -301,7 +310,8 @@ export const NearbySearch = () => {
             () => {
                 // Fail silently if user denies or an error occurs, fall back to Kula center
                 setUserPosition({ lat: 38.547, lng: 28.65 });
-            }
+            },
+            { enableHighAccuracy: false, timeout: 20000, maximumAge: 60000 }
         );
     }, []);
 

@@ -58,10 +58,12 @@ export default function NearbyPage() {
 
         try {
             const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+                // PC'lerde ve bazı ağlarda enableHighAccuracy:true hata verebilir veya çok yavaş olabilir.
+                // Önce daha hızlı sonuç almak için toleranslı bir istek yapıyoruz.
                 navigator.geolocation.getCurrentPosition(resolve, reject, {
-                    enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 0,
+                    enableHighAccuracy: false, // PC uyumluluğu için false
+                    timeout: 20000, // 20 saniye (PC ağ tabanlı konum için daha güvenli)
+                    maximumAge: 60000, // 1 dakikalık eski konumu kabul et (hız için)
                 });
             });
 
@@ -86,6 +88,7 @@ export default function NearbyPage() {
             setStatus(poisWithDistances.length > 0 ? 'success' : 'no_results');
 
         } catch (err: any) {
+            console.error("Geolocation error:", err);
             let errorMessage = translations.map.locationError;
             if (err.code === 1) { // PERMISSION_DENIED
                 errorMessage = translations.nearby.permissionDenied;
@@ -133,7 +136,7 @@ export default function NearbyPage() {
                         <ShieldAlert className="h-4 w-4" />
                         <AlertTitle>{translations.toast.errorTitle}</AlertTitle>
                         <AlertDescription className="flex items-center justify-between">
-                           {error}
+                           <span className="mr-4">{error}</span>
                            <Button variant="secondary" size="sm" onClick={requestLocation}>{translations.nearby.tryAgain}</Button>
                         </AlertDescription>
                     </Alert>

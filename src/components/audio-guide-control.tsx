@@ -123,7 +123,11 @@ export function AudioGuideControl() {
             watchIdRef.current = navigator.geolocation.watchPosition(
                 handlePositionUpdate,
                 (error) => console.warn("Could not get user location:", error.message),
-                { enableHighAccuracy: true }
+                { 
+                    enableHighAccuracy: false, // PC ve mobil uyumluluğu için false
+                    timeout: 20000,
+                    maximumAge: 30000 
+                }
             );
         }
 
