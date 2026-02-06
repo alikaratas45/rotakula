@@ -113,7 +113,7 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col">
-      <section className="relative h-[70vh] md:h-[90vh] w-full text-center flex flex-col justify-start pt-0">
+      <section className="relative min-h-[85vh] md:min-h-[90vh] w-full text-center flex flex-col justify-center pt-8">
         {heroImage && (
           <Image
             src={heroImage.imageUrl}
@@ -125,28 +125,28 @@ export default function HomePage() {
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
-        <div className="relative z-10 mx-auto max-w-4xl px-4 pb-4">
-        <div className="flex justify-center items-center gap-4">
+        <div className="relative z-10 mx-auto max-w-4xl px-4 pb-20 md:pb-32">
+        <div className="flex justify-center items-center gap-4 mb-4">
             <Image
                 src="https://i.imgur.com/aQa6rQO.png"
                 alt="Kula Belediyesi Logosu"
-                width={350}
-                height={350}
-                className="animate-fade-in w-full max-w-[350px] h-auto"
+                width={300}
+                height={300}
+                className="animate-fade-in w-full max-w-[280px] md:max-w-[350px] h-auto"
                 style={{ animationDelay: '0ms' }}
                 priority
             />
         </div>
-          <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-3d animate-fade-in" style={{animationDelay: '200ms'}}>
+          <h1 className="font-headline text-4xl md:text-7xl lg:text-8xl font-bold tracking-tight text-3d animate-fade-in" style={{animationDelay: '200ms'}}>
             {translations.home.heroTitle}
           </h1>
-          <p className="mt-6 text-lg md:text-xl max-w-3xl mx-auto drop-shadow-md animate-fade-in" style={{animationDelay: '600ms'}}>
+          <p className="mt-6 text-lg md:text-xl max-w-3xl mx-auto drop-shadow-md animate-fade-in font-medium" style={{animationDelay: '600ms'}}>
             {translations.home.heroSubtitle}
           </p>
         </div>
       </section>
 
-      <section className="relative z-20 pb-12 px-4 md:px-8 -mt-20 md:-mt-32">
+      <section className="relative z-20 pb-12 px-4 md:px-8 -mt-16 md:-mt-24">
          <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
               {iconNavItems.map((item, index) => (
@@ -226,4 +226,3 @@ export default function HomePage() {
     </div>
   );
 }
-    
