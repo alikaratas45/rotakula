@@ -1,29 +1,18 @@
 
-// simple service worker for PWA support
-const CACHE_NAME = 'rotakula-cache-v1';
-const urlsToCache = [
-  '/',
-  '/manifest.json',
-  'https://i.imgur.com/PS0UgvO.png'
-];
-
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        return cache.addAll(urlsToCache);
-      })
-  );
+// Service Worker for PWA installability
+self.addEventListener('install', (event) => {
+  self.skipWaiting();
 });
 
-self.addEventListener('fetch', event => {
+self.addEventListener('activate', (event) => {
+  event.waitUntil(clients.claim());
+});
+
+self.addEventListener('fetch', (event) => {
+  // Strategy: Network first, falling back to cache if offline
   event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        if (response) {
-          return response;
-        }
-        return fetch(event.request);
-      })
+    fetch(event.request).catch(() => {
+      return caches.match(event.request);
+    })
   );
 });
