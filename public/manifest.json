@@ -1,14 +1,12 @@
 
 {
-  "name": "RotaKula - Kula Gezi Rehberi",
+  "name": "RotaKula",
   "short_name": "RotaKula",
-  "description": "UNESCO Global Jeoparkı ve Tarihi Kula Evleri Gezi Rehberi",
+  "description": "Kula Gezi Rehberi ve UNESCO Global Jeopark Rehberi",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#4E342E",
-  "orientation": "portrait",
-  "scope": "/",
+  "theme_color": "#ffffff",
   "icons": [
     {
       "src": "https://i.imgur.com/PS0UgvO.png",

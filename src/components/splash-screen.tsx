@@ -24,11 +24,11 @@ export default function SplashScreen() {
     // Hide splash screen after a delay
     const fadeTimer = setTimeout(() => {
       setIsFading(true);
-    }, 1000); // Start fading after 1 second
+    }, 1200); // Start fading after 1.2 seconds
 
     const visibilityTimer = setTimeout(() => {
         setIsVisible(false);
-    }, 1500); // Completely hide after 1.5 seconds
+    }, 1700); // Completely hide after 1.7 seconds
 
     return () => {
       clearTimeout(fadeTimer);
@@ -43,17 +43,17 @@ export default function SplashScreen() {
   return (
     <div
       className={cn(
-        "fixed inset-0 z-[200] flex flex-col items-center justify-center bg-background transition-opacity duration-500 ease-in-out",
+        "fixed inset-0 z-[200] flex flex-col items-center justify-center bg-white transition-opacity duration-500 ease-in-out",
         isFading ? "opacity-0" : "opacity-100"
       )}
     >
       <div className="text-center animate-fade-in-up perspective-1000">
         <div className="preserve-3d">
              <Image
-                src="https://i.imgur.com/aQa6rQO.png"
-                alt="Kula Belediyesi Logo"
-                width={700}
-                height={700}
+                src="https://i.imgur.com/PS0UgvO.png"
+                alt="RotaKula Logo"
+                width={200}
+                height={200}
                 priority
                 className="animate-spin-slow"
             />
