@@ -1,13 +1,14 @@
 
 {
-  "name": "RotaKula",
+  "name": "RotaKula - Kula Gezi Rehberi",
   "short_name": "RotaKula",
-  "description": "Kula Gezi Rehberi",
+  "description": "Kula Belediyesi Mobil Turist Rehberi",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
   "orientation": "portrait",
+  "scope": "/",
   "icons": [
     {
       "src": "https://i.imgur.com/PS0UgvO.png",
