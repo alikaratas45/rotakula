@@ -1,14 +1,13 @@
 
 {
-  "name": "RotaKula - Kula Gezi Rehberi",
+  "name": "RotaKula",
   "short_name": "RotaKula",
-  "description": "Kula Belediyesi Mobil Turist Rehberi",
+  "description": "Kula Gezi Rehberi - Volkanik Toprakları ve Tarihi Evleri Keşfedin",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
   "orientation": "portrait",
-  "scope": "/",
   "icons": [
     {
       "src": "https://i.imgur.com/PS0UgvO.png",
