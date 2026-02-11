@@ -157,6 +157,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     isUserLoading: isAuthLoading,
   };
 
+  // Hydration hatasını önlemek için Client-side mount olana kadar render'ı beklet
   if (!isMounted) {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-background">

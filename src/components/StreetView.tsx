@@ -28,14 +28,16 @@ export default function StreetView({ latitude, longitude }: StreetViewProps) {
 
       const svService = new google.maps.StreetViewService();
       
-      // Belirtilen koordinatların 500 metre çevresinde en yakın dış mekan görüntüsünü ara
+      // Arama parametreleri: 
+      // - 1000 metre yarıçap (daha geniş alan taraması)
+      // - google.maps.StreetViewSource.DEFAULT (Hem Google hem de kullanıcıların yüklediği 360 görselleri içerir)
       svService.getPanorama({ 
         location: { lat: latitude, lng: longitude }, 
-        radius: 500,
-        source: google.maps.StreetViewSource.OUTDOOR
+        radius: 1000,
+        source: google.maps.StreetViewSource.DEFAULT
       }, (data, status) => {
         if (status === google.maps.StreetViewStatus.OK && data && data.location && data.location.latLng) {
-          // Bulunan en yakın noktada panoramayı başlat
+          // Bulunan en yakın 360 görselde panoramayı başlat
           new google.maps.StreetViewPanorama(containerRef.current!, {
             position: data.location.latLng,
             pov: { heading: 165, pitch: 0 },
@@ -48,14 +50,14 @@ export default function StreetView({ latitude, longitude }: StreetViewProps) {
           });
           setIsLoading(false);
         } else {
-          const msg = translations.map.noStreetView || "Bu konum için yakınlarda Sokak Görünümü bulunamadı.";
+          const msg = translations.map.noStreetView || "Bu konum için yakınlarda 360 derece görüntü bulunamadı.";
           setError(msg);
           setIsLoading(false);
         }
       });
     };
 
-    // Google Maps API'nin tam hazır olduğundan emin olmak için kısa bir gecikme
+    // API'nin hazır olmasını bekle
     const timer = setTimeout(initializeStreetView, 500);
     return () => clearTimeout(timer);
   }, [latitude, longitude, translations]);
