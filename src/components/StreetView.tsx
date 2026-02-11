@@ -10,9 +10,10 @@ interface StreetViewProps {
   latitude: number;
   longitude: number;
   onClose?: () => void;
+  isHistoricRoute?: boolean;
 }
 
-export default function StreetView({ latitude, longitude, onClose }: StreetViewProps) {
+export default function StreetView({ latitude, longitude, onClose, isHistoricRoute }: StreetViewProps) {
   const { translations } = useApp();
   const containerRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
@@ -30,10 +31,12 @@ export default function StreetView({ latitude, longitude, onClose }: StreetViewP
 
       const svService = new google.maps.StreetViewService();
       
-      // 1000 metre yarıçap ve Photosphere (kullanıcı görselleri) desteği
+      // Define search radius based on route type
+      const searchRadius = isHistoricRoute ? 10 : 1000;
+      
       svService.getPanorama({ 
         location: { lat: latitude, lng: longitude }, 
-        radius: 1000,
+        radius: searchRadius,
         source: google.maps.StreetViewSource.DEFAULT
       }, (data, status) => {
         if (status === google.maps.StreetViewStatus.OK && data && data.location && data.location.latLng) {
@@ -51,7 +54,10 @@ export default function StreetView({ latitude, longitude, onClose }: StreetViewP
           });
           setIsLoading(false);
         } else {
-          const msg = translations.map.noStreetView || "Bu konum için yakınlarda 360 derece görüntü bulunamadı.";
+          // Specific error message for historic route within 10m
+          const msg = isHistoricRoute 
+            ? "Bu bölgede sokak görünümü yok." 
+            : (translations.map.noStreetView || "Bu konum için yakınlarda 360 derece görüntü bulunamadı.");
           setError(msg);
           setIsLoading(false);
         }
@@ -61,7 +67,7 @@ export default function StreetView({ latitude, longitude, onClose }: StreetViewP
     // DOM'un hazır olduğundan emin olmak için kısa bir gecikme
     const timer = setTimeout(initializeStreetView, 500);
     return () => clearTimeout(timer);
-  }, [latitude, longitude, translations]);
+  }, [latitude, longitude, translations, isHistoricRoute]);
 
   return (
     <div className="fixed inset-0 z-[200] bg-black flex flex-col overflow-hidden touch-none">

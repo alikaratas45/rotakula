@@ -18,6 +18,9 @@ import { BackButton } from '@/components/back-button';
 import StreetView from '@/components/StreetView';
 import { Button } from '@/components/ui/button';
 
+// List of POIs in the "Tarihi Kula Evleri Yürüyüş Turu" route
+const historicRoutePoiIds = ["poi-6", "poi-20", "poi-29", "poi-21", "poi-9", "poi-22", "poi-23", "poi-24", "poi-25", "poi-34", "poi-28", "poi-32"];
+
 export default function PlaceDetailPage() {
     const params = useParams();
     const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
@@ -89,6 +92,8 @@ export default function PlaceDetailPage() {
         const url = `https://www.google.com/maps/dir/?api=1&destination=${poi.latitude},${poi.longitude}`;
         window.open(url, '_blank');
     };
+
+    const isHistoricRoute = poi ? historicRoutePoiIds.includes(poi.id) : false;
 
     return (
         <APIProvider apiKey={apiKey}>
@@ -164,6 +169,7 @@ export default function PlaceDetailPage() {
                         latitude={poi.latitude} 
                         longitude={poi.longitude} 
                         onClose={() => setIsStreetViewOpen(false)} 
+                        isHistoricRoute={isHistoricRoute}
                     />
                 )}
 
