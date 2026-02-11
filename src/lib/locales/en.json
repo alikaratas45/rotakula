@@ -203,7 +203,8 @@
         "searchError": "An error occurred while searching for restaurants.",
         "gettingLocation": "Getting your location...",
         "reviews": "reviews",
-        "getDirections": "Get Directions"
+        "getDirections": "Get Directions",
+        "noStreetView": "No Street View found nearby for this location."
     },
     "toast": {
         "unsupportedTitle": "Not Supported",

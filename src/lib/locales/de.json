@@ -173,7 +173,7 @@
         "step4Title": "Schritt 4: Ihre Erinnerung ist fertig!",
         "step4Description": "Sie können Ihr gerahmtes Foto über die Schaltfläche unten herunterladen.",
         "downloadButton": "Foto herunterladen",
-        "waitingForPhoto": "Bitte laden Sie ein Foto hoch, um eine Erinnerung zu erstellen.",
+        "waitingForPhoto": "Bitte laden Sie ein foto hoch, um eine Erinnerung zu erstellen.",
         "toastSuccessTitle": "Erfolg!",
         "toastSuccessDescription": "Der Rahmen wurde erfolgreich angewendet. Sie können Ihr Foto jetzt herunterladen.",
         "toastErrorDescription": "Beim Verarbeiten des Fotos ist ein Fehler aufgetreten. Bitte versuchen Sie es mit einem anderen Foto."
@@ -201,7 +201,8 @@
         "searchError": "Bei der Suche nach Restaurants ist ein Fehler aufgetreten.",
         "gettingLocation": "Ihr Standort wird abgerufen...",
         "reviews": "bewertungen",
-        "getDirections": "Route abrufen"
+        "getDirections": "Route abrufen",
+        "noStreetView": "In der Nähe dieses Standorts wurde kein Street View gefunden."
     },
     "toast": {
         "unsupportedTitle": "Nicht Unterstützt",
@@ -249,7 +250,7 @@
             "Darüber hinaus benannte der Geograf Strabon in der Antike die Region aufgrund ihrer vulkanischen Struktur 'Katakekaumene' (Verbranntes Land). Es gibt auch andere Theorien, dass der Name Kula 'gelber Fluss' in der luwischen Sprache oder 'Festung' im Alttürkischen bedeutet.",
             "In der Antike wurde die vulkanische Region in und um Kula Katakekaumene genannt, was „das verbrannte Land“ bedeutet. Dieser Name beschreibt das Erscheinungsbild der Gegend, die mit schwarzer Lava bedeckt ist. Antike Schriftsteller wie Strabon, Vitruv, Stephanos von Byzanz und Eustathios erwähnten diese Region in ihren Werken. Der einzige Schriftsteller, der Katakekaumene jedoch detailliert beschrieb, ist Strabon.",
             "Strabon gibt die Länge der Region mit ungefähr 9 Kilometern und ihre Breite mit 7 Kilometern an. Ihm zufolge ist es ein unfruchtbares Land, das mit schwarzen Felsen und Asche bedeckt ist und sich außer für den Weinbau für nichts eignet. Strabon gibt an, dass dieses Erscheinungsbild durch „Feuer aus dem Untergrund, das an die Oberfläche kommt“ entstanden sei. Er erklärt auch, dass die Hügel, die sich neben jeder der drei Gruben, die „Blasebälge“ genannt werden, erheben, durch heiße Materialien entstanden sind, die aus dem Untergrund ausbrachen.",
-            "Im selben Werk berichtet Strabon auch, dass Katakekaumene häufig von Erdbeben erschüttert wurde. Es wird erwähnt, dass insbesondere die Menschen um Philadelphia (Alaşehir) an ständige Erdstöße gewöhnt waren und ihre Häuser entsprechend bauten. Das große Erdbeben von 17 n. Chr. verwüstete nicht nur Sardes (Sart), sondern auch einen großen Teil Westanatoliens. Der römische Kaiser unterstützte den Wiederaufbau der Städte der Region.",
+            "Im selben Werk parıcht Strabon auch, dass Katakekaumene häufig von Erdbeben erschüttert wurde. Es wird erwähnt, dass insbesondere die Menschen um Philadelphia (Alaşehir) an ständige Erdstöße gewöhnt waren und ihre Häuser entsprechend bauten. Das große Erdbeben von 17 n. Chr. verwüstete nicht nur Sardes (Sart), sondern auch einen großen Teil Westanatoliens. Der römische Kaiser unterstützte den Wiederaufbau der Städte der Region.",
             "Während der Herrschaft des römischen Kaisers Decius (249–251 n. Chr.) interpretierte ein Geistlicher namens Pionius, der unter der lokalen Bevölkerung lebte, Kulas verbranntes Aussehen als „eine Warnung Gottes an die Ungläubigen“.",
             "Die Grenzen von Katakekaumene wurden als Kula und Esenyazı im Süden, der Fluss Gediz im Norden, Gökçeören (Menye/Maionia) im Westen und Kollyda (İncesu/Gölde) im Osten definiert. Die Städte Maionia und Kollyda in der Region lagen an der berühmten Königsstraße, die von Sardes (Sart) ausging und sich bis nach Susa, der Hauptstadt des Perserreiches, erstreckte.",
             "In diesem Gebiet gab es auch Städte wie Thermai Theseos (Şehitlioğlu), Tabala (Güvercinlik) und Satala (Sandal); und zahlreiche kleine Dörfer um Körez, Ayvatlar, Hamidiye und Ayazören.",
@@ -262,8 +263,8 @@
             "Eine Steinfundamentinschrift aus der Zeit von Yakup Bey II enthält die folgenden Worte:",
             "„Mein Vorfahre Mehmet Bey nahm Küldi (Kula) vom Ungläubigen, und mein Vorfahre Mehmet Bey nahm den Simav-See vom Ungläubigen. Ich habe es für die verbleibenden Erben rechtmäßig gemacht und diese gestiftet.“",
             "Während der Herrschaft von Süleyman Şah (1361–1387) erlebte das Germiyan-Beylik seine mächtigste Zeit. Um Verwandtschaftsbande mit den Osmanen zu knüpfen, verheiratete er seine Tochter Devlet Hatun mit Yıldırım Bayezid, dem Sohn von Sultan Murad I. Als Mitgift wurden Kütahya, Tavşanlı, Simav und Emet den Osmanen übergeben. Süleyman Şah verbrachte die letzten Jahre seines Lebens in Kula, machte es zur Hauptstadt des Beyliks und wurde nach seinem Tod in der Gürhane-Madrasa beigesetzt.",
-            "Als Yıldırım Bayezid den Thron bestieg, gliederte er das Germiyan-Beylik vollständig in das osmanische Gebiet ein. Nach der Schlacht von Ankara im Jahr 1402 gab Timur die Verwaltung des Beyliks an die Germiyaniden zurück. Im Jahr 1428 ging Yakup Bey II jedoch nach Edirne und vermachte sein Beylik dem osmanischen Sultan Murad II und starb im folgenden Jahr.",
-            "Osmanische und Republikanische Zeit",
+            "Als Yıldırım Bayezid den Thron bestieg, gliederte er das Germiyan-Beylik vollständig in das osmanische Gebiet ein. Nach der Schlacht von Ankara im Jahr 1402 gab Timur die Verwaltung des Beyliks an die Germiyaniden zurück. Im Jahr 1428 ging Yakup Bey II nach Edirne und vermachte sein Beylik dem osmanischen Sultan Murad II und starb im folgenden Jahr.",
+            "Osmanliche und Republikanische Zeit",
             "Während der osmanischen Zeit wurde Kula als ein Kaza (Bezirk) verwaltet, das dem Sandschak von Kütahya angegliedert war. Im Jahr 1852 wurde es dem Sandschak von Saruhan angegliedert.",
             "Nach dem Ersten Weltkrieg landeten nach der Unterzeichnung des Waffenstillstands von Mudros griechische Truppen am 15. Mai 1919 in İzmir und begannen die Besetzung Westanatoliens; sie besetzten auch Kula am 28. Juni 1920. Nach dem Sieg vom 30. August 1922 drang jedoch türkische Kavallerie unter dem Kommando von Fahrettin Altay am 4. September 1922 in Kula ein und befreite die Stadt.",
             "Heute ist Kula eine Stadt, die noch immer ihr vulkanisches Erbe, ihre historischen Schichten und ihren kulturellen Reichtum bewahrt und als Tor von der Vergangenheit in die Gegenwart fungiert. Die Spuren des antiken Katakekaumene leben noch in den Steinen, Straßen und vulkanischen Hügeln von Kula weiter."
@@ -328,7 +329,7 @@
     "sofa": {
         "title": "Sofa (Hayat)",
         "content": [
-            "Der Grundriss des Obergeschosses, oft als Hauptgeschoss bezeichnet, besteht aus einem Sofa und den darum angeordneten Räumen. Je nach Position des Sofas werden die Häuser als solche mit einem inneren, äußeren oder mittleren Sofa klassifiziert. Ein anderer Name für das Sofa ist 'Hayat'. Allgemein blickt das 'Hayat' auf den Innenhof. Eine oder zwei Treppen führen vom Innenhof zum 'Hayat'. In vielen Häusern ist das 'Hayat' in zwei Bereiche unterteilt: einen Harem (privater Bereich für Frauen) und einen Selamlık (öffentlicher Bereich für Männer). In einigen Häusern gibt es 40 cm hohe Plattformen, die 'Seki' genannt werden, am Übergang vom 'Hayat' zu diesen Pavillons. Diese Plattformen dienen dazu, die Pavillons leicht zu erhöhen. Nach einer weit verbreiteten Meinung markierten diese Plattformen auch eine Grenze für die Dienerschaft, die sie in Anwesenheit der Herren und Damen des Hauses nicht überschreiten durften. Darüber hinaus gibt es in einigen Häusern im Harem-Pavillon zwei Plattformen, und die zweite Plattform soll die Grenze für die Braut sein. Dies liegt daran, dass die schönste Ecke des Harem-Pavillons, die den gesamten Innenhof überblickt, die Ecke der Schwiegermutter ist. Es wäre respektlos, wenn die neue Braut hierher käme."
+            "Der Grundriss des Obergeschosses, oft als Hauptgeschoss bezeichnet, besteht aus einem Sofa und den darum angeordneten Räumen. Je nach Position des Sofas werden die Häuser als solche mit einem inneren, äußeren oder mittleren Sofa klassifiziert. Ein anderer Name für das Sofa ist 'Hayat'. Allgemein blickt das 'Hayat' auf den Innenhof. Eine oder zwei Treppen führen vom Innenhof zum 'Hayat'. In vielen Häusern ist das 'Hayat' in zwei Bereiche unterteilt: einen Harem (privater Bereich für Frauen) und einen Selamlık (öffentlicher Bereich für Männer). In einigen Häusern gibt es 40 cm hohe Plattformen, die 'Seki' genannt werden, am Übergang vom 'Hayat' zu diesen Pavillons. Diese Plattformen dienen dazu, die Pavillons leicht zu erhöhen. Nach einer weit verbreiteten Meinung markierten diese Plattformen auch eine Grenze für die Dienerschaft, die sie in Anwesenheit der Herren und Damen des Hauses nicht überschreiten durften. Darüber hinaus gibt es in einigen Häusern im Harem-Pavillon zwei Plattformen, und die zweite Plattform soll die Grenze für die Braut sein. Dies liegt daran, dass die schönste Ecke des Harem-Pavillons, die den gesamten Innenhof überblickt, ist die Ecke der Schwiegermutter ist. Es wäre respektlos, wenn die neue Braut hierher käme."
         ]
     }
 }

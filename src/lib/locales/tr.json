@@ -203,7 +203,8 @@
         "searchError": "Restoranlar aranırken bir hata oluştu.",
         "gettingLocation": "Konumunuz alınıyor...",
         "reviews": "yorum",
-        "getDirections": "Yol Tarifi Al"
+        "getDirections": "Yol Tarifi Al",
+        "noStreetView": "Bu konum için yakınlarda Sokak Görünümü bulunamadı."
     },
     "toast": {
         "unsupportedTitle": "Desteklenmiyor",

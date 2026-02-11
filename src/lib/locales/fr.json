@@ -201,7 +201,8 @@
         "searchError": "Une erreur s'est produite lors de la recherche de restaurants.",
         "gettingLocation": "Obtention de votre emplacement...",
         "reviews": "avis",
-        "getDirections": "Obtenir l'Itinéraire"
+        "getDirections": "Obtenir l'Itinéraire",
+        "noStreetView": "Aucun Street View trouvé à proximité pour cet endroit."
     },
     "toast": {
         "unsupportedTitle": "Non Pris en Charge",
@@ -261,7 +262,7 @@
             "L'histoire turque de Kula est devenue importante pendant la période du beylicat de Germiyan. Sous le règne de Yakup Bey I (1300-1340), les Germiyanides sont devenus un puissant beylicat en Anatolie occidentale ; sous le règne de son fils Mehmet Bey (1340-1361), Kula et Simav ont été reconquis par les Turcs.",
             "Une inscription de fondation en pierre de la période de Yakup Bey II contient les mots suivants :",
             "« Mon ancêtre Mehmet Bey a pris Küldi (Kula) à l'infidèle, et mon ancêtre Mehmet Bey a pris le lac Simav à l'infidèle. J'ai rendu cela licite pour les héritiers restants et je les ai dotés. »",
-            "Sous le règne de Süleyman Şah (1361-1387), le beylicat de Germiyan a connu sa période la plus puissante. Pour établir des liens de parenté avec les Ottomans, il a marié sa fille Devlet Hatun à Yıldırım Bayezid, le fils du sultan Mourad Ier. En dot, Kütahya, Tavşanlı, Simav et Emet ont été donnés aux Ottomans. Süleyman Şah a passé les dernières années de sa vie à Kula, en a fait la capitale du beylicat et a été enterré dans la médersa de Gürhane à sa mort.",
+            "Sous le règne de Süleyman Şah (1361-1387), le beylicat de Germiyan a connu sa période la plus puissante. Pour établir des liens de parenté avec les Ottomans, he a marié sa fille Devlet Hatun à Yıldırım Bayezid, le fils du sultan Mourad Ier. En dot, Kütahya, Tavşanlı, Simav et Emet ont été donnés aux Ottomans. Süleyman Şah a passé les dernières années de sa vie à Kula, en a fait la capitale du beylicat et a été enterré dans la médersa de Gürhane à sa mort.",
             "Lorsque Yıldırım Bayezid est monté sur le trône, il a complètement incorporé le beylicat de Germiyan au territoire ottoman. Après la bataille d'Ankara en 1402, Tamerlan a rendu l'administration du beylicat aux Germiyanides. Cependant, en 1428, Yakup Bey II s'est rendu à Edirne et a légué son beylicat au sultan ottoman Mourad II, décédant l'année suivante.",
             "Période Ottomane et Républicaine",
             "Pendant la période ottomane, Kula était administrée comme un kaza (district) rattaché au sandjak de Kütahya. En 1852, elle a été rattachée au sandjak de Saruhan.",

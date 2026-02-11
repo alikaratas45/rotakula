@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
@@ -9,9 +8,10 @@ import en from '@/lib/locales/en.json';
 import fr from '@/lib/locales/fr.json';
 import de from '@/lib/locales/de.json';
 import { getPois } from '@/lib/kula-data';
-import type { PointOfInterest, SurveyState } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
-
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { useAuth, useUser } from '@/firebase';
+import { Loader2 } from 'lucide-react';
 
 type Language = 'tr' | 'en' | 'fr' | 'de';
 
@@ -31,7 +31,7 @@ interface AppContextType {
   earnedBadges: Badge[];
   addBadge: (poiId: string) => void;
   totalPoints: number;
-  handleAdminLogin: (email: string, password: string) => void;
+  handleAdminLogin: (username: string, pass: string) => void;
   handleAdminLogout: () => void;
   isAdmin: boolean;
   isUserLoading: boolean;
@@ -47,23 +47,26 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [isAudioGuideActive, setIsAudioGuideActive] = useState(false);
   const [earnedBadges, setEarnedBadges] = useState<Badge[]>([]);
   const [allPois, setAllPois] = useState<any[]>([]);
+  const [isMounted, setIsMounted] = useState(false);
+  
   const router = useRouter();
   const { toast } = useToast();
   
-  const isAdmin = false;
-  const isUserLoading = false;
+  const auth = useAuth();
+  const { user, isUserLoading: isAuthLoading } = useUser();
+  
+  const isAdmin = useMemo(() => {
+    return !!user && user.email === ADMIN_EMAIL;
+  }, [user]);
 
-  // Fetch all POIs on mount to map badge IDs to badge data
   useEffect(() => {
+    setIsMounted(true);
     async function fetchPois() {
-        const pois = await getPois('tr'); // Use a base language to get all badge info
+        const pois = await getPois('tr');
         setAllPois(pois);
     }
     fetchPois();
-  }, []);
 
-  // Load language and badges from localStorage, and register service worker
-  useEffect(() => {
     const storedLang = localStorage.getItem('rota-kula-language') as Language;
     if (storedLang && ['tr', 'en', 'fr', 'de'].includes(storedLang)) {
       setLanguage(storedLang);
@@ -81,17 +84,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setEarnedBadges(JSON.parse(storedBadges));
     }
 
-    // Register Service Worker for PWA capabilities
     if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').then(registration => {
-          console.log('Service Worker registered with scope:', registration.scope);
-        }).catch(error => {
-          console.log('Service Worker registration failed:', error);
-        });
+        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW fail:', err));
       });
     }
-
   }, []);
 
   const handleSetLanguage = (lang: Language) => {
@@ -102,55 +99,46 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   };
   
-  const handleAdminLogin = async (email: string, password: string) => {
-    toast({
-        title: "Giriş Devre Dışı",
-        description: "Firebase bağlantısı geçici olarak kaldırıldığı için admin girişi yapılamıyor.",
-        variant: "destructive"
-    });
+  const handleAdminLogin = async (username: string, pass: string) => {
+     try {
+      const email = username === 'kulaadmin' ? ADMIN_EMAIL : username;
+      await signInWithEmailAndPassword(auth, email, pass);
+      router.push('/admin/surveys');
+      toast({ title: "Giriş Başarılı", description: "Admin paneline yönlendiriliyorsunuz." });
+    } catch (error) {
+       toast({ title: "Giriş Başarısız", description: "Kullanıcı adı veya şifre hatalı.", variant: "destructive" });
+    }
   };
 
-  const handleAdminLogout = () => {
-    toast({
-        title: "Giriş Devre Dışı",
-        description: "Firebase bağlantısı geçici olarak kaldırıldığı için admin çıkışı yapılamıyor.",
-        variant: "destructive"
-    });
+  const handleAdminLogout = async () => {
+     try {
+      await signOut(auth);
+      router.push('/');
+      toast({ title: "Çıkış Başarılı" });
+    } catch (error) {
+       toast({ title: "Çıkış Yapılamadı", variant: "destructive" });
+    }
   }
   
-  useEffect(() => {
-      if (typeof document !== 'undefined') {
-        document.documentElement.lang = language;
-      }
-  }, [language]);
-
   const addBadge = useCallback((poiId: string) => {
     if (!allPois.length) return;
-
     const poi = allPois.find(p => p.id === poiId);
     if (!poi || !poi.badgeId) return;
 
     const newBadge: Badge = {
         id: poi.badgeId,
-        name: poi.name, // Use POI name for the badge name
-        points: poi.points,
+        name: poi.name,
+        points: poi.points || 10,
         imageId: poi.imageId
     };
 
-    setEarnedBadges(prevBadges => {
-        const isAlreadyEarned = prevBadges.some(b => b.id === newBadge.id);
-        if (isAlreadyEarned) {
-            return prevBadges; // Do not add if already earned
-        }
-        const updatedBadges = [...prevBadges, newBadge];
-        localStorage.setItem('rota-kula-badges', JSON.stringify(updatedBadges));
-        return updatedBadges;
+    setEarnedBadges(prev => {
+        if (prev.some(b => b.id === newBadge.id)) return prev;
+        const updated = [...prev, newBadge];
+        localStorage.setItem('rota-kula-badges', JSON.stringify(updated));
+        return updated;
     });
   }, [allPois]);
-
-  const totalPoints = useMemo(() => {
-    return earnedBadges.reduce((sum, badge) => sum + badge.points, 0);
-  }, [earnedBadges]);
 
   const currentTranslations = useMemo(() => translations[language], [language]);
 
@@ -162,12 +150,20 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setIsAudioGuideActive,
     earnedBadges,
     addBadge,
-    totalPoints,
+    totalPoints: earnedBadges.reduce((sum, b) => sum + b.points, 0),
     handleAdminLogin,
     handleAdminLogout,
     isAdmin,
-    isUserLoading,
+    isUserLoading: isAuthLoading,
   };
+
+  if (!isMounted) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-background">
+        <Loader2 className="h-10 w-10 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <AppContext.Provider value={value}>
@@ -183,5 +179,4 @@ export function useApp(): AppContextType {
   }
   return context;
 }
-// Keep useLanguage for backward compatibility if needed, but preferably refactor to useApp
 export const useLanguage = useApp;
