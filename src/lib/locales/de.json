@@ -56,7 +56,9 @@
         "pause": "Pause",
         "listenNarration": "Erzählung anhören",
         "pauseNarration": "Erzählung anhalten",
-        "continueNarration": "Fortsetzen"
+        "continueNarration": "Fortsetzen",
+        "streetView": "Bring mich dorthin",
+        "showMap": "Auf Karte zeigen"
     },
     "food": {
         "title": "Geschmacksstopps",
@@ -252,7 +254,7 @@
             "Strabon gibt die Länge der Region mit ungefähr 9 Kilometern und ihre Breite mit 7 Kilometern an. Ihm zufolge ist es ein unfruchtbares Land, das mit schwarzen Felsen und Asche bedeckt ist und sich außer für den Weinbau für nichts eignet. Strabon gibt an, dass dieses Erscheinungsbild durch „Feuer aus dem Untergrund, das an die Oberfläche kommt“ entstanden sei. Er erklärt auch, dass die Hügel, die sich neben jeder der drei Gruben, die „Blasebälge“ genannt werden, erheben, durch heiße Materialien entstanden sind, die aus dem Untergrund ausbrachen.",
             "Im selben Werk parıcht Strabon auch, dass Katakekaumene häufig von Erdbeben erschüttert wurde. Es wird erwähnt, dass insbesondere die Menschen um Philadelphia (Alaşehir) an ständige Erdstöße gewöhnt waren und ihre Häuser entsprechend bauten. Das große Erdbeben von 17 n. Chr. verwüstete nicht nur Sardes (Sart), sondern auch einen großen Teil Westanatoliens. Der römische Kaiser unterstützte den Wiederaufbau der Städte der Region.",
             "Während der Herrschaft des römischen Kaisers Decius (249–251 n. Chr.) interpretierte ein Geistlicher namens Pionius, der unter der lokalen Bevölkerung lebte, Kulas verbranntes Aussehen als „eine Warnung Gottes an die Ungläubigen“.",
-            "Die Grenzen von Katakekaumene wurden als Kula und Esenyazı im Süden, der Fluss Gediz im Norden, Gökçeören (Menye/Maionia) im Westen und Kollyda (İncesu/Gölde) im Osten definiert. Die Städte Maionia und Kollyda in der Region lagen an der berühmten Königsstraße, die von Sardes (Sart) ausging und sich bis nach Susa, der Hauptstadt des Perserreiches, erstreckte.",
+            "Die Grenzen von Katakekaumene wurden als Kula und Esenyazı im Süden, der Fluss Gediz im Norden, Gökçeören (Menye/Maionia) im Westen und Kollyda (İncesu/Gölde) im Osten definiert. Die Städte Maionia und Kollyda in der Region lagen an der berühmten Königsstraße, die von Sardes (Sart) ausging und sich hasta nach Susa, der Hauptstadt des Perserreiches, erstreckte.",
             "In diesem Gebiet gab es auch Städte wie Thermai Theseos (Şehitlioğlu), Tabala (Güvercinlik) und Satala (Sandal); und zahlreiche kleine Dörfer um Körez, Ayvatlar, Hamidiye und Ayazören.",
             "Byzantinische Zeit",
             "Zwischen dem 11. Jahrhundert war Kula innerhalb der Grenzen des Opsikion-Themas, einer der militärischen und administrativen Regionen von Byzanz. Während der byzantinischen Zeit war das Land zu Verteidigungszwecken in Provinzen unterteilt, die „Themata“ genannt wurden und jeweils von Kommandanten namens „Strategoi“ regiert wurden.",
@@ -267,7 +269,7 @@
             "Osmanliche und Republikanische Zeit",
             "Während der osmanischen Zeit wurde Kula als ein Kaza (Bezirk) verwaltet, das dem Sandschak von Kütahya angegliedert war. Im Jahr 1852 wurde es dem Sandschak von Saruhan angegliedert.",
             "Nach dem Ersten Weltkrieg landeten nach der Unterzeichnung des Waffenstillstands von Mudros griechische Truppen am 15. Mai 1919 in İzmir und begannen die Besetzung Westanatoliens; sie besetzten auch Kula am 28. Juni 1920. Nach dem Sieg vom 30. August 1922 drang jedoch türkische Kavallerie unter dem Kommando von Fahrettin Altay am 4. September 1922 in Kula ein und befreite die Stadt.",
-            "Heute ist Kula eine Stadt, die noch immer ihr vulkanisches Erbe, ihre historischen Schichten und ihren kulturellen Reichtum bewahrt und als Tor von der Vergangenheit in die Gegenwart fungiert. Die Spuren des antiken Katakekaumene leben noch in den Steinen, Straßen und vulkanischen Hügeln von Kula weiter."
+            "Heute ist Kula eine Stadt, die noch immer ihr vulkanisches Erbe, ihre historischen Schichten und ihren kulturellen Reichtum bewahrt und als Tor von der Vergangenheit in die Gegenwart fungiert. Die Spuren des antiken Katakekaumene leben noch in den Steinen, Straßen und vulkanischen Hügeln von Kula."
         ]
     },
     "badges": {

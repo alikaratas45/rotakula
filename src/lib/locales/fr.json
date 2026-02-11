@@ -56,7 +56,9 @@
         "pause": "Pause",
         "listenNarration": "Écouter la narration",
         "pauseNarration": "Mettre la narration en pause",
-        "continueNarration": "Continuer"
+        "continueNarration": "Continuer",
+        "streetView": "Emmenez-moi là-bas",
+        "showMap": "Afficher la carte"
     },
     "food": {
         "title": "Arrêts Gourmands",
