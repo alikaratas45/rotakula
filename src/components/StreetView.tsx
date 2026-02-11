@@ -2,15 +2,17 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import { useApp } from "@/context/app-context";
+import { Button } from "./ui/button";
 
 interface StreetViewProps {
   latitude: number;
   longitude: number;
+  onClose?: () => void;
 }
 
-export default function StreetView({ latitude, longitude }: StreetViewProps) {
+export default function StreetView({ latitude, longitude, onClose }: StreetViewProps) {
   const { translations } = useApp();
   const containerRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
@@ -28,16 +30,13 @@ export default function StreetView({ latitude, longitude }: StreetViewProps) {
 
       const svService = new google.maps.StreetViewService();
       
-      // Arama parametreleri: 
-      // - 1000 metre yarıçap (daha geniş alan taraması)
-      // - google.maps.StreetViewSource.DEFAULT (Hem Google hem de kullanıcıların yüklediği 360 görselleri içerir)
+      // 1000 metre yarıçap ve Photosphere (kullanıcı görselleri) desteği
       svService.getPanorama({ 
         location: { lat: latitude, lng: longitude }, 
         radius: 1000,
         source: google.maps.StreetViewSource.DEFAULT
       }, (data, status) => {
         if (status === google.maps.StreetViewStatus.OK && data && data.location && data.location.latLng) {
-          // Bulunan en yakın 360 görselde panoramayı başlat
           new google.maps.StreetViewPanorama(containerRef.current!, {
             position: data.location.latLng,
             pov: { heading: 165, pitch: 0 },
@@ -57,28 +56,43 @@ export default function StreetView({ latitude, longitude }: StreetViewProps) {
       });
     };
 
-    // API'nin hazır olmasını bekle
     const timer = setTimeout(initializeStreetView, 500);
     return () => clearTimeout(timer);
   }, [latitude, longitude, translations]);
 
-  if (error) {
-    return (
-      <div className="h-80 w-full flex items-center justify-center bg-muted rounded-lg text-muted-foreground p-6 text-center border border-dashed">
-        <p className="max-w-[250px]">{error}</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="relative h-80 w-full rounded-lg overflow-hidden border shadow-inner bg-black">
+    <div className="fixed inset-0 z-[100] bg-black flex flex-col">
+      <div className="absolute top-4 right-4 z-[110] flex gap-2">
+         <Button 
+            variant="secondary" 
+            size="sm" 
+            onClick={onClose}
+            className="rounded-full shadow-lg bg-white/90 hover:bg-white text-black font-bold"
+          >
+            <X className="mr-2 h-4 w-4" />
+            {translations.common.close}
+          </Button>
+      </div>
+
       {isLoading && (
-        <div className="absolute inset-0 bg-muted/50 flex flex-col items-center justify-center z-10">
-          <Loader2 className="h-8 w-8 animate-spin text-primary mb-2" />
-          <span className="text-xs font-medium text-muted-foreground">{translations.map.loading}</span>
+        <div className="absolute inset-0 bg-black flex flex-col items-center justify-center z-10 text-white">
+          <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />
+          <span className="text-sm font-medium">{translations.map.loading}</span>
         </div>
       )}
-      <div ref={containerRef} className="w-full h-full" />
+
+      {error ? (
+        <div className="flex-grow flex items-center justify-center p-6 text-center text-white bg-neutral-900">
+          <div className="max-w-xs">
+            <p className="mb-6 text-lg">{error}</p>
+            <Button variant="outline" onClick={onClose} className="text-white border-white hover:bg-white hover:text-black">
+                {translations.common.back}
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <div ref={containerRef} className="w-full h-full" />
+      )}
     </div>
   );
 }

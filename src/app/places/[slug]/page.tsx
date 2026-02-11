@@ -9,7 +9,7 @@ import EmbeddedMap from '@/components/map';
 import { getImageById } from '@/lib/placeholder-images';
 import type { PointOfInterest } from '@/lib/types';
 import { useState, useEffect } from 'react';
-import { Loader2, Camera, Map as MapIcon } from 'lucide-react';
+import { Loader2, Camera, Map as MapIcon, Navigation } from 'lucide-react';
 import { useApp } from '@/context/app-context';
 import { Survey } from '@/components/survey';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -25,7 +25,7 @@ export default function PlaceDetailPage() {
     const [poi, setPoi] = useState<PointOfInterest | null>(null);
     const [loading, setLoading] = useState(true);
     const [audioUrl, setAudioUrl] = useState<string | null>(null);
-    const [viewMode, setViewMode] = useState<'map' | 'streetview'>('map');
+    const [isStreetViewOpen, setIsStreetViewOpen] = useState(false);
 
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -66,8 +66,7 @@ export default function PlaceDetailPage() {
             const newPath = `/places/${poi.slug}`;
             router.replace(newPath, { scroll: false });
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [poi, searchParams]);
+    }, [poi, searchParams, router]);
 
     if (loading) {
         return (
@@ -85,6 +84,11 @@ export default function PlaceDetailPage() {
     const heroImage = getImageById(poi.imageId);
 
     const paragraphs = poi.longDescription.split('\\n\\n').map(p => p.trim()).filter(Boolean);
+
+    const handleGetDirections = () => {
+        const url = `https://www.google.com/maps/dir/?api=1&destination=${poi.latitude},${poi.longitude}`;
+        window.open(url, '_blank');
+    };
 
     return (
         <APIProvider apiKey={apiKey}>
@@ -128,32 +132,40 @@ export default function PlaceDetailPage() {
 
                         <aside className="lg:col-span-1">
                             <div className="sticky top-24 space-y-6">
-                                <div>
-                                    <div className="flex items-center justify-between mb-4">
-                                        <h2 className="text-2xl font-headline font-bold">{translations.common.map}</h2>
-                                        <Button 
-                                            variant="outline" 
-                                            size="sm" 
-                                            onClick={() => setViewMode(viewMode === 'map' ? 'streetview' : 'map')}
-                                            className="flex items-center gap-2"
-                                        >
-                                            {viewMode === 'map' ? (
-                                                <><Camera className="h-4 w-4" /> {translations.pois.streetView}</>
-                                            ) : (
-                                                <><MapIcon className="h-4 w-4" /> {translations.pois.showMap}</>
-                                            )}
-                                        </Button>
-                                    </div>
-                                    {viewMode === 'map' ? (
+                                <Card>
+                                    <CardHeader>
+                                        <CardTitle className="text-lg">{translations.common.map}</CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="space-y-4">
                                         <EmbeddedMap pois={[poi]} />
-                                    ) : (
-                                        <StreetView latitude={poi.latitude} longitude={poi.longitude} />
-                                    )}
-                                </div>
+                                        <div className="grid grid-cols-1 gap-2">
+                                            <Button 
+                                                variant="default" 
+                                                className="w-full bg-blue-600 hover:bg-blue-700" 
+                                                onClick={() => setIsStreetViewOpen(true)}
+                                            >
+                                                <Camera className="mr-2 h-4 w-4" />
+                                                {translations.pois.streetView}
+                                            </Button>
+                                            <Button variant="outline" className="w-full" onClick={handleGetDirections}>
+                                                <Navigation className="mr-2 h-4 w-4" />
+                                                {translations.map.getDirections}
+                                            </Button>
+                                        </div>
+                                    </CardContent>
+                                </Card>
                             </div>
                         </aside>
                     </div>
                 </div>
+
+                {isStreetViewOpen && (
+                    <StreetView 
+                        latitude={poi.latitude} 
+                        longitude={poi.longitude} 
+                        onClose={() => setIsStreetViewOpen(false)} 
+                    />
+                )}
 
                 {showSurvey && (
                     <section className="py-12 bg-muted">
