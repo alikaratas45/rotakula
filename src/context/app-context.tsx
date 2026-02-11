@@ -69,6 +69,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   // Load language and badges from localStorage, and register service worker
   useEffect(() => {
+    // We defer language detection to useEffect to avoid hydration mismatch
     const storedLang = localStorage.getItem('rota-kula-language') as Language;
     if (storedLang && ['tr', 'en', 'fr', 'de'].includes(storedLang)) {
       setLanguage(storedLang);

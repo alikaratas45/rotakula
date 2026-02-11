@@ -56,7 +56,9 @@
         "pause": "Pause",
         "listenNarration": "Listen to narration",
         "pauseNarration": "Pause narration",
-        "continueNarration": "Continue"
+        "continueNarration": "Continue",
+        "streetView": "Street View",
+        "showMap": "Show Map"
     },
     "food": {
         "title": "Flavor Stops",

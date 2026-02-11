@@ -1,3 +1,4 @@
+
 "use client"
 
 import { getPoiBySlug, getAudioUrl } from '@/lib/kula-data';
@@ -8,12 +9,14 @@ import EmbeddedMap from '@/components/map';
 import { getImageById } from '@/lib/placeholder-images';
 import type { PointOfInterest } from '@/lib/types';
 import { useState, useEffect } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Camera, Map as MapIcon } from 'lucide-react';
 import { useApp } from '@/context/app-context';
 import { Survey } from '@/components/survey';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AudioPlayer from '@/components/AudioPlayer';
 import { BackButton } from '@/components/back-button';
+import StreetView from '@/components/StreetView';
+import { Button } from '@/components/ui/button';
 
 export default function PlaceDetailPage() {
     const params = useParams();
@@ -22,6 +25,7 @@ export default function PlaceDetailPage() {
     const [poi, setPoi] = useState<PointOfInterest | null>(null);
     const [loading, setLoading] = useState(true);
     const [audioUrl, setAudioUrl] = useState<string | null>(null);
+    const [viewMode, setViewMode] = useState<'map' | 'streetview'>('map');
 
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -125,8 +129,26 @@ export default function PlaceDetailPage() {
                         <aside className="lg:col-span-1">
                             <div className="sticky top-24 space-y-6">
                                 <div>
-                                    <h2 className="text-2xl font-headline font-bold mb-4">{translations.common.map}</h2>
-                                    <EmbeddedMap pois={[poi]} />
+                                    <div className="flex items-center justify-between mb-4">
+                                        <h2 className="text-2xl font-headline font-bold">{translations.common.map}</h2>
+                                        <Button 
+                                            variant="outline" 
+                                            size="sm" 
+                                            onClick={() => setViewMode(viewMode === 'map' ? 'streetview' : 'map')}
+                                            className="flex items-center gap-2"
+                                        >
+                                            {viewMode === 'map' ? (
+                                                <><Camera className="h-4 w-4" /> {translations.pois.streetView}</>
+                                            ) : (
+                                                <><MapIcon className="h-4 w-4" /> {translations.pois.showMap}</>
+                                            )}
+                                        </Button>
+                                    </div>
+                                    {viewMode === 'map' ? (
+                                        <EmbeddedMap pois={[poi]} />
+                                    ) : (
+                                        <StreetView latitude={poi.latitude} longitude={poi.longitude} />
+                                    )}
                                 </div>
                             </div>
                         </aside>

@@ -56,7 +56,9 @@
         "pause": "Duraklat",
         "listenNarration": "Anlatımı dinle",
         "pauseNarration": "Anlatımı duraklat",
-        "continueNarration": "Devam Et"
+        "continueNarration": "Devam Et",
+        "streetView": "Sokak Görünümü",
+        "showMap": "Haritayı Göster"
     },
     "food": {
         "title": "Lezzet Durakları",
@@ -107,7 +109,7 @@
         "distanceLabel": "Mesafe",
         "elevationGainLabel": "İrtifa Kazancı",
         "difficultyLabel": "Teknik Zorluk",
-        "elevationLossLabel": "İrtifa Kaybı",
+        "elevationLossLabel": "İrtifa Kayabı",
         "maxElevationLabel": "Maksimum İrtifa",
         "minElevationLabel": "Minimum İrtifa",
         "trailRankLabel": "TrailRank",
