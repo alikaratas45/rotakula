@@ -37,7 +37,7 @@ interface AppContextType {
   isUserLoading: boolean;
 }
 
-const translations = { tr, en, fr, de };
+const translationsMap = { tr, en, fr, de };
 const ADMIN_EMAIL = "alikarataskula@gmail.com"; 
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -59,8 +59,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     return !!user && user.email === ADMIN_EMAIL;
   }, [user]);
 
+  // Hydration hatasını önlemek için sadece istemci tarafında render'ı başlatıyoruz
   useEffect(() => {
     setIsMounted(true);
+    
     async function fetchPois() {
         const pois = await getPois('tr');
         setAllPois(pois);
@@ -140,7 +142,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     });
   }, [allPois]);
 
-  const currentTranslations = useMemo(() => translations[language], [language]);
+  const currentTranslations = useMemo(() => translationsMap[language], [language]);
 
   const value: AppContextType = { 
     language, 
@@ -157,9 +159,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     isUserLoading: isAuthLoading,
   };
 
+  // Hydration hatasını önlemek için mounted olana kadar yükleme ekranı göster
   if (!isMounted) {
     return (
-      <div className="flex h-screen w-full items-center justify-center bg-background">
+      <div className="flex h-screen w-full items-center justify-center bg-white">
         <Loader2 className="h-10 w-10 animate-spin text-primary" />
       </div>
     );

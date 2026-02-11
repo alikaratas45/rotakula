@@ -1,8 +1,8 @@
 
 {
-  "name": "RotaKula",
+  "name": "RotaKula - Dijital Turist Rehberi",
   "short_name": "RotaKula",
-  "description": "Kula Dijital Turist Rehberi",
+  "description": "Kula Belediyesi Dijital Turist Rehberi ve UNESCO Global Jeopark Deneyimi",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
