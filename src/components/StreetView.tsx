@@ -31,7 +31,7 @@ export default function StreetView({ latitude, longitude, onClose, isHistoricRou
 
       const svService = new google.maps.StreetViewService();
       
-      // Define search radius based on route type
+      // Define search radius based on route type: 10m for historic houses, 1000m for others
       const searchRadius = isHistoricRoute ? 10 : 1000;
       
       svService.getPanorama({ 
@@ -46,8 +46,8 @@ export default function StreetView({ latitude, longitude, onClose, isHistoricRou
             zoom: 1,
             addressControl: false,
             showRoadLabels: true,
-            motionTracking: true, // Telefon hareketine göre bakış açısını değiştirir
-            motionTrackingControl: true, // Kullanıcıya jiroskopu açma/kapama ikonu gösterir
+            motionTracking: true, // Follows phone movement
+            motionTrackingControl: true, // Compass icon to toggle
             clickToGo: true,
             fullscreenControl: false,
             panControl: false,
@@ -64,14 +64,13 @@ export default function StreetView({ latitude, longitude, onClose, isHistoricRou
       });
     };
 
-    // DOM'un hazır olduğundan emin olmak için kısa bir gecikme
     const timer = setTimeout(initializeStreetView, 500);
     return () => clearTimeout(timer);
   }, [latitude, longitude, translations, isHistoricRoute]);
 
   return (
     <div className="fixed inset-0 z-[200] bg-black flex flex-col overflow-hidden touch-none">
-      {/* Üst Bar */}
+      {/* Upper Bar */}
       <div className="absolute top-0 left-0 right-0 z-[210] p-4 bg-gradient-to-b from-black/60 to-transparent flex justify-between items-start">
         <div className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-2 shadow-lg">
           <Compass className="h-4 w-4 text-primary animate-pulse" />
@@ -108,10 +107,10 @@ export default function StreetView({ latitude, longitude, onClose, isHistoricRou
         <div ref={containerRef} className="w-full h-full" />
       )}
       
-      {/* Hareket Bildirimi (Sadece yüklendiğinde kısa süreli görünür) */}
+      {/* Tip for movement */}
       {!isLoading && !error && (
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-[210] pointer-events-none animate-fade-out animation-delay-3000">
-          <div className="bg-black/50 backdrop-blur-md text-white text-[10px] px-4 py-2 rounded-full border border-white/20 uppercase tracking-widest">
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-[210] pointer-events-none">
+          <div className="bg-black/50 backdrop-blur-md text-white text-[10px] px-4 py-2 rounded-full border border-white/20 uppercase tracking-widest animate-fade-out">
             Etrafınıza bakmak için telefonu döndürün
           </div>
         </div>
