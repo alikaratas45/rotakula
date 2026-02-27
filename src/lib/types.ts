@@ -1,5 +1,4 @@
 
-
 export type Coordinate = {
   lat: number;
   lon: number;
@@ -30,6 +29,7 @@ export type PointOfInterest = {
   category_de?: string;
   badgeId?: string;
   points?: number;
+  hideStreetView?: boolean;
 };
 
 export type ThematicRoute = {

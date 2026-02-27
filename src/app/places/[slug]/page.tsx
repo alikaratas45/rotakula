@@ -144,14 +144,16 @@ export default function PlaceDetailPage() {
                                     <CardContent className="space-y-4">
                                         <EmbeddedMap pois={[poi]} />
                                         <div className="grid grid-cols-1 gap-2">
-                                            <Button 
-                                                variant="default" 
-                                                className="w-full bg-blue-600 hover:bg-blue-700" 
-                                                onClick={() => setIsStreetViewOpen(true)}
-                                            >
-                                                <Camera className="mr-2 h-4 w-4" />
-                                                {translations.pois.streetView}
-                                            </Button>
+                                            {!poi.hideStreetView && (
+                                                <Button 
+                                                    variant="default" 
+                                                    className="w-full bg-blue-600 hover:bg-blue-700" 
+                                                    onClick={() => setIsStreetViewOpen(true)}
+                                                >
+                                                    <Camera className="mr-2 h-4 w-4" />
+                                                    {translations.pois.streetView}
+                                                </Button>
+                                            )}
                                             <Button variant="outline" className="w-full" onClick={handleGetDirections}>
                                                 <Navigation className="mr-2 h-4 w-4" />
                                                 {translations.map.getDirections}
