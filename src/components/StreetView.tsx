@@ -39,7 +39,7 @@ export default function StreetView({ latitude, longitude, onClose, isHistoricRou
         radius: searchRadius,
         source: google.maps.StreetViewSource.DEFAULT
       }, (data, status) => {
-        if (status === google.maps.StreetViewStatus.OK && data && data.location && data.location.latLng) {
+        if (status === google.maps.DirectionsStatus.OK && data && data.location && data.location.latLng) {
           const panorama = new google.maps.StreetViewPanorama(containerRef.current!, {
             position: data.location.latLng,
             pov: { heading: 165, pitch: 0 },
