@@ -157,6 +157,99 @@
         "createdAt"
       ]
     },
+    "PointOfInterest": {
+      "title": "PointOfInterest",
+      "type": "object",
+      "description": "A site location that can override or extend the bundled POI catalog.",
+      "properties": {
+        "id": { "type": "string" },
+        "slug": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "longDescription": { "type": "string" },
+        "category": {
+          "type": "string",
+          "enum": ["geopark", "history", "food", "nature", "accommodation"]
+        },
+        "imageId": { "type": "string" },
+        "latitude": { "type": "number" },
+        "longitude": { "type": "number" },
+        "mapQuery": { "type": "string" },
+        "name_en": { "type": "string" },
+        "description_en": { "type": "string" },
+        "longDescription_en": { "type": "string" },
+        "name_fr": { "type": "string" },
+        "description_fr": { "type": "string" },
+        "longDescription_fr": { "type": "string" },
+        "name_de": { "type": "string" },
+        "description_de": { "type": "string" },
+        "longDescription_de": { "type": "string" },
+        "badgeId": { "type": "string" },
+        "points": { "type": "number" },
+        "hideStreetView": { "type": "boolean" },
+        "deleted": { "type": "boolean" }
+      },
+      "required": [
+        "id",
+        "slug",
+        "name",
+        "description",
+        "longDescription",
+        "category",
+        "imageId",
+        "latitude",
+        "longitude"
+      ]
+    },
+    "BikeRoute": {
+      "title": "BikeRoute",
+      "type": "object",
+      "description": "A cycling route, optionally linked to KML geometry and points of interest.",
+      "properties": {
+        "id": { "type": "string" },
+        "slug": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "distance": { "type": "string" },
+        "kmlPath": { "type": "string" },
+        "poiIds": { "type": "array", "items": { "type": "string" } },
+        "name_en": { "type": "string" },
+        "description_en": { "type": "string" },
+        "name_fr": { "type": "string" },
+        "description_fr": { "type": "string" },
+        "name_de": { "type": "string" },
+        "description_de": { "type": "string" }
+      },
+      "required": ["id", "slug", "name", "description", "distance", "kmlPath"]
+    },
+    "WalkingRoute": {
+      "title": "WalkingRoute",
+      "type": "object",
+      "description": "A walking route, optionally linked to KML geometry, points of interest, and trail statistics.",
+      "properties": {
+        "id": { "type": "string" },
+        "slug": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "distance": { "type": "string" },
+        "kmlPath": { "type": "string" },
+        "poiIds": { "type": "array", "items": { "type": "string" } },
+        "elevationGain": { "type": "string" },
+        "elevationLoss": { "type": "string" },
+        "maxElevation": { "type": "string" },
+        "minElevation": { "type": "string" },
+        "trailRank": { "type": "string" },
+        "difficulty": { "type": "string" },
+        "trackType": { "type": "string" },
+        "name_en": { "type": "string" },
+        "description_en": { "type": "string" },
+        "name_fr": { "type": "string" },
+        "description_fr": { "type": "string" },
+        "name_de": { "type": "string" },
+        "description_de": { "type": "string" }
+      },
+      "required": ["id", "slug", "name", "description", "distance", "kmlPath"]
+    },
     "SiteStats": {
       "title": "SiteStats",
       "type": "object",
@@ -185,6 +278,24 @@
     ]
   },
   "firestore": {
+    "pois": {
+      "schema": {
+        "$ref": "#/entities/PointOfInterest"
+      },
+      "description": "Admin-managed POI overrides and additions. A deleted marker hides a bundled POI."
+    },
+    "walkingRoutes": {
+      "schema": {
+        "$ref": "#/entities/WalkingRoute"
+      },
+      "description": "Admin-managed walking route overrides and additions. A deleted marker hides a bundled route."
+    },
+    "bikeRoutes": {
+      "schema": {
+        "$ref": "#/entities/BikeRoute"
+      },
+      "description": "Admin-managed bike route overrides and additions. A deleted marker hides a bundled route."
+    },
     "surveys": {
       "schema": {
         "$ref": "#/entities/Survey"

@@ -86,7 +86,10 @@ export default function PlaceDetailPage() {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!;
     const heroImage = getImageById(poi.imageId);
 
-    const paragraphs = poi.longDescription.split('\\n\\n').map(p => p.trim()).filter(Boolean);
+    const paragraphs = (poi.longDescription || poi.description)
+        .split(/\n\s*\n|\\n\\n/)
+        .map(paragraph => paragraph.replace(/\\n/g, ' ').trim())
+        .filter(Boolean);
 
     const handleGetDirections = () => {
         const url = `https://www.google.com/maps/dir/?api=1&destination=${poi.latitude},${poi.longitude}`;

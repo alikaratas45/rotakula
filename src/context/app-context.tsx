@@ -101,13 +101,40 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   };
   
   const handleAdminLogin = async (username: string, pass: string) => {
-     try {
-      const email = username === 'kulaadmin' ? ADMIN_EMAIL : username;
+    try {
+      const usernameInput = username.trim();
+      const usernameKey = usernameInput.toLowerCase();
+      const email = ['kulaadmi', 'kulaadmin'].includes(usernameKey)
+        ? ADMIN_EMAIL
+        : usernameInput;
       await signInWithEmailAndPassword(auth, email, pass);
       router.push('/admin/surveys');
       toast({ title: "Giriş Başarılı", description: "Admin paneline yönlendiriliyorsunuz." });
     } catch (error) {
-       toast({ title: "Giriş Başarısız", description: "Kullanıcı adı veya şifre hatalı.", variant: "destructive" });
+      const errorCode =
+        typeof error === 'object' &&
+        error !== null &&
+        'code' in error &&
+        typeof error.code === 'string'
+          ? error.code
+          : undefined;
+      let description = 'Giriş sırasında beklenmeyen bir hata oluştu.';
+
+      if (errorCode === 'auth/unauthorized-domain') {
+        description = 'Bu alan adı Firebase Authentication ayarlarında yetkili değil. Firebase Console > Authentication > Settings > Authorized domains bölümünü kontrol edin.';
+      } else if (errorCode === 'auth/operation-not-allowed') {
+        description = 'Firebase projesinde e-posta ve şifre ile giriş etkin değil.';
+      } else if (errorCode?.startsWith('auth/requests-to-this-api-')) {
+        description = 'Firebase API anahtarının kısıtlamaları giriş isteğini engelliyor. Google Cloud Console > APIs & Services > Credentials bölümünde bu anahtar için Identity Toolkit API erişimine izin verin; HTTP referrer kısıtlamasında kullandığınız localhost adresini de ekleyin.';
+      } else if (
+        ['auth/invalid-credential', 'auth/invalid-login-credentials', 'auth/user-not-found', 'auth/wrong-password', 'auth/invalid-email'].includes(errorCode ?? '')
+      ) {
+        description = 'Kullanıcı adı veya şifre hatalı.';
+      } else if (errorCode) {
+        description = `Giriş başarısız oldu. Firebase hata kodu: ${errorCode}`;
+      }
+
+      toast({ title: "Giriş Başarısız", description, variant: "destructive" });
     }
   };
 

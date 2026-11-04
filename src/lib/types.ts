@@ -108,6 +108,12 @@ export type WalkingRoute = {
   trailRank?: string;
   minElevation?: string;
   trackType?: string;
+  difficulty_en?: string;
+  difficulty_fr?: string;
+  difficulty_de?: string;
+  trackType_en?: string;
+  trackType_fr?: string;
+  trackType_de?: string;
 }
 
 export interface SurveyState {

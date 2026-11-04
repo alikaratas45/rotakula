@@ -2,10 +2,11 @@
 "use client";
 
 import Image from "next/image";
-import { useLanguage } from "@/context/app-context";
+import Link from "next/link";
+import { useApp } from "@/context/app-context";
 
 export function Footer() {
-    const { translations } = useLanguage();
+    const { translations, isAdmin } = useApp();
     const currentYear = new Date().getFullYear();
     return (
         <footer className="border-t bg-background">
@@ -21,6 +22,14 @@ export function Footer() {
                         {translations.footer.credits}
                     </p>
                 </div>
+                {isAdmin && (
+                    <Link
+                        href="/admin/pois"
+                        className="text-[11px] text-muted-foreground/50 transition-colors hover:text-muted-foreground"
+                    >
+                        Admin Paneli
+                    </Link>
+                )}
             </div>
         </footer>
     );

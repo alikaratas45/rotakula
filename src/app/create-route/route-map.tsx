@@ -17,7 +17,7 @@ export function RouteMap({ pois }: { pois: PointOfInterest[] }) {
     
     return (
         <div className="h-full w-full">
-            <APIProvider apiKey={apiKey}>
+            <APIProvider apiKey={apiKey} version="quarterly">
                 <EmbeddedMap pois={pois} drawRouteLine />
             </APIProvider>
         </div>

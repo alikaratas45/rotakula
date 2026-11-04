@@ -27,6 +27,23 @@ service cloud.firestore {
       allow read: if true;
       allow write: if isAdmin();
     }
+
+    // POIs are public content; only admins can create, edit, or remove them.
+    match /pois/{poiId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Walking and biking routes are public content; only admins can manage them.
+    match /walkingRoutes/{routeId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /bikeRoutes/{routeId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
     
     // Default-deny all other reads and writes for security.
     match /{document=**} {
