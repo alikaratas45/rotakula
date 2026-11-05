@@ -177,6 +177,7 @@
         "tripPlanShared": "Freigabelink ist bereit.",
         "tripPlanShareError": "Der Freigabelink konnte nicht erstellt werden.",
         "tripPlanStorageError": "Die Route konnte nicht in diesem Browser gespeichert werden.",
+        "userLocationUnavailable": "Ihr Standort wurde nicht gefunden; die Orte bleiben in Auswahlreihenfolge.",
         "sharedStopsMissing": "Einige Orte der geteilten Route wurden nicht gefunden.",
         "durationHoursFormat": "{hours} Std. {minutes} Min.",
         "durationMinutesFormat": "{minutes} Min."

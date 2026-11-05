@@ -177,6 +177,7 @@
         "tripPlanShared": "Paylaşım bağlantısı hazır.",
         "tripPlanShareError": "Paylaşım bağlantısı oluşturulamadı.",
         "tripPlanStorageError": "Gezi planı tarayıcıya kaydedilemedi.",
+        "userLocationUnavailable": "Konumunuz alınamadı; seçtiğiniz yerler seçim sırasıyla rotalanacak.",
         "sharedStopsMissing": "Paylaşılan plandaki bazı yerler bulunamadı.",
         "durationHoursFormat": "{hours} sa {minutes} dk",
         "durationMinutesFormat": "{minutes} dk"

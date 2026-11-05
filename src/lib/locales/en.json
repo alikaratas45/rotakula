@@ -177,6 +177,7 @@
         "tripPlanShared": "Share link is ready.",
         "tripPlanShareError": "Could not create a share link.",
         "tripPlanStorageError": "Could not save the trip plan in this browser.",
+        "userLocationUnavailable": "Your location could not be found; places will follow selection order.",
         "sharedStopsMissing": "Some places in the shared plan could not be found.",
         "durationHoursFormat": "{hours} hr {minutes} min",
         "durationMinutesFormat": "{minutes} min"

@@ -12,8 +12,9 @@ import PoiSelectionList from './poi-selection-list';
 import SelectedPoisSidebar from './selected-pois-sidebar';
 import { RouteMap } from './route-map';
 import { TripPlanControls } from './trip-plan-controls';
-import type { RouteSummary } from '@/components/map';
+import type { MapPosition, RouteSummary } from '@/components/map';
 import { BackButton } from '@/components/back-button';
+import { haversineDistance } from '@/lib/utils';
 
 const MAX_SELECTION = 10;
 
@@ -43,8 +44,11 @@ export default function CreateRoutePage() {
     const [allPois, setAllPois] = useState<PointOfInterest[]>([]);
     const [selectedPois, setSelectedPois] = useState<PointOfInterest[]>([]);
     const [routeSummary, setRouteSummary] = useState<RouteSummary | null>(null);
+    const [userPosition, setUserPosition] = useState<MapPosition | null>(null);
+    const [isUserPositionResolved, setIsUserPositionResolved] = useState(false);
     const [loading, setLoading] = useState(true);
     const hasAppliedSharedPlan = useRef(false);
+    const hasResolvedUserPosition = useRef(false);
 
     useEffect(() => {
         async function fetchPois() {
@@ -119,6 +123,36 @@ export default function CreateRoutePage() {
         setRouteSummary(summary);
     }, []);
 
+    const sortPoisFromUser = useCallback((pois: PointOfInterest[], position: MapPosition) => (
+        [...pois].sort((a, b) => {
+            const distanceToA = haversineDistance(
+                { lat: position.lat, lon: position.lng },
+                { lat: a.latitude, lon: a.longitude },
+            );
+            const distanceToB = haversineDistance(
+                { lat: position.lat, lon: position.lng },
+                { lat: b.latitude, lon: b.longitude },
+            );
+            return distanceToA - distanceToB;
+        })
+    ), []);
+
+    const handleUserPosition = useCallback((position: MapPosition | null) => {
+        if (hasResolvedUserPosition.current) return;
+        hasResolvedUserPosition.current = true;
+        setUserPosition(position);
+        setIsUserPositionResolved(true);
+        if (position) {
+            setSelectedPois(currentPois => sortPoisFromUser(currentPois, position));
+        } else {
+            toast({
+                title: translations.toast.errorTitle,
+                description: translations.createRoute.userLocationUnavailable,
+                variant: 'destructive',
+            });
+        }
+    }, [sortPoisFromUser, toast, translations]);
+
     const handleLoadPlan = (poiIds: string[]) => {
         const poisById = new Map(allPois.map(poi => [poi.id, poi]));
         const restoredPois = poiIds
@@ -134,7 +168,7 @@ export default function CreateRoutePage() {
             return;
         }
 
-        setSelectedPois(restoredPois);
+        setSelectedPois(userPosition ? sortPoisFromUser(restoredPois, userPosition) : restoredPois);
         if (restoredPois.length !== poiIds.length) {
             toast({
                 title: translations.toast.errorTitle,
@@ -149,7 +183,10 @@ export default function CreateRoutePage() {
     const handlePoiSelect = (poi: PointOfInterest, isSelected: boolean) => {
         if (isSelected) {
             if (selectedPois.length < MAX_SELECTION) {
-                setSelectedPois(prev => [...prev, poi]);
+                setSelectedPois(prev => {
+                    const nextPois = [...prev, poi];
+                    return userPosition ? sortPoisFromUser(nextPois, userPosition) : nextPois;
+                });
             }
         } else {
             setSelectedPois(prev => prev.filter(p => p.id !== poi.id));
@@ -205,7 +242,13 @@ export default function CreateRoutePage() {
                             </CardContent>
                         </Card>
                     )}
-                    <RouteMap pois={selectedPois} onRouteSummary={handleRouteSummary} />
+                    <RouteMap
+                        pois={selectedPois}
+                        onRouteSummary={handleRouteSummary}
+                        drawRouteLine={isUserPositionResolved}
+                        onUserPosition={handleUserPosition}
+                        routeOrigin={userPosition ?? undefined}
+                    />
                 </div>
             </div>
         </div>

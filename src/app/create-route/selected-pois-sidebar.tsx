@@ -73,7 +73,8 @@ export default function SelectedPoisSidebar({ selectedPois, setSelectedPois }: {
                     .map(p => `${p.latitude},${p.longitude}`)
                     .join('|');
                 
-                const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${destination}&waypoints=${waypoints}&travelmode=${travelMode}`;
+                const origin = `${userLocation.lat},${userLocation.lng}`;
+                const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&waypoints=${waypoints}&travelmode=${travelMode}`;
 
                 window.open(googleMapsUrl, '_blank');
                 setIsStartingRoute(false);

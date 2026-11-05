@@ -177,6 +177,7 @@
         "tripPlanShared": "Lien de partage prêt.",
         "tripPlanShareError": "Impossible de créer le lien de partage.",
         "tripPlanStorageError": "Impossible d’enregistrer l’itinéraire dans ce navigateur.",
+        "userLocationUnavailable": "Votre position est introuvable ; les lieux suivront l’ordre de sélection.",
         "sharedStopsMissing": "Certains lieux de l’itinéraire partagé sont introuvables.",
         "durationHoursFormat": "{hours} h {minutes} min",
         "durationMinutesFormat": "{minutes} min"

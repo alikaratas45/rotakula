@@ -1,15 +1,21 @@
 "use client"
 
 import { APIProvider } from "@vis.gl/react-google-maps";
-import EmbeddedMap, { type RouteSummary } from "@/components/map";
+import EmbeddedMap, { type MapPosition, type RouteSummary } from "@/components/map";
 import type { PointOfInterest } from "@/lib/types";
 
 export function RouteMap({
     pois,
     onRouteSummary,
+    drawRouteLine,
+    onUserPosition,
+    routeOrigin,
 }: {
     pois: PointOfInterest[];
     onRouteSummary: (summary: RouteSummary | null) => void;
+    drawRouteLine: boolean;
+    onUserPosition: (position: MapPosition | null) => void;
+    routeOrigin: MapPosition | undefined;
 }) {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
@@ -24,7 +30,13 @@ export function RouteMap({
     return (
         <div className="h-full w-full">
             <APIProvider apiKey={apiKey} version="quarterly">
-                <EmbeddedMap pois={pois} drawRouteLine onRouteSummary={onRouteSummary} />
+                <EmbeddedMap
+                    pois={pois}
+                    drawRouteLine={drawRouteLine}
+                    onRouteSummary={onRouteSummary}
+                    onUserPosition={onUserPosition}
+                    routeOrigin={routeOrigin}
+                />
             </APIProvider>
         </div>
     )

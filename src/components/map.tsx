@@ -140,15 +140,24 @@ export type RouteSummary = {
   durationSeconds: number;
 };
 
+export type MapPosition = {
+  lat: number;
+  lng: number;
+};
+
 export default function EmbeddedMap({
   pois,
   drawRouteLine = false,
   onRouteSummary,
+  onUserPosition,
+  routeOrigin,
   routeTravelMode = "DRIVING",
 }: {
   pois: PointOfInterest[];
   drawRouteLine?: boolean;
   onRouteSummary?: (summary: RouteSummary | null) => void;
+  onUserPosition?: (position: MapPosition | null) => void;
+  routeOrigin?: MapPosition;
   routeTravelMode?: "DRIVING" | "WALKING";
 }) {
   const map = useMap();
@@ -177,30 +186,45 @@ export default function EmbeddedMap({
   useEffect(() => {
     // Kademeli konum alma
     const getPos = () => {
+        if (!navigator.geolocation) {
+            onUserPosition?.(null);
+            return;
+        }
+
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                setUserPosition({
+                const currentPosition = {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude,
-                });
+                };
+                setUserPosition(currentPosition);
+                onUserPosition?.(currentPosition);
             },
             (err) => {
                 if (err.code === 3 || err.code === 2) {
                     // Fail over to low accuracy
                     navigator.geolocation.getCurrentPosition(
-                        (p) => setUserPosition({ lat: p.coords.latitude, lng: p.coords.longitude }),
-                        () => setUserPosition(null),
+                        (p) => {
+                            const currentPosition = { lat: p.coords.latitude, lng: p.coords.longitude };
+                            setUserPosition(currentPosition);
+                            onUserPosition?.(currentPosition);
+                        },
+                        () => {
+                            setUserPosition(null);
+                            onUserPosition?.(null);
+                        },
                         { enableHighAccuracy: false, timeout: 10000, maximumAge: 60000 }
                     );
                 } else {
-                    setUserPosition(null); 
+                    setUserPosition(null);
+                    onUserPosition?.(null);
                 }
             },
             { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 }
         );
     }
     getPos();
-  }, []);
+  }, [onUserPosition]);
 
 
   useEffect(() => {
@@ -219,9 +243,9 @@ export default function EmbeddedMap({
     let isCurrentRequest = true;
     onRouteSummary?.(null);
     const directionsService = new google.maps.DirectionsService();
-    const origin = { lat: pois[0].latitude, lng: pois[0].longitude };
+    const origin = routeOrigin ?? { lat: pois[0].latitude, lng: pois[0].longitude };
     const destination = { lat: pois[pois.length - 1].latitude, lng: pois[pois.length - 1].longitude };
-    const waypoints = pois.slice(1, -1).map(poi => ({
+    const waypoints = pois.slice(routeOrigin ? 0 : 1, -1).map(poi => ({
       location: { lat: poi.latitude, lng: poi.longitude },
       stopover: true,
     }));
@@ -278,7 +302,7 @@ export default function EmbeddedMap({
         polylineRef.current = null;
       }
     };
-  }, [map, pois, drawRouteLine, onRouteSummary, routeTravelMode]);
+  }, [map, pois, drawRouteLine, onRouteSummary, routeOrigin, routeTravelMode]);
 
   useEffect(() => {
     if (!map || (drawRouteLine && pois.length > 1)) return;
