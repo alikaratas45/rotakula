@@ -144,10 +144,12 @@ export default function EmbeddedMap({
   pois,
   drawRouteLine = false,
   onRouteSummary,
+  routeTravelMode = "DRIVING",
 }: {
   pois: PointOfInterest[];
   drawRouteLine?: boolean;
   onRouteSummary?: (summary: RouteSummary | null) => void;
+  routeTravelMode?: "DRIVING" | "WALKING";
 }) {
   const map = useMap();
   const router = useRouter();
@@ -229,8 +231,11 @@ export default function EmbeddedMap({
       {
         origin,
         destination,
-        travelMode: google.maps.TravelMode.DRIVING,
+        travelMode: routeTravelMode === "WALKING"
+          ? google.maps.TravelMode.WALKING
+          : google.maps.TravelMode.DRIVING,
         waypoints,
+        optimizeWaypoints: false,
       },
       (result, status) => {
         if (!isCurrentRequest) return;
@@ -273,7 +278,7 @@ export default function EmbeddedMap({
         polylineRef.current = null;
       }
     };
-  }, [map, pois, drawRouteLine, onRouteSummary]);
+  }, [map, pois, drawRouteLine, onRouteSummary, routeTravelMode]);
 
   useEffect(() => {
     if (!map || (drawRouteLine && pois.length > 1)) return;

@@ -137,6 +137,7 @@ export default function RoutePage() {
     
     const isFlavorTour = route.slug === 'kula-flavor-tour';
     const isDrivingRoute = route.slug === 'geopark-discovery-route';
+    const isHistoricKulaWalkingTour = route.slug === 'historic-kula-walking-tour';
 
     return (
         <div>
@@ -175,7 +176,11 @@ export default function RoutePage() {
                                      <div className="mb-8">
                                         <h2 className="text-2xl font-headline font-bold mb-4">{translations.route.mapTitle}</h2>
                                         <APIProvider apiKey={apiKey} libraries={['places']}>
-                                            <EmbeddedMap pois={pois} drawRouteLine />
+                                            <EmbeddedMap
+                                                pois={pois}
+                                                drawRouteLine
+                                                routeTravelMode={isHistoricKulaWalkingTour ? "WALKING" : "DRIVING"}
+                                            />
                                         </APIProvider>
                                     </div>
                                 )}
