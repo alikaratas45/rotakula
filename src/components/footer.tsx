@@ -39,6 +39,9 @@ export function Footer() {
                         {translations.footer.credits}
                     </p>
                 </div>
+                <p className="text-[10px] text-muted-foreground/50">
+                    Geliştirici: Ali KARATAŞ
+                </p>
                 {isAdmin ? (
                     <Link
                         href="/admin/pois"
