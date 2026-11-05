@@ -135,7 +135,20 @@ function PoiMarker({
 }
 
 // --- Main Map Component ---
-export default function EmbeddedMap({ pois, drawRouteLine = false }: { pois: PointOfInterest[], drawRouteLine?: boolean }) {
+export type RouteSummary = {
+  distanceMeters: number;
+  durationSeconds: number;
+};
+
+export default function EmbeddedMap({
+  pois,
+  drawRouteLine = false,
+  onRouteSummary,
+}: {
+  pois: PointOfInterest[];
+  drawRouteLine?: boolean;
+  onRouteSummary?: (summary: RouteSummary | null) => void;
+}) {
   const map = useMap();
   const router = useRouter();
   const { translations } = useApp();
@@ -189,14 +202,20 @@ export default function EmbeddedMap({ pois, drawRouteLine = false }: { pois: Poi
 
 
   useEffect(() => {
-    if (!map || !drawRouteLine || pois.length < 2) return;
+    if (!map) return;
 
     if (polylineRef.current) {
       polylineRef.current.setMap(null);
       polylineRef.current = null;
     }
 
+    if (!drawRouteLine || pois.length < 2) {
+      onRouteSummary?.(null);
+      return;
+    }
+
     let isCurrentRequest = true;
+    onRouteSummary?.(null);
     const directionsService = new google.maps.DirectionsService();
     const origin = { lat: pois[0].latitude, lng: pois[0].longitude };
     const destination = { lat: pois[pois.length - 1].latitude, lng: pois[pois.length - 1].longitude };
@@ -218,6 +237,15 @@ export default function EmbeddedMap({ pois, drawRouteLine = false }: { pois: Poi
 
         if (status === google.maps.DirectionsStatus.OK && result?.routes[0]) {
           const route = result.routes[0];
+          const hasCompleteLegEstimates = route.legs.length > 0 &&
+            route.legs.every(leg => leg.distance && leg.duration);
+          if (hasCompleteLegEstimates) {
+            onRouteSummary?.({
+              distanceMeters: route.legs.reduce((total, leg) => total + (leg.distance?.value ?? 0), 0),
+              durationSeconds: route.legs.reduce((total, leg) => total + (leg.duration?.value ?? 0), 0),
+            });
+          }
+
           const routePolyline = new google.maps.Polyline({
             path: route.overview_path,
             geodesic: true,
@@ -239,12 +267,13 @@ export default function EmbeddedMap({ pois, drawRouteLine = false }: { pois: Poi
 
     return () => {
       isCurrentRequest = false;
+      onRouteSummary?.(null);
       if (polylineRef.current) {
         polylineRef.current.setMap(null);
         polylineRef.current = null;
       }
     };
-  }, [map, pois, drawRouteLine]);
+  }, [map, pois, drawRouteLine, onRouteSummary]);
 
   useEffect(() => {
     if (!map || (drawRouteLine && pois.length > 1)) return;

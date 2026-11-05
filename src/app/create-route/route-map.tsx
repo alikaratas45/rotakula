@@ -1,10 +1,16 @@
 "use client"
 
 import { APIProvider } from "@vis.gl/react-google-maps";
-import EmbeddedMap from "@/components/map";
+import EmbeddedMap, { type RouteSummary } from "@/components/map";
 import type { PointOfInterest } from "@/lib/types";
 
-export function RouteMap({ pois }: { pois: PointOfInterest[] }) {
+export function RouteMap({
+    pois,
+    onRouteSummary,
+}: {
+    pois: PointOfInterest[];
+    onRouteSummary: (summary: RouteSummary | null) => void;
+}) {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
     if (!apiKey) {
@@ -18,7 +24,7 @@ export function RouteMap({ pois }: { pois: PointOfInterest[] }) {
     return (
         <div className="h-full w-full">
             <APIProvider apiKey={apiKey} version="quarterly">
-                <EmbeddedMap pois={pois} drawRouteLine />
+                <EmbeddedMap pois={pois} drawRouteLine onRouteSummary={onRouteSummary} />
             </APIProvider>
         </div>
     )

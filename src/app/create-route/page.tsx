@@ -1,13 +1,18 @@
 
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Clock3, Route as RouteIcon } from 'lucide-react';
 import { getPois } from '@/lib/kula-data';
 import type { PointOfInterest } from '@/lib/types';
 import { useApp } from '@/context/app-context';
+import { useToast } from '@/hooks/use-toast';
+import { Card, CardContent } from '@/components/ui/card';
 import PoiSelectionList from './poi-selection-list';
 import SelectedPoisSidebar from './selected-pois-sidebar';
 import { RouteMap } from './route-map';
+import { TripPlanControls } from './trip-plan-controls';
+import type { RouteSummary } from '@/components/map';
 import { BackButton } from '@/components/back-button';
 
 const MAX_SELECTION = 10;
@@ -34,9 +39,12 @@ const neighborhoodSlugs = [
 
 export default function CreateRoutePage() {
     const { language, translations } = useApp();
+    const { toast } = useToast();
     const [allPois, setAllPois] = useState<PointOfInterest[]>([]);
     const [selectedPois, setSelectedPois] = useState<PointOfInterest[]>([]);
+    const [routeSummary, setRouteSummary] = useState<RouteSummary | null>(null);
     const [loading, setLoading] = useState(true);
+    const hasAppliedSharedPlan = useRef(false);
 
     useEffect(() => {
         async function fetchPois() {
@@ -73,6 +81,71 @@ export default function CreateRoutePage() {
         fetchPois();
     }, [language]);
 
+    useEffect(() => {
+        if (loading || hasAppliedSharedPlan.current) return;
+        hasAppliedSharedPlan.current = true;
+
+        const sharedStopIds = new URLSearchParams(window.location.search).get('stops');
+        if (!sharedStopIds) return;
+
+        const requestedIds = [...new Set(sharedStopIds.split(',').filter(Boolean))].slice(0, MAX_SELECTION);
+        const poisById = new Map(allPois.map(poi => [poi.id, poi]));
+        const sharedPois = requestedIds
+            .map(id => poisById.get(id))
+            .filter((poi): poi is PointOfInterest => poi !== undefined);
+
+        if (sharedPois.length === 0) {
+            toast({
+                title: translations.toast.errorTitle,
+                description: translations.createRoute.sharedStopsMissing,
+                variant: 'destructive',
+            });
+            return;
+        }
+
+        setSelectedPois(sharedPois);
+        if (sharedPois.length !== requestedIds.length) {
+            toast({
+                title: translations.toast.errorTitle,
+                description: translations.createRoute.sharedStopsMissing,
+                variant: 'destructive',
+            });
+        } else {
+            toast({ title: translations.createRoute.tripPlanLoaded });
+        }
+    }, [allPois, loading, toast, translations]);
+
+    const handleRouteSummary = useCallback((summary: RouteSummary | null) => {
+        setRouteSummary(summary);
+    }, []);
+
+    const handleLoadPlan = (poiIds: string[]) => {
+        const poisById = new Map(allPois.map(poi => [poi.id, poi]));
+        const restoredPois = poiIds
+            .map(id => poisById.get(id))
+            .filter((poi): poi is PointOfInterest => poi !== undefined);
+
+        if (restoredPois.length === 0) {
+            toast({
+                title: translations.toast.errorTitle,
+                description: translations.createRoute.sharedStopsMissing,
+                variant: 'destructive',
+            });
+            return;
+        }
+
+        setSelectedPois(restoredPois);
+        if (restoredPois.length !== poiIds.length) {
+            toast({
+                title: translations.toast.errorTitle,
+                description: translations.createRoute.sharedStopsMissing,
+                variant: 'destructive',
+            });
+        } else {
+            toast({ title: translations.createRoute.tripPlanLoaded });
+        }
+    };
+
     const handlePoiSelect = (poi: PointOfInterest, isSelected: boolean) => {
         if (isSelected) {
             if (selectedPois.length < MAX_SELECTION) {
@@ -91,6 +164,8 @@ export default function CreateRoutePage() {
                 <div className="sticky top-16 z-20 -mx-4 px-4 py-4 border-y bg-background/95 backdrop-blur-sm">
                     <SelectedPoisSidebar selectedPois={selectedPois} setSelectedPois={setSelectedPois} />
                 </div>
+
+                <TripPlanControls selectedPois={selectedPois} onLoadPlan={handleLoadPlan} />
                 
                 {/* POI Selection List */}
                 <div>
@@ -106,9 +181,53 @@ export default function CreateRoutePage() {
                 {/* Map */}
                 <div>
                      <h2 className="text-2xl font-headline font-bold mb-4">{translations.route.mapTitle}</h2>
-                    <RouteMap pois={selectedPois} />
+                    {routeSummary && selectedPois.length > 1 && (
+                        <Card className="mb-4">
+                            <CardContent className="flex flex-wrap gap-6 py-4">
+                                <div className="flex items-center gap-2">
+                                    <RouteIcon className="h-5 w-5 text-primary" />
+                                    <div>
+                                        <p className="text-xs text-muted-foreground">{translations.createRoute.estimatedDistance}</p>
+                                        <p className="font-semibold">
+                                            {new Intl.NumberFormat(language, { maximumFractionDigits: 1 }).format(routeSummary.distanceMeters / 1000)} km
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <Clock3 className="h-5 w-5 text-primary" />
+                                    <div>
+                                        <p className="text-xs text-muted-foreground">{translations.createRoute.estimatedDuration}</p>
+                                        <p className="font-semibold">
+                                            {formatDuration(routeSummary.durationSeconds, language, translations.createRoute.durationHoursFormat, translations.createRoute.durationMinutesFormat)}
+                                        </p>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    )}
+                    <RouteMap pois={selectedPois} onRouteSummary={handleRouteSummary} />
                 </div>
             </div>
         </div>
     );
+}
+
+function formatDuration(
+    durationSeconds: number,
+    language: string,
+    hoursFormat: string,
+    minutesFormat: string,
+) {
+    const totalMinutes = Math.round(durationSeconds / 60);
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    const formatNumber = (value: number) => new Intl.NumberFormat(language).format(value);
+
+    if (hours === 0) {
+        return minutesFormat.replace('{minutes}', formatNumber(minutes));
+    }
+
+    return hoursFormat
+        .replace('{hours}', formatNumber(hours))
+        .replace('{minutes}', formatNumber(minutes));
 }
