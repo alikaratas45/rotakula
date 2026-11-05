@@ -226,6 +226,7 @@
         "gettingLocation": "Konumunuz alınıyor...",
         "reviews": "yorum",
         "getDirections": "Yol Tarifi Al",
+        "routeUnavailable": "Yol çizgisi oluşturulamadı. Google Maps API anahtarında Maps JavaScript API ve Directions API'nin etkin, bu adresin de yetkili olduğundan emin olun.",
         "noStreetView": "Bu konum için yakınlarda 360 derece görüntü bulunamadı."
     },
     "toast": {

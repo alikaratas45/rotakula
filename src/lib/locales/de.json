@@ -226,6 +226,7 @@
         "gettingLocation": "Ihr Standort wird abgerufen...",
         "reviews": "bewertungen",
         "getDirections": "Route abrufen",
+        "routeUnavailable": "Die Route konnte nicht eingezeichnet werden. Prüfen Sie, ob Maps JavaScript API und Directions API für Ihren Google-Maps-Schlüssel aktiviert und diese Adresse freigegeben sind.",
         "noStreetView": "In der Nähe dieses Standorts wurde kein Street View gefunden."
     },
     "toast": {

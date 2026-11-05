@@ -166,6 +166,7 @@ export default function EmbeddedMap({
   const [markersLoaded, setMarkersLoaded] = useState(false);
   const [userPosition, setUserPosition] = useState<{ lat: number; lng: number } | null>(null);
   const [selectedPoi, setSelectedPoi] = useState<PointOfInterest | null>(null);
+  const [routeError, setRouteError] = useState(false);
   const polylineRef = useRef<google.maps.Polyline | null>(null);
 
 
@@ -235,12 +236,14 @@ export default function EmbeddedMap({
       polylineRef.current = null;
     }
 
-    if (!drawRouteLine || pois.length < 2) {
+    if (!drawRouteLine || (routeOrigin ? pois.length < 1 : pois.length < 2)) {
+      setRouteError(false);
       onRouteSummary?.(null);
       return;
     }
 
     let isCurrentRequest = true;
+    setRouteError(false);
     onRouteSummary?.(null);
     const directionsService = new google.maps.DirectionsService();
     const origin = routeOrigin ?? { lat: pois[0].latitude, lng: pois[0].longitude };
@@ -287,6 +290,7 @@ export default function EmbeddedMap({
           map.fitBounds(route.bounds, 60);
         } else {
           console.error(`Directions request failed due to ${status}. Falling back to fitting POIs.`);
+          setRouteError(true);
           const bounds = new google.maps.LatLngBounds();
           pois.forEach(poi => bounds.extend({ lat: poi.latitude, lng: poi.longitude }));
           map.fitBounds(bounds, 60);
@@ -302,7 +306,7 @@ export default function EmbeddedMap({
         polylineRef.current = null;
       }
     };
-  }, [map, pois, drawRouteLine, onRouteSummary, routeOrigin, routeTravelMode]);
+  }, [map, pois, drawRouteLine, onRouteSummary, routeOrigin, routeTravelMode, translations.map.routeUnavailable]);
 
   useEffect(() => {
     if (!map || (drawRouteLine && pois.length > 1)) return;
@@ -341,6 +345,11 @@ export default function EmbeddedMap({
                 <Loader2 className="w-5 h-5 animate-spin" />
                 <span>{translations.map.loading}</span>
             </div>
+        </div>
+      )}
+      {routeError && (
+        <div className="absolute top-3 left-3 right-3 z-10 rounded-md bg-destructive px-4 py-3 text-sm text-destructive-foreground shadow-md" role="alert">
+          {translations.map.routeUnavailable}
         </div>
       )}
       <Map
