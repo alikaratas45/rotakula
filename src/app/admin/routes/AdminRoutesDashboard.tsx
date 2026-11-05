@@ -13,6 +13,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 type RouteType = 'bike' | 'walking';
 type ManagedRoute = BikeRoute & Partial<Pick<
@@ -410,10 +421,31 @@ export default function AdminRoutesDashboard() {
                 </Button>
                 <div className="flex gap-2">
                   {form.id && (
-                    <Button type="button" variant="destructive" onClick={() => void handleDelete()} disabled={isSaving || isDeleting}>
-                      {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
-                      Rotayı sil
-                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button type="button" variant="destructive" disabled={isSaving || isDeleting}>
+                          {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
+                          Rotayı sil
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Bu rotayı silmek istiyor musunuz?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            “{form.name}” ziyaretçi rota listelerinden kaldırılacak. Bu işlem rotayı kalıcı olarak silmez.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Vazgeç</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => void handleDelete()}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                          >
+                            Rotayı kaldır
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   )}
                   <Button type="button" variant="outline" onClick={() => setForm(createEmptyForm())}>
                     <MapPin className="mr-2 h-4 w-4" />
