@@ -1,9 +1,10 @@
 
 "use client";
 
-import { Map, AdvancedMarker, useMap } from "@vis.gl/react-google-maps";
+import { Map, useMap, useMapsLibrary } from "@vis.gl/react-google-maps";
 import { PointOfInterest } from "@/lib/types";
 import { useCallback, useEffect, useState, useRef } from "react";
+import { createPortal } from "react-dom";
 import { Loader2, Star, Navigation, X } from "lucide-react";
 import Image from "next/image";
 import { getImageById } from "@/lib/placeholder-images";
@@ -12,6 +13,64 @@ import { useApp } from "@/context/app-context";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { cn } from "@/lib/utils";
+
+type MapMarkerProps = {
+  position: google.maps.LatLng | google.maps.LatLngLiteral | null | undefined;
+  title?: string;
+  onClick?: () => void;
+  children: React.ReactNode;
+};
+
+function MapMarker({ position, title, onClick, children }: MapMarkerProps) {
+  const map = useMap();
+  const markerLibrary = useMapsLibrary("marker");
+  const [content, setContent] = useState<HTMLDivElement | null>(null);
+  const markerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(null);
+
+  useEffect(() => {
+    if (!map || !markerLibrary) return;
+
+    const markerContent = document.createElement("div");
+    const marker = new markerLibrary.AdvancedMarkerElement({
+      content: markerContent,
+      position,
+      title,
+    });
+
+    markerRef.current = marker;
+    marker.map = map;
+    setContent(markerContent);
+
+    return () => {
+      marker.map = null;
+      markerContent.remove();
+      markerRef.current = null;
+      setContent(null);
+    };
+  }, [map, markerLibrary]);
+
+  useEffect(() => {
+    if (markerRef.current) {
+      markerRef.current.position = position;
+    }
+  }, [position]);
+
+  useEffect(() => {
+    if (markerRef.current) {
+      markerRef.current.title = title ?? "";
+    }
+  }, [title]);
+
+  useEffect(() => {
+    const marker = markerRef.current;
+    if (!marker || !onClick) return;
+
+    const listener = marker.addListener("click", onClick);
+    return () => listener.remove();
+  }, [onClick, markerLibrary, map]);
+
+  return content ? createPortal(children, content) : null;
+}
 
 // --- User Location Marker ---
 export function UserLocationMarker() {
@@ -50,12 +109,12 @@ export function UserLocationMarker() {
   if (!position) return null;
 
   return (
-    <AdvancedMarker position={position} title={translations.map.yourLocation}>
+    <MapMarker position={position} title={translations.map.yourLocation}>
       <div className="relative w-6 h-6 flex justify-center items-center">
         <div className="absolute w-full h-full rounded-full bg-blue-500/20 animate-ping"></div>
         <div className="w-4 h-4 rounded-full bg-blue-500 border-2 border-white shadow-md"></div>
       </div>
-    </AdvancedMarker>
+    </MapMarker>
   );
 }
 
@@ -69,9 +128,9 @@ function PoiMarker({
     onClick: () => void 
 }) {
     return (
-        <AdvancedMarker onClick={onClick} position={{ lat: poi.latitude, lng: poi.longitude }} title={poi.name}>
+        <MapMarker onClick={onClick} position={{ lat: poi.latitude, lng: poi.longitude }} title={poi.name}>
             <div className="w-6 h-6 bg-red-500 rounded-full border-2 border-white shadow-md cursor-pointer" />
-        </AdvancedMarker>
+        </MapMarker>
     );
 }
 
@@ -130,85 +189,82 @@ export default function EmbeddedMap({ pois, drawRouteLine = false }: { pois: Poi
 
 
   useEffect(() => {
-    if (!map) return;
+    if (!map || !drawRouteLine || pois.length < 2) return;
 
-    // 1. Clear any existing polyline
     if (polylineRef.current) {
-        polylineRef.current.setMap(null);
-        polylineRef.current = null;
+      polylineRef.current.setMap(null);
+      polylineRef.current = null;
     }
 
-    // 2. Decide what to do based on props
-    if (drawRouteLine && pois.length > 1) {
-        // --- DRAW ROUTE ON ROADS ---
-        const directionsService = new google.maps.DirectionsService();
-        const origin = { lat: pois[0].latitude, lng: pois[0].longitude };
-        const destination = { lat: pois[pois.length - 1].latitude, lng: pois[pois.length - 1].longitude };
-        const waypoints = pois.slice(1, -1).map(poi => ({
-            location: { lat: poi.latitude, lng: poi.longitude },
-            stopover: true,
-        }));
+    let isCurrentRequest = true;
+    const directionsService = new google.maps.DirectionsService();
+    const origin = { lat: pois[0].latitude, lng: pois[0].longitude };
+    const destination = { lat: pois[pois.length - 1].latitude, lng: pois[pois.length - 1].longitude };
+    const waypoints = pois.slice(1, -1).map(poi => ({
+      location: { lat: poi.latitude, lng: poi.longitude },
+      stopover: true,
+    }));
 
-        directionsService.route(
-            {
-                origin: origin,
-                destination: destination,
-                travelMode: google.maps.TravelMode.DRIVING, // Default to driving
-                waypoints: waypoints,
-            },
-            (result, status) => {
-                if (status === google.maps.DirectionsStatus.OK && result) {
-                    const routePolyline = new google.maps.Polyline({
-                        path: result.routes[0].overview_path,
-                        geodesic: true,
-                        strokeColor: '#4285F4',
-                        strokeOpacity: 0.9,
-                        strokeWeight: 5
-                    });
-                    routePolyline.setMap(map);
-                    polylineRef.current = routePolyline;
-                    
-                    // Fit map to the route bounds
-                    map.fitBounds(result.routes[0].bounds, 60);
+    setMarkersLoaded(true);
+    directionsService.route(
+      {
+        origin,
+        destination,
+        travelMode: google.maps.TravelMode.DRIVING,
+        waypoints,
+      },
+      (result, status) => {
+        if (!isCurrentRequest) return;
 
-                } else {
-                    console.error(`Directions request failed due to ${status}. Falling back to fitting POIs.`);
-                    // Fallback: Fit bounds to POIs directly if Directions API fails
-                    const bounds = new google.maps.LatLngBounds();
-                    pois.forEach((poi) => {
-                        bounds.extend(new google.maps.LatLng(poi.latitude, poi.longitude));
-                    });
-                    map.fitBounds(bounds, 60);
-                }
-            }
-        );
-    } else if (pois.length > 0) {
-        // --- FIT POIS WITHOUT ROUTE LINE ---
-        if (pois.length === 1) {
-            // Single POI: center on it
-            map.setCenter({ lat: pois[0].latitude, lng: pois[0].longitude });
-            map.setZoom(15);
+        if (status === google.maps.DirectionsStatus.OK && result?.routes[0]) {
+          const route = result.routes[0];
+          const routePolyline = new google.maps.Polyline({
+            path: route.overview_path,
+            geodesic: true,
+            strokeColor: '#4285F4',
+            strokeOpacity: 0.9,
+            strokeWeight: 5,
+          });
+          routePolyline.setMap(map);
+          polylineRef.current = routePolyline;
+          map.fitBounds(route.bounds, 60);
         } else {
-            // Multiple POIs: fit them all
-            const bounds = new google.maps.LatLngBounds();
-            pois.forEach((poi) => {
-                bounds.extend(new google.maps.LatLng(poi.latitude, poi.longitude));
-            });
-            map.fitBounds(bounds, 60);
+          console.error(`Directions request failed due to ${status}. Falling back to fitting POIs.`);
+          const bounds = new google.maps.LatLngBounds();
+          pois.forEach(poi => bounds.extend({ lat: poi.latitude, lng: poi.longitude }));
+          map.fitBounds(bounds, 60);
         }
+      }
+    );
+
+    return () => {
+      isCurrentRequest = false;
+      if (polylineRef.current) {
+        polylineRef.current.setMap(null);
+        polylineRef.current = null;
+      }
+    };
+  }, [map, pois, drawRouteLine]);
+
+  useEffect(() => {
+    if (!map || (drawRouteLine && pois.length > 1)) return;
+
+    if (pois.length === 1) {
+      map.setCenter({ lat: pois[0].latitude, lng: pois[0].longitude });
+      map.setZoom(15);
+    } else if (pois.length > 1) {
+      const bounds = new google.maps.LatLngBounds();
+      pois.forEach(poi => bounds.extend({ lat: poi.latitude, lng: poi.longitude }));
+      map.fitBounds(bounds, 60);
+    } else if (userPosition) {
+      map.setCenter(userPosition);
+      map.setZoom(13);
     } else {
-        // --- NO POIS, DEFAULT VIEW ---
-        if (userPosition) {
-            map.setCenter(userPosition);
-            map.setZoom(13);
-        } else {
-            map.setCenter({ lat: 38.547, lng: 28.65 });
-            map.setZoom(13);
-        }
+      map.setCenter({ lat: 38.547, lng: 28.65 });
+      map.setZoom(13);
     }
 
     setMarkersLoaded(true);
-
   }, [map, pois, drawRouteLine, userPosition]);
 
 
@@ -292,9 +348,9 @@ export default function EmbeddedMap({ pois, drawRouteLine = false }: { pois: Poi
 
 const PlaceMarker = ({ place, onClick }: { place: google.maps.places.PlaceResult, onClick: () => void }) => {
     return (
-        <AdvancedMarker position={place.geometry?.location} onClick={onClick} title={place.name!}>
+        <MapMarker position={place.geometry?.location} onClick={onClick} title={place.name || ""}>
             <div className="w-6 h-6 bg-blue-600 rounded-full border-2 border-white shadow-md cursor-pointer" />
-        </AdvancedMarker>
+        </MapMarker>
     )
 }
 
