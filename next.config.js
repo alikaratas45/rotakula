@@ -1,53 +1,48 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
-  distDir: process.env.NODE_ENV === 'production' ? '.next-prod' : '.next',
   typescript: {
     ignoreBuildErrors: true,
   },
+
   eslint: {
     ignoreDuringBuilds: true,
   },
+
   images: {
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'i.imgur.com',
-        port: '',
         pathname: '/**',
       },
       {
         protocol: 'https',
         hostname: 'placehold.co',
-        port: '',
         pathname: '/**',
       },
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
-        port: '',
         pathname: '/**',
       },
       {
         protocol: 'https',
         hostname: 'picsum.photos',
-        port: '',
         pathname: '/**',
       },
       {
         protocol: 'https',
         hostname: 'maps.googleapis.com',
-        port: '',
         pathname: '/**',
       },
-       {
+      {
         protocol: 'https',
         hostname: 'firebasestorage.googleapis.com',
-        port: '',
         pathname: '/**',
       },
     ],
   },
+
   async headers() {
     return [
       {
@@ -71,7 +66,7 @@ const nextConfig = {
           },
           {
             key: 'Permissions-Policy',
-            value: "camera=(self), geolocation=(self), microphone=()",
+            value: 'camera=(self), geolocation=(self), microphone=()',
           },
         ],
       },
