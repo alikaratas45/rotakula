@@ -42,21 +42,11 @@ function MapMarker({ position, title, onClick, children }: MapMarkerProps) {
     setContent(markerContent);
 
     return () => {
-  try {
-    if (markerRef.current) {
-      markerRef.current.map = null;
-    }
-  } catch (e) {
-    console.warn("Marker cleanup warning:", e);
-  }
-
-  if (markerContent && markerContent.parentNode) {
-    markerContent.remove();
-  }
-
-  markerRef.current = null;
-  setContent(null);
-};
+      marker.map = null;
+      markerContent.remove();
+      markerRef.current = null;
+      setContent(null);
+    };
   }, [map, markerLibrary]);
 
   useEffect(() => {
@@ -304,7 +294,7 @@ export default function EmbeddedMap({
           const bounds = new google.maps.LatLngBounds();
           pois.forEach(poi => bounds.extend({ lat: poi.latitude, lng: poi.longitude }));
           map.fitBounds(bounds, 60);
-        }
+       }
       }
     );
 
