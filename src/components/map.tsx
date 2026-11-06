@@ -42,11 +42,21 @@ function MapMarker({ position, title, onClick, children }: MapMarkerProps) {
     setContent(markerContent);
 
     return () => {
-      marker.map = null;
-      markerContent.remove();
-      markerRef.current = null;
-      setContent(null);
-    };
+  try {
+    if (markerRef.current) {
+      markerRef.current.map = null;
+    }
+  } catch (e) {
+    console.warn("Marker cleanup warning:", e);
+  }
+
+  if (markerContent && markerContent.parentNode) {
+    markerContent.remove();
+  }
+
+  markerRef.current = null;
+  setContent(null);
+};
   }, [map, markerLibrary]);
 
   useEffect(() => {
