@@ -226,7 +226,7 @@
         "gettingLocation": "Getting your location...",
         "reviews": "reviews",
         "getDirections": "Get Directions",
-        "routeUnavailable": "The route line could not be drawn. Make sure Maps JavaScript API and Directions API are enabled for your Google Maps key and this address is authorized.",
+        "routeUnavailable": "The route line could not be drawn. Make sure Maps JavaScript API and Routes API are enabled in Google Cloud and this address is authorized for the API key.",
         "noStreetView": "No Street View found nearby for this location."
     },
     "toast": {

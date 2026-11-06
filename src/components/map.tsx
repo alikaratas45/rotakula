@@ -163,11 +163,12 @@ export default function EmbeddedMap({
   const map = useMap();
   const router = useRouter();
   const { translations } = useApp();
+  const routesLibrary = useMapsLibrary("routes");
   const [markersLoaded, setMarkersLoaded] = useState(false);
   const [userPosition, setUserPosition] = useState<{ lat: number; lng: number } | null>(null);
   const [selectedPoi, setSelectedPoi] = useState<PointOfInterest | null>(null);
   const [routeError, setRouteError] = useState(false);
-  const polylineRef = useRef<google.maps.Polyline | null>(null);
+  const polylineRef = useRef<google.maps.Polyline[]>([]);
 
 
   const handleMarkerClick = (poi: PointOfInterest) => {
@@ -229,12 +230,10 @@ export default function EmbeddedMap({
 
 
   useEffect(() => {
-    if (!map) return;
+    if (!map || !routesLibrary) return;
 
-    if (polylineRef.current) {
-      polylineRef.current.setMap(null);
-      polylineRef.current = null;
-    }
+    polylineRef.current.forEach(polyline => polyline.setMap(null));
+    polylineRef.current = [];
 
     if (!drawRouteLine || (routeOrigin ? pois.length < 1 : pois.length < 2)) {
       setRouteError(false);
@@ -245,68 +244,77 @@ export default function EmbeddedMap({
     let isCurrentRequest = true;
     setRouteError(false);
     onRouteSummary?.(null);
-    const directionsService = new google.maps.DirectionsService();
     const origin = routeOrigin ?? { lat: pois[0].latitude, lng: pois[0].longitude };
     const destination = { lat: pois[pois.length - 1].latitude, lng: pois[pois.length - 1].longitude };
-    const waypoints = pois.slice(routeOrigin ? 0 : 1, -1).map(poi => ({
+    const intermediates = pois.slice(routeOrigin ? 0 : 1, -1).map(poi => ({
       location: { lat: poi.latitude, lng: poi.longitude },
-      stopover: true,
     }));
+    const fitPois = () => {
+      const bounds = new google.maps.LatLngBounds();
+      pois.forEach(poi => bounds.extend({ lat: poi.latitude, lng: poi.longitude }));
+      map.fitBounds(bounds, 60);
+    };
 
     setMarkersLoaded(true);
-    directionsService.route(
-      {
-        origin,
-        destination,
-        travelMode: routeTravelMode === "WALKING"
-          ? google.maps.TravelMode.WALKING
-          : google.maps.TravelMode.DRIVING,
-        waypoints,
-        optimizeWaypoints: false,
-      },
-      (result, status) => {
+    void (async () => {
+      try {
+        const { routes } = await routesLibrary.Route.computeRoutes({
+          origin,
+          destination,
+          intermediates,
+          travelMode: routeTravelMode === "WALKING"
+            ? google.maps.TravelMode.WALKING
+            : google.maps.TravelMode.DRIVING,
+          fields: ["path", "distanceMeters", "durationMillis", "viewport"],
+        });
+
         if (!isCurrentRequest) return;
+        const route = routes?.[0];
 
-        if (status === google.maps.DirectionsStatus.OK && result?.routes[0]) {
-          const route = result.routes[0];
-          const hasCompleteLegEstimates = route.legs.length > 0 &&
-            route.legs.every(leg => leg.distance && leg.duration);
-          if (hasCompleteLegEstimates) {
-            onRouteSummary?.({
-              distanceMeters: route.legs.reduce((total, leg) => total + (leg.distance?.value ?? 0), 0),
-              durationSeconds: route.legs.reduce((total, leg) => total + (leg.duration?.value ?? 0), 0),
-            });
-          }
+        if (!route) {
+          console.error("Routes API returned no route. Falling back to fitting POIs.");
+          setRouteError(true);
+          fitPois();
+          return;
+        }
 
-          const routePolyline = new google.maps.Polyline({
-            path: route.overview_path,
+        if (route.distanceMeters != null && route.durationMillis != null) {
+          onRouteSummary?.({
+            distanceMeters: route.distanceMeters,
+            durationSeconds: route.durationMillis / 1000,
+          });
+        }
+
+        const routePolylines = route.createPolylines({
+          polylineOptions: {
             geodesic: true,
-            strokeColor: '#4285F4',
+            strokeColor: "#4285F4",
             strokeOpacity: 0.9,
             strokeWeight: 5,
-          });
-          routePolyline.setMap(map);
-          polylineRef.current = routePolyline;
-          map.fitBounds(route.bounds, 60);
+          },
+        });
+        routePolylines.forEach(polyline => polyline.setMap(map));
+        polylineRef.current = routePolylines;
+        if (route.viewport) {
+          map.fitBounds(route.viewport, 60);
         } else {
-          console.error(`Directions request failed due to ${status}. Falling back to fitting POIs.`);
-          setRouteError(true);
-          const bounds = new google.maps.LatLngBounds();
-          pois.forEach(poi => bounds.extend({ lat: poi.latitude, lng: poi.longitude }));
-          map.fitBounds(bounds, 60);
-       }
+          fitPois();
+        }
+      } catch (error) {
+        if (!isCurrentRequest) return;
+        console.error("Routes API request failed. Falling back to fitting POIs.", error);
+        setRouteError(true);
+        fitPois();
       }
-    );
+    })();
 
     return () => {
       isCurrentRequest = false;
       onRouteSummary?.(null);
-      if (polylineRef.current) {
-        polylineRef.current.setMap(null);
-        polylineRef.current = null;
-      }
+      polylineRef.current.forEach(polyline => polyline.setMap(null));
+      polylineRef.current = [];
     };
-  }, [map, pois, drawRouteLine, onRouteSummary, routeOrigin, routeTravelMode, translations.map.routeUnavailable]);
+  }, [map, routesLibrary, pois, drawRouteLine, onRouteSummary, routeOrigin, routeTravelMode]);
 
   useEffect(() => {
     if (!map || (drawRouteLine && pois.length > 1)) return;

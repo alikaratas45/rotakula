@@ -226,7 +226,7 @@
         "gettingLocation": "Obtention de votre emplacement...",
         "reviews": "avis",
         "getDirections": "Obtenir l'Itinéraire",
-        "routeUnavailable": "Le tracé n'a pas pu être affiché. Vérifiez que Maps JavaScript API et Directions API sont activées pour votre clé Google Maps et que cette adresse est autorisée.",
+        "routeUnavailable": "Le tracé n'a pas pu être affiché. Vérifiez que Maps JavaScript API et Routes API sont activées dans Google Cloud et que cette adresse est autorisée pour la clé API.",
         "noStreetView": "Aucun Street View trouvé à proximité pour cet endroit."
     },
     "toast": {
